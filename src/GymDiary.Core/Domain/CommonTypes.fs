@@ -1,5 +1,4 @@
-﻿/// Common domain-agnostic types
-module GymDiary.Core.Domain.CommonTypes
+﻿module GymDiary.Core.Domain.CommonTypes
 
 open System
 
