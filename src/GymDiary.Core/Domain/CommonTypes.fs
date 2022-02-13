@@ -1,6 +1,7 @@
 ﻿module GymDiary.Core.Domain.CommonTypes
 
 open System
+open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 /// Constrained to be 50 chars or less, not null
 type String50 = private String50 of string
@@ -14,11 +15,8 @@ type String1k = private String1k of string
 /// Constrained to be a non-zero positive natural number
 type PositiveInt = private PositiveInt of int
 
-/// Constrained to be a decimal between 0.1 and 1000.00
-type Kilogram = private Kilogram of decimal
-
-/// Constrained to be a decimal between 0.001 and 1000.00
-type Kilometer = private Kilometer of decimal
+/// Constrained to be a decimal kilogram between 0.1 and 1000.00
+type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg>
 
 /// Constrained to be a valid email address
 type EmailAddress = private EmailAddress of string
@@ -67,9 +65,9 @@ module ConstrainedType =
         else
             Ok (ctor i)
 
-    /// Create a constrained decimal using the constructor provided
+    /// Create a constrained decimal<kg> using the constructor provided
     /// Return Error if input is less than minVal or more than maxVal
-    let createDecimal fieldName ctor minVal maxVal i =
+    let createDecimalKg fieldName ctor minVal maxVal i =
         if i < minVal then
             let msg = sprintf "%s: Must not be less than %M" fieldName minVal
             Error msg
@@ -128,23 +126,14 @@ module PositiveInt =
     let create fieldName num = 
         ConstrainedType.createInt fieldName PositiveInt 1 Int32.MaxValue num
 
-module Kilogram =
+module EquipmentWeightKg =
 
-    let value (Kilogram v) = v
+    let value (EquipmentWeightKg v) = v
 
-    /// Create a Kilogram from a decimal.
-    /// Return Error if input is not a decimal between 0.1 and 1000.00
+    /// Create an EquipmentWeightKg from a decimal<kg>.
+    /// Return Error if input is not a decimal<kg> between 0.1 and 1000.00
     let create fieldName v = 
-        ConstrainedType.createDecimal fieldName Kilogram 0.1M 1000M v
-
-module Kilometer =
-
-    let value (Kilometer v) = v
-
-    /// Create a Kilometer from a decimal.
-    /// Return Error if input is not a decimal between 0.001 and 1000.00
-    let create fieldName v = 
-        ConstrainedType.createDecimal fieldName Kilometer 0.001M 1000M v
+        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg 0.1M<kg> 1000M<kg> v
 
 module EmailAddress =
 

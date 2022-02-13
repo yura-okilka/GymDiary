@@ -2,6 +2,7 @@
 
 open System
 open CommonTypes
+open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 type ExerciseCategoryId = private ExerciseCategoryId of Guid
 type ExerciseTemplateId = private ExerciseTemplateId of Guid
@@ -17,7 +18,7 @@ type RepsSet = private {
 type RepsWeightSet = private {
     OrderNum: PositiveInt
     Reps: PositiveInt
-    EquipmentWeight: Kilogram
+    EquipmentWeight: EquipmentWeightKg
 }
 
 type DurationSet = private {
@@ -28,13 +29,13 @@ type DurationSet = private {
 type DurationWeightSet = private {
     OrderNum: PositiveInt
     Duration: TimeSpan
-    EquipmentWeight: Kilogram
+    EquipmentWeight: EquipmentWeightKg
 }
 
 type DurationDistanceSet = private {
     OrderNum: PositiveInt
     Duration: TimeSpan
-    Distance: Kilometer
+    Distance: decimal<m>
 }
 
 type ExerciseSets = 
