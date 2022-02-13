@@ -49,6 +49,7 @@ type ExerciseSets =
 type ExerciseCategory = private {
     Id: ExerciseCategoryId
     Name: String50
+    OwnerId: SportsmanId
 }
 
 type ExerciseTemplate = private {
@@ -60,6 +61,7 @@ type ExerciseTemplate = private {
     Sets: ExerciseSets
     CreatedOn: DateTimeOffset
     LastModifiedOn: DateTimeOffset
+    OwnerId: SportsmanId
 }
 
 type WorkoutTemplate = private {
@@ -71,6 +73,7 @@ type WorkoutTemplate = private {
     Exercises: ExerciseTemplate list
     CreatedOn: DateTimeOffset
     LastModifiedOn: DateTimeOffset
+    OwnerId: SportsmanId
 }
 
 type Exercise = private {
@@ -86,6 +89,7 @@ type Workout = private {
     Exercises: Exercise list
     StartedOn: DateTimeOffset
     CompletedOn: DateTimeOffset
+    OwnerId: SportsmanId
 }
 
 type Sportsman = private {
@@ -95,8 +99,4 @@ type Sportsman = private {
     LastName: String50
     DateOfBirth: DateOnly option
     Sex: Sex option
-    Workouts: WorkoutId list
-    WorkoutTemplates: WorkoutTemplateId list
-    ExerciseTemplates: ExerciseTemplateId list
-    ExerciseCategories: ExerciseCategoryId list
 }
