@@ -1,4 +1,4 @@
-﻿module GymDiary.Core.Domain.CommonTypes
+﻿namespace GymDiary.Core.Domain.CommonTypes
 
 open System
 open FSharp.Data.UnitSystems.SI.UnitSymbols

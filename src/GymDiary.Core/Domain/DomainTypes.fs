@@ -1,58 +1,57 @@
-﻿module GymDiary.Core.Domain.DomainTypes
+﻿namespace GymDiary.Core.Domain.DomainTypes
 
 open System
-open CommonTypes
+open GymDiary.Core.Domain.CommonTypes
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 
-type ExerciseCategoryId = private ExerciseCategoryId of Guid
-type ExerciseTemplateId = private ExerciseTemplateId of Guid
-type WorkoutTemplateId = private WorkoutTemplateId of Guid
-type WorkoutId = private WorkoutId of Guid
-type SportsmanId = private SportsmanId of Guid
+type ExerciseCategoryId = ExerciseCategoryId of Guid
+type ExerciseTemplateId = ExerciseTemplateId of Guid
+type WorkoutTemplateId = WorkoutTemplateId of Guid
+type WorkoutId = WorkoutId of Guid
+type SportsmanId = SportsmanId of Guid
 
-type RepsSet = private {
+type RepsSet = {
     OrderNum: PositiveInt
     Reps: PositiveInt
 }
 
-type RepsWeightSet = private {
+type RepsWeightSet = {
     OrderNum: PositiveInt
     Reps: PositiveInt
     EquipmentWeight: EquipmentWeightKg
 }
 
-type DurationSet = private {
+type DurationSet = {
     OrderNum: PositiveInt
     Duration: TimeSpan
 }
 
-type DurationWeightSet = private {
+type DurationWeightSet = {
     OrderNum: PositiveInt
     Duration: TimeSpan
     EquipmentWeight: EquipmentWeightKg
 }
 
-type DurationDistanceSet = private {
+type DurationDistanceSet = {
     OrderNum: PositiveInt
     Duration: TimeSpan
     Distance: decimal<m>
 }
 
 type ExerciseSets = 
-    private
     | RepsSets of RepsSet list
     | RepsWeightSets of RepsWeightSet list
     | DurationSets of DurationSet list
     | DurationWeightSets of DurationWeightSet list
     | DurationDistanceSets of DurationDistanceSet list
     
-type ExerciseCategory = private {
+type ExerciseCategory = {
     Id: ExerciseCategoryId
     Name: String50
     OwnerId: SportsmanId
 }
 
-type ExerciseTemplate = private {
+type ExerciseTemplate = {
     Id: ExerciseTemplateId
     CategoryId: ExerciseCategoryId
     Name: String50
@@ -64,7 +63,7 @@ type ExerciseTemplate = private {
     OwnerId: SportsmanId
 }
 
-type WorkoutTemplate = private {
+type WorkoutTemplate = {
     Id: WorkoutTemplateId
     Name: String50
     Goal: String200 option
@@ -76,14 +75,14 @@ type WorkoutTemplate = private {
     OwnerId: SportsmanId
 }
 
-type Exercise = private {
+type Exercise = {
     TemplateId: ExerciseTemplateId
     Sets: ExerciseSets
     StartedOn: DateTimeOffset
     CompletedOn: DateTimeOffset
 }
 
-type Workout = private {
+type Workout = {
     Id: WorkoutId
     TemplateId: WorkoutTemplateId
     Exercises: Exercise list
@@ -92,7 +91,7 @@ type Workout = private {
     OwnerId: SportsmanId
 }
 
-type Sportsman = private {
+type Sportsman = {
     Id: SportsmanId
     Email: EmailAddress
     FirstName: String50
@@ -100,3 +99,32 @@ type Sportsman = private {
     DateOfBirth: DateOnly option
     Sex: Sex option
 }
+
+module ExerciseCategoryId =
+
+    let value (ExerciseCategoryId id) = id
+
+module ExerciseTemplateId =
+
+    let value (ExerciseTemplateId id) = id
+
+module WorkoutTemplateId =
+
+    let value (WorkoutTemplateId id) = id
+
+module WorkoutId =
+
+    let value (WorkoutId id) = id
+
+module SportsmanId =
+
+    let value (SportsmanId id) = id
+
+module ExerciseCategory =
+    
+    let create id name ownerId : ExerciseCategory =
+        {
+            Id = id
+            Name = name
+            OwnerId = ownerId
+        }

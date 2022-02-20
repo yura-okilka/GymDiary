@@ -8,7 +8,12 @@
   <ItemGroup>
     <Compile Include="Domain\CommonTypes.fs" />
     <Compile Include="Domain\DomainTypes.fs" />
+    <Compile Include="Persistence\Dtos.fs" />
     <Compile Include="Library.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsToolkit.ErrorHandling" Version="2.13.0" />
   </ItemGroup>
 
 </Project>
