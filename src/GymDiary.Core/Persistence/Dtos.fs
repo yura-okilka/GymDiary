@@ -45,20 +45,20 @@ type ExerciseSetsDto =
       DurationDistanceSets: DurationDistanceSetDto list }
 
 type ExerciseCategoryDto =
-    { Id: Guid
+    { Id: string
       Name: string
-      OwnerId: Guid }
+      OwnerId: string }
 
 type ExerciseTemplateDto =
-    { Id: Guid
-      CategoryId: Guid
+    { Id: string
+      CategoryId: string
       Name: string
       Notes: string option
       RestTime: TimeSpan
       Sets: ExerciseSetsDto
       CreatedOn: DateTimeOffset
       LastModifiedOn: DateTimeOffset
-      OwnerId: Guid }
+      OwnerId: string }
 
 module ExerciseCategoryDto =
 
