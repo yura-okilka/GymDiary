@@ -13,24 +13,29 @@ type SportsmanId = SportsmanId of string
 /// Constrained to be a decimal kilogram between 0.1 and 1000.00
 type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg>
 
+/// Exercise set represented by reps quantity
 type RepsSet =
     { OrderNum: PositiveInt
       Reps: PositiveInt }
 
+/// Exercise set represented by reps quantity & equipment weight
 type RepsWeightSet =
     { OrderNum: PositiveInt
       Reps: PositiveInt
       EquipmentWeight: EquipmentWeightKg }
 
+/// Exercise set represented by exercise duration
 type DurationSet =
     { OrderNum: PositiveInt
       Duration: TimeSpan }
 
+/// Exercise set represented by exercise duration & equipment weight
 type DurationWeightSet =
     { OrderNum: PositiveInt
       Duration: TimeSpan
       EquipmentWeight: EquipmentWeightKg }
 
+/// Exercise set represented by exercise duration & distance
 type DurationDistanceSet =
     { OrderNum: PositiveInt
       Duration: TimeSpan
@@ -48,6 +53,7 @@ type ExerciseCategory =
       Name: String50
       OwnerId: SportsmanId }
 
+/// Exercise template with description about an exercise
 type ExerciseTemplate =
     { Id: ExerciseTemplateId
       CategoryId: ExerciseCategoryId
@@ -59,6 +65,7 @@ type ExerciseTemplate =
       LastModifiedOn: DateTimeOffset
       OwnerId: SportsmanId }
 
+/// Workout template with description about a workout
 type WorkoutTemplate =
     { Id: WorkoutTemplateId
       Name: String50
@@ -70,12 +77,14 @@ type WorkoutTemplate =
       LastModifiedOn: DateTimeOffset
       OwnerId: SportsmanId }
 
+/// Exercise completed on a particular date
 type Exercise =
     { TemplateId: ExerciseTemplateId
       Sets: ExerciseSets
       StartedOn: DateTimeOffset
       CompletedOn: DateTimeOffset }
 
+/// Workout completed on a particular date
 type Workout =
     { Id: WorkoutId
       TemplateId: WorkoutTemplateId
