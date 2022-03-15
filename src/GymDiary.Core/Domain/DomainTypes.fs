@@ -10,6 +10,9 @@ type WorkoutTemplateId = WorkoutTemplateId of string
 type WorkoutId = WorkoutId of string
 type SportsmanId = SportsmanId of string
 
+/// Constrained to be a decimal kilogram between 0.1 and 1000.00
+type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg>
+
 type RepsSet =
     { OrderNum: PositiveInt
       Reps: PositiveInt }
@@ -108,6 +111,15 @@ module WorkoutId =
 module SportsmanId =
 
     let value (SportsmanId id) = id
+
+module EquipmentWeightKg =
+
+    let value (EquipmentWeightKg v) = v
+
+    /// Create an EquipmentWeightKg from a decimal<kg>.
+    /// Return Error if input is not a decimal<kg> between 0.1 and 1000.00
+    let create fieldName v =
+        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg 0.1M<kg> 1000M<kg> v
 
 module ExerciseCategory =
 

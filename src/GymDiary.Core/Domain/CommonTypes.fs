@@ -15,9 +15,6 @@ type String1k = private String1k of string
 /// Constrained to be a non-zero positive natural number
 type PositiveInt = private PositiveInt of int
 
-/// Constrained to be a decimal kilogram between 0.1 and 1000.00
-type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg>
-
 /// Constrained to be a valid email address
 type EmailAddress = private EmailAddress of string
 
@@ -65,7 +62,7 @@ module ConstrainedType =
 
     /// Create a constrained decimal<kg> using the constructor provided
     /// Return Error if input is less than minVal or more than maxVal
-    let createDecimalKg fieldName ctor minVal maxVal i =
+    let createDecimalKg fieldName ctor (minVal: decimal<kg>) (maxVal: decimal<kg>) i =
         if i < minVal then
             Error $"%s{fieldName}: Must not be less than %M{minVal}"
         elif i > maxVal then
@@ -119,15 +116,6 @@ module PositiveInt =
 
     let create fieldName num =
         ConstrainedType.createInt fieldName PositiveInt 1 Int32.MaxValue num
-
-module EquipmentWeightKg =
-
-    let value (EquipmentWeightKg v) = v
-
-    /// Create an EquipmentWeightKg from a decimal<kg>.
-    /// Return Error if input is not a decimal<kg> between 0.1 and 1000.00
-    let create fieldName v =
-        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg 0.1M<kg> 1000M<kg> v
 
 module EmailAddress =
 
