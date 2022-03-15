@@ -6,13 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Domain\CommonTypes.fs" />
-    <Compile Include="Domain\DomainTypes.fs" />
-    <Compile Include="Library.fs" />
+    <Compile Include="Dtos.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FsToolkit.ErrorHandling" Version="2.13.0" />
+    <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
   </ItemGroup>
 
 </Project>

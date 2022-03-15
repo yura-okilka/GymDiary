@@ -1,4 +1,4 @@
-namespace GymDiary.Core.Persistence.Dtos
+namespace GymDiary.Persistence.Dtos
 
 open System
 open GymDiary.Core.Domain.CommonTypes
