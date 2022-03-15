@@ -61,8 +61,8 @@ type ExerciseTemplate =
       Notes: String1k option
       RestTime: TimeSpan
       Sets: ExerciseSets
-      CreatedOn: DateTimeOffset
-      LastModifiedOn: DateTimeOffset
+      CreatedOn: DateTime
+      LastModifiedOn: DateTime
       OwnerId: SportsmanId }
 
 /// Workout template with description about a workout
@@ -73,24 +73,24 @@ type WorkoutTemplate =
       Notes: String1k option
       Schedule: DayOfWeek Set
       Exercises: ExerciseTemplate list
-      CreatedOn: DateTimeOffset
-      LastModifiedOn: DateTimeOffset
+      CreatedOn: DateTime
+      LastModifiedOn: DateTime
       OwnerId: SportsmanId }
 
 /// Exercise completed on a particular date
 type Exercise =
     { TemplateId: ExerciseTemplateId
       Sets: ExerciseSets
-      StartedOn: DateTimeOffset
-      CompletedOn: DateTimeOffset }
+      StartedOn: DateTime
+      CompletedOn: DateTime }
 
 /// Workout completed on a particular date
 type Workout =
     { Id: WorkoutId
       TemplateId: WorkoutTemplateId
       Exercises: Exercise list
-      StartedOn: DateTimeOffset
-      CompletedOn: DateTimeOffset
+      StartedOn: DateTime
+      CompletedOn: DateTime
       OwnerId: SportsmanId }
 
 type Sportsman =

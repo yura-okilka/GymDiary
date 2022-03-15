@@ -56,8 +56,8 @@ type ExerciseTemplateDto =
       Notes: string option
       RestTime: TimeSpan
       Sets: ExerciseSetsDto
-      CreatedOn: DateTimeOffset
-      LastModifiedOn: DateTimeOffset
+      CreatedOn: DateTime
+      LastModifiedOn: DateTime
       OwnerId: string }
 
 module ExerciseCategoryDto =
