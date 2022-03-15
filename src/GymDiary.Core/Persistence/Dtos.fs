@@ -28,7 +28,7 @@ type DurationDistanceSetDto =
       Duration: TimeSpan
       Distance: decimal }
 
-// Enum for serialization
+// Discriminator enum for serialization
 type ExerciseSetsDtoDiscriminator =
     | RepsSets = 1
     | RepsWeightSets = 2
@@ -59,6 +59,39 @@ type ExerciseTemplateDto =
       CreatedOn: DateTime
       LastModifiedOn: DateTime
       OwnerId: string }
+
+type WorkoutTemplateDto =
+    { Id: string
+      Name: string
+      Goal: string option
+      Notes: string option
+      Schedule: string list
+      Exercises: ExerciseTemplateDto list
+      CreatedOn: DateTime
+      LastModifiedOn: DateTime
+      OwnerId: string }
+
+type ExerciseDto =
+    { TemplateId: string
+      Sets: ExerciseSetsDto
+      StartedOn: DateTime
+      CompletedOn: DateTime }
+
+type WorkoutDto =
+    { Id: string
+      TemplateId: string
+      Exercises: ExerciseDto list
+      StartedOn: DateTime
+      CompletedOn: DateTime
+      OwnerId: string }
+
+type SportsmanDto =
+    { Id: string
+      Email: string
+      FirstName: string
+      LastName: string
+      DateOfBirth: DateTime option
+      Sex: string option }
 
 module ExerciseCategoryDto =
 
