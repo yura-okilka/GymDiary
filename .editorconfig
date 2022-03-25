@@ -14,5 +14,7 @@ indent_size = 4
 trim_trailing_whitespace = true
 
 [*.fs]
+fsharp_space_before_member=true
 fsharp_max_infix_operator_expression=100
+fsharp_max_value_binding_width=100
 fsharp_max_record_width=20
