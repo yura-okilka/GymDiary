@@ -1,6 +1,7 @@
-﻿namespace GymDiary.Core.Domain.CommonTypes
+namespace GymDiary.Core.Domain.CommonTypes
 
 open System
+open GymDiary.Core.Domain.Errors
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 /// Constrained to be 50 chars or less, not null
@@ -29,100 +30,91 @@ module ConstrainedType =
     open System.Text.RegularExpressions
 
     /// Create a constrained string using the constructor provided
-    /// Return Error if input is null, empty, or length > maxLen
-    let createString fieldName ctor maxLen str =
-        if String.IsNullOrEmpty(str) then
-            Error $"%s{fieldName} must not be null or empty"
-        elif str.Length > maxLen then
-            Error $"%s{fieldName} must not be more than %i{maxLen} chars"
+    let createString (fieldName: string) (ctor: string -> 'a) (maxLength: int) (value: string) =
+        if String.IsNullOrEmpty(value) then
+            Error(ValueNullOrEmpty fieldName)
+        elif value.Length > maxLength then
+            Error(LengthGreaterThanLimit(fieldName, maxLength.ToString()))
         else
-            Ok(ctor str)
+            Ok(ctor value)
 
     /// Create an optional constrained string using the constructor provided
-    /// Return None if input is null, empty.
-    /// Return error if length > maxLen
-    /// Return Some if the input is valid
-    let createStringOption fieldName ctor maxLen str =
-        if String.IsNullOrEmpty(str) then
-            Ok None
-        elif str.Length > maxLen then
-            Error $"%s{fieldName} must not be more than %i{maxLen} chars"
+    let createStringOption (fieldName: string) (ctor: string -> 'a) (maxLength: int) (value: string) =
+        if String.IsNullOrEmpty(value) then
+            Ok(None)
+        elif value.Length > maxLength then
+            Error(LengthGreaterThanLimit(fieldName, maxLength.ToString()))
         else
-            Ok(ctor str |> Some)
+            Ok(Some(ctor value))
 
     /// Create a constrained integer using the constructor provided
-    /// Return Error if input is less than minVal or more than maxVal
-    let createInt fieldName ctor minVal maxVal i =
-        if i < minVal then
-            Error $"%s{fieldName}: Must not be less than %i{minVal}"
-        elif i > maxVal then
-            Error $"%s{fieldName}: Must not be greater than %i{maxVal}"
+    let createInt (fieldName: string) (ctor: int -> 'a) (minValue: int, maxValue: int) (value: int) =
+        if value < minValue then
+            Error(ValueLessThanLimit(fieldName, minValue.ToString()))
+        elif value > maxValue then
+            Error(ValueGreaterThanLimit(fieldName, maxValue.ToString()))
         else
-            Ok(ctor i)
+            Ok(ctor value)
 
     /// Create a constrained decimal<kg> using the constructor provided
-    /// Return Error if input is less than minVal or more than maxVal
-    let createDecimalKg fieldName ctor (minVal: decimal<kg>) (maxVal: decimal<kg>) i =
-        if i < minVal then
-            Error $"%s{fieldName}: Must not be less than %M{minVal}"
-        elif i > maxVal then
-            Error $"%s{fieldName}: Must not be greater than %M{maxVal}"
+    let createDecimalKg (fieldName: string) (ctor: decimal<kg> -> 'a) (minValue: decimal<kg>, maxValue: decimal<kg>) (value: decimal<kg>) =
+        if value < minValue then
+            Error(ValueLessThanLimit(fieldName, minValue.ToString()))
+        elif value > maxValue then
+            Error(ValueGreaterThanLimit(fieldName, maxValue.ToString()))
         else
-            Ok(ctor i)
+            Ok(ctor value)
 
     /// Create a constrained string using the constructor provided
-    /// Return Error if input is null. empty, or does not match the regex pattern
-    let createLike fieldName ctor pattern str =
-        if String.IsNullOrEmpty(str) then
-            Error $"%s{fieldName}: Must not be null or empty"
-        elif Regex.IsMatch(str, pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1)) then
-            Ok(ctor str)
+    let createLike (fieldName: string) (ctor: string -> 'a) (pattern: string) (value: string) =
+        if String.IsNullOrEmpty(value) then
+            Error(ValueNullOrEmpty fieldName)
+        elif Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1)) then
+            Ok(ctor value)
         else
-            Error $"%s{fieldName}: '%s{str}' must match the pattern '%s{pattern}'"
+            Error(RegexNotMatched(fieldName))
 
 module String50 =
 
-    let value (String50 str) = str
+    let value (String50 value) = value
 
-    let create fieldName str =
-        ConstrainedType.createString fieldName String50 50 str
+    let create fieldName value =
+        ConstrainedType.createString fieldName String50 50 value
 
-    let createOption fieldName str =
-        ConstrainedType.createStringOption fieldName String50 50 str
+    let createOption fieldName value =
+        ConstrainedType.createStringOption fieldName String50 50 value
 
 module String200 =
 
-    let value (String200 str) = str
+    let value (String200 value) = value
 
-    let create fieldName str =
-        ConstrainedType.createString fieldName String200 200 str
+    let create fieldName value =
+        ConstrainedType.createString fieldName String200 200 value
 
-    let createOption fieldName str =
-        ConstrainedType.createStringOption fieldName String200 200 str
+    let createOption fieldName value =
+        ConstrainedType.createStringOption fieldName String200 200 value
 
 module String1k =
 
-    let value (String1k str) = str
+    let value (String1k value) = value
 
-    let create fieldName str =
-        ConstrainedType.createString fieldName String1k 1000 str
+    let create fieldName value =
+        ConstrainedType.createString fieldName String1k 1000 value
 
-    let createOption fieldName str =
-        ConstrainedType.createStringOption fieldName String1k 1000 str
+    let createOption fieldName value =
+        ConstrainedType.createStringOption fieldName String1k 1000 value
 
 module PositiveInt =
 
     let value (PositiveInt num) = num
 
     let create fieldName num =
-        ConstrainedType.createInt fieldName PositiveInt 1 Int32.MaxValue num
+        ConstrainedType.createInt fieldName PositiveInt (1, Int32.MaxValue) num
 
 module EmailAddress =
 
-    let value (EmailAddress str) = str
+    let value (EmailAddress value) = value
 
-    /// Create an EmailAddress from a string
-    /// Return Error if input is null, empty, or doesn't have an "@" in it
-    let create fieldName str =
+    let create fieldName value =
         let pattern = ".+@.+" // anything separated by an "@"
-        ConstrainedType.createLike fieldName EmailAddress pattern str
+        ConstrainedType.createLike fieldName EmailAddress pattern value

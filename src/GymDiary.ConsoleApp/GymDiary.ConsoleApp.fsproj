@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
+    <ProjectReference Include="..\GymDiary.Persistence\GymDiary.Persistence.fsproj" />
   </ItemGroup>
 
 </Project>

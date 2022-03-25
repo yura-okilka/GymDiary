@@ -1,4 +1,4 @@
-﻿namespace GymDiary.Core.Domain.DomainTypes
+namespace GymDiary.Core.Domain.DomainTypes
 
 open System
 open GymDiary.Core.Domain.CommonTypes
@@ -128,7 +128,7 @@ module EquipmentWeightKg =
     /// Create an EquipmentWeightKg from a decimal<kg>.
     /// Return Error if input is not a decimal<kg> between 0.1 and 1000.00
     let create fieldName v =
-        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg 0.1M<kg> 1000M<kg> v
+        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) v
 
 module ExerciseCategory =
 

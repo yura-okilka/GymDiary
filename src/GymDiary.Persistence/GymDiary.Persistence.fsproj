@@ -6,7 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Errors.fs" />
     <Compile Include="Dtos.fs" />
+    <Compile Include="DBContext.fs" />
+    <Compile Include="SerializationSettings.fs" />
+    <Compile Include="Services\ExerciseCategoryService.fs" />
+    <Compile Include="CompositionRoot.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
   </ItemGroup>
 
   <ItemGroup>
