@@ -2,6 +2,7 @@ namespace GymDiary.Persistence
 
 open GymDiary.Persistence
 open GymDiary.Persistence.Services
+
 open MongoDB.Driver
 
 type PersistenceSettings =

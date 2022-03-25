@@ -1,10 +1,12 @@
 namespace GymDiary.Persistence.Dtos
 
 open System
+
+open FsToolkit.ErrorHandling.Operator.Result
+
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
-open FsToolkit.ErrorHandling.Operator.Result
 
 [<CLIMutable>]
 type RepsSetDto =

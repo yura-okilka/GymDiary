@@ -1,8 +1,10 @@
 namespace GymDiary.Core.Domain.CommonTypes
 
 open System
-open GymDiary.Core.Domain.Errors
+
 open FSharp.Data.UnitSystems.SI.UnitSymbols
+
+open GymDiary.Core.Domain.Errors
 
 /// Constrained to be 50 chars or less, not null
 type String50 = private String50 of string
@@ -57,7 +59,12 @@ module ConstrainedType =
             Ok(ctor value)
 
     /// Create a constrained decimal<kg> using the constructor provided
-    let createDecimalKg (fieldName: string) (ctor: decimal<kg> -> 'a) (minValue: decimal<kg>, maxValue: decimal<kg>) (value: decimal<kg>) =
+    let createDecimalKg
+        (fieldName: string)
+        (ctor: decimal<kg> -> 'a)
+        (minValue: decimal<kg>, maxValue: decimal<kg>)
+        (value: decimal<kg>)
+        =
         if value < minValue then
             Error(ValueLessThanLimit(fieldName, minValue.ToString()))
         elif value > maxValue then

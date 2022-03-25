@@ -1,10 +1,12 @@
 namespace GymDiary.Persistence.Services
 
 open System.Threading.Tasks
-open GymDiary.Core.Domain.DomainTypes
+
 open GymDiary.Core.Extensions
+open GymDiary.Core.Domain.DomainTypes
 open GymDiary.Persistence.Dtos
 open GymDiary.Persistence.Errors
+
 open MongoDB.Driver
 
 type IExerciseCategoryService =

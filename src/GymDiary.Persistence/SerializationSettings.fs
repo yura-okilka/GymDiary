@@ -1,6 +1,7 @@
 namespace GymDiary.Persistence
 
 open System
+
 open MongoDB.Bson
 open MongoDB.Bson.Serialization
 open MongoDB.Bson.Serialization.Conventions

@@ -1,6 +1,7 @@
 namespace GymDiary.Persistence
 
 open GymDiary.Persistence.Dtos
+
 open MongoDB.Driver
 
 type IDBContext =

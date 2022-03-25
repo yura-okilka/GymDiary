@@ -1,6 +1,7 @@
 namespace GymDiary.Persistence.Errors
 
 open GymDiary.Core.Domain.Errors
+
 open MongoDB.Driver
 
 type PersistenceError =
