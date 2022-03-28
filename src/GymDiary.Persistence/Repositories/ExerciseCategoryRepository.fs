@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence.Services
+namespace GymDiary.Persistence.Repositories
 
 open System.Threading.Tasks
 
@@ -9,11 +9,11 @@ open GymDiary.Persistence.Errors
 
 open MongoDB.Driver
 
-type IExerciseCategoryService =
+type IExerciseCategoryRepository =
     abstract member Create: ExerciseCategory -> Task<Result<ExerciseCategoryId, PersistenceError>>
     abstract member FindById: ExerciseCategoryId -> Task<Result<ExerciseCategory, PersistenceError>>
 
-module ExerciseCategoryService =
+module ExerciseCategoryRepository =
 
     let create (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
         task {
@@ -22,8 +22,8 @@ module ExerciseCategoryService =
                 do! collection.InsertOneAsync(dto)
                 return dto.Id |> ExerciseCategoryId |> Ok
             with
-            | :? MongoException as ex -> return ex |> Mongo |> Error
-            | ex -> return ex |> Other |> Error
+            | :? MongoException as ex -> return Error(Mongo ex)
+            | ex -> return Error(Other ex)
         }
 
     let findById (collection: IMongoCollection<ExerciseCategoryDto>) (ExerciseCategoryId id) =
@@ -33,11 +33,11 @@ module ExerciseCategoryService =
                 let! dto = cursor.SingleAsync()
                 return dto |> ExerciseCategoryDto.toDomain |> Result.mapError Validation
             with
-            | :? MongoException as ex -> return ex |> Mongo |> Error
-            | ex -> return ex |> Other |> Error
+            | :? MongoException as ex -> return Error(Mongo ex)
+            | ex -> return Error(Other ex)
         }
 
     let compose (collection: IMongoCollection<ExerciseCategoryDto>) =
-        { new IExerciseCategoryService with
+        { new IExerciseCategoryRepository with
             member _.Create entity = create collection entity
             member _.FindById id = findById collection id }
