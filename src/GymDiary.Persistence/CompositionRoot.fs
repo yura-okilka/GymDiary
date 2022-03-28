@@ -1,5 +1,6 @@
 namespace GymDiary.Persistence
 
+open GymDiary.Core.Persistence.Contracts
 open GymDiary.Persistence
 open GymDiary.Persistence.Repositories
 

@@ -14,3 +14,8 @@ type ValidationError =
         | ValueGreaterThanLimit (field, limit) -> $"'%s{field}' must be less than or equal to %s{limit}."
         | LengthGreaterThanLimit (field, limit) -> $"The length of '%s{field}' must be %s{limit} characters or fewer."
         | RegexNotMatched field -> $"'%s{field}' is not in the correct format."
+
+type PersistenceError =
+    | Validation of error: ValidationError
+    | Database of ex: exn
+    | Other of ex: exn

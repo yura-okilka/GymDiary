@@ -1,17 +1,12 @@
 namespace GymDiary.Persistence.Repositories
 
-open System.Threading.Tasks
-
 open GymDiary.Core.Extensions
+open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Core.Persistence.Contracts
 open GymDiary.Persistence.Dtos
-open GymDiary.Persistence.Errors
 
 open MongoDB.Driver
-
-type IExerciseCategoryRepository =
-    abstract member Create: ExerciseCategory -> Task<Result<ExerciseCategoryId, PersistenceError>>
-    abstract member FindById: ExerciseCategoryId -> Task<Result<ExerciseCategory, PersistenceError>>
 
 module ExerciseCategoryRepository =
 
@@ -22,7 +17,7 @@ module ExerciseCategoryRepository =
                 do! collection.InsertOneAsync(dto)
                 return dto.Id |> ExerciseCategoryId |> Ok
             with
-            | :? MongoException as ex -> return Error(Mongo ex)
+            | :? MongoException as ex -> return Error(Database ex)
             | ex -> return Error(Other ex)
         }
 
@@ -33,7 +28,7 @@ module ExerciseCategoryRepository =
                 let! dto = cursor.SingleAsync()
                 return dto |> ExerciseCategoryDto.toDomain |> Result.mapError Validation
             with
-            | :? MongoException as ex -> return Error(Mongo ex)
+            | :? MongoException as ex -> return Error(Database ex)
             | ex -> return Error(Other ex)
         }
 
