@@ -8,6 +8,12 @@ open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
 
+open MongoDB.Bson.Serialization.Attributes
+
+// It is safe to use non-nullable types for DTOs.
+// Driver throws "Cannot deserialize a 'DateTime' from BsonType 'Null'"
+// and does not populate it silently with a default value.
+
 [<CLIMutable>]
 type RepsSetDto =
     { OrderNum: int
@@ -47,11 +53,21 @@ type ExerciseSetsDtoTag =
 [<CLIMutable>]
 type ExerciseSetsDto =
     { Tag: ExerciseSetsDtoTag
-      RepsSets: RepsSetDto list
-      RepsWeightSets: RepsWeightSetDto list
-      DurationSets: DurationSetDto list
-      DurationWeightSets: DurationWeightSetDto list
-      DurationDistanceSets: DurationDistanceSetDto list }
+
+      [<BsonIgnoreIfDefault>]
+      RepsSets: ResizeArray<RepsSetDto>
+
+      [<BsonIgnoreIfDefault>]
+      RepsWeightSets: ResizeArray<RepsWeightSetDto>
+
+      [<BsonIgnoreIfDefault>]
+      DurationSets: ResizeArray<DurationSetDto>
+
+      [<BsonIgnoreIfDefault>]
+      DurationWeightSets: ResizeArray<DurationWeightSetDto>
+
+      [<BsonIgnoreIfDefault>]
+      DurationDistanceSets: ResizeArray<DurationDistanceSetDto> }
 
 [<CLIMutable>]
 type ExerciseCategoryDto =
@@ -77,8 +93,8 @@ type WorkoutTemplateDto =
       Name: string
       Goal: string option
       Notes: string option
-      Schedule: string list
-      Exercises: ExerciseTemplateDto list
+      Schedule: ResizeArray<string>
+      Exercises: ResizeArray<ExerciseTemplateDto>
       CreatedOn: DateTime
       LastModifiedOn: DateTime
       OwnerId: string }
@@ -94,7 +110,7 @@ type ExerciseDto =
 type WorkoutDto =
     { Id: string
       TemplateId: string
-      Exercises: ExerciseDto list
+      Exercises: ResizeArray<ExerciseDto>
       StartedOn: DateTime
       CompletedOn: DateTime
       OwnerId: string }
