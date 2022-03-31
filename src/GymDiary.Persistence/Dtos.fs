@@ -80,7 +80,7 @@ type ExerciseTemplateDto =
     { Id: string
       CategoryId: string
       Name: string
-      Notes: string option
+      Notes: string
       RestTime: TimeSpan
       Sets: ExerciseSetsDto
       CreatedOn: DateTime
@@ -91,8 +91,8 @@ type ExerciseTemplateDto =
 type WorkoutTemplateDto =
     { Id: string
       Name: string
-      Goal: string option
-      Notes: string option
+      Goal: string
+      Notes: string
       Schedule: ResizeArray<string>
       Exercises: ResizeArray<ExerciseTemplateDto>
       CreatedOn: DateTime
@@ -115,14 +115,19 @@ type WorkoutDto =
       CompletedOn: DateTime
       OwnerId: string }
 
+type SexDto =
+    | Male = 1
+    | Female = 2
+    | Other = 3
+
 [<CLIMutable>]
 type SportsmanDto =
     { Id: string
       Email: string
       FirstName: string
       LastName: string
-      DateOfBirth: DateTime option
-      Sex: string option }
+      DateOfBirth: Nullable<DateTime>
+      Sex: Nullable<SexDto> }
 
 module ExerciseCategoryDto =
 
