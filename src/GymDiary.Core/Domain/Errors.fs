@@ -1,6 +1,7 @@
 namespace GymDiary.Core.Domain.Errors
 
 type ValidationError =
+    | ValueNull of field: string
     | ValueNullOrEmpty of field: string
     | ValueLessThanLimit of field: string * limit: string
     | ValueGreaterThanLimit of field: string * limit: string
@@ -10,6 +11,7 @@ type ValidationError =
 
     static member toString (error: ValidationError) =
         match error with
+        | ValueNull field -> $"'%s{field}' must not be null."
         | ValueNullOrEmpty field -> $"'%s{field}' must not be null or empty."
         | ValueLessThanLimit (field, limit) -> $"'%s{field}' must be greater than or equal to %s{limit}."
         | ValueGreaterThanLimit (field, limit) -> $"'%s{field}' must be less than or equal to %s{limit}."

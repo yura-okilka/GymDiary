@@ -66,33 +66,48 @@ module ExerciseSetsDto =
     let toDomain (dto: ExerciseSetsDto) : Result<ExerciseSets, ValidationError> =
         match dto.Tag with
         | ExerciseSetsDtoTag.RepsSets ->
-            dto.RepsSets
-            |> ResizeArray.toList
-            |> List.traverseResultM RepsSetDto.toDomain
-            |> Result.map RepsSets
+            if dto.RepsSets = null then
+                ValueNull("RepsSets") |> Error
+            else
+                dto.RepsSets
+                |> ResizeArray.toList
+                |> List.traverseResultM RepsSetDto.toDomain
+                |> Result.map RepsSets
 
         | ExerciseSetsDtoTag.RepsWeightSets ->
-            dto.RepsWeightSets
-            |> ResizeArray.toList
-            |> List.traverseResultM RepsWeightSetDto.toDomain
-            |> Result.map RepsWeightSets
+            if dto.RepsWeightSets = null then
+                ValueNull("RepsWeightSets") |> Error
+            else
+                dto.RepsWeightSets
+                |> ResizeArray.toList
+                |> List.traverseResultM RepsWeightSetDto.toDomain
+                |> Result.map RepsWeightSets
 
         | ExerciseSetsDtoTag.DurationSets ->
-            dto.DurationSets
-            |> ResizeArray.toList
-            |> List.traverseResultM DurationSetDto.toDomain
-            |> Result.map DurationSets
+            if dto.DurationSets = null then
+                ValueNull("DurationSets") |> Error
+            else
+                dto.DurationSets
+                |> ResizeArray.toList
+                |> List.traverseResultM DurationSetDto.toDomain
+                |> Result.map DurationSets
 
         | ExerciseSetsDtoTag.DurationWeightSets ->
-            dto.DurationWeightSets
-            |> ResizeArray.toList
-            |> List.traverseResultM DurationWeightSetDto.toDomain
-            |> Result.map DurationWeightSets
+            if dto.DurationWeightSets = null then
+                ValueNull("DurationWeightSets") |> Error
+            else
+                dto.DurationWeightSets
+                |> ResizeArray.toList
+                |> List.traverseResultM DurationWeightSetDto.toDomain
+                |> Result.map DurationWeightSets
 
         | ExerciseSetsDtoTag.DurationDistanceSets ->
-            dto.DurationDistanceSets
-            |> ResizeArray.toList
-            |> List.traverseResultM DurationDistanceSetDto.toDomain
-            |> Result.map DurationDistanceSets
+            if dto.DurationDistanceSets = null then
+                ValueNull("DurationDistanceSets") |> Error
+            else
+                dto.DurationDistanceSets
+                |> ResizeArray.toList
+                |> List.traverseResultM DurationDistanceSetDto.toDomain
+                |> Result.map DurationDistanceSets
 
         | _ -> InvalidValue("Tag", dto.Tag.ToString()) |> Error

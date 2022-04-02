@@ -22,7 +22,13 @@ module WorkoutDto =
     let toDomain (dto: WorkoutDto) : Result<Workout, ValidationError> =
         let id = dto.Id |> WorkoutId |> Ok
         let templateId = dto.TemplateId |> WorkoutTemplateId |> Ok
-        let exercises = dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseDto.toDomain
+
+        let exercises =
+            if dto.Exercises = null then
+                ValueNull("Exercises") |> Error
+            else
+                dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseDto.toDomain
+
         let startedOn = dto.StartedOn |> Ok
         let completedOn = dto.CompletedOn |> Ok
         let ownerId = dto.OwnerId |> SportsmanId |> Ok

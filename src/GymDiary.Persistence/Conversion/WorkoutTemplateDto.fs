@@ -34,8 +34,19 @@ module WorkoutTemplateDto =
         let name = dto.Name |> String50.create "Name"
         let goal = dto.Goal |> String200.createOption "Goal"
         let notes = dto.Notes |> String1k.createOption "Notes"
-        let schedule = dto.Schedule |> ResizeArray.toSeq |> Set.ofSeq |> Ok
-        let exercises = dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDto.toDomain
+
+        let schedule =
+            if dto.Schedule = null then
+                ValueNull("Schedule") |> Error
+            else
+                dto.Schedule |> ResizeArray.toSeq |> Set.ofSeq |> Ok
+
+        let exercises =
+            if dto.Exercises = null then
+                ValueNull("Exercises") |> Error
+            else
+                dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDto.toDomain
+
         let createdOn = dto.CreatedOn |> Ok
         let lastModifiedOn = dto.LastModifiedOn |> Ok
         let ownerId = dto.OwnerId |> SportsmanId |> Ok
