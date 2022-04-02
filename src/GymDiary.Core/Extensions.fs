@@ -1,5 +1,7 @@
 namespace GymDiary.Core
 
+open System
+
 module Extensions =
 
     let inline isNotNull (value) = not (isNull value)
@@ -22,3 +24,7 @@ module Extensions =
             match result with
             | Ok _ -> failwith "Result is not error"
             | Error er -> er
+
+    module DateOnly =
+
+        let toDateTime (date: DateOnly) = date.ToDateTime(TimeOnly.MinValue)

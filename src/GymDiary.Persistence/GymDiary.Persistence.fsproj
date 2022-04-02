@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,18 +7,36 @@
 
   <ItemGroup>
     <Compile Include="Dtos.fs" />
+    <Compile Include="Conversion\RepsSetDto.fs" />
+    <Compile Include="Conversion\RepsWeightSetDto.fs" />
+    <Compile Include="Conversion\DurationSetDto.fs" />
+    <Compile Include="Conversion\DurationWeightSetDto.fs" />
+    <Compile Include="Conversion\DurationDistanceSetDto.fs" />
+    <Compile Include="Conversion\ExerciseCategoryDto.fs" />
+    <Compile Include="Conversion\ExerciseSetsDto.fs" />
+    <Compile Include="Conversion\ExerciseTemplateDto.fs" />
+    <Compile Include="Conversion\WorkoutTemplateDto.fs" />
+    <Compile Include="Conversion\ExerciseDto.fs" />
+    <Compile Include="Conversion\WorkoutDto.fs" />
+    <Compile Include="Conversion\SexDto.fs" />
+    <Compile Include="Conversion\SportsmanDto.fs" />
     <Compile Include="DBContext.fs" />
-    <Compile Include="SerializationSettings.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
+    <Compile Include="SerializationSettings.fs" />
     <Compile Include="CompositionRoot.fs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FSharpx.Collections" Version="3.0.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.15.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="6.0.3" />
   </ItemGroup>
 
 </Project>

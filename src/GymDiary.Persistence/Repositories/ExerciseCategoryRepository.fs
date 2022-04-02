@@ -5,6 +5,7 @@ open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
 open GymDiary.Core.Persistence.Contracts
 open GymDiary.Persistence.Dtos
+open GymDiary.Persistence.Conversion
 
 open MongoDB.Driver
 

@@ -1,0 +1,22 @@
+namespace GymDiary.Persistence.Conversion
+
+open GymDiary.Core.Domain.Errors
+open GymDiary.Core.Domain.CommonTypes
+open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Persistence.Dtos
+
+open FsToolkit.ErrorHandling.Operator.Result
+
+module RepsWeightSetDto =
+
+    let fromDomain (domain: RepsWeightSet) : RepsWeightSetDto =
+        { OrderNum = domain.OrderNum |> PositiveInt.value
+          Reps = domain.Reps |> PositiveInt.value
+          EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value }
+
+    let toDomain (dto: RepsWeightSetDto) : Result<RepsWeightSet, ValidationError> =
+        let orderNum = dto.OrderNum |> PositiveInt.create "OrderNum"
+        let reps = dto.Reps |> PositiveInt.create "Reps"
+        let equipmentWeight = dto.EquipmentWeight |> EquipmentWeightKg.create "EquipmentWeight"
+
+        RepsWeightSet.create <!> orderNum <*> reps <*> equipmentWeight

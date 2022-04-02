@@ -2,16 +2,11 @@ namespace GymDiary.Persistence.Dtos
 
 open System
 
-open FsToolkit.ErrorHandling.Operator.Result
-
-open GymDiary.Core.Domain.Errors
-open GymDiary.Core.Domain.CommonTypes
-open GymDiary.Core.Domain.DomainTypes
-
 open MongoDB.Bson.Serialization.Attributes
 
-// It is safe to use non-nullable types for DTOs.
-// Driver throws "Cannot deserialize a 'DateTime' from BsonType 'Null'"
+// Do not use F# types for DTOs: driver cannot deserialize most of them. Use C# analogs instead.
+// It is safe to use non-nullable types for DTOs:
+// driver throws "Cannot deserialize a 'DateTime' from BsonType 'Null'"
 // and does not populate it silently with a default value.
 
 [<CLIMutable>]
@@ -93,7 +88,7 @@ type WorkoutTemplateDto =
       Name: string
       Goal: string
       Notes: string
-      Schedule: ResizeArray<string>
+      Schedule: ResizeArray<DayOfWeek>
       Exercises: ResizeArray<ExerciseTemplateDto>
       CreatedOn: DateTime
       LastModifiedOn: DateTime
@@ -128,17 +123,3 @@ type SportsmanDto =
       LastName: string
       DateOfBirth: Nullable<DateTime>
       Sex: Nullable<SexDto> }
-
-module ExerciseCategoryDto =
-
-    let fromDomain (domain: ExerciseCategory) : ExerciseCategoryDto =
-        { Id = domain.Id |> ExerciseCategoryId.value
-          Name = domain.Name |> String50.value
-          OwnerId = domain.OwnerId |> SportsmanId.value }
-
-    let toDomain (dto: ExerciseCategoryDto) : Result<ExerciseCategory, ValidationError> =
-        let id = dto.Id |> ExerciseCategoryId |> Ok
-        let name = dto.Name |> String50.create "Exercise Category Name"
-        let ownerId = dto.OwnerId |> SportsmanId |> Ok
-
-        ExerciseCategory.create <!> id <*> name <*> ownerId
