@@ -18,6 +18,12 @@ type ValidationError =
         | RegexNotMatched field -> $"'%s{field}' is not in the correct format."
 
 type PersistenceError =
-    | Validation of error: ValidationError
-    | Database of ex: exn
-    | Other of ex: exn
+    | DtoConversion of dto: string * error: ValidationError
+    | Database of operation: string * ex: exn
+    | Other of operation: string * ex: exn
+
+    static member toString (error: PersistenceError) =
+        match error with
+        | DtoConversion (dto, error) -> $"Failed to convert '%s{dto}': %s{ValidationError.toString error}"
+        | Database (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
+        | Other (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"

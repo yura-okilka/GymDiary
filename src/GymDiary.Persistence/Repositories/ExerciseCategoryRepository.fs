@@ -13,24 +13,32 @@ module ExerciseCategoryRepository =
 
     let create (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
         task {
+            let operation = "create ExerciseCategory"
+
             try
                 let dto = entity |> ExerciseCategoryDto.fromDomain
                 do! collection.InsertOneAsync(dto)
                 return dto.Id |> ExerciseCategoryId |> Ok
             with
-            | :? MongoException as ex -> return Error(Database ex)
-            | ex -> return Error(Other ex)
+            | :? MongoException as ex -> return Error(Database(operation, ex))
+            | ex -> return Error(Other(operation, ex))
         }
 
     let findById (collection: IMongoCollection<ExerciseCategoryDto>) (ExerciseCategoryId id) =
         task {
+            let operation = $"find ExerciseCategory by id '%s{id}'"
+
             try
                 let! cursor = collection.FindAsync(fun x -> x.Id = id)
                 let! dto = cursor.SingleAsync()
-                return dto |> ExerciseCategoryDto.toDomain |> Result.mapError Validation
+
+                return
+                    dto
+                    |> ExerciseCategoryDto.toDomain
+                    |> Result.mapError (fun e -> DtoConversion("ExerciseCategoryDto", e))
             with
-            | :? MongoException as ex -> return Error(Database ex)
-            | ex -> return Error(Other ex)
+            | :? MongoException as ex -> return Error(Database(operation, ex))
+            | ex -> return Error(Other(operation, ex))
         }
 
     let compose (collection: IMongoCollection<ExerciseCategoryDto>) =
