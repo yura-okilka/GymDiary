@@ -125,12 +125,46 @@ module SportsmanId =
 
 module EquipmentWeightKg =
 
-    let value (EquipmentWeightKg v) = v
+    let value (EquipmentWeightKg value) = decimal value
 
-    /// Create an EquipmentWeightKg from a decimal<kg>.
-    /// Return Error if input is not a decimal<kg> between 0.1 and 1000.00
-    let create fieldName v =
-        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) v
+    /// Create an EquipmentWeightKg from a decimal.
+    /// Return Error if input is not a decimal between 0.1 and 1000.00
+    let create (fieldName: string) (value: decimal) =
+        let valueKg = LanguagePrimitives.DecimalWithMeasure<kg> value
+        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) valueKg
+
+module RepsSet =
+
+    let create orderNum reps : RepsSet =
+        { OrderNum = orderNum
+          Reps = reps }
+
+module RepsWeightSet =
+
+    let create orderNum reps equipmentWeight : RepsWeightSet =
+        { OrderNum = orderNum
+          Reps = reps
+          EquipmentWeight = equipmentWeight }
+
+module DurationSet =
+
+    let create orderNum duration : DurationSet =
+        { OrderNum = orderNum
+          Duration = duration }
+
+module DurationWeightSet =
+
+    let create orderNum duration equipmentWeight : DurationWeightSet =
+        { OrderNum = orderNum
+          Duration = duration
+          EquipmentWeight = equipmentWeight }
+
+module DurationDistanceSet =
+
+    let create orderNum duration distance : DurationDistanceSet =
+        { OrderNum = orderNum
+          Duration = duration
+          Distance = distance }
 
 module ExerciseCategory =
 
@@ -138,3 +172,52 @@ module ExerciseCategory =
         { Id = id
           Name = name
           OwnerId = ownerId }
+
+module ExerciseTemplate =
+    let create id categoryId name notes restTime sets createdOn lastModifiedOn ownerId : ExerciseTemplate =
+        { Id = id
+          CategoryId = categoryId
+          Name = name
+          Notes = notes
+          RestTime = restTime
+          Sets = sets
+          CreatedOn = createdOn
+          LastModifiedOn = lastModifiedOn
+          OwnerId = ownerId }
+
+module WorkoutTemplate =
+    let create id name goal notes schedule exercises createdOn lastModifiedOn ownerId : WorkoutTemplate =
+        { Id = id
+          Name = name
+          Goal = goal
+          Notes = notes
+          Schedule = schedule
+          Exercises = exercises
+          CreatedOn = createdOn
+          LastModifiedOn = lastModifiedOn
+          OwnerId = ownerId }
+
+module Exercise =
+    let create templateId sets startedOn completedOn : Exercise =
+        { TemplateId = templateId
+          Sets = sets
+          StartedOn = startedOn
+          CompletedOn = completedOn }
+
+module Workout =
+    let create id templateId exercises startedOn completedOn ownerId : Workout =
+        { Id = id
+          TemplateId = templateId
+          Exercises = exercises
+          StartedOn = startedOn
+          CompletedOn = completedOn
+          OwnerId = ownerId }
+
+module Sportsman =
+    let create id email firstName lastName dateOfBirth sex : Sportsman =
+        { Id = id
+          Email = email
+          FirstName = firstName
+          LastName = lastName
+          DateOfBirth = dateOfBirth
+          Sex = sex }
