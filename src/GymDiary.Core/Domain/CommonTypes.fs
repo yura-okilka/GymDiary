@@ -113,10 +113,10 @@ module String1k =
 
 module PositiveInt =
 
-    let value (PositiveInt num) = num
+    let value (PositiveInt number) = number
 
-    let create fieldName num =
-        ConstrainedType.createInt fieldName PositiveInt (1, Int32.MaxValue) num
+    let create fieldName number =
+        ConstrainedType.createInt fieldName PositiveInt (1, Int32.MaxValue) number
 
 module EmailAddress =
 
