@@ -30,7 +30,7 @@ module WorkoutTemplateDto =
           OwnerId = domain.OwnerId |> SportsmanId.value }
 
     let toDomain (dto: WorkoutTemplateDto) : Result<WorkoutTemplate, ValidationError> =
-        let id = dto.Id |> WorkoutTemplateId |> Ok
+        let id = dto.Id |> WorkoutTemplateId.create "Id"
         let name = dto.Name |> String50.create "Name"
         let goal = dto.Goal |> String200.createOption "Goal"
         let notes = dto.Notes |> String1k.createOption "Notes"
@@ -49,7 +49,7 @@ module WorkoutTemplateDto =
 
         let createdOn = dto.CreatedOn |> Ok
         let lastModifiedOn = dto.LastModifiedOn |> Ok
-        let ownerId = dto.OwnerId |> SportsmanId |> Ok
+        let ownerId = dto.OwnerId |> SportsmanId.create "OwnerId"
 
         WorkoutTemplate.create <!> id
         <*> name

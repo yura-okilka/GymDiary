@@ -18,14 +18,19 @@ module ExerciseCategoryRepository =
             try
                 let dto = entity |> ExerciseCategoryDto.fromDomain
                 do! collection.InsertOneAsync(dto)
-                return dto.Id |> ExerciseCategoryId |> Ok
+
+                return
+                    dto.Id
+                    |> ExerciseCategoryId.create "Id"
+                    |> Result.mapError (fun e -> DtoConversion("ExerciseCategoryId", e))
             with
             | :? MongoException as ex -> return Error(Database(operation, ex))
             | ex -> return Error(Other(operation, ex))
         }
 
-    let findById (collection: IMongoCollection<ExerciseCategoryDto>) (ExerciseCategoryId id) =
+    let findById (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
         task {
+            let id = ExerciseCategoryId.value id
             let operation = $"find ExerciseCategory by id '%s{id}'"
 
             try

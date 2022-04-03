@@ -6,11 +6,11 @@ open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 open GymDiary.Core.Domain.CommonTypes
 
-type ExerciseCategoryId = ExerciseCategoryId of string
-type ExerciseTemplateId = ExerciseTemplateId of string
-type WorkoutTemplateId = WorkoutTemplateId of string
-type WorkoutId = WorkoutId of string
-type SportsmanId = SportsmanId of string
+type ExerciseCategoryId = private ExerciseCategoryId of string
+type ExerciseTemplateId = private ExerciseTemplateId of string
+type WorkoutTemplateId = private WorkoutTemplateId of string
+type WorkoutId = private WorkoutId of string
+type SportsmanId = private SportsmanId of string
 
 /// Constrained to be a decimal kilogram between 0.1 and 1000.00
 type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg>
@@ -107,28 +107,41 @@ module ExerciseCategoryId =
 
     let value (ExerciseCategoryId id) = id
 
+    let create fieldName value =
+        ConstrainedType.createString fieldName ExerciseCategoryId (0, Int32.MaxValue) value
+
 module ExerciseTemplateId =
 
     let value (ExerciseTemplateId id) = id
+
+    let create fieldName value =
+        ConstrainedType.createString fieldName ExerciseTemplateId (0, Int32.MaxValue) value
 
 module WorkoutTemplateId =
 
     let value (WorkoutTemplateId id) = id
 
+    let create fieldName value =
+        ConstrainedType.createString fieldName WorkoutTemplateId (0, Int32.MaxValue) value
+
 module WorkoutId =
 
     let value (WorkoutId id) = id
+
+    let create fieldName value =
+        ConstrainedType.createString fieldName WorkoutId (0, Int32.MaxValue) value
 
 module SportsmanId =
 
     let value (SportsmanId id) = id
 
+    let create fieldName value =
+        ConstrainedType.createString fieldName SportsmanId (0, Int32.MaxValue) value
+
 module EquipmentWeightKg =
 
     let value (EquipmentWeightKg value) = decimal value
 
-    /// Create an EquipmentWeightKg from a decimal.
-    /// Return Error if input is not a decimal between 0.1 and 1000.00
     let create (fieldName: string) (value: decimal) =
         let valueKg = LanguagePrimitives.DecimalWithMeasure<kg> value
         ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) valueKg

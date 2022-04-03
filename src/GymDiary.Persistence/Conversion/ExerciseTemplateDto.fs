@@ -21,15 +21,15 @@ module ExerciseTemplateDto =
           OwnerId = domain.OwnerId |> SportsmanId.value }
 
     let toDomain (dto: ExerciseTemplateDto) : Result<ExerciseTemplate, ValidationError> =
-        let id = dto.Id |> ExerciseTemplateId |> Ok
-        let categoryId = dto.CategoryId |> ExerciseCategoryId |> Ok
+        let id = dto.Id |> ExerciseTemplateId.create "Id"
+        let categoryId = dto.CategoryId |> ExerciseCategoryId.create "CategoryId"
         let name = dto.Name |> String50.create "Name"
         let notes = dto.Notes |> String1k.createOption "Notes"
         let restTime = dto.RestTime |> Ok
         let sets = dto.Sets |> ExerciseSetsDto.toDomain
         let createdOn = dto.CreatedOn |> Ok
         let lastModifiedOn = dto.LastModifiedOn |> Ok
-        let ownerId = dto.OwnerId |> SportsmanId |> Ok
+        let ownerId = dto.OwnerId |> SportsmanId.create "OwnerId"
 
         ExerciseTemplate.create <!> id
         <*> categoryId

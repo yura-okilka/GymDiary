@@ -20,8 +20,8 @@ module WorkoutDto =
           OwnerId = domain.OwnerId |> SportsmanId.value }
 
     let toDomain (dto: WorkoutDto) : Result<Workout, ValidationError> =
-        let id = dto.Id |> WorkoutId |> Ok
-        let templateId = dto.TemplateId |> WorkoutTemplateId |> Ok
+        let id = dto.Id |> WorkoutId.create "Id"
+        let templateId = dto.TemplateId |> WorkoutTemplateId.create "TemplateId"
 
         let exercises =
             if dto.Exercises = null then
@@ -31,6 +31,6 @@ module WorkoutDto =
 
         let startedOn = dto.StartedOn |> Ok
         let completedOn = dto.CompletedOn |> Ok
-        let ownerId = dto.OwnerId |> SportsmanId |> Ok
+        let ownerId = dto.OwnerId |> SportsmanId.create "OwnerId"
 
         Workout.create <!> id <*> templateId <*> exercises <*> startedOn <*> completedOn <*> ownerId

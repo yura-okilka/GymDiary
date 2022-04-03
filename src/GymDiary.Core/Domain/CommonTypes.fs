@@ -32,9 +32,11 @@ module ConstrainedType =
     open System.Text.RegularExpressions
 
     /// Create a constrained string using the constructor provided
-    let createString (fieldName: string) (ctor: string -> 'a) (maxLength: int) (value: string) =
-        if String.IsNullOrEmpty(value) then
-            Error(ValueNullOrEmpty fieldName)
+    let createString (fieldName: string) (ctor: string -> 'a) (minLength: int, maxLength: int) (value: string) =
+        if value = null then
+            Error(ValueNull fieldName)
+        elif value.Length < minLength then
+            Error(LengthLessThanLimit(fieldName, minLength.ToString()))
         elif value.Length > maxLength then
             Error(LengthGreaterThanLimit(fieldName, maxLength.ToString()))
         else
@@ -86,7 +88,7 @@ module String50 =
     let value (String50 value) = value
 
     let create fieldName value =
-        ConstrainedType.createString fieldName String50 50 value
+        ConstrainedType.createString fieldName String50 (1, 50) value
 
     let createOption fieldName value =
         ConstrainedType.createStringOption fieldName String50 50 value
@@ -96,7 +98,7 @@ module String200 =
     let value (String200 value) = value
 
     let create fieldName value =
-        ConstrainedType.createString fieldName String200 200 value
+        ConstrainedType.createString fieldName String200 (1, 200) value
 
     let createOption fieldName value =
         ConstrainedType.createStringOption fieldName String200 200 value
@@ -106,7 +108,7 @@ module String1k =
     let value (String1k value) = value
 
     let create fieldName value =
-        ConstrainedType.createString fieldName String1k 1000 value
+        ConstrainedType.createString fieldName String1k (1, 1000) value
 
     let createOption fieldName value =
         ConstrainedType.createStringOption fieldName String1k 1000 value

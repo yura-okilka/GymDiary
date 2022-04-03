@@ -15,7 +15,7 @@ module ExerciseDto =
           CompletedOn = domain.CompletedOn }
 
     let toDomain (dto: ExerciseDto) : Result<Exercise, ValidationError> =
-        let templateId = dto.TemplateId |> ExerciseTemplateId |> Ok
+        let templateId = dto.TemplateId |> ExerciseTemplateId.create "TemplateId"
         let sets = dto.Sets |> ExerciseSetsDto.toDomain
         let startedOn = dto.StartedOn |> Ok
         let completedOn = dto.CompletedOn |> Ok

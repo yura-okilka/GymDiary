@@ -22,7 +22,7 @@ module SportsmanDto =
           Sex = domain.Sex |> Option.map SexDto.fromDomain |> Option.toNullable }
 
     let toDomain (dto: SportsmanDto) : Result<Sportsman, ValidationError> =
-        let id = dto.Id |> SportsmanId |> Ok
+        let id = dto.Id |> SportsmanId.create "Id"
         let email = dto.Email |> EmailAddress.create "Email"
         let firstName = dto.FirstName |> String50.create "FirstName"
         let lastName = dto.LastName |> String50.create "LastName"
