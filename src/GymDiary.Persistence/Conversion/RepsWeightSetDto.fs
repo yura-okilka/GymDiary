@@ -15,8 +15,8 @@ module RepsWeightSetDto =
           EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value }
 
     let toDomain (dto: RepsWeightSetDto) : Result<RepsWeightSet, ValidationError> =
-        let orderNum = dto.OrderNum |> PositiveInt.create "OrderNum"
-        let reps = dto.Reps |> PositiveInt.create "Reps"
-        let equipmentWeight = dto.EquipmentWeight |> EquipmentWeightKg.create "EquipmentWeight"
+        let orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
+        let reps = dto.Reps |> PositiveInt.create (nameof dto.Reps)
+        let equipmentWeight = dto.EquipmentWeight |> EquipmentWeightKg.create (nameof dto.EquipmentWeight)
 
         RepsWeightSet.create <!> orderNum <*> reps <*> equipmentWeight

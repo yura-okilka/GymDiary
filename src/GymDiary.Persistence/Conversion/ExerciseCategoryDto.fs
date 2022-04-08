@@ -15,8 +15,8 @@ module ExerciseCategoryDto =
           OwnerId = domain.OwnerId |> SportsmanId.value }
 
     let toDomain (dto: ExerciseCategoryDto) : Result<ExerciseCategory, ValidationError> =
-        let id = dto.Id |> ExerciseCategoryId.create "Id"
-        let name = dto.Name |> String50.create "Name"
-        let ownerId = dto.OwnerId |> SportsmanId.create "OwnerId"
+        let id = dto.Id |> ExerciseCategoryId.create (nameof dto.Id)
+        let name = dto.Name |> String50.create (nameof dto.Name)
+        let ownerId = dto.OwnerId |> SportsmanId.create (nameof dto.OwnerId)
 
         ExerciseCategory.create <!> id <*> name <*> ownerId

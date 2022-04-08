@@ -23,7 +23,7 @@ module ExerciseCategoryRepository =
 
                 return
                     dto.Id
-                    |> ExerciseCategoryId.create "Id"
+                    |> ExerciseCategoryId.create (nameof dto.Id)
                     |> Result.mapError (fun e -> DtoConversion("ExerciseCategoryId", e))
             with
             | :? MongoException as ex -> return Error(Database(operation, ex))

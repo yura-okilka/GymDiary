@@ -15,8 +15,8 @@ module DurationWeightSetDto =
           EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value }
 
     let toDomain (dto: DurationWeightSetDto) : Result<DurationWeightSet, ValidationError> =
-        let orderNum = dto.OrderNum |> PositiveInt.create "OrderNum"
+        let orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
         let duration = dto.Duration |> Ok
-        let equipmentWeight = dto.EquipmentWeight |> EquipmentWeightKg.create "EquipmentWeight"
+        let equipmentWeight = dto.EquipmentWeight |> EquipmentWeightKg.create (nameof dto.EquipmentWeight)
 
         DurationWeightSet.create <!> orderNum <*> duration <*> equipmentWeight

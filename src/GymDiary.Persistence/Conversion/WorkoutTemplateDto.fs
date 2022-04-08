@@ -30,26 +30,26 @@ module WorkoutTemplateDto =
           OwnerId = domain.OwnerId |> SportsmanId.value }
 
     let toDomain (dto: WorkoutTemplateDto) : Result<WorkoutTemplate, ValidationError> =
-        let id = dto.Id |> WorkoutTemplateId.create "Id"
-        let name = dto.Name |> String50.create "Name"
-        let goal = dto.Goal |> String200.createOption "Goal"
-        let notes = dto.Notes |> String1k.createOption "Notes"
+        let id = dto.Id |> WorkoutTemplateId.create (nameof dto.Id)
+        let name = dto.Name |> String50.create (nameof dto.Name)
+        let goal = dto.Goal |> String200.createOption (nameof dto.Goal)
+        let notes = dto.Notes |> String1k.createOption (nameof dto.Notes)
 
         let schedule =
             if dto.Schedule = null then
-                ValueNull("Schedule") |> Error
+                ValueNull(nameof dto.Schedule) |> Error
             else
                 dto.Schedule |> ResizeArray.toSeq |> Set.ofSeq |> Ok
 
         let exercises =
             if dto.Exercises = null then
-                ValueNull("Exercises") |> Error
+                ValueNull(nameof dto.Exercises) |> Error
             else
                 dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDto.toDomain
 
         let createdOn = dto.CreatedOn |> Ok
         let lastModifiedOn = dto.LastModifiedOn |> Ok
-        let ownerId = dto.OwnerId |> SportsmanId.create "OwnerId"
+        let ownerId = dto.OwnerId |> SportsmanId.create (nameof dto.OwnerId)
 
         WorkoutTemplate.create <!> id
         <*> name

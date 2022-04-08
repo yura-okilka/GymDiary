@@ -14,7 +14,7 @@ module DurationSetDto =
           Duration = domain.Duration }
 
     let toDomain (dto: DurationSetDto) : Result<DurationSet, ValidationError> =
-        let orderNum = dto.OrderNum |> PositiveInt.create "OrderNum"
+        let orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
         let duration = dto.Duration |> Ok
 
         DurationSet.create <!> orderNum <*> duration

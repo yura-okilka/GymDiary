@@ -17,7 +17,7 @@ module DurationDistanceSetDto =
           Distance = domain.Distance |> decimal }
 
     let toDomain (dto: DurationDistanceSetDto) : Result<DurationDistanceSet, ValidationError> =
-        let orderNum = dto.OrderNum |> PositiveInt.create "OrderNum"
+        let orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
         let duration = dto.Duration |> Ok
         let distance = dto.Distance |> LanguagePrimitives.DecimalWithMeasure<m> |> Ok
 

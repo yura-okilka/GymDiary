@@ -67,7 +67,7 @@ module ExerciseSetsDto =
         match dto.Tag with
         | ExerciseSetsDtoTag.RepsSets ->
             if dto.RepsSets = null then
-                ValueNull("RepsSets") |> Error
+                ValueNull(nameof dto.RepsSets) |> Error
             else
                 dto.RepsSets
                 |> ResizeArray.toList
@@ -76,7 +76,7 @@ module ExerciseSetsDto =
 
         | ExerciseSetsDtoTag.RepsWeightSets ->
             if dto.RepsWeightSets = null then
-                ValueNull("RepsWeightSets") |> Error
+                ValueNull(nameof dto.RepsWeightSets) |> Error
             else
                 dto.RepsWeightSets
                 |> ResizeArray.toList
@@ -85,7 +85,7 @@ module ExerciseSetsDto =
 
         | ExerciseSetsDtoTag.DurationSets ->
             if dto.DurationSets = null then
-                ValueNull("DurationSets") |> Error
+                ValueNull(nameof dto.DurationSets) |> Error
             else
                 dto.DurationSets
                 |> ResizeArray.toList
@@ -94,7 +94,7 @@ module ExerciseSetsDto =
 
         | ExerciseSetsDtoTag.DurationWeightSets ->
             if dto.DurationWeightSets = null then
-                ValueNull("DurationWeightSets") |> Error
+                ValueNull(nameof dto.DurationWeightSets) |> Error
             else
                 dto.DurationWeightSets
                 |> ResizeArray.toList
@@ -103,11 +103,11 @@ module ExerciseSetsDto =
 
         | ExerciseSetsDtoTag.DurationDistanceSets ->
             if dto.DurationDistanceSets = null then
-                ValueNull("DurationDistanceSets") |> Error
+                ValueNull(nameof dto.DurationDistanceSets) |> Error
             else
                 dto.DurationDistanceSets
                 |> ResizeArray.toList
                 |> List.traverseResultM DurationDistanceSetDto.toDomain
                 |> Result.map DurationDistanceSets
 
-        | _ -> InvalidValue("Tag", dto.Tag.ToString()) |> Error
+        | _ -> InvalidValue(nameof dto.Tag, dto.Tag.ToString()) |> Error
