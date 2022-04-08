@@ -4,6 +4,7 @@ open GymDiary.Core.Extensions
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
 open GymDiary.Core.Persistence.Contracts
+open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 open GymDiary.Persistence.Conversion
 
@@ -15,8 +16,6 @@ module ExerciseCategoryRepository =
 
     let create (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
         task {
-            let operation = "create ExerciseCategory"
-
             try
                 let dto = entity |> ExerciseCategoryDto.fromDomain
                 do! collection.InsertOneAsync(dto)
@@ -26,8 +25,7 @@ module ExerciseCategoryRepository =
                     |> ExerciseCategoryId.create (nameof dto.Id)
                     |> Result.mapError (fun e -> DtoConversion("ExerciseCategoryId", e))
             with
-            | :? MongoException as ex -> return Error(Database(operation, ex))
-            | ex -> return Error(Other(operation, ex))
+            | ex -> return PersistenceError.createResult "create ExerciseCategory" ex
         }
 
     let findById (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
@@ -45,8 +43,7 @@ module ExerciseCategoryRepository =
                     |> Option.traverseResult ExerciseCategoryDto.toDomain
                     |> Result.mapError (fun e -> DtoConversion("ExerciseCategoryDto", e))
             with
-            | :? MongoException as ex -> return Error(Database(operation, ex))
-            | ex -> return Error(Other(operation, ex))
+            | ex -> return PersistenceError.createResult operation ex
         }
 
     let compose (collection: IMongoCollection<ExerciseCategoryDto>) =

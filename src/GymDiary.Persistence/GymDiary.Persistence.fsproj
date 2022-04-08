@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="InternalExtensions.fs" />
     <Compile Include="Dtos.fs" />
     <Compile Include="Conversion\RepsSetDto.fs" />
     <Compile Include="Conversion\RepsWeightSetDto.fs" />
