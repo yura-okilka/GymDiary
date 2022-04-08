@@ -7,6 +7,8 @@ open GymDiary.Core.Persistence.Contracts
 open GymDiary.Persistence.Dtos
 open GymDiary.Persistence.Conversion
 
+open FsToolkit.ErrorHandling
+
 open MongoDB.Driver
 
 module ExerciseCategoryRepository =
@@ -35,11 +37,12 @@ module ExerciseCategoryRepository =
 
             try
                 let! cursor = collection.FindAsync(fun x -> x.Id = id)
-                let! dto = cursor.SingleAsync()
+                let! dto = cursor.SingleOrDefaultAsync()
 
                 return
                     dto
-                    |> ExerciseCategoryDto.toDomain
+                    |> Option.ofRecord
+                    |> Option.traverseResult ExerciseCategoryDto.toDomain
                     |> Result.mapError (fun e -> DtoConversion("ExerciseCategoryDto", e))
             with
             | :? MongoException as ex -> return Error(Database(operation, ex))
