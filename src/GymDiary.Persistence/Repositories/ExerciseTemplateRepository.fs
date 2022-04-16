@@ -38,8 +38,10 @@ module ExerciseTemplateRepository =
             let id, entityWithIdMsg = unwrapId id
 
             try
-                let! cursor = collection.FindAsync(fun d -> d.Id = id)
-                let! dto = cursor.SingleOrDefaultAsync()
+                let! dto =
+                    collection
+                        .Find(fun d -> d.Id = id)
+                        .SingleOrDefaultAsync()
 
                 if isNull dto then
                     return PersistenceError.notFound entityWithIdMsg |> Error
