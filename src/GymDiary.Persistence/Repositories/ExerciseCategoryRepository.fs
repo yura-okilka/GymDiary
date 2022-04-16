@@ -3,7 +3,7 @@ namespace GymDiary.Persistence.Repositories
 open GymDiary.Core.Extensions
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
-open GymDiary.Core.Persistence.ExerciseCategory
+open GymDiary.Core.Persistence
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 open GymDiary.Persistence.Conversion
@@ -99,8 +99,8 @@ module ExerciseCategoryRepository =
 
     let createRepository (collection: IMongoCollection<ExerciseCategoryDto>) =
         { new IExerciseCategoryRepository with
-            member _.Create = fun entity -> create collection entity
-            member _.GetById = fun id -> getById collection id
-            member _.ExistWithName = fun name -> existWithName collection name
-            member _.Update = fun entity -> update collection entity
-            member _.Delete = fun id -> delete collection id }
+            member _.Create entity = create collection entity
+            member _.GetById id = getById collection id
+            member _.ExistWithName name = existWithName collection name
+            member _.Update entity = update collection entity
+            member _.Delete id = delete collection id }
