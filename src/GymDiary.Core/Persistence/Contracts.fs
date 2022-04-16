@@ -5,14 +5,14 @@ open GymDiary.Core.Domain.DomainTypes
 
 type CreateExerciseCategoryInDB = ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>
 type GetExerciseCategoryByIdFromDB = ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>
-type FindExerciseCategoryByNameInDB = string -> Async<Result<ExerciseCategory option, PersistenceError>>
+type ExerciseCategoryWithNameExistsInDB = string -> Async<Result<bool, PersistenceError>>
 type UpdateExerciseCategoryInDB = ExerciseCategory -> Async<Result<unit, PersistenceError>>
 type DeleteExerciseCategoryFromDB = ExerciseCategoryId -> Async<Result<unit, PersistenceError>>
 
 type IExerciseCategoryRepository =
     abstract member Create: CreateExerciseCategoryInDB
     abstract member GetById: GetExerciseCategoryByIdFromDB
-    abstract member FindByName: FindExerciseCategoryByNameInDB
+    abstract member ExistWithName: ExerciseCategoryWithNameExistsInDB
     abstract member Update: UpdateExerciseCategoryInDB
     abstract member Delete: DeleteExerciseCategoryFromDB
 

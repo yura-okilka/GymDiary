@@ -53,18 +53,16 @@ module ExerciseCategoryRepository =
         }
         |> Async.AwaitTask
 
-    let findByName (collection: IMongoCollection<ExerciseCategoryDto>) (name: string) =
+    let existWithName (collection: IMongoCollection<ExerciseCategoryDto>) (name: string) =
         task {
             try
                 // Consider using case insensitive index for large collections.
-                let! cursor = collection.FindAsync(fun d -> d.Name.ToLower() = name.ToLower())
-                let! dto = cursor.SingleOrDefaultAsync()
+                let! exists =
+                    collection
+                        .Find(fun d -> d.Name.ToLower() = name.ToLower())
+                        .AnyAsync()
 
-                return
-                    dto
-                    |> Option.ofRecord
-                    |> Option.traverseResult ExerciseCategoryDto.toDomain
-                    |> Result.mapError (PersistenceError.dtoConversion "ExerciseCategoryDto")
+                return Ok(exists)
             with
             | ex -> return PersistenceError.fromException $"find ExerciseCategory with name '%s{name}'" ex
         }
@@ -103,6 +101,6 @@ module ExerciseCategoryRepository =
         { new IExerciseCategoryRepository with
             member _.Create = fun entity -> create collection entity
             member _.GetById = fun id -> getById collection id
-            member _.FindByName = fun name -> findByName collection name
+            member _.ExistWithName = fun name -> existWithName collection name
             member _.Update = fun entity -> update collection entity
             member _.Delete = fun id -> delete collection id }
