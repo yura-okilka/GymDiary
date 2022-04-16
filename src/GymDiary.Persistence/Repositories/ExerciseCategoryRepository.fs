@@ -31,6 +31,7 @@ module ExerciseCategoryRepository =
             with
             | ex -> return PersistenceError.fromException "create ExerciseCategory" ex
         }
+        |> Async.AwaitTask
 
     let getById (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
         task {
@@ -50,6 +51,7 @@ module ExerciseCategoryRepository =
             with
             | ex -> return PersistenceError.fromException $"get %s{entityWithIdMsg}" ex
         }
+        |> Async.AwaitTask
 
     let findByName (collection: IMongoCollection<ExerciseCategoryDto>) (name: string) =
         task {
@@ -66,6 +68,7 @@ module ExerciseCategoryRepository =
             with
             | ex -> return PersistenceError.fromException $"find ExerciseCategory with name '%s{name}'" ex
         }
+        |> Async.AwaitTask
 
     let update (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
         task {
@@ -82,6 +85,7 @@ module ExerciseCategoryRepository =
             with
             | ex -> return PersistenceError.fromException $"update %s{entityWithIdMsg}" ex
         }
+        |> Async.AwaitTask
 
     let delete (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
         task {
@@ -93,6 +97,7 @@ module ExerciseCategoryRepository =
             with
             | ex -> return PersistenceError.fromException $"delete %s{entityWithIdMsg}" ex
         }
+        |> Async.AwaitTask
 
     let createRepository (collection: IMongoCollection<ExerciseCategoryDto>) =
         { new IExerciseCategoryRepository with

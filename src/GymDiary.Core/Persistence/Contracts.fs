@@ -1,15 +1,13 @@
 namespace GymDiary.Core.Persistence.ExerciseCategory
 
-open System.Threading.Tasks
-
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
 
-type CreateExerciseCategoryInDB = ExerciseCategory -> Task<Result<ExerciseCategoryId, PersistenceError>>
-type GetExerciseCategoryByIdFromDB = ExerciseCategoryId -> Task<Result<ExerciseCategory, PersistenceError>>
-type FindExerciseCategoryByNameInDB = string -> Task<Result<ExerciseCategory option, PersistenceError>>
-type UpdateExerciseCategoryInDB = ExerciseCategory -> Task<Result<unit, PersistenceError>>
-type DeleteExerciseCategoryFromDB = ExerciseCategoryId -> Task<Result<unit, PersistenceError>>
+type CreateExerciseCategoryInDB = ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>
+type GetExerciseCategoryByIdFromDB = ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>
+type FindExerciseCategoryByNameInDB = string -> Async<Result<ExerciseCategory option, PersistenceError>>
+type UpdateExerciseCategoryInDB = ExerciseCategory -> Async<Result<unit, PersistenceError>>
+type DeleteExerciseCategoryFromDB = ExerciseCategoryId -> Async<Result<unit, PersistenceError>>
 
 type IExerciseCategoryRepository =
     abstract member Create: CreateExerciseCategoryInDB
@@ -20,15 +18,13 @@ type IExerciseCategoryRepository =
 
 namespace GymDiary.Core.Persistence.ExerciseTemplate
 
-open System.Threading.Tasks
-
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
 
-type CreateExerciseTemplateInDB = ExerciseTemplate -> Task<Result<ExerciseTemplateId, PersistenceError>>
-type GetExerciseTemplateByIdFromDB = ExerciseTemplateId -> Task<Result<ExerciseTemplate, PersistenceError>>
-type UpdateExerciseTemplateInDB = ExerciseTemplate -> Task<Result<unit, PersistenceError>>
-type DeleteExerciseTemplateFromDB = ExerciseTemplateId -> Task<Result<unit, PersistenceError>>
+type CreateExerciseTemplateInDB = ExerciseTemplate -> Async<Result<ExerciseTemplateId, PersistenceError>>
+type GetExerciseTemplateByIdFromDB = ExerciseTemplateId -> Async<Result<ExerciseTemplate, PersistenceError>>
+type UpdateExerciseTemplateInDB = ExerciseTemplate -> Async<Result<unit, PersistenceError>>
+type DeleteExerciseTemplateFromDB = ExerciseTemplateId -> Async<Result<unit, PersistenceError>>
 
 type IExerciseTemplateRepository =
     abstract member Create: CreateExerciseTemplateInDB
