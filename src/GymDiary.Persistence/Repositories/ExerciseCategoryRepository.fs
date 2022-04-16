@@ -48,7 +48,23 @@ module ExerciseCategoryRepository =
                         |> ExerciseCategoryDto.toDomain
                         |> Result.mapError (PersistenceError.dtoConversion "ExerciseCategoryDto")
             with
-            | ex -> return PersistenceError.fromException $"find %s{entityWithIdMsg}" ex
+            | ex -> return PersistenceError.fromException $"get %s{entityWithIdMsg}" ex
+        }
+
+    let findByName (collection: IMongoCollection<ExerciseCategoryDto>) (name: string) =
+        task {
+            try
+                // Consider using case insensitive index for large collections.
+                let! cursor = collection.FindAsync(fun d -> d.Name.ToLower() = name.ToLower())
+                let! dto = cursor.SingleOrDefaultAsync()
+
+                return
+                    dto
+                    |> Option.ofRecord
+                    |> Option.traverseResult ExerciseCategoryDto.toDomain
+                    |> Result.mapError (PersistenceError.dtoConversion "ExerciseCategoryDto")
+            with
+            | ex -> return PersistenceError.fromException $"find ExerciseCategory with name '%s{name}'" ex
         }
 
     let update (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
@@ -82,5 +98,6 @@ module ExerciseCategoryRepository =
         { new IExerciseCategoryRepository with
             member _.Create = fun entity -> create collection entity
             member _.GetById = fun id -> getById collection id
+            member _.FindByName = fun name -> findByName collection name
             member _.Update = fun entity -> update collection entity
             member _.Delete = fun id -> delete collection id }
