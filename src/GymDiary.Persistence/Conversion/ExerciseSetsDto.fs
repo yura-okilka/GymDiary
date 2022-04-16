@@ -2,6 +2,7 @@ namespace GymDiary.Persistence.Conversion
 
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 
 open FSharpx.Collections
@@ -13,7 +14,7 @@ module ExerciseSetsDto =
 
     let fromDomain (domain: ExerciseSets) : ExerciseSetsDto =
         let emptyDto =
-            { Tag = Unchecked.defaultof<ExerciseSetsDtoTag>
+            { Tag = aNull<ExerciseSetsDtoTag>
               RepsSets = null
               RepsWeightSets = null
               DurationSets = null

@@ -3,6 +3,7 @@ namespace GymDiary.Persistence.Conversion
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 
 open FsToolkit.ErrorHandling.Operator.Result
@@ -13,7 +14,7 @@ module ExerciseTemplateDto =
         { Id = domain.Id |> ExerciseTemplateId.value
           CategoryId = domain.CategoryId |> ExerciseCategoryId.value
           Name = domain.Name |> String50.value
-          Notes = domain.Notes |> Option.map String1k.value |> Option.defaultValue Unchecked.defaultof<string>
+          Notes = domain.Notes |> Option.map String1k.value |> Option.defaultValue aNull<string>
           RestTime = domain.RestTime
           Sets = domain.Sets |> ExerciseSetsDto.fromDomain
           CreatedOn = domain.CreatedOn

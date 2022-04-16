@@ -5,6 +5,7 @@ open System
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 
 open FSharpx.Collections
@@ -17,8 +18,8 @@ module WorkoutTemplateDto =
     let fromDomain (domain: WorkoutTemplate) : WorkoutTemplateDto =
         { Id = domain.Id |> WorkoutTemplateId.value
           Name = domain.Name |> String50.value
-          Goal = domain.Goal |> Option.map String200.value |> Option.defaultValue Unchecked.defaultof<string>
-          Notes = domain.Notes |> Option.map String1k.value |> Option.defaultValue Unchecked.defaultof<string>
+          Goal = domain.Goal |> Option.map String200.value |> Option.defaultValue aNull<string>
+          Notes = domain.Notes |> Option.map String1k.value |> Option.defaultValue aNull<string>
           Schedule = domain.Schedule |> ResizeArray<DayOfWeek>
           Exercises =
             domain.Exercises
