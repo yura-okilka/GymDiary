@@ -4,8 +4,6 @@ open System
 
 module Extensions =
 
-    let inline isNotNull (value) = not (isNull value)
-
     module Option =
 
         let ofRecord (value: 'T) =

@@ -1,6 +1,6 @@
 namespace GymDiary.Persistence
 
-open GymDiary.Core.Persistence.Contracts
+open GymDiary.Core.Persistence
 open GymDiary.Persistence
 open GymDiary.Persistence.Repositories
 
@@ -10,15 +10,12 @@ type PersistenceSettings =
     { DatabaseName: string
       ConnectionString: string }
 
-type IPersistenceCompositionRoot =
-    abstract member ExerciseCategoryRepository: IExerciseCategoryRepository
-
 module CompositionRoot =
 
-    let compose (settings: PersistenceSettings) =
+    let createRoot (settings: PersistenceSettings) =
         let client = new MongoClient(settings.ConnectionString) // MongoClient & IMongoCollection<TDocument> are thread-safe.
-        let context = DBContext.compose client settings.DatabaseName
-        let exerciseCategoryRepository = ExerciseCategoryRepository.compose context.ExerciseCategories
+        let context = DBContext.createContext client settings.DatabaseName
+        let exerciseCategoryRepository = ExerciseCategoryRepository.createRepository context.ExerciseCategories
 
         { new IPersistenceCompositionRoot with
             member _.ExerciseCategoryRepository = exerciseCategoryRepository }

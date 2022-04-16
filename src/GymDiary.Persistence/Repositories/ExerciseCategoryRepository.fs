@@ -3,7 +3,7 @@ namespace GymDiary.Persistence.Repositories
 open GymDiary.Core.Extensions
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
-open GymDiary.Core.Persistence.Contracts
+open GymDiary.Core.Persistence.ExerciseCategory
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 open GymDiary.Persistence.Conversion
@@ -14,6 +14,10 @@ open MongoDB.Driver
 
 module ExerciseCategoryRepository =
 
+    let private unwrapId id =
+        let rawId = ExerciseCategoryId.value id
+        (rawId, $"ExerciseCategory with id '%s{rawId}'")
+
     let create (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
         task {
             try
@@ -23,30 +27,60 @@ module ExerciseCategoryRepository =
                 return
                     dto.Id
                     |> ExerciseCategoryId.create (nameof dto.Id)
-                    |> Result.mapError (fun e -> DtoConversion("ExerciseCategoryId", e))
+                    |> Result.mapError (PersistenceError.dtoConversion "ExerciseCategoryId")
             with
-            | ex -> return PersistenceError.createResult "create ExerciseCategory" ex
+            | ex -> return PersistenceError.fromException "create ExerciseCategory" ex
         }
 
-    let findById (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
+    let getById (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
         task {
-            let id = ExerciseCategoryId.value id
-            let operation = $"find ExerciseCategory by id '%s{id}'"
+            let id, entityWithIdMsg = unwrapId id
 
             try
-                let! cursor = collection.FindAsync(fun x -> x.Id = id)
+                let! cursor = collection.FindAsync(fun d -> d.Id = id)
                 let! dto = cursor.SingleOrDefaultAsync()
 
-                return
-                    dto
-                    |> Option.ofRecord
-                    |> Option.traverseResult ExerciseCategoryDto.toDomain
-                    |> Result.mapError (fun e -> DtoConversion("ExerciseCategoryDto", e))
+                if isNull dto then
+                    return PersistenceError.notFound entityWithIdMsg |> Error
+                else
+                    return
+                        dto
+                        |> ExerciseCategoryDto.toDomain
+                        |> Result.mapError (PersistenceError.dtoConversion "ExerciseCategoryDto")
             with
-            | ex -> return PersistenceError.createResult operation ex
+            | ex -> return PersistenceError.fromException $"find %s{entityWithIdMsg}" ex
         }
 
-    let compose (collection: IMongoCollection<ExerciseCategoryDto>) =
+    let update (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
+        task {
+            let _, entityWithIdMsg = unwrapId entity.Id
+
+            try
+                let dto = entity |> ExerciseCategoryDto.fromDomain
+                let! result = collection.ReplaceOneAsync((fun d -> d.Id = dto.Id), dto)
+
+                if result.ModifiedCount = 0 then
+                    return PersistenceError.notFound entityWithIdMsg |> Error
+                else
+                    return Ok()
+            with
+            | ex -> return PersistenceError.fromException $"update %s{entityWithIdMsg}" ex
+        }
+
+    let delete (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
+        task {
+            let id, entityWithIdMsg = unwrapId id
+
+            try
+                let! _ = collection.DeleteOneAsync(fun d -> d.Id = id)
+                return Ok()
+            with
+            | ex -> return PersistenceError.fromException $"delete %s{entityWithIdMsg}" ex
+        }
+
+    let createRepository (collection: IMongoCollection<ExerciseCategoryDto>) =
         { new IExerciseCategoryRepository with
-            member _.Create entity = create collection entity
-            member _.FindById id = findById collection id }
+            member _.Create = fun entity -> create collection entity
+            member _.GetById = fun id -> getById collection id
+            member _.Update = fun entity -> update collection entity
+            member _.Delete = fun id -> delete collection id }

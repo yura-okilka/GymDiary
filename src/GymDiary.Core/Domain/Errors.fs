@@ -22,12 +22,19 @@ type ValidationError =
         | RegexNotMatched field -> $"'%s{field}' is not in the correct format."
 
 type PersistenceError =
+    | NotFound of entity: string
     | DtoConversion of dto: string * error: ValidationError
     | Database of operation: string * ex: exn
     | Other of operation: string * ex: exn
 
+    static member notFound entity = NotFound(entity)
+    static member dtoConversion dto error = DtoConversion(dto, error)
+    static member database operation ex = Database(operation, ex)
+    static member other operation ex = Other(operation, ex)
+
     static member toString (error: PersistenceError) =
         match error with
+        | NotFound entity -> $"%s{entity} is not found."
         | DtoConversion (dto, error) -> $"Failed to convert '%s{dto}': %s{ValidationError.toString error}"
         | Database (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
         | Other (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
