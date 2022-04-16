@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -11,6 +11,8 @@
     <Compile Include="Domain\CommonTypes.fs" />
     <Compile Include="Domain\DomainTypes.fs" />
     <Compile Include="Persistence\Contracts.fs" />
+    <Compile Include="Workflows\ExerciseCategory\CreateExerciseCategory.fs" />
+    <Compile Include="CoreRoot.fs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,7 +10,7 @@ type PersistenceSettings =
     { DatabaseName: string
       ConnectionString: string }
 
-module CompositionRoot =
+module PersistenceRoot =
 
     let createRoot (settings: PersistenceSettings) =
         let client = new MongoClient(settings.ConnectionString) // MongoClient & IMongoCollection<TDocument> are thread-safe.

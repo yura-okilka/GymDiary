@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FsToolkit.ErrorHandling" Version="2.13.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
     <ProjectReference Include="..\GymDiary.Persistence\GymDiary.Persistence.fsproj" />
   </ItemGroup>

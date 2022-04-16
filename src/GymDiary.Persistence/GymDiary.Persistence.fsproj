@@ -25,7 +25,7 @@
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseTemplateRepository.fs" />
     <Compile Include="SerializationSettings.fs" />
-    <Compile Include="CompositionRoot.fs" />
+    <Compile Include="PersistenceRoot.fs" />
   </ItemGroup>
 
   <ItemGroup>
