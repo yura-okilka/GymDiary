@@ -1,12 +1,13 @@
 namespace GymDiary.Core.Persistence
 
 open GymDiary.Core.Domain.Errors
+open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
 
 type IExerciseCategoryRepository =
     abstract member Create: ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>
     abstract member GetById: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>
-    abstract member ExistWithName: string -> Async<Result<bool, PersistenceError>>
+    abstract member ExistWithName: String50 -> Async<Result<bool, PersistenceError>>
     abstract member Update: ExerciseCategory -> Async<Result<unit, PersistenceError>>
     abstract member Delete: ExerciseCategoryId -> Async<Result<unit, PersistenceError>>
 

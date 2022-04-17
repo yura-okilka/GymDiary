@@ -2,6 +2,7 @@ namespace GymDiary.Persistence.Repositories
 
 open GymDiary.Core.Extensions
 open GymDiary.Core.Domain.Errors
+open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
 open GymDiary.Core.Persistence
 open GymDiary.Persistence.InternalExtensions
@@ -55,7 +56,9 @@ module ExerciseCategoryRepository =
         }
         |> Async.AwaitTask
 
-    let existWithName (collection: IMongoCollection<ExerciseCategoryDto>) (name: string) =
+    let existWithName (collection: IMongoCollection<ExerciseCategoryDto>) (name: String50) =
+        let name = name |> String50.value
+
         task {
             try
                 // Consider using case insensitive index for large collections.

@@ -30,7 +30,7 @@ module CreateExerciseCategory =
     type Workflow = Command -> Async<Result<CommandResult, CommandError>>
 
     let createWorkflow
-        (categoryWithNameExistsInDB: string -> Async<Result<bool, PersistenceError>>)
+        (categoryWithNameExistsInDB: String50 -> Async<Result<bool, PersistenceError>>)
         (sportsmanWithIdExistsInDB: SportsmanId -> Async<Result<bool, PersistenceError>>)
         (createCategoryInDB: ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>)
         : Workflow =
@@ -52,7 +52,7 @@ module CreateExerciseCategory =
                     return! OwnerIsNotFound |> CommandError.domainResult
 
                 let! categoryExists =
-                    categoryWithNameExistsInDB command.Name |> AsyncResult.mapError CommandError.persistence
+                    categoryWithNameExistsInDB category.Name |> AsyncResult.mapError CommandError.persistence
 
                 if categoryExists then
                     return! ExerciseCategoryAlreadyExists |> CommandError.domainResult
