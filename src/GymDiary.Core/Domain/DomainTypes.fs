@@ -4,6 +4,7 @@ open System
 
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 
+open GymDiary.Core.Extensions
 open GymDiary.Core.Domain.CommonTypes
 
 type ExerciseCategoryId = private ExerciseCategoryId of string
@@ -110,7 +111,7 @@ module ExerciseCategoryId =
     let create fieldName value =
         ConstrainedType.createString fieldName ExerciseCategoryId (0, Int32.MaxValue) value
 
-    let empty = create "Id" ""
+    let empty = create "Id" "" |> Result.getOk
 
 module ExerciseTemplateId =
 
@@ -119,7 +120,7 @@ module ExerciseTemplateId =
     let create fieldName value =
         ConstrainedType.createString fieldName ExerciseTemplateId (0, Int32.MaxValue) value
 
-    let empty = create "Id" ""
+    let empty = create "Id" "" |> Result.getOk
 
 module WorkoutTemplateId =
 
@@ -128,7 +129,7 @@ module WorkoutTemplateId =
     let create fieldName value =
         ConstrainedType.createString fieldName WorkoutTemplateId (0, Int32.MaxValue) value
 
-    let empty = create "Id" ""
+    let empty = create "Id" "" |> Result.getOk
 
 module WorkoutId =
 
@@ -137,7 +138,7 @@ module WorkoutId =
     let create fieldName value =
         ConstrainedType.createString fieldName WorkoutId (0, Int32.MaxValue) value
 
-    let empty = create "Id" ""
+    let empty = create "Id" "" |> Result.getOk
 
 module SportsmanId =
 
@@ -146,7 +147,7 @@ module SportsmanId =
     let create fieldName value =
         ConstrainedType.createString fieldName SportsmanId (0, Int32.MaxValue) value
 
-    let empty = create "Id" ""
+    let empty = create "Id" "" |> Result.getOk
 
 module EquipmentWeightKg =
 

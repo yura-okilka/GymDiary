@@ -18,7 +18,7 @@ module CreateExerciseCategory =
         static member create id = { Id = id }
 
     type CommandError =
-        | Validation of ValidationError
+        | Validation of ValidationError list
         | Domain of DomainError
         | Persistence of PersistenceError
 
@@ -36,10 +36,10 @@ module CreateExerciseCategory =
         fun command ->
             asyncResult {
                 let! category =
-                    result { // TODO: use validation CE to collect errors.
-                        let! id = ExerciseCategoryId.empty
-                        let! name = String50.create (nameof command.Name) command.Name
-                        let! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId // TODO: ensure sportsman exists in DB.
+                    validation {
+                        let! id = ExerciseCategoryId.empty |> Ok
+                        and! name = String50.create (nameof command.Name) command.Name
+                        and! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId // TODO: ensure sportsman exists in DB.
                         return ExerciseCategory.create id name ownerId
                     }
                     |> Result.mapError CommandError.validation
