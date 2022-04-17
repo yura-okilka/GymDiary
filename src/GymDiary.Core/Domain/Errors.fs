@@ -1,6 +1,8 @@
 namespace GymDiary.Core.Domain.Errors
 
-type DomainError = | ExerciseCategoryAlreadyExists
+type DomainError =
+    | ExerciseCategoryAlreadyExists
+    | OwnerIsNotFound
 
 type ValidationError =
     | ValueNull of field: string

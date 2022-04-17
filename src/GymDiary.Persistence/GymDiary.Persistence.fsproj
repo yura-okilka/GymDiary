@@ -24,6 +24,7 @@
     <Compile Include="DBContext.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseTemplateRepository.fs" />
+    <Compile Include="Repositories\SportsmanRepository.fs" />
     <Compile Include="SerializationSettings.fs" />
     <Compile Include="PersistenceRoot.fs" />
   </ItemGroup>

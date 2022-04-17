@@ -16,6 +16,10 @@ type IExerciseTemplateRepository =
     abstract member Update: ExerciseTemplate -> Async<Result<unit, PersistenceError>>
     abstract member Delete: ExerciseTemplateId -> Async<Result<unit, PersistenceError>>
 
+type ISportsmanRepository =
+    abstract member ExistWithId: SportsmanId -> Async<Result<bool, PersistenceError>>
+
 type IPersistenceCompositionRoot =
     abstract member ExerciseCategoryRepository: IExerciseCategoryRepository
     abstract member ExerciseTemplateRepository: IExerciseTemplateRepository
+    abstract member SportsmanRepository: ISportsmanRepository

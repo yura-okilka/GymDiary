@@ -31,6 +31,7 @@ module CreateExerciseCategory =
 
     let createWorkflow
         (categoryWithNameExistsInDB: string -> Async<Result<bool, PersistenceError>>)
+        (sportsmanWithIdExistsInDB: SportsmanId -> Async<Result<bool, PersistenceError>>)
         (createCategoryInDB: ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>)
         : Workflow =
         fun command ->
@@ -39,18 +40,24 @@ module CreateExerciseCategory =
                     validation {
                         let! id = ExerciseCategoryId.empty |> Ok
                         and! name = String50.create (nameof command.Name) command.Name
-                        and! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId // TODO: ensure sportsman exists in DB.
+                        and! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId
                         return ExerciseCategory.create id name ownerId
                     }
                     |> Result.mapError CommandError.validation
 
-                let! alreadyExists =
+                let! ownerExists =
+                    sportsmanWithIdExistsInDB category.OwnerId |> AsyncResult.mapError CommandError.persistence
+
+                if not ownerExists then
+                    return! OwnerIsNotFound |> CommandError.domainResult
+
+                let! categoryExists =
                     categoryWithNameExistsInDB command.Name |> AsyncResult.mapError CommandError.persistence
 
-                if alreadyExists then
+                if categoryExists then
                     return! ExerciseCategoryAlreadyExists |> CommandError.domainResult
-                else
-                    let! id = createCategoryInDB category |> AsyncResult.mapError CommandError.persistence
 
-                    return id |> ExerciseCategoryId.value |> CommandResult.create
+                let! id = createCategoryInDB category |> AsyncResult.mapError CommandError.persistence
+
+                return id |> ExerciseCategoryId.value |> CommandResult.create
             }

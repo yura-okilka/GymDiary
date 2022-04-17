@@ -12,6 +12,7 @@ module CoreRoot =
         let createExerciseCategoryWorkflow =
             CreateExerciseCategory.createWorkflow
                 persistenceRoot.ExerciseCategoryRepository.ExistWithName
+                persistenceRoot.SportsmanRepository.ExistWithId
                 persistenceRoot.ExerciseCategoryRepository.Create
 
         { new ICoreCompositionRoot with
