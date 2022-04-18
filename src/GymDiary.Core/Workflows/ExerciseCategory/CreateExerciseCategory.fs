@@ -49,7 +49,7 @@ module CreateExerciseCategory =
                     sportsmanWithIdExistsInDB category.OwnerId |> AsyncResult.mapError CommandError.persistence
 
                 if not ownerExists then
-                    return! OwnerIsNotFound |> CommandError.domainResult
+                    return! OwnerNotFound |> CommandError.domainResult
 
                 let! categoryExists =
                     categoryWithNameExistsInDB category.Name |> AsyncResult.mapError CommandError.persistence

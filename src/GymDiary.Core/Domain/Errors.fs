@@ -2,7 +2,12 @@ namespace GymDiary.Core.Domain.Errors
 
 type DomainError =
     | ExerciseCategoryAlreadyExists
-    | OwnerIsNotFound
+    | OwnerNotFound
+
+    static member toString (error: DomainError) =
+        match error with
+        | ExerciseCategoryAlreadyExists -> "Exercise category already exists."
+        | OwnerNotFound -> "Owner is not found."
 
 type ValidationError =
     | ValueNull of field: string
@@ -12,7 +17,9 @@ type ValidationError =
     | LengthLessThanLimit of field: string * limit: string
     | LengthGreaterThanLimit of field: string * limit: string
     | InvalidValue of field: string * value: string
-    | RegexNotMatched of field: string
+    | InvalidEmailAddress of field: string
+    | InvalidPhoneNumber of field: string
+    | PatternNotMatched of field: string
 
     static member toString (error: ValidationError) =
         match error with
@@ -23,12 +30,14 @@ type ValidationError =
         | LengthLessThanLimit (field, limit) -> $"The length of '%s{field}' must be at least %s{limit} characters."
         | LengthGreaterThanLimit (field, limit) -> $"The length of '%s{field}' must be %s{limit} characters or fewer."
         | InvalidValue (field, value) -> $"'%s{field}' cannot contain '%s{value}'."
-        | RegexNotMatched field -> $"'%s{field}' is not in the correct format."
+        | InvalidEmailAddress field -> $"'%s{field}' is not a valid email address."
+        | InvalidPhoneNumber field -> $"'%s{field}' is not a valid phone number."
+        | PatternNotMatched field -> $"'%s{field}' is not in the correct format."
 
 type PersistenceError =
     | NotFound of entity: string
     | DtoConversion of dto: string * error: ValidationError
-    | Database of operation: string * ex: exn
+    | Database of operation: string * ex: exn // Introduce separate DU cases for database errors that are important for control flow (see NotFound).
     | Other of operation: string * ex: exn
 
     static member notFound entity = NotFound(entity)

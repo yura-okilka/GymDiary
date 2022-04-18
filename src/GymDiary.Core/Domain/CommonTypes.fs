@@ -2,8 +2,6 @@ namespace GymDiary.Core.Domain.CommonTypes
 
 open System
 
-open FSharp.Data.UnitSystems.SI.UnitSymbols
-
 open GymDiary.Core.Domain.Errors
 
 /// Constrained to be 50 chars or less, not null
@@ -21,6 +19,9 @@ type PositiveInt = private PositiveInt of int
 /// Constrained to be a valid email address
 type EmailAddress = private EmailAddress of string
 
+/// Constrained to be a valid phone number
+type PhoneNumber = private PhoneNumber of string
+
 type Sex =
     | Male
     | Female
@@ -30,6 +31,8 @@ type Sex =
 module ConstrainedType =
 
     open System.Text.RegularExpressions
+
+    open FSharp.Data.UnitSystems.SI.UnitSymbols
 
     /// Create a constrained string using the constructor provided
     let createString (fieldName: string) (ctor: string -> 'a) (minLength: int, maxLength: int) (value: string) =
@@ -81,7 +84,7 @@ module ConstrainedType =
         elif Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1)) then
             Ok(ctor value)
         else
-            Error(RegexNotMatched(fieldName))
+            Error(PatternNotMatched fieldName)
 
 module String50 =
 
@@ -122,8 +125,28 @@ module PositiveInt =
 
 module EmailAddress =
 
+    open System.ComponentModel.DataAnnotations
+
     let value (EmailAddress value) = value
 
-    let create fieldName value =
-        let pattern = ".+@.+" // anything separated by an "@"
-        ConstrainedType.createLike fieldName EmailAddress pattern value
+    let create (fieldName: string) (value: string) =
+        let attribute = new EmailAddressAttribute()
+
+        if attribute.IsValid(value) then
+            Ok(EmailAddress value)
+        else
+            Error(InvalidEmailAddress fieldName)
+
+module PhoneNumber =
+
+    open System.ComponentModel.DataAnnotations
+
+    let value (PhoneNumber value) = value
+
+    let create (fieldName: string) (value: string) =
+        let attribute = new PhoneAttribute()
+
+        if attribute.IsValid(value) then
+            Ok(PhoneNumber value)
+        else
+            Error(InvalidPhoneNumber fieldName)
