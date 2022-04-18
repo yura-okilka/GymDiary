@@ -150,11 +150,12 @@ module SportsmanId =
 
 module EquipmentWeightKg =
 
+    open GymDiary.Core.Extensions
+
     let value (EquipmentWeightKg value) = decimal value
 
     let create (fieldName: string) (value: decimal) =
-        let valueKg = LanguagePrimitives.DecimalWithMeasure<kg> value
-        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) valueKg
+        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) (decimalKilogram value)
 
 module RepsSet =
 

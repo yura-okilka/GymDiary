@@ -26,3 +26,12 @@ module Extensions =
     module DateOnly =
 
         let toDateTime (date: DateOnly) = date.ToDateTime(TimeOnly.MinValue)
+
+    [<AutoOpen>]
+    module UnitOfMeasure =
+
+        open FSharp.Data.UnitSystems.SI.UnitSymbols
+
+        let decimalMeter = LanguagePrimitives.DecimalWithMeasure<m>
+
+        let decimalKilogram = LanguagePrimitives.DecimalWithMeasure<kg>
