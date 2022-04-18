@@ -111,7 +111,7 @@ module ExerciseCategoryId =
     let create fieldName value =
         ConstrainedType.createString fieldName ExerciseCategoryId (0, Int32.MaxValue) value
 
-    let empty = create "Id" "" |> Result.getOk
+    let empty = ExerciseCategoryId ""
 
 module ExerciseTemplateId =
 
@@ -120,7 +120,7 @@ module ExerciseTemplateId =
     let create fieldName value =
         ConstrainedType.createString fieldName ExerciseTemplateId (0, Int32.MaxValue) value
 
-    let empty = create "Id" "" |> Result.getOk
+    let empty = ExerciseTemplateId ""
 
 module WorkoutTemplateId =
 
@@ -129,7 +129,7 @@ module WorkoutTemplateId =
     let create fieldName value =
         ConstrainedType.createString fieldName WorkoutTemplateId (0, Int32.MaxValue) value
 
-    let empty = create "Id" "" |> Result.getOk
+    let empty = WorkoutTemplateId ""
 
 module WorkoutId =
 
@@ -138,7 +138,7 @@ module WorkoutId =
     let create fieldName value =
         ConstrainedType.createString fieldName WorkoutId (0, Int32.MaxValue) value
 
-    let empty = create "Id" "" |> Result.getOk
+    let empty = WorkoutId ""
 
 module SportsmanId =
 
@@ -147,7 +147,7 @@ module SportsmanId =
     let create fieldName value =
         ConstrainedType.createString fieldName SportsmanId (0, Int32.MaxValue) value
 
-    let empty = create "Id" "" |> Result.getOk
+    let empty = SportsmanId ""
 
 module EquipmentWeightKg =
 
