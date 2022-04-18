@@ -6,7 +6,7 @@ open GymDiary.Core.Domain.DomainTypes
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 
-open FsToolkit.ErrorHandling.Operator.Result
+open FsToolkit.ErrorHandling
 
 module ExerciseTemplateDto =
 
@@ -22,22 +22,16 @@ module ExerciseTemplateDto =
           OwnerId = domain.OwnerId |> SportsmanId.value }
 
     let toDomain (dto: ExerciseTemplateDto) : Result<ExerciseTemplate, ValidationError> =
-        let id = dto.Id |> ExerciseTemplateId.create (nameof dto.Id)
-        let categoryId = dto.CategoryId |> ExerciseCategoryId.create (nameof dto.CategoryId)
-        let name = dto.Name |> String50.create (nameof dto.Name)
-        let notes = dto.Notes |> String1k.createOption (nameof dto.Notes)
-        let restTime = dto.RestTime |> Ok
-        let sets = dto.Sets |> ExerciseSetsDto.toDomain
-        let createdOn = dto.CreatedOn |> Ok
-        let lastModifiedOn = dto.LastModifiedOn |> Ok
-        let ownerId = dto.OwnerId |> SportsmanId.create (nameof dto.OwnerId)
+        result {
+            let! id = dto.Id |> ExerciseTemplateId.create (nameof dto.Id)
+            let! categoryId = dto.CategoryId |> ExerciseCategoryId.create (nameof dto.CategoryId)
+            let! name = dto.Name |> String50.create (nameof dto.Name)
+            let! notes = dto.Notes |> String1k.createOption (nameof dto.Notes)
+            let! restTime = dto.RestTime |> Ok
+            let! sets = dto.Sets |> ExerciseSetsDto.toDomain
+            let! createdOn = dto.CreatedOn |> Ok
+            let! lastModifiedOn = dto.LastModifiedOn |> Ok
+            let! ownerId = dto.OwnerId |> SportsmanId.create (nameof dto.OwnerId)
 
-        ExerciseTemplate.create <!> id
-        <*> categoryId
-        <*> name
-        <*> notes
-        <*> restTime
-        <*> sets
-        <*> createdOn
-        <*> lastModifiedOn
-        <*> ownerId
+            return ExerciseTemplate.create id categoryId name notes restTime sets createdOn lastModifiedOn ownerId
+        }
