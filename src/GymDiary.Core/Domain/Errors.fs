@@ -2,11 +2,13 @@ namespace GymDiary.Core.Domain.Errors
 
 type DomainError =
     | ExerciseCategoryAlreadyExists
+    | ExerciseCategoryNotFound
     | OwnerNotFound
 
     static member toString (error: DomainError) =
         match error with
         | ExerciseCategoryAlreadyExists -> "Exercise category already exists."
+        | ExerciseCategoryNotFound -> "Exercise category is not found."
         | OwnerNotFound -> "Owner is not found."
 
 type ValidationError =
@@ -37,7 +39,7 @@ type ValidationError =
 type PersistenceError =
     | NotFound of entity: string
     | DtoConversion of dto: string * error: ValidationError
-    | Database of operation: string * ex: exn // Introduce separate DU cases for database errors that are important for control flow (see NotFound).
+    | Database of operation: string * ex: exn // Introduce separate DU cases for database errors that are important for domain and control flow (see NotFound).
     | Other of operation: string * ex: exn
 
     static member notFound entity = NotFound(entity)

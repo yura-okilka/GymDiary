@@ -5,6 +5,7 @@ open GymDiary.Core.Workflows.ExerciseCategory
 
 type ICoreCompositionRoot =
     abstract member CreateExerciseCategoryWorkflow: CreateExerciseCategory.Workflow
+    abstract member GetExerciseCategoryWorkflow: GetExerciseCategory.Workflow
 
 module CoreRoot =
 
@@ -15,5 +16,9 @@ module CoreRoot =
                 persistenceRoot.SportsmanRepository.ExistWithId
                 persistenceRoot.ExerciseCategoryRepository.Create
 
+        let getExerciseCategoryWorkflow =
+            GetExerciseCategory.createWorkflow persistenceRoot.ExerciseCategoryRepository.GetById
+
         { new ICoreCompositionRoot with
-            member _.CreateExerciseCategoryWorkflow = createExerciseCategoryWorkflow }
+            member _.CreateExerciseCategoryWorkflow = createExerciseCategoryWorkflow
+            member _.GetExerciseCategoryWorkflow = getExerciseCategoryWorkflow }
