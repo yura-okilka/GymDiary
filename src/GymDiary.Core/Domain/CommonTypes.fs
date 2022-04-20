@@ -37,31 +37,31 @@ module ConstrainedType =
     /// Create a constrained string using the constructor provided
     let createString (fieldName: string) (ctor: string -> 'a) (minLength: int, maxLength: int) (value: string) =
         if value = null then
-            Error(ValueNull fieldName)
+            ValueNull fieldName |> Error
         elif value.Length < minLength then
-            Error(LengthLessThanLimit(fieldName, minLength.ToString()))
+            LengthLessThanLimit(fieldName, minLength.ToString()) |> Error
         elif value.Length > maxLength then
-            Error(LengthGreaterThanLimit(fieldName, maxLength.ToString()))
+            LengthGreaterThanLimit(fieldName, maxLength.ToString()) |> Error
         else
-            Ok(ctor value)
+            ctor value |> Ok
 
     /// Create an optional constrained string using the constructor provided
     let createStringOption (fieldName: string) (ctor: string -> 'a) (maxLength: int) (value: string) =
         if String.IsNullOrEmpty(value) then
-            Ok(None)
+            None |> Ok
         elif value.Length > maxLength then
-            Error(LengthGreaterThanLimit(fieldName, maxLength.ToString()))
+            LengthGreaterThanLimit(fieldName, maxLength.ToString()) |> Error
         else
-            Ok(Some(ctor value))
+            ctor value |> Some |> Ok
 
     /// Create a constrained integer using the constructor provided
     let createInt (fieldName: string) (ctor: int -> 'a) (minValue: int, maxValue: int) (value: int) =
         if value < minValue then
-            Error(ValueLessThanLimit(fieldName, minValue.ToString()))
+            ValueLessThanLimit(fieldName, minValue.ToString()) |> Error
         elif value > maxValue then
-            Error(ValueGreaterThanLimit(fieldName, maxValue.ToString()))
+            ValueGreaterThanLimit(fieldName, maxValue.ToString()) |> Error
         else
-            Ok(ctor value)
+            ctor value |> Ok
 
     /// Create a constrained decimal<kg> using the constructor provided
     let createDecimalKg
@@ -71,20 +71,20 @@ module ConstrainedType =
         (value: decimal<kg>)
         =
         if value < minValue then
-            Error(ValueLessThanLimit(fieldName, minValue.ToString()))
+            ValueLessThanLimit(fieldName, minValue.ToString()) |> Error
         elif value > maxValue then
-            Error(ValueGreaterThanLimit(fieldName, maxValue.ToString()))
+            ValueGreaterThanLimit(fieldName, maxValue.ToString()) |> Error
         else
-            Ok(ctor value)
+            ctor value |> Ok
 
     /// Create a constrained string using the constructor provided
     let createLike (fieldName: string) (ctor: string -> 'a) (pattern: string) (value: string) =
         if String.IsNullOrEmpty(value) then
-            Error(ValueNullOrEmpty fieldName)
+            ValueNullOrEmpty fieldName |> Error
         elif Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1)) then
-            Ok(ctor value)
+            ctor value |> Ok
         else
-            Error(PatternNotMatched fieldName)
+            PatternNotMatched fieldName |> Error
 
 module String50 =
 
@@ -133,9 +133,9 @@ module EmailAddress =
         let attribute = new EmailAddressAttribute()
 
         if attribute.IsValid(value) then
-            Ok(EmailAddress value)
+            EmailAddress value |> Ok
         else
-            Error(InvalidEmailAddress fieldName)
+            InvalidEmailAddress fieldName |> Error
 
 module PhoneNumber =
 
@@ -147,6 +147,6 @@ module PhoneNumber =
         let attribute = new PhoneAttribute()
 
         if attribute.IsValid(value) then
-            Ok(PhoneNumber value)
+            PhoneNumber value |> Ok
         else
-            Error(InvalidPhoneNumber fieldName)
+            InvalidPhoneNumber fieldName |> Error
