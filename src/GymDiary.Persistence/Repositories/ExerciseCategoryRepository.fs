@@ -45,13 +45,14 @@ module ExerciseCategoryRepository =
                         .SingleOrDefaultAsync()
 
                 if isNull dto then
-                    return PersistenceError.notFound entityWithIdMsg |> Error
+                    return PersistenceError.notFoundResult entityWithIdMsg
                 else
                     return
                         dto
                         |> ExerciseCategoryDto.toDomain
                         |> Result.mapError (PersistenceError.dtoConversion "ExerciseCategoryDto")
             with
+            | ObjectIdFormatException _ -> return PersistenceError.notFoundResult entityWithIdMsg
             | ex -> return PersistenceError.fromException $"get %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask
@@ -82,10 +83,11 @@ module ExerciseCategoryRepository =
                 let! result = collection.ReplaceOneAsync((fun d -> d.Id = dto.Id), dto)
 
                 if result.ModifiedCount = 0 then
-                    return PersistenceError.notFound entityWithIdMsg |> Error
+                    return PersistenceError.notFoundResult entityWithIdMsg
                 else
                     return Ok()
             with
+            | ObjectIdFormatException _ -> return PersistenceError.notFoundResult entityWithIdMsg
             | ex -> return PersistenceError.fromException $"update %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask
@@ -98,6 +100,7 @@ module ExerciseCategoryRepository =
                 let! _ = collection.DeleteOneAsync(fun d -> d.Id = id)
                 return Ok()
             with
+            | ObjectIdFormatException _ -> return PersistenceError.notFoundResult entityWithIdMsg
             | ex -> return PersistenceError.fromException $"delete %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask

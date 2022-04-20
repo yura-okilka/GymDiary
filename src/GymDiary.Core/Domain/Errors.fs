@@ -43,6 +43,7 @@ type PersistenceError =
     | Other of operation: string * ex: exn
 
     static member notFound entity = NotFound(entity)
+    static member notFoundResult entity = Error(NotFound(entity))
     static member dtoConversion dto error = DtoConversion(dto, error)
     static member database operation ex = Database(operation, ex)
     static member other operation ex = Other(operation, ex)

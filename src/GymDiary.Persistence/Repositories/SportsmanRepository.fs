@@ -1,5 +1,6 @@
 namespace GymDiary.Persistence.Repositories
 
+open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
 open GymDiary.Core.Persistence
 open GymDiary.Persistence.InternalExtensions
@@ -23,6 +24,7 @@ module SportsmanRepository =
                 let! exists = collection.Find(fun d -> d.Id = id).AnyAsync()
                 return Ok(exists)
             with
+            | ObjectIdFormatException _ -> return Ok(false)
             | ex -> return PersistenceError.fromException $"find %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask

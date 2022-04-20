@@ -1,5 +1,7 @@
 namespace GymDiary.Persistence
 
+open System
+
 open GymDiary.Core.Domain.Errors
 
 open MongoDB.Driver
@@ -12,6 +14,14 @@ module internal InternalExtensions =
         let inline isNull value = obj.ReferenceEquals(value, null)
 
         let inline aNull<'T> = Unchecked.defaultof<'T>
+
+    [<AutoOpen>]
+    module ExceptionPatterns =
+
+        let (|ObjectIdFormatException|_|) (ex: exn) =
+            match ex with
+            | :? FormatException as fex when fex.Message.Contains("is not a valid 24 digit hex string") -> Some fex
+            | _ -> None
 
     module PersistenceError =
 
