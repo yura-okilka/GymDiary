@@ -1,13 +1,13 @@
 namespace GymDiary.Core.Domain.Errors
 
 type DomainError =
-    | ExerciseCategoryAlreadyExists
+    | ExerciseCategoryWithNameAlreadyExists of name: string
     | ExerciseCategoryNotFound
     | OwnerNotFound
 
     static member toString (error: DomainError) =
         match error with
-        | ExerciseCategoryAlreadyExists -> "Exercise category already exists."
+        | ExerciseCategoryWithNameAlreadyExists name -> $"Exercise category '%s{name}' already exists."
         | ExerciseCategoryNotFound -> "Exercise category is not found."
         | OwnerNotFound -> "Owner is not found."
 

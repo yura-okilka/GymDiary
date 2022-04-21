@@ -55,7 +55,9 @@ module CreateExerciseCategory =
                     categoryWithNameExistsInDB category.Name |> AsyncResult.mapError CommandError.persistence
 
                 if categoryExists then
-                    return! ExerciseCategoryAlreadyExists |> CommandError.domainResult
+                    return!
+                        ExerciseCategoryWithNameAlreadyExists(category.Name |> String50.value)
+                        |> CommandError.domainResult
 
                 let! id = createCategoryInDB category |> AsyncResult.mapError CommandError.persistence
 

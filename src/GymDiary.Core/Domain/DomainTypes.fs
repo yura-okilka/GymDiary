@@ -197,6 +197,8 @@ module ExerciseCategory =
           Name = name
           OwnerId = ownerId }
 
+    let rename (name: String50) (category: ExerciseCategory) = { category with Name = name }
+
 module ExerciseTemplate =
     let create id categoryId name notes restTime sets createdOn lastModifiedOn ownerId : ExerciseTemplate =
         { Id = id
