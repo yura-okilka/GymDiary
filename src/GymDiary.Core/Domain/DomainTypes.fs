@@ -155,7 +155,7 @@ module EquipmentWeightKg =
     let value (EquipmentWeightKg value) = decimal value
 
     let create (fieldName: string) (value: decimal) =
-        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) (decimalKilogram value)
+        ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) (decimalKg value)
 
 module RepsSet =
 

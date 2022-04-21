@@ -32,6 +32,6 @@ module Extensions =
 
         open FSharp.Data.UnitSystems.SI.UnitSymbols
 
-        let decimalMeter = LanguagePrimitives.DecimalWithMeasure<m>
+        let decimalM = LanguagePrimitives.DecimalWithMeasure<m>
 
-        let decimalKilogram = LanguagePrimitives.DecimalWithMeasure<kg>
+        let decimalKg = LanguagePrimitives.DecimalWithMeasure<kg>

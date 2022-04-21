@@ -18,6 +18,6 @@ module DurationDistanceSetDto =
     let toDomain (dto: DurationDistanceSetDto) : Result<DurationDistanceSet, ValidationError> =
         let orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
         let duration = dto.Duration |> Ok
-        let distance = dto.Distance |> decimalMeter |> Ok
+        let distance = dto.Distance |> decimalM |> Ok
 
         DurationDistanceSet.create <!> orderNum <*> duration <*> distance
