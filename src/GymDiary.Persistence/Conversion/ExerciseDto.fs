@@ -4,7 +4,7 @@ open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
 open GymDiary.Persistence.Dtos
 
-open FsToolkit.ErrorHandling.Operator.Result
+open FsToolkit.ErrorHandling
 
 module ExerciseDto =
 
@@ -15,9 +15,9 @@ module ExerciseDto =
           CompletedOn = domain.CompletedOn }
 
     let toDomain (dto: ExerciseDto) : Result<Exercise, ValidationError> =
-        let templateId = dto.TemplateId |> ExerciseTemplateId.create (nameof dto.TemplateId)
-        let sets = dto.Sets |> ExerciseSetsDto.toDomain
-        let startedOn = dto.StartedOn |> Ok
-        let completedOn = dto.CompletedOn |> Ok
+        result {
+            let! templateId = dto.TemplateId |> ExerciseTemplateId.create (nameof dto.TemplateId)
+            let! sets = dto.Sets |> ExerciseSetsDto.toDomain
 
-        Exercise.create <!> templateId <*> sets <*> startedOn <*> completedOn
+            return Exercise.create templateId sets dto.StartedOn dto.CompletedOn
+        }

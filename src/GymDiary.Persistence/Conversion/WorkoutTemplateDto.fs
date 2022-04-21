@@ -48,9 +48,7 @@ module WorkoutTemplateDto =
                 else
                     dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDto.toDomain
 
-            let! createdOn = dto.CreatedOn |> Ok
-            let! lastModifiedOn = dto.LastModifiedOn |> Ok
             let! ownerId = dto.OwnerId |> SportsmanId.create (nameof dto.OwnerId)
 
-            return WorkoutTemplate.create id name goal notes schedule exercises createdOn lastModifiedOn ownerId
+            return WorkoutTemplate.create id name goal notes schedule exercises dto.CreatedOn dto.LastModifiedOn ownerId
         }
