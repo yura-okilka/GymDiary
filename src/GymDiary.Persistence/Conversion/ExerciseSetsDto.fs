@@ -14,7 +14,7 @@ module ExerciseSetsDto =
 
     let fromDomain (domain: ExerciseSets) : ExerciseSetsDto =
         let emptyDto =
-            { Tag = aNull<ExerciseSetsDtoTag>
+            { Tag = defaultof<ExerciseSetsDtoTag>
               RepsSets = null
               RepsWeightSets = null
               DurationSets = null

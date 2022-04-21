@@ -17,8 +17,8 @@ module WorkoutTemplateDto =
     let fromDomain (domain: WorkoutTemplate) : WorkoutTemplateDto =
         { Id = domain.Id |> WorkoutTemplateId.value
           Name = domain.Name |> String50.value
-          Goal = domain.Goal |> Option.map String200.value |> Option.defaultValue aNull<string>
-          Notes = domain.Notes |> Option.map String1k.value |> Option.defaultValue aNull<string>
+          Goal = domain.Goal |> Option.map String200.value |> Option.defaultValue defaultof<string>
+          Notes = domain.Notes |> Option.map String1k.value |> Option.defaultValue defaultof<string>
           Schedule = domain.Schedule |> ResizeArray<DayOfWeek>
           Exercises =
             domain.Exercises

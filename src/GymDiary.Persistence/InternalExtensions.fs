@@ -13,7 +13,7 @@ module internal InternalExtensions =
 
         let inline isNull value = obj.ReferenceEquals(value, null)
 
-        let inline aNull<'T> = Unchecked.defaultof<'T>
+        let inline defaultof<'T> = Unchecked.defaultof<'T>
 
     [<AutoOpen>]
     module ExceptionPatterns =
