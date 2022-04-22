@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Giraffe" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
     <ProjectReference Include="..\GymDiary.Persistence\GymDiary.Persistence.fsproj" />
   </ItemGroup>
