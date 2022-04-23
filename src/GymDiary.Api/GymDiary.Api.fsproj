@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="HttpHandlers.fs" />
+    <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
