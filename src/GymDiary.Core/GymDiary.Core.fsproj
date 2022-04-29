@@ -10,11 +10,9 @@
     <Compile Include="Domain\Errors.fs" />
     <Compile Include="Domain\CommonTypes.fs" />
     <Compile Include="Domain\DomainTypes.fs" />
-    <Compile Include="Persistence\Contracts.fs" />
     <Compile Include="Workflows\ExerciseCategory\CreateExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\GetExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\RenameExerciseCategory.fs" />
-    <Compile Include="CoreRoot.fs" />
   </ItemGroup>
 
   <ItemGroup>

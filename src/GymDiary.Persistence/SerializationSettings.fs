@@ -12,7 +12,7 @@ module SerializationSettings =
     [<Literal>]
     let GymDiaryDBConventions = "GymDiary DB Conventions"
 
-    let registerGlobally =
+    let registerGlobally () =
         let conventionPack = new ConventionPack()
         conventionPack.Add(new CamelCaseElementNameConvention())
         conventionPack.Add(new StringIdStoredAsObjectIdConvention())

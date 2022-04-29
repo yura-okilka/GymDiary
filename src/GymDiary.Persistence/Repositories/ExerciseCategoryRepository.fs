@@ -4,7 +4,6 @@ open GymDiary.Core.Extensions
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
-open GymDiary.Core.Persistence
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 open GymDiary.Persistence.Conversion
@@ -104,11 +103,3 @@ module ExerciseCategoryRepository =
             | ex -> return PersistenceError.fromException $"delete %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask
-
-    let createRepository (collection: IMongoCollection<ExerciseCategoryDto>) =
-        { new IExerciseCategoryRepository with
-            member _.Create entity = create collection entity
-            member _.GetById id = getById collection id
-            member _.ExistWithName name = existWithName collection name
-            member _.Update entity = update collection entity
-            member _.Delete id = delete collection id }

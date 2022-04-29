@@ -1,8 +1,6 @@
 namespace GymDiary.Persistence.Repositories
 
-open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.DomainTypes
-open GymDiary.Core.Persistence
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 
@@ -28,7 +26,3 @@ module SportsmanRepository =
             | ex -> return PersistenceError.fromException $"find %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask
-
-    let createRepository (collection: IMongoCollection<SportsmanDto>) =
-        { new ISportsmanRepository with
-            member _.ExistWithId id = existWithId collection id }
