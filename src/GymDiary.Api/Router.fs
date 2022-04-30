@@ -2,18 +2,22 @@ namespace GymDiary.Api
 
 open Giraffe
 
+open GymDiary.Api.DependencyInjection
+open GymDiary.Api.HttpHandlers
+
 open Microsoft.AspNetCore.Http
 
-[<RequireQualifiedAccess>]
 module Router =
 
-    let webApp: (HttpFunc -> HttpContext -> HttpFuncResult) =
-        choose [ subRoute
-                     "/v1/exerciseCategories"
-                     (choose [ POST >=> route "" >=> HttpHandlers.ExerciseCategory.create
-                               GET >=> route "" >=> HttpHandlers.ExerciseCategory.getAll
-                               GET >=> routef "/%s" (fun id -> id |> HttpHandlers.ExerciseCategory.getById)
-                               PUT >=> routef "/%s" (fun id -> id |> HttpHandlers.ExerciseCategory.rename)
-                               DELETE >=> routef "/%s" (fun id -> id |> HttpHandlers.ExerciseCategory.delete) ])
-                 route "/ping" >=> HttpHandlers.pingPong
-                 RequestErrors.NOT_FOUND "Not Found" ]
+    let webApp (root: CompositionRoot) : (HttpFunc -> HttpContext -> HttpFuncResult) =
+        choose [
+            subRoute "/v1/exerciseCategories"
+                (choose [
+                    POST >=> route "" >=> ExerciseCategoryHandlers.create root.CreateExerciseCategory
+                    GET >=> route "" >=> ExerciseCategoryHandlers.getAll
+                    GET >=> routef "/%s" (ExerciseCategoryHandlers.getById root.GetExerciseCategory)
+                    PUT >=> routef "/%s" (ExerciseCategoryHandlers.rename root.RenameExerciseCategory)
+                    DELETE >=> routef "/%s" ExerciseCategoryHandlers.delete ])
+            route "/ping" >=> noResponseCaching >=> text "pong"
+            RequestErrors.NOT_FOUND "Not Found" ]
+            
