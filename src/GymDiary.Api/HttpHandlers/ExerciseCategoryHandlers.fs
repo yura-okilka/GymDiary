@@ -1,7 +1,9 @@
-﻿namespace GymDiary.Api.HttpHandlers
+namespace GymDiary.Api.HttpHandlers
 
 open Giraffe
 
+open GymDiary.Api
+open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Workflows.ExerciseCategory
 
 open Microsoft.AspNetCore.Http
@@ -16,8 +18,16 @@ module ExerciseCategoryHandlers =
 
                 return!
                     match result with
-                    | Ok data -> json data next ctx
-                    | Error error -> RequestErrors.badRequest (text "Bad Request") next ctx // TODO: match errors to HTTP codes.
+                    | Ok data -> Successful.CREATED data next ctx
+
+                    | Error (CreateExerciseCategory.Validation errors) ->
+                        RequestErrors.BAD_REQUEST (ErrorResponse.from errors) next ctx
+
+                    | Error (CreateExerciseCategory.Domain error) ->
+                        RequestErrors.CONFLICT (ErrorResponse.from error) next ctx
+
+                    | Error (CreateExerciseCategory.Persistence error) ->
+                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
             }
 
     let getAll: HttpHandler = text "getAll"
@@ -25,12 +35,20 @@ module ExerciseCategoryHandlers =
     let getById (getExerciseCategory: GetExerciseCategory.Workflow) (id: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! result = getExerciseCategory { Id = id } // TODO: Use alias where possible.
+                let! result = getExerciseCategory { Id = id }
 
                 return!
                     match result with
-                    | Ok data -> json data next ctx
-                    | Error error -> RequestErrors.notFound (text "Not Found") next ctx // TODO: match errors to HTTP codes.
+                    | Ok data -> Successful.OK data next ctx
+
+                    | Error (GetExerciseCategory.Domain (ExerciseCategoryNotFound as error)) ->
+                        RequestErrors.NOT_FOUND (ErrorResponse.from error) next ctx
+
+                    | Error (GetExerciseCategory.Domain error) ->
+                        RequestErrors.CONFLICT (ErrorResponse.from error) next ctx
+
+                    | Error (GetExerciseCategory.Persistence error) ->
+                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
             }
 
     type RenameRequest = { Name: string }
@@ -43,8 +61,19 @@ module ExerciseCategoryHandlers =
 
                 return!
                     match result with
-                    | Ok _ -> Successful.ok (text "Ok") next ctx
-                    | Error error -> RequestErrors.badRequest (text "Bad Request") next ctx // TODO: match errors to HTTP codes.
+                    | Ok _ -> Successful.NO_CONTENT next ctx
+
+                    | Error (RenameExerciseCategory.Validation error) ->
+                        RequestErrors.BAD_REQUEST (ErrorResponse.from error) next ctx
+
+                    | Error (RenameExerciseCategory.Domain (ExerciseCategoryNotFound as error)) ->
+                        RequestErrors.NOT_FOUND (ErrorResponse.from error) next ctx
+
+                    | Error (RenameExerciseCategory.Domain error) ->
+                        RequestErrors.CONFLICT (ErrorResponse.from error) next ctx
+
+                    | Error (RenameExerciseCategory.Persistence error) ->
+                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
             }
 
     let delete (id: string) : HttpHandler = text $"delete %s{id}"

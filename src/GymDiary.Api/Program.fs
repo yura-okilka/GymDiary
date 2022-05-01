@@ -17,6 +17,12 @@ open Microsoft.Extensions.Hosting
 module Program =
 
     let configureApp (root: CompositionRoot) (app: IApplicationBuilder) =
+        let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
+
+        match env.EnvironmentName with
+        | "Development" -> app.UseDeveloperExceptionPage() |> ignore
+        | _ -> app.UseGiraffeErrorHandler(ErrorHandler.handle) |> ignore
+
         app.UseGiraffe(Router.webApp root)
 
     let configureServices (services: IServiceCollection) = services.AddGiraffe() |> ignore

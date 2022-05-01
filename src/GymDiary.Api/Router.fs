@@ -20,4 +20,3 @@ module Router =
                     DELETE >=> routef "/%s" ExerciseCategoryHandlers.delete ])
             route "/ping" >=> noResponseCaching >=> text "pong"
             RequestErrors.NOT_FOUND "Not Found" ]
-            
