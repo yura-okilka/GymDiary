@@ -1,16 +1,19 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
+open GymDiary.Core.Domain
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Core.Workflows
+open GymDiary.Core.Workflows.ErrorLoggingDecorator
 
 open FsToolkit.ErrorHandling
 
+open Microsoft.Extensions.Logging
+
 module RenameExerciseCategory =
 
-    type Command =
-        { Id: string
-          Name: string }
+    type Command = { Id: string; Name: string }
 
     type CommandError =
         | Validation of ValidationError
@@ -22,12 +25,27 @@ module RenameExerciseCategory =
         static member domainResult e = Error(Domain e)
         static member persistence e = Persistence e
 
-    type Workflow = Command -> Async<Result<unit, CommandError>>
+        static member toString (error: CommandError) =
+            match error with
+            | Validation e -> e |> ValidationError.toString
+            | Domain e -> e |> DomainError.toString
+            | Persistence e -> e |> PersistenceError.toString
+
+    type Workflow = Workflow<Command, unit, CommandError>
+
+    let LoggingContext =
+        { ErrorEventId = Events.ExerciseCategoryRenamingFailed
+          GetErrorMessage = fun err -> err |> CommandError.toString
+          GetRequestInfo =
+            fun cmd ->
+                Map [ (nameof cmd.Id, cmd.Id)
+                      (nameof cmd.Name, cmd.Name) ] }
 
     let createWorkflow
         (getCategoryByIdFromDB: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
         (categoryWithNameExistsInDB: String50 -> Async<Result<bool, PersistenceError>>)
         (updateCategoryInDB: ExerciseCategory -> Async<Result<unit, PersistenceError>>)
+        (logger: ILogger)
         : Workflow =
         fun command ->
             asyncResult {
@@ -53,4 +71,11 @@ module RenameExerciseCategory =
                 let renamedCategory = category |> ExerciseCategory.rename name
 
                 do! updateCategoryInDB renamedCategory |> AsyncResult.mapError CommandError.persistence
+
+                logger.LogInformation(
+                    Events.ExerciseCategoryRenamed,
+                    "Exercise category with id '{id}' was renamed to '{name}'.",
+                    id |> ExerciseCategoryId.value,
+                    name |> String50.value
+                )
             }

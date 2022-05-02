@@ -13,19 +13,9 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
+open Microsoft.Extensions.Logging
 
 module Program =
-
-    let configureApp (root: CompositionRoot) (app: IApplicationBuilder) =
-        let env = app.ApplicationServices.GetService<IWebHostEnvironment>()
-
-        match env.EnvironmentName with
-        | "Development" -> app.UseDeveloperExceptionPage() |> ignore
-        | _ -> app.UseGiraffeErrorHandler(ErrorHandler.handle) |> ignore
-
-        app.UseGiraffe(Router.webApp root)
-
-    let configureServices (services: IServiceCollection) = services.AddGiraffe() |> ignore
 
     let configureSettings (builder: IConfigurationBuilder) (environment: string) =
         builder
@@ -36,22 +26,49 @@ module Program =
             .AddEnvironmentVariables("DOTNET_")
             .AddEnvironmentVariables("ASPNETCORE_")
             .AddEnvironmentVariables()
+        |> ignore
+
+    let configureAppConfiguration (context: WebHostBuilderContext) (builder: IConfigurationBuilder) (args: string []) =
+        let env = context.HostingEnvironment.EnvironmentName
+        builder.Sources.Clear()
+        configureSettings builder env
+
+        if args.Length > 0 then
+            builder.AddCommandLine args |> ignore
+
+    let configureLogging (builder: ILoggingBuilder) =
+        builder
+            .AddConsole()
+            .AddDebug()
+        |> ignore
+
+    let configureServices (services: IServiceCollection) =
+        PersistenceModule.configure () // MongoDB conventions must be configured before using MongoClient in the composition root.
+
+        services.AddGiraffe() |> ignore
+
+    let configureApp (context: WebHostBuilderContext) (app: IApplicationBuilder) =
+        let env = context.HostingEnvironment.EnvironmentName
+
+        match env with
+        | "Development" -> app.UseDeveloperExceptionPage() |> ignore
+        | _ -> app.UseGiraffeErrorHandler(ErrorHandler.handle) |> ignore
+
+        let settings = context.Configuration.Get<Settings>() // TODO: validate settings.
+        let root = (settings, app.ApplicationServices) ||> Trunk.compose |> CompositionRoot.compose
+
+        app.UseGiraffe(Router.webApp root)
 
     [<EntryPoint>]
     let main args =
-        PersistenceModule.configure () // MongoDB conventions must be configured before using MongoClient in the composition root.
-
-        let env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")
-        let configBuilder = (ConfigurationBuilder(), env) ||> configureSettings
-        let settings = configBuilder.Build().Get<Settings>() // TODO: validate settings.
-        let root = settings |> Trunk.compose |> CompositionRoot.compose
-
         Host
             .CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(fun webHostBuilder ->
                 webHostBuilder
-                    .Configure(configureApp root)
+                    .ConfigureAppConfiguration(fun context builder -> configureAppConfiguration context builder args)
+                    .ConfigureLogging(configureLogging)
                     .ConfigureServices(configureServices)
+                    .Configure(configureApp)
                 |> ignore)
             .Build()
             .Run()

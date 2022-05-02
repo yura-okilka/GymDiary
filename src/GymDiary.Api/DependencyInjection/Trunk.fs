@@ -1,17 +1,27 @@
-﻿namespace GymDiary.Api.DependencyInjection
+namespace GymDiary.Api.DependencyInjection
+
+open System
 
 open GymDiary.Api
 open GymDiary.Api.DependencyInjection.Leaves
+
+open Microsoft.Extensions.Logging
+open Microsoft.Extensions.DependencyInjection
 
 open MongoDB.Driver
 
 /// Host of all the Leaves and common IO dependencies needed in different places.
 type Trunk =
-    { Persistence: Persistence }
+    { Logger: ILogger
+      Persistence: Persistence }
 
 module Trunk =
 
-    let compose (settings: Settings) =
+    /// Composes Trunk with IO dependencies. Only dependencies from framework and libraries should be taken from service provider.
+    /// It is the way to take the best of composition root and ASP.NET Core features.
+    let compose (settings: Settings) (serviceProvider: IServiceProvider) =
         let mongoClient = new MongoClient(settings.MongoDb.ConnectionString) // MongoClient & IMongoCollection<TDocument> are thread-safe.
+        let logger = serviceProvider.GetRequiredService<ILoggerFactory>().CreateLogger()
 
-        { Persistence = Persistence.compose mongoClient settings.MongoDb.DatabaseName }
+        { Logger = logger
+          Persistence = Persistence.compose mongoClient settings.MongoDb.DatabaseName }

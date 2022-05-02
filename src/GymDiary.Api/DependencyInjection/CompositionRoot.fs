@@ -1,6 +1,7 @@
-﻿namespace GymDiary.Api.DependencyInjection
+namespace GymDiary.Api.DependencyInjection
 
 open GymDiary.Api.DependencyInjection
+open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ExerciseCategory
 
 type CompositionRoot =
@@ -12,19 +13,27 @@ module CompositionRoot =
 
     let compose (trunk: Trunk) =
         let createExerciseCategoryWorkflow =
-            CreateExerciseCategory.createWorkflow
-                trunk.Persistence.ExerciseCategory.ExistWithName
-                trunk.Persistence.Sportsman.ExistWithId
-                trunk.Persistence.ExerciseCategory.Create
+            ErrorLoggingDecorator.logWorkflow
+                trunk.Logger
+                CreateExerciseCategory.LoggingContext
+                (CreateExerciseCategory.createWorkflow
+                    trunk.Persistence.ExerciseCategory.ExistWithName
+                    trunk.Persistence.Sportsman.ExistWithId
+                    trunk.Persistence.ExerciseCategory.Create
+                    trunk.Logger)
 
         let getExerciseCategoryWorkflow =
             GetExerciseCategory.createWorkflow trunk.Persistence.ExerciseCategory.GetById
 
         let renameExerciseCategoryWorkflow =
-            RenameExerciseCategory.createWorkflow
-                trunk.Persistence.ExerciseCategory.GetById
-                trunk.Persistence.ExerciseCategory.ExistWithName
-                trunk.Persistence.ExerciseCategory.Update
+            ErrorLoggingDecorator.logWorkflow
+                trunk.Logger
+                RenameExerciseCategory.LoggingContext
+                (RenameExerciseCategory.createWorkflow
+                    trunk.Persistence.ExerciseCategory.GetById
+                    trunk.Persistence.ExerciseCategory.ExistWithName
+                    trunk.Persistence.ExerciseCategory.Update
+                    trunk.Logger)
 
         { CreateExerciseCategory = createExerciseCategoryWorkflow
           GetExerciseCategory = getExerciseCategoryWorkflow

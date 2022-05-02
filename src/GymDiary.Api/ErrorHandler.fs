@@ -34,7 +34,7 @@ type ErrorResponse =
           Message = error |> PersistenceError.toString
           Details = null }
 
-    static member internalError =
+    static member InternalError =
         { Name = "ServerError"
           Message = "Server error has occurred."
           Details = null }
@@ -42,5 +42,5 @@ type ErrorResponse =
 module ErrorHandler =
 
     let handle (ex: Exception) (logger: ILogger) =
-        logger.LogError(Events.undefinedFailure, ex, "An unhandled exception has occurred while executing the request.")
-        clearResponse >=> ServerErrors.INTERNAL_ERROR ErrorResponse.internalError
+        logger.LogError(Events.UndefinedFailure, ex, "An unhandled exception has occurred while executing the request.")
+        clearResponse >=> ServerErrors.INTERNAL_ERROR ErrorResponse.InternalError

@@ -3,6 +3,7 @@ namespace GymDiary.Core.Workflows.ExerciseCategory
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Core.Workflows
 
 open FsToolkit.ErrorHandling
 
@@ -22,7 +23,7 @@ module GetExerciseCategory =
         static member domain e = Domain e
         static member persistence e = Persistence e
 
-    type Workflow = Query -> Async<Result<QueryResult, QueryError>>
+    type Workflow = Workflow<Query, QueryResult, QueryError>
 
     let createWorkflow
         (getCategoryByIdFromDB: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
