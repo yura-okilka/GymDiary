@@ -15,6 +15,8 @@ open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 
+open Validus
+
 module Program =
 
     let configureSettings (builder: IConfigurationBuilder) (environment: string) =
@@ -54,7 +56,16 @@ module Program =
         | "Development" -> app.UseDeveloperExceptionPage() |> ignore
         | _ -> app.UseGiraffeErrorHandler(ErrorHandler.handle) |> ignore
 
-        let settings = context.Configuration.Get<Settings>() // TODO: validate settings.
+        let settings = context.Configuration.Get<Settings>()
+
+        match Settings.validate settings with
+        | Error errors ->
+            errors
+            |> ValidationErrors.toList
+            |> String.concat "; "
+            |> fun msg -> failwith $"Invalid settings: %s{msg}"
+        | Ok _ -> ()
+
         let root = (settings, app.ApplicationServices) ||> Trunk.compose |> CompositionRoot.compose
 
         app.UseGiraffe(Router.webApp root)

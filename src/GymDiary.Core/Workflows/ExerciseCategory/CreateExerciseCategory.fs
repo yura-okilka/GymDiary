@@ -34,7 +34,7 @@ module CreateExerciseCategory =
 
         static member toString (error: CommandError) =
             match error with
-            | Validation e -> e |> List.map ValidationError.toString |> String.concat Environment.NewLine
+            | Validation e -> e |> List.map ValidationError.toString |> String.concat " "
             | Domain e -> e |> DomainError.toString
             | Persistence e -> e |> PersistenceError.toString
 
