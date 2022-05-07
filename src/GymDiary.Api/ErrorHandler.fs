@@ -27,7 +27,10 @@ type ErrorResponse =
     static member from (errors: ValidationError list) =
         { Name = "ValidationErrors"
           Message = "Validation errors have occurred."
-          Details = errors |> List.map ValidationError.toString }
+          Details =
+            errors
+            |> List.map (fun (ValidationError (field, _) as error) -> (field, error |> ValidationError.toString))
+            |> Map.ofList }
 
     static member from (error: PersistenceError) =
         { Name = "PersistenceError"
