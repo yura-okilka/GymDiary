@@ -68,7 +68,7 @@ module ExerciseSetsDto =
         match dto.Tag with
         | ExerciseSetsDtoTag.RepsSets ->
             if dto.RepsSets = null then
-                ValueNull(nameof dto.RepsSets) |> Error
+                ValidationError(nameof dto.RepsSets, ValueNull) |> Error
             else
                 dto.RepsSets
                 |> ResizeArray.toList
@@ -77,7 +77,7 @@ module ExerciseSetsDto =
 
         | ExerciseSetsDtoTag.RepsWeightSets ->
             if dto.RepsWeightSets = null then
-                ValueNull(nameof dto.RepsWeightSets) |> Error
+                ValidationError(nameof dto.RepsWeightSets, ValueNull) |> Error
             else
                 dto.RepsWeightSets
                 |> ResizeArray.toList
@@ -86,7 +86,7 @@ module ExerciseSetsDto =
 
         | ExerciseSetsDtoTag.DurationSets ->
             if dto.DurationSets = null then
-                ValueNull(nameof dto.DurationSets) |> Error
+                ValidationError(nameof dto.DurationSets, ValueNull) |> Error
             else
                 dto.DurationSets
                 |> ResizeArray.toList
@@ -95,7 +95,7 @@ module ExerciseSetsDto =
 
         | ExerciseSetsDtoTag.DurationWeightSets ->
             if dto.DurationWeightSets = null then
-                ValueNull(nameof dto.DurationWeightSets) |> Error
+                ValidationError(nameof dto.DurationWeightSets, ValueNull) |> Error
             else
                 dto.DurationWeightSets
                 |> ResizeArray.toList
@@ -104,11 +104,11 @@ module ExerciseSetsDto =
 
         | ExerciseSetsDtoTag.DurationDistanceSets ->
             if dto.DurationDistanceSets = null then
-                ValueNull(nameof dto.DurationDistanceSets) |> Error
+                ValidationError(nameof dto.DurationDistanceSets, ValueNull) |> Error
             else
                 dto.DurationDistanceSets
                 |> ResizeArray.toList
                 |> List.traverseResultM DurationDistanceSetDto.toDomain
                 |> Result.map DurationDistanceSets
 
-        | _ -> InvalidValue(nameof dto.Tag, dto.Tag.ToString()) |> Error
+        | _ -> ValidationError(nameof dto.Tag, InvalidValue(dto.Tag.ToString())) |> Error

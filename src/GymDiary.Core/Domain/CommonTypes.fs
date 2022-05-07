@@ -37,11 +37,11 @@ module ConstrainedType =
     /// Create a constrained string using the constructor provided
     let createString (fieldName: string) (ctor: string -> 'a) (minLength: int, maxLength: int) (value: string) =
         if value = null then
-            ValueNull fieldName |> Error
+            ValidationError(fieldName, ValueNull) |> Error
         elif value.Length < minLength then
-            LengthLessThanLimit(fieldName, minLength.ToString()) |> Error
+            ValidationError(fieldName, LengthLessThanLimit(minLength.ToString())) |> Error
         elif value.Length > maxLength then
-            LengthGreaterThanLimit(fieldName, maxLength.ToString()) |> Error
+            ValidationError(fieldName, LengthGreaterThanLimit(maxLength.ToString())) |> Error
         else
             ctor value |> Ok
 
@@ -50,16 +50,16 @@ module ConstrainedType =
         if String.IsNullOrEmpty(value) then
             None |> Ok
         elif value.Length > maxLength then
-            LengthGreaterThanLimit(fieldName, maxLength.ToString()) |> Error
+            ValidationError(fieldName, LengthGreaterThanLimit(maxLength.ToString())) |> Error
         else
             ctor value |> Some |> Ok
 
     /// Create a constrained integer using the constructor provided
     let createInt (fieldName: string) (ctor: int -> 'a) (minValue: int, maxValue: int) (value: int) =
         if value < minValue then
-            ValueLessThanLimit(fieldName, minValue.ToString()) |> Error
+            ValidationError(fieldName, ValueLessThanLimit(minValue.ToString())) |> Error
         elif value > maxValue then
-            ValueGreaterThanLimit(fieldName, maxValue.ToString()) |> Error
+            ValidationError(fieldName, ValueGreaterThanLimit(maxValue.ToString())) |> Error
         else
             ctor value |> Ok
 
@@ -71,20 +71,20 @@ module ConstrainedType =
         (value: decimal<kg>)
         =
         if value < minValue then
-            ValueLessThanLimit(fieldName, minValue.ToString()) |> Error
+            ValidationError(fieldName, ValueLessThanLimit(minValue.ToString())) |> Error
         elif value > maxValue then
-            ValueGreaterThanLimit(fieldName, maxValue.ToString()) |> Error
+            ValidationError(fieldName, ValueGreaterThanLimit(maxValue.ToString())) |> Error
         else
             ctor value |> Ok
 
     /// Create a constrained string using the constructor provided
     let createLike (fieldName: string) (ctor: string -> 'a) (pattern: string) (value: string) =
         if String.IsNullOrEmpty(value) then
-            ValueNullOrEmpty fieldName |> Error
+            ValidationError(fieldName, ValueNullOrEmpty) |> Error
         elif Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1)) then
             ctor value |> Ok
         else
-            PatternNotMatched fieldName |> Error
+            ValidationError(fieldName, PatternNotMatched) |> Error
 
 module String50 =
 
@@ -135,7 +135,7 @@ module EmailAddress =
         if attribute.IsValid(value) then
             EmailAddress value |> Ok
         else
-            InvalidEmailAddress fieldName |> Error
+            ValidationError(fieldName, InvalidEmailAddress) |> Error
 
 module PhoneNumber =
 
@@ -149,4 +149,4 @@ module PhoneNumber =
         if attribute.IsValid(value) then
             PhoneNumber value |> Ok
         else
-            InvalidPhoneNumber fieldName |> Error
+            ValidationError(fieldName, InvalidPhoneNumber) |> Error

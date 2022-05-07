@@ -25,7 +25,7 @@ module WorkoutDto =
 
         let exercises =
             if dto.Exercises = null then
-                ValueNull(nameof dto.Exercises) |> Error
+                ValidationError(nameof dto.Exercises, ValueNull) |> Error
             else
                 dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseDto.toDomain
 

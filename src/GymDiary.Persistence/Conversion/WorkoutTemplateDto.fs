@@ -38,13 +38,13 @@ module WorkoutTemplateDto =
 
             let! schedule =
                 if dto.Schedule = null then
-                    ValueNull(nameof dto.Schedule) |> Error
+                    ValidationError(nameof dto.Schedule, ValueNull) |> Error
                 else
                     dto.Schedule |> ResizeArray.toSeq |> Set.ofSeq |> Ok
 
             let! exercises =
                 if dto.Exercises = null then
-                    ValueNull(nameof dto.Exercises) |> Error
+                    ValidationError(nameof dto.Exercises, ValueNull) |> Error
                 else
                     dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDto.toDomain
 

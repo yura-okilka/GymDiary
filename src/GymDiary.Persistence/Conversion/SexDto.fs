@@ -17,4 +17,4 @@ module SexDto =
         | SexDto.Male -> Male |> Ok
         | SexDto.Female -> Female |> Ok
         | SexDto.Other -> Other |> Ok
-        | _ -> InvalidValue(field, dto.ToString()) |> Error
+        | _ -> ValidationError(field, InvalidValue(dto.ToString())) |> Error
