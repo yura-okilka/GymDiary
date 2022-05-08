@@ -87,4 +87,21 @@ module ExerciseCategoryHandlers =
                         ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
             }
 
-    let delete (id: string) : HttpHandler = text $"delete %s{id}"
+    let delete (deleteExerciseCategory: DeleteExerciseCategory.Workflow) (id: string) : HttpHandler =
+        fun (next: HttpFunc) (ctx: HttpContext) ->
+            task {
+                let! result = deleteExerciseCategory { Id = id }
+
+                return!
+                    match result with
+                    | Ok _ -> Successful.NO_CONTENT next ctx
+
+                    | Error (DeleteExerciseCategory.Domain (ExerciseCategoryNotFound as error)) ->
+                        RequestErrors.NOT_FOUND (ErrorResponse.from error) next ctx
+
+                    | Error (DeleteExerciseCategory.Domain error) ->
+                        RequestErrors.CONFLICT (ErrorResponse.from error) next ctx
+
+                    | Error (DeleteExerciseCategory.Persistence error) ->
+                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
+            }

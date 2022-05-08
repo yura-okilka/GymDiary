@@ -17,6 +17,6 @@ module Router =
                     GET >=> route "" >=> ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories
                     GET >=> routef "/%s" (ExerciseCategoryHandlers.getById root.GetExerciseCategory)
                     PUT >=> routef "/%s" (ExerciseCategoryHandlers.rename root.RenameExerciseCategory)
-                    DELETE >=> routef "/%s" ExerciseCategoryHandlers.delete ])
+                    DELETE >=> routef "/%s" (ExerciseCategoryHandlers.delete root.DeleteExerciseCategory) ])
             route "/ping" >=> noResponseCaching >=> text "pong"
             RequestErrors.NOT_FOUND "Not Found" ]

@@ -8,7 +8,8 @@ type CompositionRoot =
     { CreateExerciseCategory: CreateExerciseCategory.Workflow
       GetAllExerciseCategories: GetAllExerciseCategories.Workflow
       GetExerciseCategory: GetExerciseCategory.Workflow
-      RenameExerciseCategory: RenameExerciseCategory.Workflow }
+      RenameExerciseCategory: RenameExerciseCategory.Workflow
+      DeleteExerciseCategory: DeleteExerciseCategory.Workflow }
 
 module CompositionRoot =
 
@@ -39,7 +40,14 @@ module CompositionRoot =
                     trunk.Persistence.ExerciseCategory.Update
                     trunk.Logger)
 
+        let deleteExerciseCategoryWorkflow =
+            ErrorLoggingDecorator.logWorkflow
+                trunk.Logger
+                DeleteExerciseCategory.LoggingContext
+                (DeleteExerciseCategory.createWorkflow trunk.Persistence.ExerciseCategory.Delete trunk.Logger)
+
         { CreateExerciseCategory = createExerciseCategoryWorkflow
           GetAllExerciseCategories = getAllExerciseCategoriesWorkflow
           GetExerciseCategory = getExerciseCategoryWorkflow
-          RenameExerciseCategory = renameExerciseCategoryWorkflow }
+          RenameExerciseCategory = renameExerciseCategoryWorkflow
+          DeleteExerciseCategory = deleteExerciseCategoryWorkflow }

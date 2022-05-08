@@ -17,6 +17,7 @@
     <Compile Include="Workflows\ExerciseCategory\GetAllExerciseCategories.fs" />
     <Compile Include="Workflows\ExerciseCategory\GetExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\RenameExerciseCategory.fs" />
+    <Compile Include="Workflows\ExerciseCategory\DeleteExerciseCategory.fs" />
   </ItemGroup>
 
   <ItemGroup>

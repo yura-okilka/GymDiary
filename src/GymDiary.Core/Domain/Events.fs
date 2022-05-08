@@ -11,3 +11,6 @@ module Events =
 
     let ExerciseCategoryRenamed = EventId(3, "ExerciseCategoryRenamed")
     let ExerciseCategoryRenamingFailed = EventId(4, "ExerciseCategoryRenamingFailed")
+
+    let ExerciseCategoryDeleted = EventId(5, "ExerciseCategoryDeleted")
+    let ExerciseCategoryDeletionFailed = EventId(6, "ExerciseCategoryDeletionFailed")

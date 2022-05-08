@@ -107,8 +107,12 @@ module ExerciseCategoryRepository =
             let id, entityWithIdMsg = unwrapId id
 
             try
-                let! _ = collection.DeleteOneAsync(fun d -> d.Id = id)
-                return Ok()
+                let! result = collection.DeleteOneAsync(fun d -> d.Id = id)
+
+                if result.DeletedCount = 0 then
+                    return PersistenceError.notFoundResult entityWithIdMsg
+                else
+                    return Ok()
             with
             | ObjectIdFormatException _ -> return PersistenceError.notFoundResult entityWithIdMsg
             | ex -> return PersistenceError.fromException $"delete %s{entityWithIdMsg}" ex
