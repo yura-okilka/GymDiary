@@ -30,7 +30,18 @@ module ExerciseCategoryHandlers =
                         ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
             }
 
-    let getAll: HttpHandler = text "getAll"
+    let getAll (getAllExerciseCategories: GetAllExerciseCategories.Workflow) : HttpHandler =
+        fun (next: HttpFunc) (ctx: HttpContext) ->
+            task {
+                let! result = getAllExerciseCategories ()
+
+                return!
+                    match result with
+                    | Ok data -> Successful.OK data next ctx
+
+                    | Error (GetAllExerciseCategories.Persistence error) ->
+                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
+            }
 
     let getById (getExerciseCategory: GetExerciseCategory.Workflow) (id: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->

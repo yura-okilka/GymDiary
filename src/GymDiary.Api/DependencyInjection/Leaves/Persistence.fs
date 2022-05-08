@@ -1,4 +1,4 @@
-﻿namespace GymDiary.Api.DependencyInjection.Leaves
+namespace GymDiary.Api.DependencyInjection.Leaves
 
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
@@ -10,6 +10,7 @@ open MongoDB.Driver
 
 type ExerciseCategoryRepository =
     { Create: ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>
+      GetAll: unit -> Async<Result<ExerciseCategory list, PersistenceError>>
       GetById: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>
       ExistWithName: String50 -> Async<Result<bool, PersistenceError>>
       Update: ExerciseCategory -> Async<Result<unit, PersistenceError>>
@@ -36,6 +37,7 @@ module Persistence =
 
         let exerciseCategoryRepository =
             { Create = fun entity -> ExerciseCategoryRepository.create context.ExerciseCategories entity
+              GetAll = fun _ -> ExerciseCategoryRepository.getAll context.ExerciseCategories
               GetById = fun id -> ExerciseCategoryRepository.getById context.ExerciseCategories id
               ExistWithName = fun name -> ExerciseCategoryRepository.existWithName context.ExerciseCategories name
               Update = fun entity -> ExerciseCategoryRepository.update context.ExerciseCategories entity

@@ -8,6 +8,8 @@ open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Dtos
 open GymDiary.Persistence.Conversion
 
+open FSharpx.Collections
+
 open FsToolkit.ErrorHandling
 
 open MongoDB.Driver
@@ -33,15 +35,27 @@ module ExerciseCategoryRepository =
         }
         |> Async.AwaitTask
 
+    let getAll (collection: IMongoCollection<ExerciseCategoryDto>) =
+        task {
+            try
+                let! dtos = collection.Find(fun _ -> true).ToListAsync()
+
+                return
+                    dtos
+                    |> ResizeArray.toList
+                    |> List.traverseResultM ExerciseCategoryDto.toDomain
+                    |> Result.mapError (PersistenceError.dtoConversion "ExerciseCategoryDto")
+            with
+            | ex -> return PersistenceError.fromException "get all ExerciseCategories" ex
+        }
+        |> Async.AwaitTask
+
     let getById (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
         task {
             let id, entityWithIdMsg = unwrapId id
 
             try
-                let! dto =
-                    collection
-                        .Find(fun d -> d.Id = id)
-                        .SingleOrDefaultAsync()
+                let! dto = collection.Find(fun d -> d.Id = id).SingleOrDefaultAsync()
 
                 if isNull dto then
                     return PersistenceError.notFoundResult entityWithIdMsg
@@ -62,10 +76,7 @@ module ExerciseCategoryRepository =
         task {
             try
                 // Consider using case insensitive index for large collections.
-                let! exists =
-                    collection
-                        .Find(fun d -> d.Name.ToLower() = name.ToLower())
-                        .AnyAsync()
+                let! exists = collection.Find(fun d -> d.Name.ToLower() = name.ToLower()).AnyAsync()
 
                 return Ok(exists)
             with

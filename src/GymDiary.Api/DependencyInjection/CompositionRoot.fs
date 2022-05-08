@@ -6,6 +6,7 @@ open GymDiary.Core.Workflows.ExerciseCategory
 
 type CompositionRoot =
     { CreateExerciseCategory: CreateExerciseCategory.Workflow
+      GetAllExerciseCategories: GetAllExerciseCategories.Workflow
       GetExerciseCategory: GetExerciseCategory.Workflow
       RenameExerciseCategory: RenameExerciseCategory.Workflow }
 
@@ -22,6 +23,9 @@ module CompositionRoot =
                     trunk.Persistence.ExerciseCategory.Create
                     trunk.Logger)
 
+        let getAllExerciseCategoriesWorkflow =
+            GetAllExerciseCategories.createWorkflow trunk.Persistence.ExerciseCategory.GetAll
+
         let getExerciseCategoryWorkflow =
             GetExerciseCategory.createWorkflow trunk.Persistence.ExerciseCategory.GetById
 
@@ -36,5 +40,6 @@ module CompositionRoot =
                     trunk.Logger)
 
         { CreateExerciseCategory = createExerciseCategoryWorkflow
+          GetAllExerciseCategories = getAllExerciseCategoriesWorkflow
           GetExerciseCategory = getExerciseCategoryWorkflow
           RenameExerciseCategory = renameExerciseCategoryWorkflow }

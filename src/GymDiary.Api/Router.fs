@@ -14,7 +14,7 @@ module Router =
             subRoute "/v1/exerciseCategories"
                 (choose [
                     POST >=> route "" >=> ExerciseCategoryHandlers.create root.CreateExerciseCategory
-                    GET >=> route "" >=> ExerciseCategoryHandlers.getAll
+                    GET >=> route "" >=> ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories
                     GET >=> routef "/%s" (ExerciseCategoryHandlers.getById root.GetExerciseCategory)
                     PUT >=> routef "/%s" (ExerciseCategoryHandlers.rename root.RenameExerciseCategory)
                     DELETE >=> routef "/%s" ExerciseCategoryHandlers.delete ])
