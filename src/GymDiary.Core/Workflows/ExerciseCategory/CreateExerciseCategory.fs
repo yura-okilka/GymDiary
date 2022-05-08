@@ -38,11 +38,19 @@ module CreateExerciseCategory =
             | Domain e -> e |> DomainError.toString
             | Persistence e -> e |> PersistenceError.toString
 
+        static member getException (error: CommandError) =
+            match error with
+            | Persistence e -> e |> PersistenceError.getException
+            | _ -> None
+
     type Workflow = Workflow<Command, CommandResult, CommandError>
 
     let LoggingContext =
         { ErrorEventId = Events.ExerciseCategoryCreationFailed
-          GetErrorMessage = fun err -> err |> CommandError.toString
+          GetErrorInfo =
+            fun err ->
+                { Message = err |> CommandError.toString
+                  Exception = err |> CommandError.getException }
           GetRequestInfo =
             fun cmd ->
                 Map [ (nameof cmd.Name, cmd.Name)

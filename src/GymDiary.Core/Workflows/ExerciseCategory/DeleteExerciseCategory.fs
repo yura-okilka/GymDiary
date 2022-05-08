@@ -27,11 +27,19 @@ module DeleteExerciseCategory =
             | Domain e -> e |> DomainError.toString
             | Persistence e -> e |> PersistenceError.toString
 
+        static member getException (error: CommandError) =
+            match error with
+            | Persistence e -> e |> PersistenceError.getException
+            | _ -> None
+
     type Workflow = Workflow<Command, unit, CommandError>
 
     let LoggingContext =
         { ErrorEventId = Events.ExerciseCategoryDeletionFailed
-          GetErrorMessage = fun err -> err |> CommandError.toString
+          GetErrorInfo =
+            fun err ->
+                { Message = err |> CommandError.toString
+                  Exception = err |> CommandError.getException }
           GetRequestInfo = fun cmd -> Map [ (nameof cmd.Id, cmd.Id) ] }
 
     let createWorkflow

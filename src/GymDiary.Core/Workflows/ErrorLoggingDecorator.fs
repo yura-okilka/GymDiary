@@ -4,9 +4,13 @@ open Microsoft.Extensions.Logging
 
 module ErrorLoggingDecorator =
 
+    type ErrorInfo =
+        { Message: string
+          Exception: exn option }
+
     type LoggingContext<'Request, 'Error> =
         { GetRequestInfo: 'Request -> Map<string, obj>
-          GetErrorMessage: 'Error -> string
+          GetErrorInfo: 'Error -> ErrorInfo
           ErrorEventId: EventId }
 
     let logWorkflow
@@ -22,9 +26,14 @@ module ErrorLoggingDecorator =
                     let! result = workflow request
 
                     match result with
-                    | Error error ->
-                        logger.LogError(context.ErrorEventId, "Workflow failed with error: {error}",error |> context.GetErrorMessage)
                     | Ok _ -> ()
+                    | Error error ->
+                        let messageTemplate = "Workflow failed with error: {error}"
+                        let errorInfo = context.GetErrorInfo error
+
+                        match errorInfo.Exception with
+                        | Some ex -> logger.LogError(context.ErrorEventId, ex, messageTemplate, errorInfo.Message)
+                        | None -> logger.LogError(context.ErrorEventId, messageTemplate, errorInfo.Message)
 
                     return result
                 with

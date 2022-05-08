@@ -59,3 +59,9 @@ type PersistenceError =
         | DtoConversion (dto, error) -> $"Failed to convert '%s{dto}': %s{ValidationError.toString error}"
         | Database (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
         | Other (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
+
+    static member getException (error: PersistenceError) =
+        match error with
+        | Database (_, ex) -> ex |> Some
+        | Other (_, ex) -> ex |> Some
+        | _ -> None
