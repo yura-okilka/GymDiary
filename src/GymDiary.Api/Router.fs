@@ -11,12 +11,12 @@ module Router =
 
     let webApp (root: CompositionRoot) : (HttpFunc -> HttpContext -> HttpFuncResult) =
         choose [
-            subRoute "/v1/exerciseCategories"
+            subRoutef "/v1/sportsmen/%s/exerciseCategories" (fun sportsmanId ->
                 (choose [
-                    POST >=> route "" >=> ExerciseCategoryHandlers.create root.CreateExerciseCategory
-                    GET >=> route "" >=> ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories
-                    GET >=> routef "/%s" (ExerciseCategoryHandlers.getById root.GetExerciseCategory)
-                    PUT >=> routef "/%s" (ExerciseCategoryHandlers.rename root.RenameExerciseCategory)
-                    DELETE >=> routef "/%s" (ExerciseCategoryHandlers.delete root.DeleteExerciseCategory) ])
+                    POST >=> route "" >=> ExerciseCategoryHandlers.create root.CreateExerciseCategory sportsmanId
+                    GET >=> route "" >=> ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories sportsmanId
+                    GET >=> routef "/%s" (fun categoryId -> ExerciseCategoryHandlers.getById root.GetExerciseCategory sportsmanId categoryId)
+                    PUT >=> routef "/%s" (fun categoryId -> ExerciseCategoryHandlers.rename root.RenameExerciseCategory sportsmanId categoryId)
+                    DELETE >=> routef "/%s" (fun categoryId -> ExerciseCategoryHandlers.delete root.DeleteExerciseCategory sportsmanId categoryId) ]))
             route "/ping" >=> noResponseCaching >=> text "pong"
             RequestErrors.NOT_FOUND "Not Found" ]

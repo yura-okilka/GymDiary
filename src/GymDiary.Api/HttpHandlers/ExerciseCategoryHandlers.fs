@@ -10,11 +10,17 @@ open Microsoft.AspNetCore.Http
 
 module ExerciseCategoryHandlers =
 
-    let create (createExerciseCategory: CreateExerciseCategory.Workflow) : HttpHandler =
+    type CreateRequest = { Name: string }
+
+    let create (createExerciseCategory: CreateExerciseCategory.Workflow) (sportsmanId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! command = ctx.BindJsonAsync<CreateExerciseCategory.Command>()
-                let! result = createExerciseCategory command
+                let! request = ctx.BindJsonAsync<CreateRequest>()
+
+                let! result =
+                    createExerciseCategory
+                        { Name = request.Name
+                          OwnerId = sportsmanId }
 
                 return!
                     match result with
@@ -30,10 +36,10 @@ module ExerciseCategoryHandlers =
                         ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
             }
 
-    let getAll (getAllExerciseCategories: GetAllExerciseCategories.Workflow) : HttpHandler =
+    let getAll (getAllExerciseCategories: GetAllExerciseCategories.Workflow) (sportsmanId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! result = getAllExerciseCategories ()
+                let! result = getAllExerciseCategories () // TODO: use sportsmanId.
 
                 return!
                     match result with
@@ -43,10 +49,14 @@ module ExerciseCategoryHandlers =
                         ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
             }
 
-    let getById (getExerciseCategory: GetExerciseCategory.Workflow) (id: string) : HttpHandler =
+    let getById
+        (getExerciseCategory: GetExerciseCategory.Workflow)
+        (sportsmanId: string)
+        (categoryId: string)
+        : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! result = getExerciseCategory { Id = id }
+                let! result = getExerciseCategory { Id = categoryId } // TODO: use sportsmanId.
 
                 return!
                     match result with
@@ -64,11 +74,15 @@ module ExerciseCategoryHandlers =
 
     type RenameRequest = { Name: string }
 
-    let rename (renameExerciseCategory: RenameExerciseCategory.Workflow) (id: string) : HttpHandler =
+    let rename
+        (renameExerciseCategory: RenameExerciseCategory.Workflow)
+        (sportsmanId: string)
+        (categoryId: string)
+        : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
                 let! request = ctx.BindJsonAsync<RenameRequest>()
-                let! result = renameExerciseCategory { Id = id; Name = request.Name }
+                let! result = renameExerciseCategory { Id = categoryId; Name = request.Name } // TODO: use sportsmanId.
 
                 return!
                     match result with
@@ -87,10 +101,14 @@ module ExerciseCategoryHandlers =
                         ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
             }
 
-    let delete (deleteExerciseCategory: DeleteExerciseCategory.Workflow) (id: string) : HttpHandler =
+    let delete
+        (deleteExerciseCategory: DeleteExerciseCategory.Workflow)
+        (sportsmanId: string)
+        (categoryId: string)
+        : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! result = deleteExerciseCategory { Id = id }
+                let! result = deleteExerciseCategory { Id = categoryId } // TODO: use sportsmanId.
 
                 return!
                     match result with
