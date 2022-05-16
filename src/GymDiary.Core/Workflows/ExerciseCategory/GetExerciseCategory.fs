@@ -7,7 +7,7 @@ open FsToolkit.ErrorHandling
 
 module GetExerciseCategory =
 
-    type Query = { Id: string }
+    type Query = { Id: string; OwnerId: string }
 
     type QueryResult =
         { Id: string
@@ -24,16 +24,20 @@ module GetExerciseCategory =
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
     let runWorkflow
-        (getCategoryByIdFromDB: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
+        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
         (query: Query)
         =
         asyncResult {
-            let! id =
-                ExerciseCategoryId.create (nameof query.Id) query.Id
+            let! (categoryId, ownerId) =
+                result {
+                    let! categoryId = ExerciseCategoryId.create (nameof query.Id) query.Id
+                    let! ownerId = SportsmanId.create (nameof query.OwnerId) query.OwnerId
+                    return (categoryId, ownerId)
+                }
                 |> Result.setError (ExerciseCategoryNotFound |> QueryError.domain)
 
             let! category =
-                getCategoryByIdFromDB id
+                getCategoryByIdFromDB ownerId categoryId
                 |> AsyncResult.mapError (fun error ->
                     match error with
                     | EntityNotFound _ -> ExerciseCategoryNotFound |> QueryError.domain

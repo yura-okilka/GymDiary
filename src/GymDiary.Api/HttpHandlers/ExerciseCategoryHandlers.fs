@@ -59,7 +59,10 @@ module ExerciseCategoryHandlers =
         : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! result = getExerciseCategory { Id = categoryId } // TODO: use sportsmanId.
+                let! result =
+                    getExerciseCategory
+                        { Id = categoryId
+                          OwnerId = sportsmanId }
 
                 return!
                     match result with
@@ -85,7 +88,12 @@ module ExerciseCategoryHandlers =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
                 let! request = ctx.BindJsonAsync<RenameRequest>()
-                let! result = renameExerciseCategory { Id = categoryId; Name = request.Name } // TODO: use sportsmanId.
+
+                let! result =
+                    renameExerciseCategory
+                        { Id = categoryId
+                          OwnerId = sportsmanId
+                          Name = request.Name }
 
                 return!
                     match result with

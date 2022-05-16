@@ -49,12 +49,21 @@ module ExerciseCategoryRepository =
         }
         |> Async.AwaitTask
 
-    let getById (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
+    let getById
+        (collection: IMongoCollection<ExerciseCategoryDto>)
+        (ownerId: SportsmanId)
+        (categoryId: ExerciseCategoryId)
+        =
         task {
-            let id, entityWithIdMsg = unwrapId id
+            let categoryId, entityWithIdMsg = unwrapId categoryId
 
             try
-                let! dto = collection.Find(fun d -> d.Id = id).SingleOrDefaultAsync()
+                let ownerId = ownerId |> SportsmanId.value
+
+                let! dto =
+                    collection
+                        .Find(fun d -> d.Id = categoryId && d.OwnerId = ownerId)
+                        .SingleOrDefaultAsync()
 
                 if isNull dto then
                     return PersistenceError.entityNotFoundResult entityWithIdMsg
@@ -69,13 +78,17 @@ module ExerciseCategoryRepository =
         }
         |> Async.AwaitTask
 
-    let existWithName (collection: IMongoCollection<ExerciseCategoryDto>) (name: String50) =
+    let existWithName (collection: IMongoCollection<ExerciseCategoryDto>) (ownerId: SportsmanId) (name: String50) =
         let name = name |> String50.value
 
         task {
             try
+                let ownerId = ownerId |> SportsmanId.value
                 // Consider using case insensitive index for large collections.
-                let! exists = collection.Find(fun d -> d.Name.ToLower() = name.ToLower()).AnyAsync()
+                let! exists =
+                    collection
+                        .Find(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId)
+                        .AnyAsync()
 
                 return Ok(exists)
             with

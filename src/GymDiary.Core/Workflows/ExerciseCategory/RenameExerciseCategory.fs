@@ -1,5 +1,6 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
+open GymDiary.Core
 open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
@@ -10,7 +11,10 @@ open Microsoft.Extensions.Logging
 
 module RenameExerciseCategory =
 
-    type Command = { Id: string; Name: string }
+    type Command =
+        { Id: string
+          OwnerId: string
+          Name: string }
 
     type CommandError =
         | Validation of ValidationError
@@ -47,26 +51,31 @@ module RenameExerciseCategory =
                       (nameof cmd.Name, cmd.Name) ] }
 
     let runWorkflow
-        (getCategoryByIdFromDB: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
-        (categoryWithNameExistsInDB: String50 -> Async<Result<bool, PersistenceError>>)
+        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
+        (categoryWithNameExistsInDB: SportsmanId -> String50 -> Async<Result<bool, PersistenceError>>)
         (updateCategoryInDB: ExerciseCategory -> Async<Result<unit, PersistenceError>>)
         (logger: ILogger)
         (command: Command)
         =
         asyncResult {
-            let! id =
-                ExerciseCategoryId.create (nameof command.Id) command.Id
+            let! (categoryId, ownerId) =
+                result {
+                    let! categoryId = ExerciseCategoryId.create (nameof command.Id) command.Id
+                    let! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId
+                    return (categoryId, ownerId)
+                }
                 |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
 
             let! name = String50.create (nameof command.Name) command.Name |> Result.mapError CommandError.validation
 
-            let! categoryExists = categoryWithNameExistsInDB name |> AsyncResult.mapError CommandError.persistence
+            let! categoryExists =
+                categoryWithNameExistsInDB ownerId name |> AsyncResult.mapError CommandError.persistence
 
             if categoryExists then
                 return! ExerciseCategoryWithNameAlreadyExists(name |> String50.value) |> CommandError.domainResult
 
             let! category =
-                getCategoryByIdFromDB id
+                getCategoryByIdFromDB ownerId categoryId
                 |> AsyncResult.mapError (fun error ->
                     match error with
                     | EntityNotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
@@ -79,7 +88,7 @@ module RenameExerciseCategory =
             logger.LogInformation(
                 Events.ExerciseCategoryRenamed,
                 "Exercise category with id '{id}' was renamed to '{name}'.",
-                id |> ExerciseCategoryId.value,
+                categoryId |> ExerciseCategoryId.value,
                 name |> String50.value
             )
         }
