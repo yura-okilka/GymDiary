@@ -1,6 +1,6 @@
 namespace GymDiary.Persistence.Repositories
 
-open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Core.Domain
 open GymDiary.Persistence
 open GymDiary.Persistence.InternalExtensions
 

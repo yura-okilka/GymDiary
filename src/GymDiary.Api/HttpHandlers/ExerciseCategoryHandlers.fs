@@ -3,7 +3,7 @@ namespace GymDiary.Api.HttpHandlers
 open Giraffe
 
 open GymDiary.Api
-open GymDiary.Core.Domain.Errors
+open GymDiary.Core.Domain
 open GymDiary.Core.Workflows.ExerciseCategory
 
 open Microsoft.AspNetCore.Http

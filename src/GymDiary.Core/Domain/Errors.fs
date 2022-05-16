@@ -1,4 +1,4 @@
-namespace GymDiary.Core.Domain.Errors
+namespace GymDiary.Core.Domain
 
 type DomainError =
     | ExerciseCategoryWithNameAlreadyExists of name: string

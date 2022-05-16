@@ -1,8 +1,7 @@
 namespace GymDiary.Persistence.Repositories
 
 open GymDiary.Core.Extensions
-open GymDiary.Core.Domain.Errors
-open GymDiary.Core.Domain.DomainTypes
+open GymDiary.Core.Domain
 open GymDiary.Persistence
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Conversion

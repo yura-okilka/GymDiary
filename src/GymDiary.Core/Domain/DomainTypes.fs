@@ -1,10 +1,8 @@
-namespace GymDiary.Core.Domain.DomainTypes
+namespace GymDiary.Core.Domain
 
 open System
 
 open FSharp.Data.UnitSystems.SI.UnitSymbols
-
-open GymDiary.Core.Domain.CommonTypes
 
 type ExerciseCategoryId = private ExerciseCategoryId of string
 type ExerciseTemplateId = private ExerciseTemplateId of string

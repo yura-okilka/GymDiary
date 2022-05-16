@@ -1,8 +1,6 @@
-namespace GymDiary.Core.Domain.CommonTypes
+namespace GymDiary.Core.Domain
 
 open System
-
-open GymDiary.Core.Domain.Errors
 
 /// Constrained to be 50 chars or less, not null
 type String50 = private String50 of string

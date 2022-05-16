@@ -1,11 +1,6 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
-open System
-
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Errors
-open GymDiary.Core.Domain.CommonTypes
-open GymDiary.Core.Domain.DomainTypes
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
 

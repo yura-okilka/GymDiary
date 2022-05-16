@@ -3,7 +3,6 @@ namespace GymDiary.Api
 open System
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Errors
 
 open Giraffe
 

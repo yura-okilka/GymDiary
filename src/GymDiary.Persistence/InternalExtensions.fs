@@ -2,7 +2,7 @@ namespace GymDiary.Persistence
 
 open System
 
-open GymDiary.Core.Domain.Errors
+open GymDiary.Core.Domain
 
 open MongoDB.Driver
 
