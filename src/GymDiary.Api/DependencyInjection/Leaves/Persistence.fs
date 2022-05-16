@@ -34,21 +34,20 @@ module Persistence =
         let context = DBContext.create client dbName
 
         let exerciseCategoryRepository =
-            { Create = fun entity -> ExerciseCategoryRepository.create context.ExerciseCategories entity
+            { Create = ExerciseCategoryRepository.create context.ExerciseCategories
               GetAll = fun _ -> ExerciseCategoryRepository.getAll context.ExerciseCategories
-              GetById = fun id -> ExerciseCategoryRepository.getById context.ExerciseCategories id
-              ExistWithName = fun name -> ExerciseCategoryRepository.existWithName context.ExerciseCategories name
-              Update = fun entity -> ExerciseCategoryRepository.update context.ExerciseCategories entity
-              Delete = fun id -> ExerciseCategoryRepository.delete context.ExerciseCategories id }
+              GetById = ExerciseCategoryRepository.getById context.ExerciseCategories
+              ExistWithName = ExerciseCategoryRepository.existWithName context.ExerciseCategories
+              Update = ExerciseCategoryRepository.update context.ExerciseCategories
+              Delete = ExerciseCategoryRepository.delete context.ExerciseCategories }
 
         let exerciseTemplateRepository =
-            { Create = fun entity -> ExerciseTemplateRepository.create context.ExerciseTemplates entity
-              GetById = fun id -> ExerciseTemplateRepository.getById context.ExerciseTemplates id
-              Update = fun entity -> ExerciseTemplateRepository.update context.ExerciseTemplates entity
-              Delete = fun id -> ExerciseTemplateRepository.delete context.ExerciseTemplates id }
+            { Create = ExerciseTemplateRepository.create context.ExerciseTemplates
+              GetById = ExerciseTemplateRepository.getById context.ExerciseTemplates
+              Update = ExerciseTemplateRepository.update context.ExerciseTemplates
+              Delete = ExerciseTemplateRepository.delete context.ExerciseTemplates }
 
-        let sportsmanRepository =
-            { ExistWithId = fun id -> SportsmanRepository.existWithId context.Sportsmans id }
+        let sportsmanRepository = { ExistWithId = SportsmanRepository.existWithId context.Sportsmans }
 
         { ExerciseCategory = exerciseCategoryRepository
           ExerciseTemplate = exerciseTemplateRepository
