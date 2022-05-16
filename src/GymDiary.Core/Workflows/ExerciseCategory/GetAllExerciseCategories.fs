@@ -25,20 +25,20 @@ module GetAllExerciseCategories =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let createWorkflow
+    let runWorkflow
         (getAllCategoriesFromDB: SportsmanId -> Async<Result<ExerciseCategory list, PersistenceError>>)
-        : Workflow =
-        fun query ->
-            asyncResult {
-                let! ownerId =
-                    SportsmanId.create (nameof query.OwnerId) query.OwnerId |> Result.mapError QueryError.validation
+        (query: Query)
+        =
+        asyncResult {
+            let! ownerId =
+                SportsmanId.create (nameof query.OwnerId) query.OwnerId |> Result.mapError QueryError.validation
 
-                let! categories = getAllCategoriesFromDB ownerId |> AsyncResult.mapError QueryError.persistence
+            let! categories = getAllCategoriesFromDB ownerId |> AsyncResult.mapError QueryError.persistence
 
-                return
-                    categories
-                    |> List.map (fun category ->
-                        { Id = category.Id |> ExerciseCategoryId.value
-                          Name = category.Name |> String50.value
-                          OwnerId = category.OwnerId |> SportsmanId.value })
-            }
+            return
+                categories
+                |> List.map (fun category ->
+                    { Id = category.Id |> ExerciseCategoryId.value
+                      Name = category.Name |> String50.value
+                      OwnerId = category.OwnerId |> SportsmanId.value })
+        }

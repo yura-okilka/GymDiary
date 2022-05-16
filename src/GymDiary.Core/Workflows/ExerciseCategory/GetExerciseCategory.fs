@@ -23,24 +23,24 @@ module GetExerciseCategory =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let createWorkflow
+    let runWorkflow
         (getCategoryByIdFromDB: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
-        : Workflow =
-        fun query ->
-            asyncResult {
-                let! id =
-                    ExerciseCategoryId.create (nameof query.Id) query.Id
-                    |> Result.setError (ExerciseCategoryNotFound |> QueryError.domain)
+        (query: Query)
+        =
+        asyncResult {
+            let! id =
+                ExerciseCategoryId.create (nameof query.Id) query.Id
+                |> Result.setError (ExerciseCategoryNotFound |> QueryError.domain)
 
-                let! category =
-                    getCategoryByIdFromDB id
-                    |> AsyncResult.mapError (fun error ->
-                        match error with
-                        | EntityNotFound _ -> ExerciseCategoryNotFound |> QueryError.domain
-                        | _ -> error |> QueryError.persistence)
+            let! category =
+                getCategoryByIdFromDB id
+                |> AsyncResult.mapError (fun error ->
+                    match error with
+                    | EntityNotFound _ -> ExerciseCategoryNotFound |> QueryError.domain
+                    | _ -> error |> QueryError.persistence)
 
-                return
-                    { Id = category.Id |> ExerciseCategoryId.value
-                      Name = category.Name |> String50.value
-                      OwnerId = category.OwnerId |> SportsmanId.value }
-            }
+            return
+                { Id = category.Id |> ExerciseCategoryId.value
+                  Name = category.Name |> String50.value
+                  OwnerId = category.OwnerId |> SportsmanId.value }
+        }

@@ -46,41 +46,40 @@ module RenameExerciseCategory =
                 Map [ (nameof cmd.Id, cmd.Id)
                       (nameof cmd.Name, cmd.Name) ] }
 
-    let createWorkflow
+    let runWorkflow
         (getCategoryByIdFromDB: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
         (categoryWithNameExistsInDB: String50 -> Async<Result<bool, PersistenceError>>)
         (updateCategoryInDB: ExerciseCategory -> Async<Result<unit, PersistenceError>>)
         (logger: ILogger)
-        : Workflow =
-        fun command ->
-            asyncResult {
-                let! id =
-                    ExerciseCategoryId.create (nameof command.Id) command.Id
-                    |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
+        (command: Command)
+        =
+        asyncResult {
+            let! id =
+                ExerciseCategoryId.create (nameof command.Id) command.Id
+                |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
 
-                let! name =
-                    String50.create (nameof command.Name) command.Name |> Result.mapError CommandError.validation
+            let! name = String50.create (nameof command.Name) command.Name |> Result.mapError CommandError.validation
 
-                let! categoryExists = categoryWithNameExistsInDB name |> AsyncResult.mapError CommandError.persistence
+            let! categoryExists = categoryWithNameExistsInDB name |> AsyncResult.mapError CommandError.persistence
 
-                if categoryExists then
-                    return! ExerciseCategoryWithNameAlreadyExists(name |> String50.value) |> CommandError.domainResult
+            if categoryExists then
+                return! ExerciseCategoryWithNameAlreadyExists(name |> String50.value) |> CommandError.domainResult
 
-                let! category =
-                    getCategoryByIdFromDB id
-                    |> AsyncResult.mapError (fun error ->
-                        match error with
-                        | EntityNotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
-                        | _ -> error |> CommandError.persistence)
+            let! category =
+                getCategoryByIdFromDB id
+                |> AsyncResult.mapError (fun error ->
+                    match error with
+                    | EntityNotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
+                    | _ -> error |> CommandError.persistence)
 
-                let renamedCategory = category |> ExerciseCategory.rename name
+            let renamedCategory = category |> ExerciseCategory.rename name
 
-                do! updateCategoryInDB renamedCategory |> AsyncResult.mapError CommandError.persistence
+            do! updateCategoryInDB renamedCategory |> AsyncResult.mapError CommandError.persistence
 
-                logger.LogInformation(
-                    Events.ExerciseCategoryRenamed,
-                    "Exercise category with id '{id}' was renamed to '{name}'.",
-                    id |> ExerciseCategoryId.value,
-                    name |> String50.value
-                )
-            }
+            logger.LogInformation(
+                Events.ExerciseCategoryRenamed,
+                "Exercise category with id '{id}' was renamed to '{name}'.",
+                id |> ExerciseCategoryId.value,
+                name |> String50.value
+            )
+        }

@@ -51,45 +51,44 @@ module CreateExerciseCategory =
                 Map [ (nameof cmd.Name, cmd.Name)
                       (nameof cmd.OwnerId, cmd.OwnerId) ] }
 
-    let createWorkflow
+    let runWorkflow
         (categoryWithNameExistsInDB: String50 -> Async<Result<bool, PersistenceError>>)
         (sportsmanWithIdExistsInDB: SportsmanId -> Async<Result<bool, PersistenceError>>)
         (createCategoryInDB: ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>)
         (logger: ILogger)
-        : Workflow =
-        fun command ->
-            asyncResult {
-                let! category =
-                    validation {
-                        let! id = ExerciseCategoryId.Empty |> Ok
-                        and! name = String50.create (nameof command.Name) command.Name
-                        and! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId
-                        return ExerciseCategory.create id name ownerId
-                    }
-                    |> Result.mapError CommandError.validation
+        (command: Command)
+        =
+        asyncResult {
+            let! category =
+                validation {
+                    let! id = ExerciseCategoryId.Empty |> Ok
+                    and! name = String50.create (nameof command.Name) command.Name
+                    and! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId
+                    return ExerciseCategory.create id name ownerId
+                }
+                |> Result.mapError CommandError.validation
 
-                let! ownerExists =
-                    sportsmanWithIdExistsInDB category.OwnerId |> AsyncResult.mapError CommandError.persistence
+            let! ownerExists =
+                sportsmanWithIdExistsInDB category.OwnerId |> AsyncResult.mapError CommandError.persistence
 
-                if not ownerExists then
-                    return! OwnerNotFound |> CommandError.domainResult
+            if not ownerExists then
+                return! OwnerNotFound |> CommandError.domainResult
 
-                let! categoryExists =
-                    categoryWithNameExistsInDB category.Name |> AsyncResult.mapError CommandError.persistence
+            let! categoryExists =
+                categoryWithNameExistsInDB category.Name |> AsyncResult.mapError CommandError.persistence
 
-                if categoryExists then
-                    return!
-                        ExerciseCategoryWithNameAlreadyExists(category.Name |> String50.value)
-                        |> CommandError.domainResult
+            if categoryExists then
+                return!
+                    ExerciseCategoryWithNameAlreadyExists(category.Name |> String50.value) |> CommandError.domainResult
 
-                let! id = createCategoryInDB category |> AsyncResult.mapError CommandError.persistence
-                let rawId = id |> ExerciseCategoryId.value
+            let! id = createCategoryInDB category |> AsyncResult.mapError CommandError.persistence
+            let rawId = id |> ExerciseCategoryId.value
 
-                logger.LogInformation(
-                    Events.ExerciseCategoryCreated,
-                    "Exercise category was created with id '{id}'.",
-                    rawId
-                )
+            logger.LogInformation(
+                Events.ExerciseCategoryCreated,
+                "Exercise category was created with id '{id}'.",
+                rawId
+            )
 
-                return rawId |> CommandResult.create
-            }
+            return rawId |> CommandResult.create
+        }

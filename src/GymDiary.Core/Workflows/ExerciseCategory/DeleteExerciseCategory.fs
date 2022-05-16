@@ -39,26 +39,26 @@ module DeleteExerciseCategory =
                   Exception = err |> CommandError.getException }
           GetRequestInfo = fun cmd -> Map [ (nameof cmd.Id, cmd.Id) ] }
 
-    let createWorkflow
+    let runWorkflow
         (deleteCategoryFromDB: ExerciseCategoryId -> Async<Result<unit, PersistenceError>>)
         (logger: ILogger)
-        : Workflow =
-        fun command ->
-            asyncResult {
-                let! id =
-                    ExerciseCategoryId.create (nameof command.Id) command.Id
-                    |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
+        (command: Command)
+        =
+        asyncResult {
+            let! id =
+                ExerciseCategoryId.create (nameof command.Id) command.Id
+                |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
 
-                do!
-                    deleteCategoryFromDB id
-                    |> AsyncResult.mapError (fun error ->
-                        match error with
-                        | EntityNotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
-                        | _ -> error |> CommandError.persistence)
+            do!
+                deleteCategoryFromDB id
+                |> AsyncResult.mapError (fun error ->
+                    match error with
+                    | EntityNotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
+                    | _ -> error |> CommandError.persistence)
 
-                logger.LogInformation(
-                    Events.ExerciseCategoryDeleted,
-                    "Exercise category with id '{id}' was deleted.",
-                    id |> ExerciseCategoryId.value
-                )
-            }
+            logger.LogInformation(
+                Events.ExerciseCategoryDeleted,
+                "Exercise category with id '{id}' was deleted.",
+                id |> ExerciseCategoryId.value
+            )
+        }
