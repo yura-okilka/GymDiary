@@ -6,7 +6,7 @@ open GymDiary.Core.Extensions
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
 open GymDiary.Core.Domain.DomainTypes
-open GymDiary.Persistence.Dtos
+open GymDiary.Persistence
 
 open FsToolkit.ErrorHandling
 open FsToolkit.ErrorHandling.Operator.Result

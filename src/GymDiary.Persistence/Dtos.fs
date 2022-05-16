@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence.Dtos
+namespace GymDiary.Persistence
 
 open System
 

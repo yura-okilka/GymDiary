@@ -2,7 +2,7 @@ namespace GymDiary.Persistence.Conversion
 
 open GymDiary.Core.Domain.Errors
 open GymDiary.Core.Domain.CommonTypes
-open GymDiary.Persistence.Dtos
+open GymDiary.Persistence
 
 module SexDto =
 
