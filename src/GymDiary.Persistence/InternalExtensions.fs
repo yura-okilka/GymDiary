@@ -27,5 +27,5 @@ module internal InternalExtensions =
 
         let fromException (operation: string) (ex: exn) =
             match ex with
-            | :? MongoException -> Error(Database(operation, ex))
-            | _ -> Error(Other(operation, ex))
+            | :? MongoException -> Error(DatabaseError(operation, ex))
+            | _ -> Error(OtherError(operation, ex))

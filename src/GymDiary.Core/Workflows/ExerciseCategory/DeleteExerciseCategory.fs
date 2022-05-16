@@ -53,7 +53,7 @@ module DeleteExerciseCategory =
                     deleteCategoryFromDB id
                     |> AsyncResult.mapError (fun error ->
                         match error with
-                        | NotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
+                        | EntityNotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
                         | _ -> error |> CommandError.persistence)
 
                 logger.LogInformation(

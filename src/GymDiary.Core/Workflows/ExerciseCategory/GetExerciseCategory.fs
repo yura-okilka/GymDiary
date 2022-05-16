@@ -36,7 +36,7 @@ module GetExerciseCategory =
                     getCategoryByIdFromDB id
                     |> AsyncResult.mapError (fun error ->
                         match error with
-                        | NotFound _ -> ExerciseCategoryNotFound |> QueryError.domain
+                        | EntityNotFound _ -> ExerciseCategoryNotFound |> QueryError.domain
                         | _ -> error |> QueryError.persistence)
 
                 return

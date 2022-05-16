@@ -42,26 +42,26 @@ type ValidationError =
     static member toString (ValidationError (field, error)) = ValueError.toString field error
 
 type PersistenceError =
-    | NotFound of entity: string
-    | DtoConversion of dto: string * error: ValidationError
-    | Database of operation: string * ex: exn // Introduce separate DU cases for database errors that are important for domain and control flow (see NotFound).
-    | Other of operation: string * ex: exn
+    | EntityNotFound of entity: string
+    | DtoConversionFailed of dto: string * error: ValidationError
+    | DatabaseError of operation: string * ex: exn // Introduce separate DU cases for database errors that are important for domain and control flow (see EntityNotFound).
+    | OtherError of operation: string * ex: exn
 
-    static member notFound entity = NotFound(entity)
-    static member notFoundResult entity = Error(NotFound(entity))
-    static member dtoConversion dto error = DtoConversion(dto, error)
-    static member database operation ex = Database(operation, ex)
-    static member other operation ex = Other(operation, ex)
+    static member entityNotFound entity = EntityNotFound(entity)
+    static member entityNotFoundResult entity = Error(EntityNotFound(entity))
+    static member dtoConversionFailed dto error = DtoConversionFailed(dto, error)
+    static member databaseError operation ex = DatabaseError(operation, ex)
+    static member otherError operation ex = OtherError(operation, ex)
 
     static member toString (error: PersistenceError) =
         match error with
-        | NotFound entity -> $"%s{entity} is not found."
-        | DtoConversion (dto, error) -> $"Failed to convert '%s{dto}': %s{ValidationError.toString error}"
-        | Database (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
-        | Other (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
+        | EntityNotFound entity -> $"%s{entity} is not found."
+        | DtoConversionFailed (dto, error) -> $"Failed to convert '%s{dto}': %s{ValidationError.toString error}"
+        | DatabaseError (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
+        | OtherError (operation, ex) -> $"Failed to %s{operation}: %s{ex.Message}"
 
     static member getException (error: PersistenceError) =
         match error with
-        | Database (_, ex) -> ex |> Some
-        | Other (_, ex) -> ex |> Some
+        | DatabaseError (_, ex) -> ex |> Some
+        | OtherError (_, ex) -> ex |> Some
         | _ -> None

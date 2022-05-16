@@ -25,7 +25,7 @@ module ExerciseTemplateRepository =
                 return
                     dto.Id
                     |> ExerciseTemplateId.create (nameof dto.Id)
-                    |> Result.mapError (PersistenceError.dtoConversion "ExerciseTemplateId")
+                    |> Result.mapError (PersistenceError.dtoConversionFailed "ExerciseTemplateId")
             with
             | ex -> return PersistenceError.fromException "create ExerciseTemplate" ex
         }
@@ -39,14 +39,14 @@ module ExerciseTemplateRepository =
                 let! dto = collection.Find(fun d -> d.Id = id).SingleOrDefaultAsync()
 
                 if isNull dto then
-                    return PersistenceError.notFoundResult entityWithIdMsg
+                    return PersistenceError.entityNotFoundResult entityWithIdMsg
                 else
                     return
                         dto
                         |> ExerciseTemplateDto.toDomain
-                        |> Result.mapError (PersistenceError.dtoConversion "ExerciseTemplateDto")
+                        |> Result.mapError (PersistenceError.dtoConversionFailed "ExerciseTemplateDto")
             with
-            | ObjectIdFormatException _ -> return PersistenceError.notFoundResult entityWithIdMsg
+            | ObjectIdFormatException _ -> return PersistenceError.entityNotFoundResult entityWithIdMsg
             | ex -> return PersistenceError.fromException $"get %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask
@@ -60,11 +60,11 @@ module ExerciseTemplateRepository =
                 let! result = collection.ReplaceOneAsync((fun d -> d.Id = dto.Id), dto)
 
                 if result.ModifiedCount = 0 then
-                    return PersistenceError.notFoundResult entityWithIdMsg
+                    return PersistenceError.entityNotFoundResult entityWithIdMsg
                 else
                     return Ok()
             with
-            | ObjectIdFormatException _ -> return PersistenceError.notFoundResult entityWithIdMsg
+            | ObjectIdFormatException _ -> return PersistenceError.entityNotFoundResult entityWithIdMsg
             | ex -> return PersistenceError.fromException $"update %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask
@@ -77,11 +77,11 @@ module ExerciseTemplateRepository =
                 let! result = collection.DeleteOneAsync(fun d -> d.Id = id)
 
                 if result.DeletedCount = 0 then
-                    return PersistenceError.notFoundResult entityWithIdMsg
+                    return PersistenceError.entityNotFoundResult entityWithIdMsg
                 else
                     return Ok()
             with
-            | ObjectIdFormatException _ -> return PersistenceError.notFoundResult entityWithIdMsg
+            | ObjectIdFormatException _ -> return PersistenceError.entityNotFoundResult entityWithIdMsg
             | ex -> return PersistenceError.fromException $"delete %s{entityWithIdMsg}" ex
         }
         |> Async.AwaitTask
