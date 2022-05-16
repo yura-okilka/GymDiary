@@ -33,10 +33,11 @@ module ExerciseCategoryRepository =
         }
         |> Async.AwaitTask
 
-    let getAll (collection: IMongoCollection<ExerciseCategoryDto>) =
+    let getAll (collection: IMongoCollection<ExerciseCategoryDto>) (ownerId: SportsmanId) =
         task {
             try
-                let! dtos = collection.Find(fun _ -> true).ToListAsync()
+                let ownerId = ownerId |> SportsmanId.value
+                let! dtos = collection.Find(fun d -> d.OwnerId = ownerId).ToListAsync()
 
                 return
                     dtos

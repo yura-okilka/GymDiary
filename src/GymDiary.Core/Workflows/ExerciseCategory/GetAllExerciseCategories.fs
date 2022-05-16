@@ -7,6 +7,8 @@ open FsToolkit.ErrorHandling
 
 module GetAllExerciseCategories =
 
+    type Query = { OwnerId: string }
+
     type ExerciseCategoryDto =
         { Id: string
           Name: string
@@ -15,18 +17,23 @@ module GetAllExerciseCategories =
     type QueryResult = ExerciseCategoryDto list
 
     type QueryError =
+        | Validation of ValidationError
         | Persistence of PersistenceError
 
+        static member validation e = Validation e
         static member persistence e = Persistence e
 
-    type Workflow = Workflow<unit, QueryResult, QueryError>
+    type Workflow = Workflow<Query, QueryResult, QueryError>
 
     let createWorkflow
-        (getAllCategoriesFromDB: unit -> Async<Result<ExerciseCategory list, PersistenceError>>)
+        (getAllCategoriesFromDB: SportsmanId -> Async<Result<ExerciseCategory list, PersistenceError>>)
         : Workflow =
-        fun _ ->
+        fun query ->
             asyncResult {
-                let! categories = getAllCategoriesFromDB () |> AsyncResult.mapError QueryError.persistence
+                let! ownerId =
+                    SportsmanId.create (nameof query.OwnerId) query.OwnerId |> Result.mapError QueryError.validation
+
+                let! categories = getAllCategoriesFromDB ownerId |> AsyncResult.mapError QueryError.persistence
 
                 return
                     categories

@@ -39,11 +39,14 @@ module ExerciseCategoryHandlers =
     let getAll (getAllExerciseCategories: GetAllExerciseCategories.Workflow) (sportsmanId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! result = getAllExerciseCategories () // TODO: use sportsmanId.
+                let! result = getAllExerciseCategories { OwnerId = sportsmanId }
 
                 return!
                     match result with
                     | Ok data -> Successful.OK data next ctx
+
+                    | Error (GetAllExerciseCategories.Validation errors) ->
+                        RequestErrors.BAD_REQUEST (ErrorResponse.from errors) next ctx
 
                     | Error (GetAllExerciseCategories.Persistence error) ->
                         ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx

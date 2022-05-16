@@ -8,7 +8,7 @@ open MongoDB.Driver
 
 type ExerciseCategoryRepository =
     { Create: ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>
-      GetAll: unit -> Async<Result<ExerciseCategory list, PersistenceError>>
+      GetAll: SportsmanId -> Async<Result<ExerciseCategory list, PersistenceError>>
       GetById: ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>
       ExistWithName: String50 -> Async<Result<bool, PersistenceError>>
       Update: ExerciseCategory -> Async<Result<unit, PersistenceError>>
@@ -35,7 +35,7 @@ module Persistence =
 
         let exerciseCategoryRepository =
             { Create = ExerciseCategoryRepository.create context.ExerciseCategories
-              GetAll = fun _ -> ExerciseCategoryRepository.getAll context.ExerciseCategories
+              GetAll = ExerciseCategoryRepository.getAll context.ExerciseCategories
               GetById = ExerciseCategoryRepository.getById context.ExerciseCategories
               ExistWithName = ExerciseCategoryRepository.existWithName context.ExerciseCategories
               Update = ExerciseCategoryRepository.update context.ExerciseCategories
