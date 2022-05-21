@@ -12,9 +12,7 @@ open MongoDB.Driver
 
 module ExerciseTemplateRepository =
 
-    let private unwrapId id =
-        let rawId = ExerciseTemplateId.value id
-        (rawId, $"ExerciseTemplate with id '%s{rawId}'")
+    let private templateWithIdMsg id = $"ExerciseTemplate with id '%s{id}'"
 
     let create (collection: IMongoCollection<ExerciseTemplateDto>) (entity: ExerciseTemplate) =
         asyncResult {
@@ -33,12 +31,11 @@ module ExerciseTemplateRepository =
 
     let getById
         (collection: IMongoCollection<ExerciseTemplateDto>)
-        (ownerId: SportsmanId)
-        (templateId: ExerciseTemplateId)
+        (SportsmanId ownerId)
+        (ExerciseTemplateId templateId)
         =
         asyncResult {
-            let templateId, entityWithIdMsg = unwrapId templateId
-            let ownerId = ownerId |> SportsmanId.value
+            let entityWithIdMsg = templateWithIdMsg templateId
 
             let! dtoOption =
                 MongoRepository.findSingle collection (Expr.Quote(fun d -> d.Id = templateId && d.OwnerId = ownerId))
@@ -56,7 +53,7 @@ module ExerciseTemplateRepository =
 
     let update (collection: IMongoCollection<ExerciseTemplateDto>) (entity: ExerciseTemplate) =
         asyncResult {
-            let _, entityWithIdMsg = unwrapId entity.Id
+            let entityWithIdMsg = templateWithIdMsg (entity.Id |> ExerciseTemplateId.value)
             let dto = entity |> ExerciseTemplateDto.fromDomain
 
             let! result =
@@ -69,12 +66,12 @@ module ExerciseTemplateRepository =
             | _ -> return ()
         }
 
-    let delete (collection: IMongoCollection<ExerciseTemplateDto>) (id: ExerciseTemplateId) =
+    let delete (collection: IMongoCollection<ExerciseTemplateDto>) (ExerciseTemplateId templateId) =
         asyncResult {
-            let id, entityWithIdMsg = unwrapId id
+            let entityWithIdMsg = templateWithIdMsg templateId
 
             let! result =
-                MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = id))
+                MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = templateId))
                 |> AsyncResult.mapError (PersistenceError.fromException $"delete %s{entityWithIdMsg}")
 
             match result with

@@ -4,11 +4,11 @@ open System
 
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 
-type ExerciseCategoryId = private ExerciseCategoryId of string
-type ExerciseTemplateId = private ExerciseTemplateId of string
-type WorkoutTemplateId = private WorkoutTemplateId of string
-type WorkoutId = private WorkoutId of string
-type SportsmanId = private SportsmanId of string
+type ExerciseCategoryId = ExerciseCategoryId of string
+type ExerciseTemplateId = ExerciseTemplateId of string
+type WorkoutTemplateId = WorkoutTemplateId of string
+type WorkoutId = WorkoutId of string
+type SportsmanId = SportsmanId of string
 
 /// Constrained to be a decimal kilogram between 0.1 and 1000.00
 type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg>

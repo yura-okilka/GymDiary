@@ -10,12 +10,10 @@ open MongoDB.Driver
 
 module SportsmanRepository =
 
-    let private unwrapId id =
-        let rawId = SportsmanId.value id
-        (rawId, $"Sportsman with id '%s{rawId}'")
+    let private sportsmanWithIdMsg id = $"Sportsman with id '%s{id}'"
 
-    let existWithId (collection: IMongoCollection<SportsmanDto>) (id: SportsmanId) =
-        let id, entityWithIdMsg = unwrapId id
+    let existWithId (collection: IMongoCollection<SportsmanDto>) (SportsmanId sportsmanId) =
+        let entityWithIdMsg = sportsmanWithIdMsg sportsmanId
 
-        MongoRepository.findAny collection (Expr.Quote(fun d -> d.Id = id))
+        MongoRepository.findAny collection (Expr.Quote(fun d -> d.Id = sportsmanId))
         |> AsyncResult.mapError (PersistenceError.fromException $"find %s{entityWithIdMsg}")

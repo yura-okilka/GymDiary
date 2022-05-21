@@ -14,9 +14,7 @@ open MongoDB.Driver
 
 module ExerciseCategoryRepository =
 
-    let private unwrapId id =
-        let rawId = ExerciseCategoryId.value id
-        (rawId, $"ExerciseCategory with id '%s{rawId}'")
+    let private categoryWithIdMsg id = $"ExerciseCategory with id '%s{id}'"
 
     let create (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
         asyncResult {
@@ -33,10 +31,8 @@ module ExerciseCategoryRepository =
                 |> Async.singleton
         }
 
-    let getAll (collection: IMongoCollection<ExerciseCategoryDto>) (ownerId: SportsmanId) =
+    let getAll (collection: IMongoCollection<ExerciseCategoryDto>) (SportsmanId ownerId) =
         asyncResult {
-            let ownerId = ownerId |> SportsmanId.value
-
             let! dtos =
                 MongoRepository.find collection (Expr.Quote(fun d -> d.OwnerId = ownerId))
                 |> AsyncResult.mapError (PersistenceError.fromException "get all ExerciseCategories")
@@ -50,12 +46,11 @@ module ExerciseCategoryRepository =
 
     let getById
         (collection: IMongoCollection<ExerciseCategoryDto>)
-        (ownerId: SportsmanId)
-        (categoryId: ExerciseCategoryId)
+        (SportsmanId ownerId)
+        (ExerciseCategoryId categoryId)
         =
         asyncResult {
-            let categoryId, entityWithIdMsg = unwrapId categoryId
-            let ownerId = ownerId |> SportsmanId.value
+            let entityWithIdMsg = categoryWithIdMsg categoryId
 
             let! dtoOption =
                 MongoRepository.findSingle collection (Expr.Quote(fun d -> d.Id = categoryId && d.OwnerId = ownerId))
@@ -83,7 +78,7 @@ module ExerciseCategoryRepository =
 
     let update (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
         asyncResult {
-            let _, entityWithIdMsg = unwrapId entity.Id
+            let entityWithIdMsg = categoryWithIdMsg (entity.Id |> ExerciseCategoryId.value)
             let dto = entity |> ExerciseCategoryDto.fromDomain
 
             let! result =
@@ -96,12 +91,12 @@ module ExerciseCategoryRepository =
             | _ -> return ()
         }
 
-    let delete (collection: IMongoCollection<ExerciseCategoryDto>) (id: ExerciseCategoryId) =
+    let delete (collection: IMongoCollection<ExerciseCategoryDto>) (ExerciseCategoryId categoryId) =
         asyncResult {
-            let id, entityWithIdMsg = unwrapId id
+            let entityWithIdMsg = categoryWithIdMsg categoryId
 
             let! result =
-                MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = id))
+                MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = categoryId))
                 |> AsyncResult.mapError (PersistenceError.fromException $"delete %s{entityWithIdMsg}")
 
             match result with
