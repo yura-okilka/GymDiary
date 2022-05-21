@@ -7,7 +7,7 @@ type DBContext =
       ExerciseTemplates: IMongoCollection<ExerciseTemplateDto>
       WorkoutTemplates: IMongoCollection<WorkoutTemplateDto>
       Workouts: IMongoCollection<WorkoutDto>
-      Sportsmans: IMongoCollection<SportsmanDto> }
+      Sportsmen: IMongoCollection<SportsmanDto> }
 
 module DBContext =
 
@@ -24,7 +24,7 @@ module DBContext =
     let Workouts = "workouts"
 
     [<Literal>]
-    let Sportsmans = "sportsmans"
+    let Sportsmen = "sportsmen"
 
     let create (client: IMongoClient) (dbName: string) =
         let database = client.GetDatabase(dbName)
@@ -33,4 +33,4 @@ module DBContext =
           ExerciseTemplates = database.GetCollection<ExerciseTemplateDto>(ExerciseTemplates)
           WorkoutTemplates = database.GetCollection<WorkoutTemplateDto>(WorkoutTemplates)
           Workouts = database.GetCollection<WorkoutDto>(Workouts)
-          Sportsmans = database.GetCollection<SportsmanDto>(Sportsmans) }
+          Sportsmen = database.GetCollection<SportsmanDto>(Sportsmen) }

@@ -47,7 +47,7 @@ module Persistence =
               Update = ExerciseTemplateRepository.update context.ExerciseTemplates
               Delete = ExerciseTemplateRepository.delete context.ExerciseTemplates }
 
-        let sportsmanRepository = { ExistWithId = SportsmanRepository.existWithId context.Sportsmans }
+        let sportsmanRepository = { ExistWithId = SportsmanRepository.existWithId context.Sportsmen }
 
         { ExerciseCategory = exerciseCategoryRepository
           ExerciseTemplate = exerciseTemplateRepository
