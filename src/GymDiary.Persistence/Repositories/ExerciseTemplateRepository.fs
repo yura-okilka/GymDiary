@@ -17,71 +17,67 @@ module ExerciseTemplateRepository =
         (rawId, $"ExerciseTemplate with id '%s{rawId}'")
 
     let create (collection: IMongoCollection<ExerciseTemplateDto>) (entity: ExerciseTemplate) =
-        task {
-            try
-                let dto = entity |> ExerciseTemplateDto.fromDomain
-                do! collection.InsertOneAsync(dto)
+        asyncResult {
+            let! createdDto =
+                entity
+                |> ExerciseTemplateDto.fromDomain
+                |> MongoRepository.insertOne collection
+                |> AsyncResult.mapError (PersistenceError.fromException "create ExerciseTemplate")
 
-                return
-                    dto.Id
-                    |> ExerciseTemplateId.create (nameof dto.Id)
-                    |> Result.mapError (PersistenceError.dtoConversionFailed "ExerciseTemplateId")
-            with
-            | ex -> return PersistenceError.fromException "create ExerciseTemplate" ex
+            return!
+                createdDto.Id
+                |> ExerciseTemplateId.create (nameof createdDto.Id)
+                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseTemplateId>.Name)
+                |> Async.singleton
         }
-        |> Async.AwaitTask
 
-    let getById (collection: IMongoCollection<ExerciseTemplateDto>) (id: ExerciseTemplateId) =
-        task {
-            let id, entityWithIdMsg = unwrapId id
+    let getById
+        (collection: IMongoCollection<ExerciseTemplateDto>)
+        (ownerId: SportsmanId)
+        (templateId: ExerciseTemplateId)
+        =
+        asyncResult {
+            let templateId, entityWithIdMsg = unwrapId templateId
+            let ownerId = ownerId |> SportsmanId.value
 
-            try
-                let! dto = collection.Find(fun d -> d.Id = id).SingleOrDefaultAsync()
+            let! dtoOption =
+                MongoRepository.findSingle collection (Expr.Quote(fun d -> d.Id = templateId && d.OwnerId = ownerId))
+                |> AsyncResult.mapError (PersistenceError.fromException $"get %s{entityWithIdMsg}")
 
-                if isNull dto then
-                    return PersistenceError.entityNotFoundResult entityWithIdMsg
-                else
-                    return
-                        dto
-                        |> ExerciseTemplateDto.toDomain
-                        |> Result.mapError (PersistenceError.dtoConversionFailed "ExerciseTemplateDto")
-            with
-            | ObjectIdFormatException _ -> return PersistenceError.entityNotFoundResult entityWithIdMsg
-            | ex -> return PersistenceError.fromException $"get %s{entityWithIdMsg}" ex
+            match dtoOption with
+            | None -> return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
+            | Some dto ->
+                return!
+                    dto
+                    |> ExerciseTemplateDto.toDomain
+                    |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseTemplateDto>.Name)
+                    |> Async.singleton
         }
-        |> Async.AwaitTask
 
     let update (collection: IMongoCollection<ExerciseTemplateDto>) (entity: ExerciseTemplate) =
-        task {
+        asyncResult {
             let _, entityWithIdMsg = unwrapId entity.Id
+            let dto = entity |> ExerciseTemplateDto.fromDomain
 
-            try
-                let dto = entity |> ExerciseTemplateDto.fromDomain
-                let! result = collection.ReplaceOneAsync((fun d -> d.Id = dto.Id), dto)
+            let! result =
+                dto
+                |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = dto.Id))
+                |> AsyncResult.mapError (PersistenceError.fromException $"update %s{entityWithIdMsg}")
 
-                if result.ModifiedCount = 0 then
-                    return PersistenceError.entityNotFoundResult entityWithIdMsg
-                else
-                    return Ok()
-            with
-            | ObjectIdFormatException _ -> return PersistenceError.entityNotFoundResult entityWithIdMsg
-            | ex -> return PersistenceError.fromException $"update %s{entityWithIdMsg}" ex
+            match result with
+            | { ModifiedCount = 0L } -> return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
+            | _ -> return ()
         }
-        |> Async.AwaitTask
 
     let delete (collection: IMongoCollection<ExerciseTemplateDto>) (id: ExerciseTemplateId) =
-        task {
+        asyncResult {
             let id, entityWithIdMsg = unwrapId id
 
-            try
-                let! result = collection.DeleteOneAsync(fun d -> d.Id = id)
+            let! result =
+                MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = id))
+                |> AsyncResult.mapError (PersistenceError.fromException $"delete %s{entityWithIdMsg}")
 
-                if result.DeletedCount = 0 then
-                    return PersistenceError.entityNotFoundResult entityWithIdMsg
-                else
-                    return Ok()
-            with
-            | ObjectIdFormatException _ -> return PersistenceError.entityNotFoundResult entityWithIdMsg
-            | ex -> return PersistenceError.fromException $"delete %s{entityWithIdMsg}" ex
+            match result with
+            | { DeletedCount = 0L } -> return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
+            | _ -> return ()
         }
-        |> Async.AwaitTask

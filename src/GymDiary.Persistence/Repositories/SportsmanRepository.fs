@@ -17,12 +17,5 @@ module SportsmanRepository =
     let existWithId (collection: IMongoCollection<SportsmanDto>) (id: SportsmanId) =
         let id, entityWithIdMsg = unwrapId id
 
-        task {
-            try
-                let! exists = collection.Find(fun d -> d.Id = id).AnyAsync()
-                return Ok(exists)
-            with
-            | ObjectIdFormatException _ -> return Ok(false)
-            | ex -> return PersistenceError.fromException $"find %s{entityWithIdMsg}" ex
-        }
-        |> Async.AwaitTask
+        MongoRepository.findAny collection (Expr.Quote(fun d -> d.Id = id))
+        |> AsyncResult.mapError (PersistenceError.fromException $"find %s{entityWithIdMsg}")

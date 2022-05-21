@@ -22,6 +22,7 @@
     <Compile Include="Conversion\SexDto.fs" />
     <Compile Include="Conversion\SportsmanDto.fs" />
     <Compile Include="DBContext.fs" />
+    <Compile Include="Repositories\MongoRepository.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseTemplateRepository.fs" />
     <Compile Include="Repositories\SportsmanRepository.fs" />

@@ -16,7 +16,7 @@ type ExerciseCategoryRepository =
 
 type ExerciseTemplateRepository =
     { Create: ExerciseTemplate -> Async<Result<ExerciseTemplateId, PersistenceError>>
-      GetById: ExerciseTemplateId -> Async<Result<ExerciseTemplate, PersistenceError>>
+      GetById: SportsmanId -> ExerciseTemplateId -> Async<Result<ExerciseTemplate, PersistenceError>>
       Update: ExerciseTemplate -> Async<Result<unit, PersistenceError>>
       Delete: ExerciseTemplateId -> Async<Result<unit, PersistenceError>> }
 
