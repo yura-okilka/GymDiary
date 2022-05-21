@@ -61,9 +61,8 @@ module ExerciseTemplateRepository =
                 |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = dto.Id))
                 |> AsyncResult.mapError (PersistenceError.fromException $"update %s{entityWithIdMsg}")
 
-            match result with
-            | { ModifiedCount = 0L } -> return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
-            | _ -> return ()
+            if result.ModifiedCount = 0L then
+                return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
         }
 
     let delete (collection: IMongoCollection<ExerciseTemplateDto>) (ExerciseTemplateId templateId) =
@@ -74,7 +73,6 @@ module ExerciseTemplateRepository =
                 MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = templateId))
                 |> AsyncResult.mapError (PersistenceError.fromException $"delete %s{entityWithIdMsg}")
 
-            match result with
-            | { DeletedCount = 0L } -> return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
-            | _ -> return ()
+            if result.DeletedCount = 0L then
+                return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
         }
