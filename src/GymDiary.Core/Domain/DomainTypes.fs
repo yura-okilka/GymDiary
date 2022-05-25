@@ -101,65 +101,18 @@ type Sportsman =
       DateOfBirth: DateOnly option
       Sex: Sex option }
 
-module ExerciseCategoryId =
-
-    let value (ExerciseCategoryId id) = id
-
-    let create fieldName value =
-        ConstrainedType.createString fieldName ExerciseCategoryId (0, Int32.MaxValue) value
-
-    let Empty = ExerciseCategoryId ""
-
-module ExerciseTemplateId =
-
-    let value (ExerciseTemplateId id) = id
-
-    let create fieldName value =
-        ConstrainedType.createString fieldName ExerciseTemplateId (0, Int32.MaxValue) value
-
-    let Empty = ExerciseTemplateId ""
-
-module WorkoutTemplateId =
-
-    let value (WorkoutTemplateId id) = id
-
-    let create fieldName value =
-        ConstrainedType.createString fieldName WorkoutTemplateId (0, Int32.MaxValue) value
-
-    let Empty = WorkoutTemplateId ""
-
-module WorkoutId =
-
-    let value (WorkoutId id) = id
-
-    let create fieldName value =
-        ConstrainedType.createString fieldName WorkoutId (0, Int32.MaxValue) value
-
-    let Empty = WorkoutId ""
-
-module SportsmanId =
-
-    let value (SportsmanId id) = id
-
-    let create fieldName value =
-        ConstrainedType.createString fieldName SportsmanId (0, Int32.MaxValue) value
-
-    let Empty = SportsmanId ""
-
 module EquipmentWeightKg =
 
     open GymDiary.Core.Extensions
 
-    let value (EquipmentWeightKg value) = decimal value
-
     let create (fieldName: string) (value: decimal) =
         ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) (decimalKg value)
 
+    let value (EquipmentWeightKg value) = decimal value
+
 module RepsSet =
 
-    let create orderNum reps : RepsSet =
-        { OrderNum = orderNum
-          Reps = reps }
+    let create orderNum reps : RepsSet = { OrderNum = orderNum; Reps = reps }
 
 module RepsWeightSet =
 
@@ -198,6 +151,7 @@ module ExerciseCategory =
     let rename (name: String50) (category: ExerciseCategory) = { category with Name = name }
 
 module ExerciseTemplate =
+
     let create id categoryId name notes restTime sets createdOn lastModifiedOn ownerId : ExerciseTemplate =
         { Id = id
           CategoryId = categoryId
@@ -210,6 +164,7 @@ module ExerciseTemplate =
           OwnerId = ownerId }
 
 module WorkoutTemplate =
+
     let create id name goal notes schedule exercises createdOn lastModifiedOn ownerId : WorkoutTemplate =
         { Id = id
           Name = name
@@ -222,6 +177,7 @@ module WorkoutTemplate =
           OwnerId = ownerId }
 
 module Exercise =
+
     let create templateId sets startedOn completedOn : Exercise =
         { TemplateId = templateId
           Sets = sets
@@ -229,6 +185,7 @@ module Exercise =
           CompletedOn = completedOn }
 
 module Workout =
+
     let create id templateId exercises startedOn completedOn ownerId : Workout =
         { Id = id
           TemplateId = templateId
@@ -238,6 +195,7 @@ module Workout =
           OwnerId = ownerId }
 
 module Sportsman =
+
     let create id email firstName lastName dateOfBirth sex : Sportsman =
         { Id = id
           Email = email

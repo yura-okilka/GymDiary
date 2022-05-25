@@ -86,17 +86,15 @@ module ConstrainedType =
 
 module String50 =
 
-    let value (String50 value) = value
-
     let create fieldName value =
         ConstrainedType.createString fieldName String50 (1, 50) value
 
     let createOption fieldName value =
         ConstrainedType.createStringOption fieldName String50 50 value
 
-module String200 =
+    let value (String50 value) = value
 
-    let value (String200 value) = value
+module String200 =
 
     let create fieldName value =
         ConstrainedType.createString fieldName String200 (1, 200) value
@@ -104,9 +102,9 @@ module String200 =
     let createOption fieldName value =
         ConstrainedType.createStringOption fieldName String200 200 value
 
-module String1k =
+    let value (String200 value) = value
 
-    let value (String1k value) = value
+module String1k =
 
     let create fieldName value =
         ConstrainedType.createString fieldName String1k (1, 1000) value
@@ -114,18 +112,18 @@ module String1k =
     let createOption fieldName value =
         ConstrainedType.createStringOption fieldName String1k 1000 value
 
-module PositiveInt =
+    let value (String1k value) = value
 
-    let value (PositiveInt number) = number
+module PositiveInt =
 
     let create fieldName number =
         ConstrainedType.createInt fieldName PositiveInt (1, Int32.MaxValue) number
 
+    let value (PositiveInt number) = number
+
 module EmailAddress =
 
     open System.ComponentModel.DataAnnotations
-
-    let value (EmailAddress value) = value
 
     let create (fieldName: string) (value: string) =
         let attribute = new EmailAddressAttribute()
@@ -135,11 +133,11 @@ module EmailAddress =
         else
             ValidationError(fieldName, InvalidEmailAddress) |> Error
 
+    let value (EmailAddress value) = value
+
 module PhoneNumber =
 
     open System.ComponentModel.DataAnnotations
-
-    let value (PhoneNumber value) = value
 
     let create (fieldName: string) (value: string) =
         let attribute = new PhoneAttribute()
@@ -148,3 +146,5 @@ module PhoneNumber =
             PhoneNumber value |> Ok
         else
             ValidationError(fieldName, InvalidPhoneNumber) |> Error
+
+    let value (PhoneNumber value) = value

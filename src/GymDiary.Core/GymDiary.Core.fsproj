@@ -11,6 +11,7 @@
     <Compile Include="Domain\Events.fs" />
     <Compile Include="Domain\CommonTypes.fs" />
     <Compile Include="Domain\DomainTypes.fs" />
+    <Compile Include="Domain\Ids.fs" />
     <Compile Include="Workflows\Abstractions.fs" />
     <Compile Include="Workflows\ErrorLoggingDecorator.fs" />
     <Compile Include="Workflows\ExerciseCategory\CreateExerciseCategory.fs" />
