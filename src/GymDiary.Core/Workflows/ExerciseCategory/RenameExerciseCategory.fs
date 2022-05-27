@@ -2,6 +2,7 @@ namespace GymDiary.Core.Workflows.ExerciseCategory
 
 open GymDiary.Core
 open GymDiary.Core.Domain
+open GymDiary.Core.Domain.Logic
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
 

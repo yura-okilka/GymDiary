@@ -1,6 +1,7 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
 open GymDiary.Core.Domain
+open GymDiary.Core.Domain.Logic
 open GymDiary.Core.Workflows
 
 open FsToolkit.ErrorHandling

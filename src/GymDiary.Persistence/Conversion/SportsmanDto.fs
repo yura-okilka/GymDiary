@@ -4,6 +4,7 @@ open System
 
 open GymDiary.Core.Extensions
 open GymDiary.Core.Domain
+open GymDiary.Core.Domain.Logic
 open GymDiary.Persistence
 
 open FsToolkit.ErrorHandling

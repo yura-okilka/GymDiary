@@ -1,6 +1,8 @@
-namespace GymDiary.Core.Domain
+namespace GymDiary.Core.Domain.Logic
 
 open System
+
+open GymDiary.Core.Domain
 
 module ExerciseCategoryId =
 

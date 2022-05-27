@@ -2,6 +2,7 @@ namespace GymDiary.Persistence.Repositories
 
 open GymDiary.Core.Extensions
 open GymDiary.Core.Domain
+open GymDiary.Core.Domain.Logic
 open GymDiary.Persistence
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Conversion
