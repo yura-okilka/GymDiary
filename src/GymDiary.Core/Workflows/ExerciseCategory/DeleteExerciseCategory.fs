@@ -41,7 +41,7 @@ module DeleteExerciseCategory =
           GetRequestInfo = fun cmd -> Map [ (nameof cmd.Id, cmd.Id) ] }
 
     let runWorkflow
-        (deleteCategoryFromDB: ExerciseCategoryId -> Async<Result<unit, PersistenceError>>)
+        (deleteCategoryFromDB: ExerciseCategoryId -> PersistenceResult<unit>)
         (logger: ILogger)
         (command: Command)
         =

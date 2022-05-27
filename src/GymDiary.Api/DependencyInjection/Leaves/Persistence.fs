@@ -1,27 +1,28 @@
 namespace GymDiary.Api.DependencyInjection.Leaves
 
 open GymDiary.Core.Domain
+open GymDiary.Core.Workflows
 open GymDiary.Persistence
 open GymDiary.Persistence.Repositories
 
 open MongoDB.Driver
 
 type ExerciseCategoryRepository =
-    { Create: ExerciseCategory -> Async<Result<ExerciseCategoryId, PersistenceError>>
-      GetAll: SportsmanId -> Async<Result<ExerciseCategory list, PersistenceError>>
-      GetById: SportsmanId -> ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>
-      ExistWithName: SportsmanId -> String50 -> Async<Result<bool, PersistenceError>>
-      Update: ExerciseCategory -> Async<Result<unit, PersistenceError>>
-      Delete: ExerciseCategoryId -> Async<Result<unit, PersistenceError>> }
+    { Create: ExerciseCategory -> PersistenceResult<ExerciseCategoryId>
+      GetAll: SportsmanId -> PersistenceResult<ExerciseCategory list>
+      GetById: SportsmanId -> ExerciseCategoryId -> PersistenceResult<ExerciseCategory>
+      ExistWithName: SportsmanId -> String50 -> PersistenceResult<bool>
+      Update: ExerciseCategory -> PersistenceResult<unit>
+      Delete: ExerciseCategoryId -> PersistenceResult<unit> }
 
 type ExerciseTemplateRepository =
-    { Create: ExerciseTemplate -> Async<Result<ExerciseTemplateId, PersistenceError>>
-      GetById: SportsmanId -> ExerciseTemplateId -> Async<Result<ExerciseTemplate, PersistenceError>>
-      Update: ExerciseTemplate -> Async<Result<unit, PersistenceError>>
-      Delete: ExerciseTemplateId -> Async<Result<unit, PersistenceError>> }
+    { Create: ExerciseTemplate -> PersistenceResult<ExerciseTemplateId>
+      GetById: SportsmanId -> ExerciseTemplateId -> PersistenceResult<ExerciseTemplate>
+      Update: ExerciseTemplate -> PersistenceResult<unit>
+      Delete: ExerciseTemplateId -> PersistenceResult<unit> }
 
 type SportsmanRepository =
-    { ExistWithId: SportsmanId -> Async<Result<bool, PersistenceError>> }
+    { ExistWithId: SportsmanId -> PersistenceResult<bool> }
 
 type Persistence =
     { ExerciseCategory: ExerciseCategoryRepository

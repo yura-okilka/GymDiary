@@ -27,7 +27,7 @@ module GetAllExerciseCategories =
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
     let runWorkflow
-        (getAllCategoriesFromDB: SportsmanId -> Async<Result<ExerciseCategory list, PersistenceError>>)
+        (getAllCategoriesFromDB: SportsmanId -> PersistenceResult<ExerciseCategory list>)
         (query: Query)
         =
         asyncResult {

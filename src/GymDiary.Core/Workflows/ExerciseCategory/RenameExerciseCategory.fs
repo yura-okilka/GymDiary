@@ -52,9 +52,9 @@ module RenameExerciseCategory =
                       (nameof cmd.Name, cmd.Name) ] }
 
     let runWorkflow
-        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<Result<ExerciseCategory, PersistenceError>>)
-        (categoryWithNameExistsInDB: SportsmanId -> String50 -> Async<Result<bool, PersistenceError>>)
-        (updateCategoryInDB: ExerciseCategory -> Async<Result<unit, PersistenceError>>)
+        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> PersistenceResult<ExerciseCategory>)
+        (categoryWithNameExistsInDB: SportsmanId -> String50 -> PersistenceResult<bool>)
+        (updateCategoryInDB: ExerciseCategory -> PersistenceResult<unit>)
         (logger: ILogger)
         (command: Command)
         =
