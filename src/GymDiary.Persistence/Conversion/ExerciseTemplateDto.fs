@@ -1,8 +1,9 @@
 namespace GymDiary.Persistence.Conversion
 
+open Common.Extensions
+
 open GymDiary.Core.Domain
 open GymDiary.Core.Domain.Logic
-open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence
 
 open FsToolkit.ErrorHandling

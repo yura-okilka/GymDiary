@@ -3,7 +3,8 @@ namespace GymDiary.Persistence.Repositories
 open System
 open System.Linq.Expressions
 
-open GymDiary.Core.Extensions
+open Common.Extensions
+
 open GymDiary.Persistence.InternalExtensions
 
 open FSharpx.Collections

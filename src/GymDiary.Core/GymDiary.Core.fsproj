@@ -14,7 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Extensions.fs" />
     <Compile Include="Domain\Errors.fs" />
     <Compile Include="Domain\Events.fs" />
     <Compile Include="Domain\CommonTypes.fs" />
@@ -35,7 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="6.0.3" />
+    <ProjectReference Include="..\Common\Common.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="6.0.4" />
   </ItemGroup>
 
 </Project>

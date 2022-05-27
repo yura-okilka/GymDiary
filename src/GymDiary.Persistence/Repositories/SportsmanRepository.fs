@@ -1,5 +1,7 @@
 namespace GymDiary.Persistence.Repositories
 
+open Common.Extensions
+
 open GymDiary.Core.Domain
 open GymDiary.Persistence
 open GymDiary.Persistence.InternalExtensions

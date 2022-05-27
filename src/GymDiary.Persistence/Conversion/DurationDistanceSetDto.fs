@@ -1,6 +1,7 @@
 namespace GymDiary.Persistence.Conversion
 
-open GymDiary.Core.Extensions
+open Common.Extensions
+
 open GymDiary.Core.Domain
 open GymDiary.Persistence
 

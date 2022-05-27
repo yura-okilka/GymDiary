@@ -9,7 +9,9 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "GymDiary.Core", "src\GymDia
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "GymDiary.Persistence", "src\GymDiary.Persistence\GymDiary.Persistence.fsproj", "{056FC5AC-DE2A-400D-960F-FFB34A134D7E}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GymDiary.Api", "src\GymDiary.Api\GymDiary.Api.fsproj", "{3AD5E1AE-AA68-4C14-9C18-F4D5567DC8E3}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "GymDiary.Api", "src\GymDiary.Api\GymDiary.Api.fsproj", "{3AD5E1AE-AA68-4C14-9C18-F4D5567DC8E3}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Common", "src\Common\Common.fsproj", "{FCBB0992-9B01-4731-9E29-98FE80C734CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{3AD5E1AE-AA68-4C14-9C18-F4D5567DC8E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AD5E1AE-AA68-4C14-9C18-F4D5567DC8E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AD5E1AE-AA68-4C14-9C18-F4D5567DC8E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCBB0992-9B01-4731-9E29-98FE80C734CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCBB0992-9B01-4731-9E29-98FE80C734CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCBB0992-9B01-4731-9E29-98FE80C734CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCBB0992-9B01-4731-9E29-98FE80C734CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
