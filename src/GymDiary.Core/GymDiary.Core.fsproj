@@ -16,6 +16,7 @@
   <ItemGroup>
     <Compile Include="Domain\Errors.fs" />
     <Compile Include="Domain\Events.fs" />
+    <Compile Include="Domain\ConstrainedType.fs" />
     <Compile Include="Domain\CommonTypes.fs" />
     <Compile Include="Domain\DomainTypes.fs" />
     <Compile Include="Domain\IdsLogic.fs" />
