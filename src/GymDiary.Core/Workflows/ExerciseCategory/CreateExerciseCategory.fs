@@ -1,7 +1,6 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Logic
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
 
@@ -53,18 +52,18 @@ module CreateExerciseCategory =
                       (nameof cmd.OwnerId, cmd.OwnerId) ] }
 
     let runWorkflow
-        (categoryWithNameExistsInDB: SportsmanId -> String50 -> PersistenceResult<bool>)
-        (sportsmanWithIdExistsInDB: SportsmanId -> PersistenceResult<bool>)
-        (createCategoryInDB: ExerciseCategory -> PersistenceResult<ExerciseCategoryId>)
+        (categoryWithNameExistsInDB: Id<Sportsman> -> String50 -> PersistenceResult<bool>)
+        (sportsmanWithIdExistsInDB: Id<Sportsman> -> PersistenceResult<bool>)
+        (createCategoryInDB: ExerciseCategory -> PersistenceResult<Id<ExerciseCategory>>)
         (logger: ILogger)
         (command: Command)
         =
         asyncResult {
             let! category =
                 validation {
-                    let! id = ExerciseCategoryId.Empty |> Ok
+                    let! id = Id.Empty |> Ok
                     and! name = String50.create (nameof command.Name) command.Name
-                    and! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId
+                    and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
                     return ExerciseCategory.create id name ownerId
                 }
                 |> Result.mapError CommandError.validation
@@ -84,7 +83,7 @@ module CreateExerciseCategory =
                     ExerciseCategoryWithNameAlreadyExists(category.Name |> String50.value) |> CommandError.domainResult
 
             let! id = createCategoryInDB category |> AsyncResult.mapError CommandError.persistence
-            let rawId = id |> ExerciseCategoryId.value
+            let rawId = id |> Id.value
 
             logger.LogInformation(
                 Events.ExerciseCategoryCreated,

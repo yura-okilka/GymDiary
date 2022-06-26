@@ -3,7 +3,6 @@ namespace GymDiary.Persistence.Repositories
 open Common.Extensions
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Logic
 open GymDiary.Persistence
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Conversion
@@ -28,13 +27,15 @@ module ExerciseCategoryRepository =
 
             return!
                 createdDto.Id
-                |> ExerciseCategoryId.create (nameof createdDto.Id)
-                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryId>.Name)
+                |> Id.create (nameof createdDto.Id)
+                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<Id<ExerciseCategory>>.Name)
                 |> Async.singleton
         }
 
-    let getAll (collection: IMongoCollection<ExerciseCategoryDto>) (SportsmanId ownerId) =
+    let getAll (collection: IMongoCollection<ExerciseCategoryDto>) (ownerId: Id<Sportsman>) =
         asyncResult {
+            let ownerId = ownerId |> Id.value
+
             let! dtos =
                 MongoRepository.find collection (Expr.Quote(fun d -> d.OwnerId = ownerId))
                 |> AsyncResult.mapError (PersistenceError.fromException "get all ExerciseCategories")
@@ -48,10 +49,12 @@ module ExerciseCategoryRepository =
 
     let getById
         (collection: IMongoCollection<ExerciseCategoryDto>)
-        (SportsmanId ownerId)
-        (ExerciseCategoryId categoryId)
+        (ownerId: Id<Sportsman>)
+        (categoryId: Id<ExerciseCategory>)
         =
         asyncResult {
+            let ownerId = ownerId |> Id.value
+            let categoryId = categoryId |> Id.value
             let entityWithIdMsg = categoryWithIdMsg categoryId
 
             let! dtoOption =
@@ -68,9 +71,9 @@ module ExerciseCategoryRepository =
                     |> Async.singleton
         }
 
-    let existWithName (collection: IMongoCollection<ExerciseCategoryDto>) (ownerId: SportsmanId) (name: String50) =
+    let existWithName (collection: IMongoCollection<ExerciseCategoryDto>) (ownerId: Id<Sportsman>) (name: String50) =
         let name = name |> String50.value
-        let ownerId = ownerId |> SportsmanId.value
+        let ownerId = ownerId |> Id.value
 
         // Consider using case insensitive index for large collections.
         MongoRepository.findAny
@@ -80,7 +83,7 @@ module ExerciseCategoryRepository =
 
     let update (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
         asyncResult {
-            let entityWithIdMsg = categoryWithIdMsg (entity.Id |> ExerciseCategoryId.value)
+            let entityWithIdMsg = categoryWithIdMsg (entity.Id |> Id.value)
             let dto = entity |> ExerciseCategoryDto.fromDomain
 
             let! result =
@@ -92,8 +95,9 @@ module ExerciseCategoryRepository =
                 return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
         }
 
-    let delete (collection: IMongoCollection<ExerciseCategoryDto>) (ExerciseCategoryId categoryId) =
+    let delete (collection: IMongoCollection<ExerciseCategoryDto>) (categoryId: Id<ExerciseCategory>) =
         asyncResult {
+            let categoryId = categoryId |> Id.value
             let entityWithIdMsg = categoryWithIdMsg categoryId
 
             let! result =

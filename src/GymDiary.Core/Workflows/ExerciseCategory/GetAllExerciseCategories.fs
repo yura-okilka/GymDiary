@@ -1,7 +1,6 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Logic
 open GymDiary.Core.Workflows
 
 open FsToolkit.ErrorHandling
@@ -26,20 +25,16 @@ module GetAllExerciseCategories =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let runWorkflow
-        (getAllCategoriesFromDB: SportsmanId -> PersistenceResult<ExerciseCategory list>)
-        (query: Query)
-        =
+    let runWorkflow (getAllCategoriesFromDB: Id<Sportsman> -> PersistenceResult<ExerciseCategory list>) (query: Query) =
         asyncResult {
-            let! ownerId =
-                SportsmanId.create (nameof query.OwnerId) query.OwnerId |> Result.mapError QueryError.validation
+            let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId |> Result.mapError QueryError.validation
 
             let! categories = getAllCategoriesFromDB ownerId |> AsyncResult.mapError QueryError.persistence
 
             return
                 categories
                 |> List.map (fun category ->
-                    { Id = category.Id |> ExerciseCategoryId.value
+                    { Id = category.Id |> Id.value
                       Name = category.Name |> String50.value
-                      OwnerId = category.OwnerId |> SportsmanId.value })
+                      OwnerId = category.OwnerId |> Id.value })
         }

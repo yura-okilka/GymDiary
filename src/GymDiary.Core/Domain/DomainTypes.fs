@@ -4,12 +4,6 @@ open System
 
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 
-type ExerciseCategoryId = ExerciseCategoryId of string
-type ExerciseTemplateId = ExerciseTemplateId of string
-type WorkoutTemplateId = WorkoutTemplateId of string
-type WorkoutId = WorkoutId of string
-type SportsmanId = SportsmanId of string
-
 /// Constrained to be a decimal kilogram between 0.1 and 1000.00
 type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg>
 
@@ -48,26 +42,34 @@ type ExerciseSets =
     | DurationWeightSets of DurationWeightSet list
     | DurationDistanceSets of DurationDistanceSet list
 
+type Sportsman =
+    { Id: Id<Sportsman>
+      Email: EmailAddress
+      FirstName: String50
+      LastName: String50
+      DateOfBirth: DateOnly option
+      Sex: Sex option }
+
 type ExerciseCategory =
-    { Id: ExerciseCategoryId
+    { Id: Id<ExerciseCategory>
       Name: String50
-      OwnerId: SportsmanId }
+      OwnerId: Id<Sportsman> }
 
 /// Exercise template with description about an exercise
 type ExerciseTemplate =
-    { Id: ExerciseTemplateId
-      CategoryId: ExerciseCategoryId
+    { Id: Id<ExerciseTemplate>
+      CategoryId: Id<ExerciseCategory>
       Name: String50
       Notes: String1k option
       RestTime: TimeSpan
       Sets: ExerciseSets
       CreatedOn: DateTime
       LastModifiedOn: DateTime
-      OwnerId: SportsmanId }
+      OwnerId: Id<Sportsman> }
 
 /// Workout template with description about a workout
 type WorkoutTemplate =
-    { Id: WorkoutTemplateId
+    { Id: Id<WorkoutTemplate>
       Name: String50
       Goal: String200 option
       Notes: String1k option
@@ -75,31 +77,23 @@ type WorkoutTemplate =
       Exercises: ExerciseTemplate list
       CreatedOn: DateTime
       LastModifiedOn: DateTime
-      OwnerId: SportsmanId }
+      OwnerId: Id<Sportsman> }
 
 /// Exercise completed on a particular date
 type Exercise =
-    { TemplateId: ExerciseTemplateId
+    { TemplateId: Id<ExerciseTemplate>
       Sets: ExerciseSets
       StartedOn: DateTime
       CompletedOn: DateTime }
 
 /// Workout completed on a particular date
 type Workout =
-    { Id: WorkoutId
-      TemplateId: WorkoutTemplateId
+    { Id: Id<Workout>
+      TemplateId: Id<WorkoutTemplate>
       Exercises: Exercise list
       StartedOn: DateTime
       CompletedOn: DateTime
-      OwnerId: SportsmanId }
-
-type Sportsman =
-    { Id: SportsmanId
-      Email: EmailAddress
-      FirstName: String50
-      LastName: String50
-      DateOfBirth: DateOnly option
-      Sex: Sex option }
+      OwnerId: Id<Sportsman> }
 
 module EquipmentWeightKg =
 

@@ -3,7 +3,6 @@ namespace GymDiary.Persistence.Repositories
 open Common.Extensions
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Logic
 open GymDiary.Persistence
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Conversion
@@ -26,17 +25,19 @@ module ExerciseTemplateRepository =
 
             return!
                 createdDto.Id
-                |> ExerciseTemplateId.create (nameof createdDto.Id)
-                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseTemplateId>.Name)
+                |> Id.create (nameof createdDto.Id)
+                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<Id<ExerciseTemplate>>.Name)
                 |> Async.singleton
         }
 
     let getById
         (collection: IMongoCollection<ExerciseTemplateDto>)
-        (SportsmanId ownerId)
-        (ExerciseTemplateId templateId)
+        (ownerId: Id<Sportsman>)
+        (templateId: Id<ExerciseTemplate>)
         =
         asyncResult {
+            let ownerId = ownerId |> Id.value
+            let templateId = templateId |> Id.value
             let entityWithIdMsg = templateWithIdMsg templateId
 
             let! dtoOption =
@@ -55,7 +56,7 @@ module ExerciseTemplateRepository =
 
     let update (collection: IMongoCollection<ExerciseTemplateDto>) (entity: ExerciseTemplate) =
         asyncResult {
-            let entityWithIdMsg = templateWithIdMsg (entity.Id |> ExerciseTemplateId.value)
+            let entityWithIdMsg = templateWithIdMsg (entity.Id |> Id.value)
             let dto = entity |> ExerciseTemplateDto.fromDomain
 
             let! result =
@@ -67,8 +68,9 @@ module ExerciseTemplateRepository =
                 return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
         }
 
-    let delete (collection: IMongoCollection<ExerciseTemplateDto>) (ExerciseTemplateId templateId) =
+    let delete (collection: IMongoCollection<ExerciseTemplateDto>) (templateId: Id<ExerciseTemplate>) =
         asyncResult {
+            let templateId = templateId |> Id.value
             let entityWithIdMsg = templateWithIdMsg templateId
 
             let! result =

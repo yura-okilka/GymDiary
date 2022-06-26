@@ -1,7 +1,6 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Logic
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
 
@@ -41,13 +40,13 @@ module DeleteExerciseCategory =
           GetRequestInfo = fun cmd -> Map [ (nameof cmd.Id, cmd.Id) ] }
 
     let runWorkflow
-        (deleteCategoryFromDB: ExerciseCategoryId -> PersistenceResult<unit>)
+        (deleteCategoryFromDB: Id<ExerciseCategory> -> PersistenceResult<unit>)
         (logger: ILogger)
         (command: Command)
         =
         asyncResult {
             let! id =
-                ExerciseCategoryId.create (nameof command.Id) command.Id
+                Id.create (nameof command.Id) command.Id
                 |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
 
             do!
@@ -60,6 +59,6 @@ module DeleteExerciseCategory =
             logger.LogInformation(
                 Events.ExerciseCategoryDeleted,
                 "Exercise category with id '{id}' was deleted.",
-                id |> ExerciseCategoryId.value
+                id |> Id.value
             )
         }

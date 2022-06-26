@@ -5,7 +5,6 @@ open System
 open Common.Extensions
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Logic
 open GymDiary.Persistence
 
 open FSharpx.Collections
@@ -15,7 +14,7 @@ open FsToolkit.ErrorHandling
 module WorkoutTemplateDto =
 
     let fromDomain (domain: WorkoutTemplate) : WorkoutTemplateDto =
-        { Id = domain.Id |> WorkoutTemplateId.value
+        { Id = domain.Id |> Id.value
           Name = domain.Name |> String50.value
           Goal = domain.Goal |> Option.map String200.value |> Option.defaultValue defaultof<string>
           Notes = domain.Notes |> Option.map String1k.value |> Option.defaultValue defaultof<string>
@@ -27,11 +26,11 @@ module WorkoutTemplateDto =
             |> ResizeArray<ExerciseTemplateDto>
           CreatedOn = domain.CreatedOn
           LastModifiedOn = domain.LastModifiedOn
-          OwnerId = domain.OwnerId |> SportsmanId.value }
+          OwnerId = domain.OwnerId |> Id.value }
 
     let toDomain (dto: WorkoutTemplateDto) : Result<WorkoutTemplate, ValidationError> =
         result {
-            let! id = dto.Id |> WorkoutTemplateId.create (nameof dto.Id)
+            let! id = dto.Id |> Id.create (nameof dto.Id)
             let! name = dto.Name |> String50.create (nameof dto.Name)
             let! goal = dto.Goal |> String200.createOption (nameof dto.Goal)
             let! notes = dto.Notes |> String1k.createOption (nameof dto.Notes)
@@ -48,7 +47,7 @@ module WorkoutTemplateDto =
                 else
                     dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDto.toDomain
 
-            let! ownerId = dto.OwnerId |> SportsmanId.create (nameof dto.OwnerId)
+            let! ownerId = dto.OwnerId |> Id.create (nameof dto.OwnerId)
 
             return WorkoutTemplate.create id name goal notes schedule exercises dto.CreatedOn dto.LastModifiedOn ownerId
         }

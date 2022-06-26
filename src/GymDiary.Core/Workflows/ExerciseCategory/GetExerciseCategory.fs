@@ -1,7 +1,6 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Logic
 open GymDiary.Core.Workflows
 
 open FsToolkit.ErrorHandling
@@ -25,14 +24,14 @@ module GetExerciseCategory =
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
     let runWorkflow
-        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> PersistenceResult<ExerciseCategory>)
+        (getCategoryByIdFromDB: Id<Sportsman> -> Id<ExerciseCategory> -> PersistenceResult<ExerciseCategory>)
         (query: Query)
         =
         asyncResult {
             let! (categoryId, ownerId) =
                 result {
-                    let! categoryId = ExerciseCategoryId.create (nameof query.Id) query.Id
-                    let! ownerId = SportsmanId.create (nameof query.OwnerId) query.OwnerId
+                    let! categoryId = Id.create (nameof query.Id) query.Id
+                    let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId
                     return (categoryId, ownerId)
                 }
                 |> Result.setError (ExerciseCategoryNotFound |> QueryError.domain)
@@ -45,7 +44,7 @@ module GetExerciseCategory =
                     | _ -> error |> QueryError.persistence)
 
             return
-                { Id = category.Id |> ExerciseCategoryId.value
+                { Id = category.Id |> Id.value
                   Name = category.Name |> String50.value
-                  OwnerId = category.OwnerId |> SportsmanId.value }
+                  OwnerId = category.OwnerId |> Id.value }
         }

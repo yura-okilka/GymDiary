@@ -2,6 +2,9 @@ namespace GymDiary.Core.Domain
 
 open System
 
+/// Constrained to be a strongly typed id of entity, not null
+type Id<'T> = Id of string
+
 /// Constrained to be 50 chars or less, not null
 type String50 = private String50 of string
 
@@ -24,6 +27,15 @@ type Sex =
     | Male
     | Female
     | Other
+
+module Id =
+
+    let Empty = Id ""
+
+    let create<'T> fieldName value : Result<Id<'T>, ValidationError> =
+        ConstrainedType.createStringNotNull fieldName Id value
+
+    let value (Id value) = value
 
 module String50 =
 
@@ -57,10 +69,10 @@ module String1k =
 
 module PositiveInt =
 
-    let create fieldName number =
-        ConstrainedType.createInt fieldName PositiveInt (1, Int32.MaxValue) number
+    let create fieldName value =
+        ConstrainedType.createInt fieldName PositiveInt (1, Int32.MaxValue) value
 
-    let value (PositiveInt number) = number
+    let value (PositiveInt value) = value
 
 module EmailAddress =
 

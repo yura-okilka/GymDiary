@@ -37,6 +37,13 @@ module ConstrainedType =
         else
             ValidationError(fieldName, PatternNotMatched) |> Error
 
+    /// Create a non-nullable string using the constructor provided
+    let createStringNotNull (fieldName: string) (ctor: string -> 'a) (value: string) =
+        if value = null then
+            ValidationError(fieldName, ValueNull) |> Error
+        else
+            ctor value |> Ok
+
     /// Create a constrained integer using the constructor provided
     let createInt (fieldName: string) (ctor: int -> 'a) (minValue: int, maxValue: int) (value: int) =
         if value < minValue then

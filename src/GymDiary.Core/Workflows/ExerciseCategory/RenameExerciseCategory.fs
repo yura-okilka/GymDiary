@@ -1,8 +1,6 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
-open GymDiary.Core
 open GymDiary.Core.Domain
-open GymDiary.Core.Domain.Logic
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
 
@@ -52,8 +50,8 @@ module RenameExerciseCategory =
                       (nameof cmd.Name, cmd.Name) ] }
 
     let runWorkflow
-        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> PersistenceResult<ExerciseCategory>)
-        (categoryWithNameExistsInDB: SportsmanId -> String50 -> PersistenceResult<bool>)
+        (getCategoryByIdFromDB: Id<Sportsman> -> Id<ExerciseCategory> -> PersistenceResult<ExerciseCategory>)
+        (categoryWithNameExistsInDB: Id<Sportsman> -> String50 -> PersistenceResult<bool>)
         (updateCategoryInDB: ExerciseCategory -> PersistenceResult<unit>)
         (logger: ILogger)
         (command: Command)
@@ -61,8 +59,8 @@ module RenameExerciseCategory =
         asyncResult {
             let! (categoryId, ownerId) =
                 result {
-                    let! categoryId = ExerciseCategoryId.create (nameof command.Id) command.Id
-                    let! ownerId = SportsmanId.create (nameof command.OwnerId) command.OwnerId
+                    let! categoryId = Id.create (nameof command.Id) command.Id
+                    let! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
                     return (categoryId, ownerId)
                 }
                 |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
@@ -89,7 +87,7 @@ module RenameExerciseCategory =
             logger.LogInformation(
                 Events.ExerciseCategoryRenamed,
                 "Exercise category with id '{id}' was renamed to '{name}'.",
-                categoryId |> ExerciseCategoryId.value,
+                categoryId |> Id.value,
                 name |> String50.value
             )
         }

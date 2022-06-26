@@ -14,7 +14,8 @@ module SportsmanRepository =
 
     let private sportsmanWithIdMsg id = $"Sportsman with id '%s{id}'"
 
-    let existWithId (collection: IMongoCollection<SportsmanDto>) (SportsmanId sportsmanId) =
+    let existWithId (collection: IMongoCollection<SportsmanDto>) (sportsmanId: Id<Sportsman>) =
+        let sportsmanId = sportsmanId |> Id.value
         let entityWithIdMsg = sportsmanWithIdMsg sportsmanId
 
         MongoRepository.findAny collection (Expr.Quote(fun d -> d.Id = sportsmanId))
