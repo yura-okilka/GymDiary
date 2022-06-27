@@ -7,14 +7,14 @@ open GymDiary.Persistence
 
 open FsToolkit.ErrorHandling.Operator.Result
 
-module DurationDistanceSetDto =
+module DurationDistanceSetDocument =
 
-    let fromDomain (domain: DurationDistanceSet) : DurationDistanceSetDto =
+    let fromDomain (domain: DurationDistanceSet) : DurationDistanceSetDocument =
         { OrderNum = domain.OrderNum |> PositiveInt.value
           Duration = domain.Duration
           Distance = domain.Distance |> decimal }
 
-    let toDomain (dto: DurationDistanceSetDto) : Result<DurationDistanceSet, ValidationError> =
+    let toDomain (dto: DurationDistanceSetDocument) : Result<DurationDistanceSet, ValidationError> =
         let orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
         let duration = dto.Duration |> Ok
         let distance = dto.Distance |> decimalM |> Ok

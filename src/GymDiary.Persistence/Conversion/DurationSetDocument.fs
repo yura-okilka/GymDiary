@@ -5,13 +5,13 @@ open GymDiary.Persistence
 
 open FsToolkit.ErrorHandling.Operator.Result
 
-module DurationSetDto =
+module DurationSetDocument =
 
-    let fromDomain (domain: DurationSet) : DurationSetDto =
+    let fromDomain (domain: DurationSet) : DurationSetDocument =
         { OrderNum = domain.OrderNum |> PositiveInt.value
           Duration = domain.Duration }
 
-    let toDomain (dto: DurationSetDto) : Result<DurationSet, ValidationError> =
+    let toDomain (dto: DurationSetDocument) : Result<DurationSet, ValidationError> =
         let orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
         let duration = dto.Duration |> Ok
 

@@ -15,23 +15,23 @@ module ExerciseTemplateRepository =
 
     let private templateWithIdMsg id = $"ExerciseTemplate with id '%s{id}'"
 
-    let create (collection: IMongoCollection<ExerciseTemplateDto>) (entity: ExerciseTemplate) =
+    let create (collection: IMongoCollection<ExerciseTemplateDocument>) (entity: ExerciseTemplate) =
         asyncResult {
-            let! createdDto =
+            let! createdDocument =
                 entity
-                |> ExerciseTemplateDto.fromDomain
+                |> ExerciseTemplateDocument.fromDomain
                 |> MongoRepository.insertOne collection
                 |> AsyncResult.mapError (PersistenceError.fromException "create ExerciseTemplate")
 
             return!
-                createdDto.Id
-                |> Id.create (nameof createdDto.Id)
+                createdDocument.Id
+                |> Id.create (nameof createdDocument.Id)
                 |> Result.mapError (PersistenceError.dtoConversionFailed typeof<Id<ExerciseTemplate>>.Name)
                 |> Async.singleton
         }
 
     let getById
-        (collection: IMongoCollection<ExerciseTemplateDto>)
+        (collection: IMongoCollection<ExerciseTemplateDocument>)
         (ownerId: Id<Sportsman>)
         (templateId: Id<ExerciseTemplate>)
         =
@@ -49,15 +49,15 @@ module ExerciseTemplateRepository =
             | Some dto ->
                 return!
                     dto
-                    |> ExerciseTemplateDto.toDomain
-                    |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseTemplateDto>.Name)
+                    |> ExerciseTemplateDocument.toDomain
+                    |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseTemplateDocument>.Name)
                     |> Async.singleton
         }
 
-    let update (collection: IMongoCollection<ExerciseTemplateDto>) (entity: ExerciseTemplate) =
+    let update (collection: IMongoCollection<ExerciseTemplateDocument>) (entity: ExerciseTemplate) =
         asyncResult {
             let entityWithIdMsg = templateWithIdMsg (entity.Id |> Id.value)
-            let dto = entity |> ExerciseTemplateDto.fromDomain
+            let dto = entity |> ExerciseTemplateDocument.fromDomain
 
             let! result =
                 dto
@@ -68,7 +68,7 @@ module ExerciseTemplateRepository =
                 return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
         }
 
-    let delete (collection: IMongoCollection<ExerciseTemplateDto>) (templateId: Id<ExerciseTemplate>) =
+    let delete (collection: IMongoCollection<ExerciseTemplateDocument>) (templateId: Id<ExerciseTemplate>) =
         asyncResult {
             let templateId = templateId |> Id.value
             let entityWithIdMsg = templateWithIdMsg templateId

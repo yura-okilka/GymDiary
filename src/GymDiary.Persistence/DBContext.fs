@@ -3,11 +3,11 @@ namespace GymDiary.Persistence
 open MongoDB.Driver
 
 type DBContext =
-    { ExerciseCategories: IMongoCollection<ExerciseCategoryDto>
-      ExerciseTemplates: IMongoCollection<ExerciseTemplateDto>
-      WorkoutTemplates: IMongoCollection<WorkoutTemplateDto>
-      Workouts: IMongoCollection<WorkoutDto>
-      Sportsmen: IMongoCollection<SportsmanDto> }
+    { ExerciseCategories: IMongoCollection<ExerciseCategoryDocument>
+      ExerciseTemplates: IMongoCollection<ExerciseTemplateDocument>
+      WorkoutTemplates: IMongoCollection<WorkoutTemplateDocument>
+      Workouts: IMongoCollection<WorkoutDocument>
+      Sportsmen: IMongoCollection<SportsmanDocument> }
 
 module DBContext =
 
@@ -29,8 +29,8 @@ module DBContext =
     let create (client: IMongoClient) (dbName: string) =
         let database = client.GetDatabase(dbName)
 
-        { ExerciseCategories = database.GetCollection<ExerciseCategoryDto>(ExerciseCategories)
-          ExerciseTemplates = database.GetCollection<ExerciseTemplateDto>(ExerciseTemplates)
-          WorkoutTemplates = database.GetCollection<WorkoutTemplateDto>(WorkoutTemplates)
-          Workouts = database.GetCollection<WorkoutDto>(Workouts)
-          Sportsmen = database.GetCollection<SportsmanDto>(Sportsmen) }
+        { ExerciseCategories = database.GetCollection<ExerciseCategoryDocument>(ExerciseCategories)
+          ExerciseTemplates = database.GetCollection<ExerciseTemplateDocument>(ExerciseTemplates)
+          WorkoutTemplates = database.GetCollection<WorkoutTemplateDocument>(WorkoutTemplates)
+          Workouts = database.GetCollection<WorkoutDocument>(Workouts)
+          Sportsmen = database.GetCollection<SportsmanDocument>(Sportsmen) }

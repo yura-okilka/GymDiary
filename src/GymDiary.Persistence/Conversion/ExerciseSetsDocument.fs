@@ -10,11 +10,11 @@ open FSharpx.Collections
 open FsToolkit.ErrorHandling
 open FsToolkit.ErrorHandling.Operator.Result
 
-module ExerciseSetsDto =
+module ExerciseSetsDocument =
 
-    let fromDomain (domain: ExerciseSets) : ExerciseSetsDto =
-        let emptyDto =
-            { Tag = defaultof<ExerciseSetsDtoTag>
+    let fromDomain (domain: ExerciseSets) : ExerciseSetsDocument =
+        let emptyDocument =
+            { Tag = defaultof<ExerciseSetsDocumentTag>
               RepsSets = null
               RepsWeightSets = null
               DurationSets = null
@@ -23,92 +23,92 @@ module ExerciseSetsDto =
 
         match domain with
         | RepsSets sets ->
-            let repsSets = sets |> Seq.ofList |> Seq.map RepsSetDto.fromDomain |> ResizeArray<RepsSetDto>
+            let repsSets = sets |> Seq.ofList |> Seq.map RepsSetDocument.fromDomain |> ResizeArray<RepsSetDocument>
 
-            { emptyDto with
-                Tag = ExerciseSetsDtoTag.RepsSets
+            { emptyDocument with
+                Tag = ExerciseSetsDocumentTag.RepsSets
                 RepsSets = repsSets }
 
         | RepsWeightSets sets ->
             let repsWeightSets =
-                sets |> Seq.ofList |> Seq.map RepsWeightSetDto.fromDomain |> ResizeArray<RepsWeightSetDto>
+                sets |> Seq.ofList |> Seq.map RepsWeightSetDocument.fromDomain |> ResizeArray<RepsWeightSetDocument>
 
-            { emptyDto with
-                Tag = ExerciseSetsDtoTag.RepsWeightSets
+            { emptyDocument with
+                Tag = ExerciseSetsDocumentTag.RepsWeightSets
                 RepsWeightSets = repsWeightSets }
 
         | DurationSets sets ->
             let durationSets =
-                sets |> Seq.ofList |> Seq.map DurationSetDto.fromDomain |> ResizeArray<DurationSetDto>
+                sets |> Seq.ofList |> Seq.map DurationSetDocument.fromDomain |> ResizeArray<DurationSetDocument>
 
-            { emptyDto with
-                Tag = ExerciseSetsDtoTag.DurationSets
+            { emptyDocument with
+                Tag = ExerciseSetsDocumentTag.DurationSets
                 DurationSets = durationSets }
 
         | DurationDistanceSets sets ->
             let durationDistanceSets =
                 sets
                 |> Seq.ofList
-                |> Seq.map DurationDistanceSetDto.fromDomain
-                |> ResizeArray<DurationDistanceSetDto>
+                |> Seq.map DurationDistanceSetDocument.fromDomain
+                |> ResizeArray<DurationDistanceSetDocument>
 
-            { emptyDto with
-                Tag = ExerciseSetsDtoTag.DurationDistanceSets
+            { emptyDocument with
+                Tag = ExerciseSetsDocumentTag.DurationDistanceSets
                 DurationDistanceSets = durationDistanceSets }
 
         | DurationWeightSets sets ->
             let durationWeightSets =
-                sets |> Seq.ofList |> Seq.map DurationWeightSetDto.fromDomain |> ResizeArray<DurationWeightSetDto>
+                sets |> Seq.ofList |> Seq.map DurationWeightSetDocument.fromDomain |> ResizeArray<DurationWeightSetDocument>
 
-            { emptyDto with
-                Tag = ExerciseSetsDtoTag.DurationWeightSets
+            { emptyDocument with
+                Tag = ExerciseSetsDocumentTag.DurationWeightSets
                 DurationWeightSets = durationWeightSets }
 
-    let toDomain (dto: ExerciseSetsDto) : Result<ExerciseSets, ValidationError> =
+    let toDomain (dto: ExerciseSetsDocument) : Result<ExerciseSets, ValidationError> =
         match dto.Tag with
-        | ExerciseSetsDtoTag.RepsSets ->
+        | ExerciseSetsDocumentTag.RepsSets ->
             if dto.RepsSets = null then
                 ValidationError(nameof dto.RepsSets, ValueNull) |> Error
             else
                 dto.RepsSets
                 |> ResizeArray.toList
-                |> List.traverseResultM RepsSetDto.toDomain
+                |> List.traverseResultM RepsSetDocument.toDomain
                 |> Result.map RepsSets
 
-        | ExerciseSetsDtoTag.RepsWeightSets ->
+        | ExerciseSetsDocumentTag.RepsWeightSets ->
             if dto.RepsWeightSets = null then
                 ValidationError(nameof dto.RepsWeightSets, ValueNull) |> Error
             else
                 dto.RepsWeightSets
                 |> ResizeArray.toList
-                |> List.traverseResultM RepsWeightSetDto.toDomain
+                |> List.traverseResultM RepsWeightSetDocument.toDomain
                 |> Result.map RepsWeightSets
 
-        | ExerciseSetsDtoTag.DurationSets ->
+        | ExerciseSetsDocumentTag.DurationSets ->
             if dto.DurationSets = null then
                 ValidationError(nameof dto.DurationSets, ValueNull) |> Error
             else
                 dto.DurationSets
                 |> ResizeArray.toList
-                |> List.traverseResultM DurationSetDto.toDomain
+                |> List.traverseResultM DurationSetDocument.toDomain
                 |> Result.map DurationSets
 
-        | ExerciseSetsDtoTag.DurationWeightSets ->
+        | ExerciseSetsDocumentTag.DurationWeightSets ->
             if dto.DurationWeightSets = null then
                 ValidationError(nameof dto.DurationWeightSets, ValueNull) |> Error
             else
                 dto.DurationWeightSets
                 |> ResizeArray.toList
-                |> List.traverseResultM DurationWeightSetDto.toDomain
+                |> List.traverseResultM DurationWeightSetDocument.toDomain
                 |> Result.map DurationWeightSets
 
-        | ExerciseSetsDtoTag.DurationDistanceSets ->
+        | ExerciseSetsDocumentTag.DurationDistanceSets ->
             if dto.DurationDistanceSets = null then
                 ValidationError(nameof dto.DurationDistanceSets, ValueNull) |> Error
             else
                 dto.DurationDistanceSets
                 |> ResizeArray.toList
-                |> List.traverseResultM DurationDistanceSetDto.toDomain
+                |> List.traverseResultM DurationDistanceSetDocument.toDomain
                 |> Result.map DurationDistanceSets
 
         | _ -> ValidationError(nameof dto.Tag, InvalidValue(dto.Tag.ToString())) |> Error

@@ -9,12 +9,12 @@ module GetAllExerciseCategories =
 
     type Query = { OwnerId: string }
 
-    type ExerciseCategoryDto =
+    type ExerciseCategoryDocument =
         { Id: string
           Name: string
           OwnerId: string }
 
-    type QueryResult = ExerciseCategoryDto list
+    type QueryResult = ExerciseCategoryDocument list
 
     type QueryError =
         | Validation of ValidationError

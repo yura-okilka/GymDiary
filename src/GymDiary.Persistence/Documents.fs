@@ -10,35 +10,31 @@ open MongoDB.Bson.Serialization.Attributes
 // and does not populate it silently with a default value.
 
 [<CLIMutable>]
-type RepsSetDto =
-    { OrderNum: int
-      Reps: int }
+type RepsSetDocument = { OrderNum: int; Reps: int }
 
 [<CLIMutable>]
-type RepsWeightSetDto =
+type RepsWeightSetDocument =
     { OrderNum: int
       Reps: int
       EquipmentWeight: decimal }
 
 [<CLIMutable>]
-type DurationSetDto =
-    { OrderNum: int
-      Duration: TimeSpan }
+type DurationSetDocument = { OrderNum: int; Duration: TimeSpan }
 
 [<CLIMutable>]
-type DurationWeightSetDto =
+type DurationWeightSetDocument =
     { OrderNum: int
       Duration: TimeSpan
       EquipmentWeight: decimal }
 
 [<CLIMutable>]
-type DurationDistanceSetDto =
+type DurationDistanceSetDocument =
     { OrderNum: int
       Duration: TimeSpan
       Distance: decimal }
 
-// Tag to discriminate ExerciseSetsDtos
-type ExerciseSetsDtoTag =
+// Tag to discriminate ExerciseSetsDocuments
+type ExerciseSetsDocumentTag =
     | RepsSets = 1
     | RepsWeightSets = 2
     | DurationSets = 3
@@ -46,80 +42,80 @@ type ExerciseSetsDtoTag =
     | DurationDistanceSets = 5
 
 [<CLIMutable>]
-type ExerciseSetsDto =
-    { Tag: ExerciseSetsDtoTag
+type ExerciseSetsDocument =
+    { Tag: ExerciseSetsDocumentTag
 
       [<BsonIgnoreIfDefault>]
-      RepsSets: ResizeArray<RepsSetDto>
+      RepsSets: ResizeArray<RepsSetDocument>
 
       [<BsonIgnoreIfDefault>]
-      RepsWeightSets: ResizeArray<RepsWeightSetDto>
+      RepsWeightSets: ResizeArray<RepsWeightSetDocument>
 
       [<BsonIgnoreIfDefault>]
-      DurationSets: ResizeArray<DurationSetDto>
+      DurationSets: ResizeArray<DurationSetDocument>
 
       [<BsonIgnoreIfDefault>]
-      DurationWeightSets: ResizeArray<DurationWeightSetDto>
+      DurationWeightSets: ResizeArray<DurationWeightSetDocument>
 
       [<BsonIgnoreIfDefault>]
-      DurationDistanceSets: ResizeArray<DurationDistanceSetDto> }
+      DurationDistanceSets: ResizeArray<DurationDistanceSetDocument> }
 
 [<CLIMutable>]
-type ExerciseCategoryDto =
+type ExerciseCategoryDocument =
     { Id: string
       Name: string
       OwnerId: string }
 
 [<CLIMutable>]
-type ExerciseTemplateDto =
+type ExerciseTemplateDocument =
     { Id: string
       CategoryId: string
       Name: string
       Notes: string
       RestTime: TimeSpan
-      Sets: ExerciseSetsDto
+      Sets: ExerciseSetsDocument
       CreatedOn: DateTime
       LastModifiedOn: DateTime
       OwnerId: string }
 
 [<CLIMutable>]
-type WorkoutTemplateDto =
+type WorkoutTemplateDocument =
     { Id: string
       Name: string
       Goal: string
       Notes: string
       Schedule: ResizeArray<DayOfWeek>
-      Exercises: ResizeArray<ExerciseTemplateDto>
+      Exercises: ResizeArray<ExerciseTemplateDocument>
       CreatedOn: DateTime
       LastModifiedOn: DateTime
       OwnerId: string }
 
 [<CLIMutable>]
-type ExerciseDto =
+type ExerciseDocument =
     { TemplateId: string
-      Sets: ExerciseSetsDto
+      Sets: ExerciseSetsDocument
       StartedOn: DateTime
       CompletedOn: DateTime }
 
 [<CLIMutable>]
-type WorkoutDto =
+type WorkoutDocument =
     { Id: string
       TemplateId: string
-      Exercises: ResizeArray<ExerciseDto>
+      Exercises: ResizeArray<ExerciseDocument>
       StartedOn: DateTime
       CompletedOn: DateTime
       OwnerId: string }
 
-type SexDto =
+type SexDocument =
     | Male = 1
     | Female = 2
     | Other = 3
 
 [<CLIMutable>]
-type SportsmanDto =
+type SportsmanDocument =
     { Id: string
       Email: string
       FirstName: string
       LastName: string
       DateOfBirth: Nullable<DateTime>
-      Sex: Nullable<SexDto> }
+      Sex: Nullable<SexDocument> }

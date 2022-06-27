@@ -17,22 +17,22 @@ module ExerciseCategoryRepository =
 
     let private categoryWithIdMsg id = $"ExerciseCategory with id '%s{id}'"
 
-    let create (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
+    let create (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) =
         asyncResult {
-            let! createdDto =
+            let! createdDocument =
                 entity
-                |> ExerciseCategoryDto.fromDomain
+                |> ExerciseCategoryDocument.fromDomain
                 |> MongoRepository.insertOne collection
                 |> AsyncResult.mapError (PersistenceError.fromException "create ExerciseCategory")
 
             return!
-                createdDto.Id
-                |> Id.create (nameof createdDto.Id)
+                createdDocument.Id
+                |> Id.create (nameof createdDocument.Id)
                 |> Result.mapError (PersistenceError.dtoConversionFailed typeof<Id<ExerciseCategory>>.Name)
                 |> Async.singleton
         }
 
-    let getAll (collection: IMongoCollection<ExerciseCategoryDto>) (ownerId: Id<Sportsman>) =
+    let getAll (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: Id<Sportsman>) =
         asyncResult {
             let ownerId = ownerId |> Id.value
 
@@ -42,13 +42,13 @@ module ExerciseCategoryRepository =
 
             return!
                 dtos
-                |> List.traverseResultM ExerciseCategoryDto.toDomain
-                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryDto>.Name)
+                |> List.traverseResultM ExerciseCategoryDocument.toDomain
+                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryDocument>.Name)
                 |> Async.singleton
         }
 
     let getById
-        (collection: IMongoCollection<ExerciseCategoryDto>)
+        (collection: IMongoCollection<ExerciseCategoryDocument>)
         (ownerId: Id<Sportsman>)
         (categoryId: Id<ExerciseCategory>)
         =
@@ -66,12 +66,12 @@ module ExerciseCategoryRepository =
             | Some dto ->
                 return!
                     dto
-                    |> ExerciseCategoryDto.toDomain
-                    |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryDto>.Name)
+                    |> ExerciseCategoryDocument.toDomain
+                    |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryDocument>.Name)
                     |> Async.singleton
         }
 
-    let existWithName (collection: IMongoCollection<ExerciseCategoryDto>) (ownerId: Id<Sportsman>) (name: String50) =
+    let existWithName (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: Id<Sportsman>) (name: String50) =
         let name = name |> String50.value
         let ownerId = ownerId |> Id.value
 
@@ -81,10 +81,10 @@ module ExerciseCategoryRepository =
             (Expr.Quote(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId))
         |> AsyncResult.mapError (PersistenceError.fromException $"find ExerciseCategory with name '%s{name}'")
 
-    let update (collection: IMongoCollection<ExerciseCategoryDto>) (entity: ExerciseCategory) =
+    let update (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) =
         asyncResult {
             let entityWithIdMsg = categoryWithIdMsg (entity.Id |> Id.value)
-            let dto = entity |> ExerciseCategoryDto.fromDomain
+            let dto = entity |> ExerciseCategoryDocument.fromDomain
 
             let! result =
                 dto
@@ -95,7 +95,7 @@ module ExerciseCategoryRepository =
                 return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
         }
 
-    let delete (collection: IMongoCollection<ExerciseCategoryDto>) (categoryId: Id<ExerciseCategory>) =
+    let delete (collection: IMongoCollection<ExerciseCategoryDocument>) (categoryId: Id<ExerciseCategory>) =
         asyncResult {
             let categoryId = categoryId |> Id.value
             let entityWithIdMsg = categoryWithIdMsg categoryId

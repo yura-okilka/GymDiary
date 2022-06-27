@@ -15,20 +15,20 @@
 
   <ItemGroup>
     <Compile Include="InternalExtensions.fs" />
-    <Compile Include="Dtos.fs" />
-    <Compile Include="Conversion\RepsSetDto.fs" />
-    <Compile Include="Conversion\RepsWeightSetDto.fs" />
-    <Compile Include="Conversion\DurationSetDto.fs" />
-    <Compile Include="Conversion\DurationWeightSetDto.fs" />
-    <Compile Include="Conversion\DurationDistanceSetDto.fs" />
-    <Compile Include="Conversion\ExerciseCategoryDto.fs" />
-    <Compile Include="Conversion\ExerciseSetsDto.fs" />
-    <Compile Include="Conversion\ExerciseTemplateDto.fs" />
-    <Compile Include="Conversion\WorkoutTemplateDto.fs" />
-    <Compile Include="Conversion\ExerciseDto.fs" />
-    <Compile Include="Conversion\WorkoutDto.fs" />
-    <Compile Include="Conversion\SexDto.fs" />
-    <Compile Include="Conversion\SportsmanDto.fs" />
+    <Compile Include="Documents.fs" />
+    <Compile Include="Conversion\RepsSetDocument.fs" />
+    <Compile Include="Conversion\RepsWeightSetDocument.fs" />
+    <Compile Include="Conversion\DurationSetDocument.fs" />
+    <Compile Include="Conversion\DurationWeightSetDocument.fs" />
+    <Compile Include="Conversion\DurationDistanceSetDocument.fs" />
+    <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
+    <Compile Include="Conversion\ExerciseSetsDocument.fs" />
+    <Compile Include="Conversion\ExerciseTemplateDocument.fs" />
+    <Compile Include="Conversion\WorkoutTemplateDocument.fs" />
+    <Compile Include="Conversion\ExerciseDocument.fs" />
+    <Compile Include="Conversion\WorkoutDocument.fs" />
+    <Compile Include="Conversion\SexDocument.fs" />
+    <Compile Include="Conversion\SportsmanDocument.fs" />
     <Compile Include="DBContext.fs" />
     <Compile Include="Repositories\MongoRepository.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />

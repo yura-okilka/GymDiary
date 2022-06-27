@@ -11,9 +11,9 @@ open FSharpx.Collections
 
 open FsToolkit.ErrorHandling
 
-module WorkoutTemplateDto =
+module WorkoutTemplateDocument =
 
-    let fromDomain (domain: WorkoutTemplate) : WorkoutTemplateDto =
+    let fromDomain (domain: WorkoutTemplate) : WorkoutTemplateDocument =
         { Id = domain.Id |> Id.value
           Name = domain.Name |> String50.value
           Goal = domain.Goal |> Option.map String200.value |> Option.defaultValue defaultof<string>
@@ -22,13 +22,13 @@ module WorkoutTemplateDto =
           Exercises =
             domain.Exercises
             |> Seq.ofList
-            |> Seq.map ExerciseTemplateDto.fromDomain
-            |> ResizeArray<ExerciseTemplateDto>
+            |> Seq.map ExerciseTemplateDocument.fromDomain
+            |> ResizeArray<ExerciseTemplateDocument>
           CreatedOn = domain.CreatedOn
           LastModifiedOn = domain.LastModifiedOn
           OwnerId = domain.OwnerId |> Id.value }
 
-    let toDomain (dto: WorkoutTemplateDto) : Result<WorkoutTemplate, ValidationError> =
+    let toDomain (dto: WorkoutTemplateDocument) : Result<WorkoutTemplate, ValidationError> =
         result {
             let! id = dto.Id |> Id.create (nameof dto.Id)
             let! name = dto.Name |> String50.create (nameof dto.Name)
@@ -45,7 +45,7 @@ module WorkoutTemplateDto =
                 if dto.Exercises = null then
                     ValidationError(nameof dto.Exercises, ValueNull) |> Error
                 else
-                    dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDto.toDomain
+                    dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDocument.toDomain
 
             let! ownerId = dto.OwnerId |> Id.create (nameof dto.OwnerId)
 
