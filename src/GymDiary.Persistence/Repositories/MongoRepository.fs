@@ -7,8 +7,6 @@ open Common.Extensions
 
 open GymDiary.Persistence.InternalExtensions
 
-open FSharpx.Collections
-
 open MongoDB.Driver
 
 /// MongoDB repository to access data in a safe way.
@@ -24,7 +22,7 @@ module MongoRepository =
             try
                 let! documents = collection.Find(filter).ToListAsync()
 
-                return documents |> ResizeArray.toList |> Ok
+                return documents |> List.ofSeq |> Ok
             with
             | ex -> return ex |> Error
         }

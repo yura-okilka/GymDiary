@@ -7,8 +7,6 @@ open GymDiary.Persistence
 open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Conversion
 
-open FSharpx.Collections
-
 open FsToolkit.ErrorHandling
 
 open MongoDB.Driver
