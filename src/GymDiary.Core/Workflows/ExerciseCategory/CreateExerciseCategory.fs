@@ -52,9 +52,9 @@ module CreateExerciseCategory =
                       (nameof cmd.OwnerId, cmd.OwnerId) ] }
 
     let runWorkflow
-        (categoryWithNameExistsInDB: Id<Sportsman> -> String50 -> PersistenceResult<bool>)
-        (sportsmanWithIdExistsInDB: Id<Sportsman> -> PersistenceResult<bool>)
-        (createCategoryInDB: ExerciseCategory -> PersistenceResult<Id<ExerciseCategory>>)
+        (categoryWithNameExistsInDB: SportsmanId -> String50 -> PersistenceResult<bool>)
+        (sportsmanWithIdExistsInDB: SportsmanId -> PersistenceResult<bool>)
+        (createCategoryInDB: ExerciseCategory -> PersistenceResult<ExerciseCategoryId>)
         (logger: ILogger)
         (command: Command)
         =

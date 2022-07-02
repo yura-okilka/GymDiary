@@ -8,21 +8,21 @@ open GymDiary.Persistence.Repositories
 open MongoDB.Driver
 
 type ExerciseCategoryRepository =
-    { Create: ExerciseCategory -> PersistenceResult<Id<ExerciseCategory>>
-      GetAll: Id<Sportsman> -> PersistenceResult<ExerciseCategory list>
-      GetById: Id<Sportsman> -> Id<ExerciseCategory> -> PersistenceResult<ExerciseCategory>
-      ExistWithName: Id<Sportsman> -> String50 -> PersistenceResult<bool>
+    { Create: ExerciseCategory -> PersistenceResult<ExerciseCategoryId>
+      GetAll: SportsmanId -> PersistenceResult<ExerciseCategory list>
+      GetById: SportsmanId -> ExerciseCategoryId -> PersistenceResult<ExerciseCategory>
+      ExistWithName: SportsmanId -> String50 -> PersistenceResult<bool>
       Update: ExerciseCategory -> PersistenceResult<unit>
-      Delete: Id<ExerciseCategory> -> PersistenceResult<unit> }
+      Delete: ExerciseCategoryId -> PersistenceResult<unit> }
 
 type ExerciseTemplateRepository =
-    { Create: ExerciseTemplate -> PersistenceResult<Id<ExerciseTemplate>>
-      GetById: Id<Sportsman> -> Id<ExerciseTemplate> -> PersistenceResult<ExerciseTemplate>
+    { Create: ExerciseTemplate -> PersistenceResult<ExerciseTemplateId>
+      GetById: SportsmanId -> ExerciseTemplateId -> PersistenceResult<ExerciseTemplate>
       Update: ExerciseTemplate -> PersistenceResult<unit>
-      Delete: Id<ExerciseTemplate> -> PersistenceResult<unit> }
+      Delete: ExerciseTemplateId -> PersistenceResult<unit> }
 
 type SportsmanRepository =
-    { ExistWithId: Id<Sportsman> -> PersistenceResult<bool> }
+    { ExistWithId: SportsmanId -> PersistenceResult<bool> }
 
 type Persistence =
     { ExerciseCategory: ExerciseCategoryRepository

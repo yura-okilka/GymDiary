@@ -26,11 +26,11 @@ module ExerciseCategoryRepository =
             return!
                 createdDocument.Id
                 |> Id.create (nameof createdDocument.Id)
-                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<Id<ExerciseCategory>>.Name)
+                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryId>.Name)
                 |> Async.singleton
         }
 
-    let getAll (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: Id<Sportsman>) =
+    let getAll (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: SportsmanId) =
         asyncResult {
             let ownerId = ownerId |> Id.value
 
@@ -47,8 +47,8 @@ module ExerciseCategoryRepository =
 
     let getById
         (collection: IMongoCollection<ExerciseCategoryDocument>)
-        (ownerId: Id<Sportsman>)
-        (categoryId: Id<ExerciseCategory>)
+        (ownerId: SportsmanId)
+        (categoryId: ExerciseCategoryId)
         =
         asyncResult {
             let ownerId = ownerId |> Id.value
@@ -69,7 +69,7 @@ module ExerciseCategoryRepository =
                     |> Async.singleton
         }
 
-    let existWithName (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: Id<Sportsman>) (name: String50) =
+    let existWithName (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: SportsmanId) (name: String50) =
         let name = name |> String50.value
         let ownerId = ownerId |> Id.value
 
@@ -93,7 +93,7 @@ module ExerciseCategoryRepository =
                 return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
         }
 
-    let delete (collection: IMongoCollection<ExerciseCategoryDocument>) (categoryId: Id<ExerciseCategory>) =
+    let delete (collection: IMongoCollection<ExerciseCategoryDocument>) (categoryId: ExerciseCategoryId) =
         asyncResult {
             let categoryId = categoryId |> Id.value
             let entityWithIdMsg = categoryWithIdMsg categoryId

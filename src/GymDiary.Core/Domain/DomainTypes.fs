@@ -95,6 +95,12 @@ type Workout =
       CompletedOn: DateTime
       OwnerId: Id<Sportsman> }
 
+type SportsmanId = Id<Sportsman>
+type ExerciseCategoryId = Id<ExerciseCategory>
+type ExerciseTemplateId = Id<ExerciseTemplate>
+type WorkoutTemplateId = Id<WorkoutTemplate>
+type WorkoutId = Id<Workout>
+
 module EquipmentWeightKg =
 
     open Common.Extensions

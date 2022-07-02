@@ -25,7 +25,7 @@ module GetAllExerciseCategories =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let runWorkflow (getAllCategoriesFromDB: Id<Sportsman> -> PersistenceResult<ExerciseCategory list>) (query: Query) =
+    let runWorkflow (getAllCategoriesFromDB: SportsmanId -> PersistenceResult<ExerciseCategory list>) (query: Query) =
         asyncResult {
             let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId |> Result.mapError QueryError.validation
 

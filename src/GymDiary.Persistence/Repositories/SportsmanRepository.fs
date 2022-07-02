@@ -14,7 +14,7 @@ module SportsmanRepository =
 
     let private sportsmanWithIdMsg id = $"Sportsman with id '%s{id}'"
 
-    let existWithId (collection: IMongoCollection<SportsmanDocument>) (sportsmanId: Id<Sportsman>) =
+    let existWithId (collection: IMongoCollection<SportsmanDocument>) (sportsmanId: SportsmanId) =
         let sportsmanId = sportsmanId |> Id.value
         let entityWithIdMsg = sportsmanWithIdMsg sportsmanId
 

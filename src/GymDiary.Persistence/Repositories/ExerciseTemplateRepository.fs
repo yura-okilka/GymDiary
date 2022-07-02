@@ -26,14 +26,14 @@ module ExerciseTemplateRepository =
             return!
                 createdDocument.Id
                 |> Id.create (nameof createdDocument.Id)
-                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<Id<ExerciseTemplate>>.Name)
+                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseTemplateId>.Name)
                 |> Async.singleton
         }
 
     let getById
         (collection: IMongoCollection<ExerciseTemplateDocument>)
-        (ownerId: Id<Sportsman>)
-        (templateId: Id<ExerciseTemplate>)
+        (ownerId: SportsmanId)
+        (templateId: ExerciseTemplateId)
         =
         asyncResult {
             let ownerId = ownerId |> Id.value
@@ -68,7 +68,7 @@ module ExerciseTemplateRepository =
                 return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
         }
 
-    let delete (collection: IMongoCollection<ExerciseTemplateDocument>) (templateId: Id<ExerciseTemplate>) =
+    let delete (collection: IMongoCollection<ExerciseTemplateDocument>) (templateId: ExerciseTemplateId) =
         asyncResult {
             let templateId = templateId |> Id.value
             let entityWithIdMsg = templateWithIdMsg templateId
