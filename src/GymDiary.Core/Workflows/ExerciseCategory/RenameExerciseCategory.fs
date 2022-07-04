@@ -3,6 +3,7 @@ namespace GymDiary.Core.Workflows.ExerciseCategory
 open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
+open GymDiary.Core.Persistence
 
 open FsToolkit.ErrorHandling
 
@@ -16,78 +17,70 @@ module RenameExerciseCategory =
           Name: string }
 
     type CommandError =
-        | Validation of ValidationError
-        | Domain of DomainError
-        | Persistence of PersistenceError
+        | InvalidCommand of ValidationError list
+        | CategoryNotFound of ExerciseCategoryNotFoundError
+        | NameAlreadyUsed of ExerciseCategoryAlreadyExistsError
 
-        static member validation e = Validation e
-        static member domain e = Domain e
-        static member domainResult e = Error(Domain e)
-        static member persistence e = Persistence e
+        static member categoryNotFound id ownerId =
+            ExerciseCategoryNotFoundError.create id ownerId |> CategoryNotFound
 
-        static member toString (error: CommandError) =
+        static member nameAlreadyUsed name =
+            ExerciseCategoryAlreadyExistsError.create name |> NameAlreadyUsed |> Error
+
+        static member toString error =
             match error with
-            | Validation e -> e |> ValidationError.toString
-            | Domain e -> e |> DomainError.toString
-            | Persistence e -> e |> PersistenceError.toString
-
-        static member getException (error: CommandError) =
-            match error with
-            | Persistence e -> e |> PersistenceError.getException
-            | _ -> None
+            | InvalidCommand es -> es |> List.map ValidationError.toString |> String.concat " "
+            | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
+            | NameAlreadyUsed e -> e |> ExerciseCategoryAlreadyExistsError.toString
 
     type Workflow = Workflow<Command, unit, CommandError>
 
     let LoggingContext =
         { ErrorEventId = Events.ExerciseCategoryRenamingFailed
-          GetErrorInfo =
-            fun err ->
-                { Message = err |> CommandError.toString
-                  Exception = err |> CommandError.getException }
+          GetErrorMessage = CommandError.toString
           GetRequestInfo =
             fun cmd ->
                 Map [ (nameof cmd.Id, cmd.Id)
                       (nameof cmd.Name, cmd.Name) ] }
 
     let runWorkflow
-        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> PersistenceResult<ExerciseCategory>)
-        (categoryWithNameExistsInDB: SportsmanId -> String50 -> PersistenceResult<bool>)
-        (updateCategoryInDB: ExerciseCategory -> PersistenceResult<unit>)
+        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>)
+        (categoryWithNameExistsInDB: SportsmanId -> String50 -> Async<bool>)
+        (updateCategoryInDB: ExerciseCategory -> ModifyEntityResult)
         (logger: ILogger)
         (command: Command)
         =
         asyncResult {
-            let! (categoryId, ownerId) =
-                result {
+            let! (categoryId, ownerId, name) =
+                validation {
                     let! categoryId = Id.create (nameof command.Id) command.Id
-                    let! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
-                    return (categoryId, ownerId)
+                    and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
+                    and! name = String50.create (nameof command.Name) command.Name
+                    return (categoryId, ownerId, name)
                 }
-                |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
+                |> Result.mapError InvalidCommand
 
-            let! name = String50.create (nameof command.Name) command.Name |> Result.mapError CommandError.validation
-
-            let! categoryExists =
-                categoryWithNameExistsInDB ownerId name |> AsyncResult.mapError CommandError.persistence
+            let! categoryExists = categoryWithNameExistsInDB ownerId name
 
             if categoryExists then
-                return! ExerciseCategoryWithNameAlreadyExists(name |> String50.value) |> CommandError.domainResult
+                return! CommandError.nameAlreadyUsed name
 
             let! category =
                 getCategoryByIdFromDB ownerId categoryId
-                |> AsyncResult.mapError (fun error ->
-                    match error with
-                    | EntityNotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
-                    | _ -> error |> CommandError.persistence)
+                |> AsyncResult.requireSome (CommandError.categoryNotFound categoryId ownerId)
 
             let renamedCategory = category |> ExerciseCategory.rename name
 
-            do! updateCategoryInDB renamedCategory |> AsyncResult.mapError CommandError.persistence
+            do!
+                updateCategoryInDB renamedCategory
+                |> AsyncResult.mapError (fun error ->
+                    match error with
+                    | EntityNotFound _ -> CommandError.categoryNotFound renamedCategory.Id renamedCategory.OwnerId)
 
             logger.LogInformation(
                 Events.ExerciseCategoryRenamed,
                 "Exercise category with id '{id}' was renamed to '{name}'.",
-                categoryId |> Id.value,
-                name |> String50.value
+                command.Id,
+                command.Name
             )
         }

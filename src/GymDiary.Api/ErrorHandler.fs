@@ -13,27 +13,37 @@ type ErrorResponse =
       Message: string
       Details: obj }
 
-    static member from (error: DomainError) =
-        { Name = "DomainError"
-          Message = error |> DomainError.toString
-          Details = null }
-
-    static member from (error: ValidationError) =
+    static member validationError (error: ValidationError) =
         { Name = "ValidationError"
-          Message = error |> ValidationError.toString
+          Message = ValidationError.toString error
           Details = null }
 
-    static member from (errors: ValidationError list) =
+    static member validationErrors (errors: ValidationError list) =
         { Name = "ValidationErrors"
           Message = "Validation errors have occurred."
           Details =
             errors
-            |> List.map (fun (ValidationError (field, _) as error) -> (field, error |> ValidationError.toString))
+            |> List.map (fun (ValidationError (field, _) as error) -> (field, ValidationError.toString error))
             |> Map.ofList }
 
-    static member from (error: PersistenceError) =
-        { Name = "PersistenceError"
-          Message = error |> PersistenceError.toString
+    static member exerciseCategoryAlreadyExists message =
+        { Name = "ExerciseCategoryAlreadyExists"
+          Message = message
+          Details = null }
+
+    static member exerciseCategoryNotFound message =
+        { Name = "ExerciseCategoryNotFound"
+          Message = message
+          Details = null }
+
+    static member ownerNotFound message =
+        { Name = "OwnerNotFound"
+          Message = message
+          Details = null }
+
+    static member nameAlreadyUsed message =
+        { Name = "NameAlreadyUsed"
+          Message = message
           Details = null }
 
     static member InternalError =

@@ -3,7 +3,6 @@ namespace GymDiary.Api.HttpHandlers
 open Giraffe
 
 open GymDiary.Api
-open GymDiary.Core.Domain
 open GymDiary.Core.Workflows.ExerciseCategory
 
 open Microsoft.AspNetCore.Http
@@ -25,15 +24,18 @@ module ExerciseCategoryHandlers =
                 return!
                     match result with
                     | Ok data -> Successful.CREATED data next ctx
+                    | Error error ->
+                        let message = CreateExerciseCategory.CommandError.toString error
 
-                    | Error (CreateExerciseCategory.Validation errors) ->
-                        RequestErrors.BAD_REQUEST (ErrorResponse.from errors) next ctx
+                        match error with
+                        | CreateExerciseCategory.InvalidCommand errors ->
+                            RequestErrors.BAD_REQUEST (ErrorResponse.validationErrors errors) next ctx
 
-                    | Error (CreateExerciseCategory.Domain error) ->
-                        RequestErrors.CONFLICT (ErrorResponse.from error) next ctx
+                        | CreateExerciseCategory.CategoryAlreadyExists _ ->
+                            RequestErrors.CONFLICT (ErrorResponse.exerciseCategoryAlreadyExists message) next ctx
 
-                    | Error (CreateExerciseCategory.Persistence error) ->
-                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
+                        | CreateExerciseCategory.OwnerNotFound _ ->
+                            RequestErrors.CONFLICT (ErrorResponse.ownerNotFound message) next ctx
             }
 
     let getAll (getAllExerciseCategories: GetAllExerciseCategories.Workflow) (sportsmanId: string) : HttpHandler =
@@ -45,11 +47,8 @@ module ExerciseCategoryHandlers =
                     match result with
                     | Ok data -> Successful.OK data next ctx
 
-                    | Error (GetAllExerciseCategories.Validation errors) ->
-                        RequestErrors.BAD_REQUEST (ErrorResponse.from errors) next ctx
-
-                    | Error (GetAllExerciseCategories.Persistence error) ->
-                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
+                    | Error (GetAllExerciseCategories.InvalidQuery error) ->
+                        RequestErrors.BAD_REQUEST (ErrorResponse.validationError error) next ctx
             }
 
     let getById
@@ -67,15 +66,15 @@ module ExerciseCategoryHandlers =
                 return!
                     match result with
                     | Ok data -> Successful.OK data next ctx
+                    | Error error ->
+                        let message = GetExerciseCategory.QueryError.toString error
 
-                    | Error (GetExerciseCategory.Domain (ExerciseCategoryNotFound as error)) ->
-                        RequestErrors.NOT_FOUND (ErrorResponse.from error) next ctx
+                        match error with
+                        | GetExerciseCategory.InvalidQuery errors ->
+                            RequestErrors.BAD_REQUEST (ErrorResponse.validationErrors errors) next ctx
 
-                    | Error (GetExerciseCategory.Domain error) ->
-                        RequestErrors.CONFLICT (ErrorResponse.from error) next ctx
-
-                    | Error (GetExerciseCategory.Persistence error) ->
-                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
+                        | GetExerciseCategory.CategoryNotFound _ ->
+                            RequestErrors.NOT_FOUND (ErrorResponse.exerciseCategoryNotFound message) next ctx
             }
 
     type RenameRequest = { Name: string }
@@ -98,18 +97,18 @@ module ExerciseCategoryHandlers =
                 return!
                     match result with
                     | Ok _ -> Successful.NO_CONTENT next ctx
+                    | Error error ->
+                        let message = RenameExerciseCategory.CommandError.toString error
 
-                    | Error (RenameExerciseCategory.Validation error) ->
-                        RequestErrors.BAD_REQUEST (ErrorResponse.from error) next ctx
+                        match error with
+                        | RenameExerciseCategory.InvalidCommand errors ->
+                            RequestErrors.BAD_REQUEST (ErrorResponse.validationErrors errors) next ctx
 
-                    | Error (RenameExerciseCategory.Domain (ExerciseCategoryNotFound as error)) ->
-                        RequestErrors.NOT_FOUND (ErrorResponse.from error) next ctx
+                        | RenameExerciseCategory.CategoryNotFound _ ->
+                            RequestErrors.NOT_FOUND (ErrorResponse.exerciseCategoryNotFound message) next ctx
 
-                    | Error (RenameExerciseCategory.Domain error) ->
-                        RequestErrors.CONFLICT (ErrorResponse.from error) next ctx
-
-                    | Error (RenameExerciseCategory.Persistence error) ->
-                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
+                        | RenameExerciseCategory.NameAlreadyUsed _ ->
+                            RequestErrors.CONFLICT (ErrorResponse.nameAlreadyUsed message) next ctx
             }
 
     let delete
@@ -119,18 +118,21 @@ module ExerciseCategoryHandlers =
         : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! result = deleteExerciseCategory { Id = categoryId } // TODO: use sportsmanId.
+                let! result =
+                    deleteExerciseCategory
+                        { Id = categoryId
+                          OwnerId = sportsmanId }
 
                 return!
                     match result with
                     | Ok _ -> Successful.NO_CONTENT next ctx
+                    | Error error ->
+                        let message = DeleteExerciseCategory.CommandError.toString error
 
-                    | Error (DeleteExerciseCategory.Domain (ExerciseCategoryNotFound as error)) ->
-                        RequestErrors.NOT_FOUND (ErrorResponse.from error) next ctx
+                        match error with
+                        | DeleteExerciseCategory.InvalidCommand errors ->
+                            RequestErrors.BAD_REQUEST (ErrorResponse.validationErrors errors) next ctx
 
-                    | Error (DeleteExerciseCategory.Domain error) ->
-                        RequestErrors.CONFLICT (ErrorResponse.from error) next ctx
-
-                    | Error (DeleteExerciseCategory.Persistence error) ->
-                        ServerErrors.INTERNAL_ERROR (ErrorResponse.from error) next ctx
+                        | DeleteExerciseCategory.CategoryNotFound _ ->
+                            RequestErrors.NOT_FOUND (ErrorResponse.exerciseCategoryNotFound message) next ctx
             }

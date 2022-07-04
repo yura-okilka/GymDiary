@@ -12,49 +12,38 @@ module CreateExerciseCategory =
 
     type Command = { Name: string; OwnerId: string }
 
-    type CommandResult =
-        { Id: string }
-
-        static member create id = { Id = id }
+    type CommandResult = { Id: string }
 
     type CommandError =
-        | Validation of ValidationError list
-        | Domain of DomainError
-        | Persistence of PersistenceError
+        | InvalidCommand of ValidationError list
+        | CategoryAlreadyExists of ExerciseCategoryAlreadyExistsError
+        | OwnerNotFound of OwnerNotFoundError
 
-        static member validation e = Validation e
-        static member domain e = Domain e
-        static member domainResult e = Error(Domain e)
-        static member persistence e = Persistence e
+        static member categoryAlreadyExists name =
+            ExerciseCategoryAlreadyExistsError.create name |> CategoryAlreadyExists |> Error
 
-        static member toString (error: CommandError) =
+        static member ownerNotFound id = OwnerNotFoundError.create id |> OwnerNotFound |> Error
+
+        static member toString error =
             match error with
-            | Validation e -> e |> List.map ValidationError.toString |> String.concat " "
-            | Domain e -> e |> DomainError.toString
-            | Persistence e -> e |> PersistenceError.toString
-
-        static member getException (error: CommandError) =
-            match error with
-            | Persistence e -> e |> PersistenceError.getException
-            | _ -> None
+            | InvalidCommand es -> es |> List.map ValidationError.toString |> String.concat " "
+            | CategoryAlreadyExists e -> e |> ExerciseCategoryAlreadyExistsError.toString
+            | OwnerNotFound e -> e |> OwnerNotFoundError.toString
 
     type Workflow = Workflow<Command, CommandResult, CommandError>
 
     let LoggingContext =
         { ErrorEventId = Events.ExerciseCategoryCreationFailed
-          GetErrorInfo =
-            fun err ->
-                { Message = err |> CommandError.toString
-                  Exception = err |> CommandError.getException }
+          GetErrorMessage = CommandError.toString
           GetRequestInfo =
             fun cmd ->
                 Map [ (nameof cmd.Name, cmd.Name)
                       (nameof cmd.OwnerId, cmd.OwnerId) ] }
 
     let runWorkflow
-        (categoryWithNameExistsInDB: SportsmanId -> String50 -> PersistenceResult<bool>)
-        (sportsmanWithIdExistsInDB: SportsmanId -> PersistenceResult<bool>)
-        (createCategoryInDB: ExerciseCategory -> PersistenceResult<ExerciseCategoryId>)
+        (categoryWithNameExistsInDB: SportsmanId -> String50 -> Async<bool>)
+        (sportsmanWithIdExistsInDB: SportsmanId -> Async<bool>)
+        (createCategoryInDB: ExerciseCategory -> Async<ExerciseCategoryId>)
         (logger: ILogger)
         (command: Command)
         =
@@ -66,30 +55,25 @@ module CreateExerciseCategory =
                     and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
                     return ExerciseCategory.create id name ownerId
                 }
-                |> Result.mapError CommandError.validation
+                |> Result.mapError InvalidCommand
 
-            let! ownerExists =
-                sportsmanWithIdExistsInDB category.OwnerId |> AsyncResult.mapError CommandError.persistence
+            let! ownerExists = sportsmanWithIdExistsInDB category.OwnerId
 
             if not ownerExists then
-                return! OwnerNotFound |> CommandError.domainResult
+                return! CommandError.ownerNotFound category.OwnerId
 
-            let! categoryExists =
-                categoryWithNameExistsInDB category.OwnerId category.Name
-                |> AsyncResult.mapError CommandError.persistence
+            let! categoryExists = categoryWithNameExistsInDB category.OwnerId category.Name
 
             if categoryExists then
-                return!
-                    ExerciseCategoryWithNameAlreadyExists(category.Name |> String50.value) |> CommandError.domainResult
+                return! CommandError.categoryAlreadyExists category.Name
 
-            let! id = createCategoryInDB category |> AsyncResult.mapError CommandError.persistence
-            let rawId = id |> Id.value
+            let! categoryId = createCategoryInDB category |> Async.map Id.value
 
             logger.LogInformation(
                 Events.ExerciseCategoryCreated,
                 "Exercise category was created with id '{id}'.",
-                rawId
+                categoryId
             )
 
-            return rawId |> CommandResult.create
+            return { Id = categoryId }
         }

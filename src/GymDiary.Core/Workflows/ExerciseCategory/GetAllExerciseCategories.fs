@@ -9,27 +9,22 @@ module GetAllExerciseCategories =
 
     type Query = { OwnerId: string }
 
-    type ExerciseCategoryDocument =
+    type ExerciseCategoryDto =
         { Id: string
           Name: string
           OwnerId: string }
 
-    type QueryResult = ExerciseCategoryDocument list
+    type QueryResult = ExerciseCategoryDto list
 
-    type QueryError =
-        | Validation of ValidationError
-        | Persistence of PersistenceError
-
-        static member validation e = Validation e
-        static member persistence e = Persistence e
+    type QueryError = InvalidQuery of ValidationError
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let runWorkflow (getAllCategoriesFromDB: SportsmanId -> PersistenceResult<ExerciseCategory list>) (query: Query) =
+    let runWorkflow (getAllCategoriesFromDB: SportsmanId -> Async<ExerciseCategory list>) (query: Query) =
         asyncResult {
-            let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId |> Result.mapError QueryError.validation
+            let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
 
-            let! categories = getAllCategoriesFromDB ownerId |> AsyncResult.mapError QueryError.persistence
+            let! categories = getAllCategoriesFromDB ownerId
 
             return
                 categories

@@ -3,6 +3,7 @@ namespace GymDiary.Core.Workflows.ExerciseCategory
 open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
+open GymDiary.Core.Persistence
 
 open FsToolkit.ErrorHandling
 
@@ -10,55 +11,50 @@ open Microsoft.Extensions.Logging
 
 module DeleteExerciseCategory =
 
-    type Command = { Id: string }
+    type Command = { Id: string; OwnerId: string }
 
     type CommandError =
-        | Domain of DomainError
-        | Persistence of PersistenceError
+        | InvalidCommand of ValidationError list
+        | CategoryNotFound of ExerciseCategoryNotFoundError
 
-        static member domain e = Domain e
-        static member persistence e = Persistence e
+        static member categoryNotFound id ownerId =
+            ExerciseCategoryNotFoundError.create id ownerId |> CategoryNotFound
 
-        static member toString (error: CommandError) =
+        static member toString error =
             match error with
-            | Domain e -> e |> DomainError.toString
-            | Persistence e -> e |> PersistenceError.toString
-
-        static member getException (error: CommandError) =
-            match error with
-            | Persistence e -> e |> PersistenceError.getException
-            | _ -> None
+            | InvalidCommand es -> es |> List.map ValidationError.toString |> String.concat " "
+            | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
 
     type Workflow = Workflow<Command, unit, CommandError>
 
     let LoggingContext =
         { ErrorEventId = Events.ExerciseCategoryDeletionFailed
-          GetErrorInfo =
-            fun err ->
-                { Message = err |> CommandError.toString
-                  Exception = err |> CommandError.getException }
+          GetErrorMessage = CommandError.toString
           GetRequestInfo = fun cmd -> Map [ (nameof cmd.Id, cmd.Id) ] }
 
     let runWorkflow
-        (deleteCategoryFromDB: ExerciseCategoryId -> PersistenceResult<unit>)
+        (deleteCategoryFromDB: ExerciseCategoryId -> ModifyEntityResult)
         (logger: ILogger)
         (command: Command)
         =
         asyncResult {
-            let! id =
-                Id.create (nameof command.Id) command.Id
-                |> Result.setError (ExerciseCategoryNotFound |> CommandError.domain)
+            let! (categoryId, ownerId) =
+                validation {
+                    let! categoryId = Id.create (nameof command.Id) command.Id
+                    and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
+                    return (categoryId, ownerId)
+                }
+                |> Result.mapError InvalidCommand
 
-            do!
-                deleteCategoryFromDB id
+            do! // TODO: ensure it can be deleted.
+                deleteCategoryFromDB categoryId
                 |> AsyncResult.mapError (fun error ->
                     match error with
-                    | EntityNotFound _ -> ExerciseCategoryNotFound |> CommandError.domain
-                    | _ -> error |> CommandError.persistence)
+                    | EntityNotFound _ -> CommandError.categoryNotFound categoryId ownerId)
 
             logger.LogInformation(
                 Events.ExerciseCategoryDeleted,
                 "Exercise category with id '{id}' was deleted.",
-                id |> Id.value
+                command.Id
             )
         }

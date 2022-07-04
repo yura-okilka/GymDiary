@@ -5,60 +5,35 @@ open System.Linq.Expressions
 
 open Common.Extensions
 
-open GymDiary.Persistence.InternalExtensions
-
 open MongoDB.Driver
 
-/// MongoDB repository to access data in a safe way.
-/// Returns data in F# types.
+/// MongoDB repository to work with data in F# types.
 module MongoRepository =
-
-    type ReplaceResult = { ModifiedCount: int64 }
-
-    type DeleteResult = { DeletedCount: int64 }
 
     let find (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =
         task {
-            try
-                let! documents = collection.Find(filter).ToListAsync()
+            let! documents = collection.Find(filter).ToListAsync()
 
-                return documents |> List.ofSeq |> Ok
-            with
-            | ex -> return ex |> Error
+            return documents :> seq<_>
         }
         |> Async.AwaitTask
 
     let findSingle (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =
         task {
-            try
-                let! document = collection.Find(filter).SingleOrDefaultAsync()
+            let! document = collection.Find(filter).SingleOrDefaultAsync()
 
-                return document |> Option.ofRecord |> Ok
-            with
-            | ObjectIdFormatException _ -> return None |> Ok
-            | ex -> return ex |> Error
+            return Option.ofRecord document
         }
         |> Async.AwaitTask
 
     let findAny (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =
-        task {
-            try
-                let! exists = collection.Find(filter).AnyAsync()
-
-                return exists |> Ok
-            with
-            | ex -> return ex |> Error
-        }
-        |> Async.AwaitTask
+        collection.Find(filter).AnyAsync() |> Async.AwaitTask
 
     let insertOne (collection: IMongoCollection<'Document>) (document: 'Document) =
         task {
-            try
-                do! collection.InsertOneAsync(document)
+            do! collection.InsertOneAsync(document)
 
-                return document |> Ok
-            with
-            | ex -> return ex |> Error
+            return document
         }
         |> Async.AwaitTask
 
@@ -67,25 +42,7 @@ module MongoRepository =
         (filter: Expression<Func<'Document, bool>>)
         (document: 'Document)
         =
-        task {
-            try
-                let! result = collection.ReplaceOneAsync(filter, document)
-
-                return { ModifiedCount = result.ModifiedCount } |> Ok
-            with
-            | ObjectIdFormatException _ -> return { ModifiedCount = 0 } |> Ok
-            | ex -> return ex |> Error
-        }
-        |> Async.AwaitTask
+        collection.ReplaceOneAsync(filter, document) |> Async.AwaitTask
 
     let deleteOne (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =
-        task {
-            try
-                let! result = collection.DeleteOneAsync(filter)
-
-                return { DeletedCount = result.DeletedCount } |> Ok
-            with
-            | ObjectIdFormatException _ -> return { DeletedCount = 0 } |> Ok
-            | ex -> return ex |> Error
-        }
-        |> Async.AwaitTask
+        collection.DeleteOneAsync(filter) |> Async.AwaitTask

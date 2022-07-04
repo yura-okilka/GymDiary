@@ -3,8 +3,8 @@ namespace GymDiary.Persistence.Repositories
 open Common.Extensions
 
 open GymDiary.Core.Domain
+open GymDiary.Core.Persistence
 open GymDiary.Persistence
-open GymDiary.Persistence.InternalExtensions
 open GymDiary.Persistence.Conversion
 
 open FsToolkit.ErrorHandling
@@ -15,93 +15,93 @@ module ExerciseCategoryRepository =
 
     let private categoryWithIdMsg id = $"ExerciseCategory with id '%s{id}'"
 
-    let create (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) =
-        asyncResult {
-            let! createdDocument =
-                entity
-                |> ExerciseCategoryDocument.fromDomain
-                |> MongoRepository.insertOne collection
-                |> AsyncResult.mapError (PersistenceError.fromException "create ExerciseCategory")
+    let create
+        (collection: IMongoCollection<ExerciseCategoryDocument>)
+        (entity: ExerciseCategory)
+        : Async<ExerciseCategoryId> =
+        async {
+            let! createdDocument = entity |> ExerciseCategoryDocument.fromDomain |> MongoRepository.insertOne collection
 
-            return!
+            return
                 createdDocument.Id
-                |> Id.create (nameof createdDocument.Id)
-                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryId>.Name)
-                |> Async.singleton
+                |> Id.create<ExerciseCategory> (nameof createdDocument.Id)
+                |> Result.valueOr (fun error ->
+                    raise (DocumentConversionException(typeof<ExerciseCategoryId>.Name, error)))
         }
 
-    let getAll (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: SportsmanId) =
-        asyncResult {
+    let getAll
+        (collection: IMongoCollection<ExerciseCategoryDocument>)
+        (ownerId: SportsmanId)
+        : Async<ExerciseCategory list> =
+        async {
             let ownerId = ownerId |> Id.value
+            let! documents = MongoRepository.find collection (Expr.Quote(fun d -> d.OwnerId = ownerId))
 
-            let! dtos =
-                MongoRepository.find collection (Expr.Quote(fun d -> d.OwnerId = ownerId))
-                |> AsyncResult.mapError (PersistenceError.fromException "get all ExerciseCategories")
-
-            return!
-                dtos
+            return
+                documents
+                |> List.ofSeq
                 |> List.traverseResultM ExerciseCategoryDocument.toDomain
-                |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryDocument>.Name)
-                |> Async.singleton
+                |> Result.valueOr (fun error ->
+                    raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
         }
 
     let getById
         (collection: IMongoCollection<ExerciseCategoryDocument>)
         (ownerId: SportsmanId)
         (categoryId: ExerciseCategoryId)
-        =
-        asyncResult {
+        : Async<ExerciseCategory option> =
+        async {
             let ownerId = ownerId |> Id.value
             let categoryId = categoryId |> Id.value
-            let entityWithIdMsg = categoryWithIdMsg categoryId
 
-            let! dtoOption =
+            let! documentOption =
                 MongoRepository.findSingle collection (Expr.Quote(fun d -> d.Id = categoryId && d.OwnerId = ownerId))
-                |> AsyncResult.mapError (PersistenceError.fromException $"get %s{entityWithIdMsg}")
 
-            match dtoOption with
-            | None -> return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
-            | Some dto ->
-                return!
-                    dto
-                    |> ExerciseCategoryDocument.toDomain
-                    |> Result.mapError (PersistenceError.dtoConversionFailed typeof<ExerciseCategoryDocument>.Name)
-                    |> Async.singleton
+            return
+                documentOption
+                |> Option.traverseResult ExerciseCategoryDocument.toDomain
+                |> Result.valueOr (fun error ->
+                    raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
         }
 
-    let existWithName (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: SportsmanId) (name: String50) =
-        let name = name |> String50.value
+    let existWithName
+        (collection: IMongoCollection<ExerciseCategoryDocument>)
+        (ownerId: SportsmanId)
+        (name: String50)
+        : Async<bool> =
         let ownerId = ownerId |> Id.value
+        let name = name |> String50.value
 
         // Consider using case insensitive index for large collections.
         MongoRepository.findAny
             collection
             (Expr.Quote(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId))
-        |> AsyncResult.mapError (PersistenceError.fromException $"find ExerciseCategory with name '%s{name}'")
 
-    let update (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) =
+    let update
+        (collection: IMongoCollection<ExerciseCategoryDocument>)
+        (entity: ExerciseCategory)
+        : ModifyEntityResult =
         asyncResult {
-            let entityWithIdMsg = categoryWithIdMsg (entity.Id |> Id.value)
-            let dto = entity |> ExerciseCategoryDocument.fromDomain
+            let id = entity.Id |> Id.value
 
             let! result =
-                dto
-                |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = dto.Id))
-                |> AsyncResult.mapError (PersistenceError.fromException $"update %s{entityWithIdMsg}")
+                entity
+                |> ExerciseCategoryDocument.fromDomain
+                |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = id))
 
-            if result.ModifiedCount = 0L then
-                return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
+            if result.ModifiedCount = 0 then
+                return! Error(EntityNotFound(categoryWithIdMsg id))
         }
 
-    let delete (collection: IMongoCollection<ExerciseCategoryDocument>) (categoryId: ExerciseCategoryId) =
+    let delete
+        (collection: IMongoCollection<ExerciseCategoryDocument>)
+        (categoryId: ExerciseCategoryId)
+        : ModifyEntityResult =
         asyncResult {
             let categoryId = categoryId |> Id.value
-            let entityWithIdMsg = categoryWithIdMsg categoryId
 
-            let! result =
-                MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = categoryId))
-                |> AsyncResult.mapError (PersistenceError.fromException $"delete %s{entityWithIdMsg}")
+            let! result = MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = categoryId))
 
-            if result.DeletedCount = 0L then
-                return! PersistenceError.entityNotFound entityWithIdMsg |> AsyncResult.error
+            if result.DeletedCount = 0 then
+                return! Error(EntityNotFound(categoryWithIdMsg categoryId))
         }

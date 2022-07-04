@@ -15,33 +15,35 @@ module GetExerciseCategory =
           OwnerId: string }
 
     type QueryError =
-        | Domain of DomainError
-        | Persistence of PersistenceError
+        | InvalidQuery of ValidationError list
+        | CategoryNotFound of ExerciseCategoryNotFoundError
 
-        static member domain e = Domain e
-        static member persistence e = Persistence e
+        static member categoryNotFound id ownerId =
+            ExerciseCategoryNotFoundError.create id ownerId |> CategoryNotFound
+
+        static member toString error =
+            match error with
+            | InvalidQuery es -> es |> List.map ValidationError.toString |> String.concat " "
+            | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
     let runWorkflow
-        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> PersistenceResult<ExerciseCategory>)
+        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>)
         (query: Query)
         =
         asyncResult {
             let! (categoryId, ownerId) =
-                result {
+                validation {
                     let! categoryId = Id.create (nameof query.Id) query.Id
-                    let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId
+                    and! ownerId = Id.create (nameof query.OwnerId) query.OwnerId
                     return (categoryId, ownerId)
                 }
-                |> Result.setError (ExerciseCategoryNotFound |> QueryError.domain)
+                |> Result.mapError InvalidQuery
 
             let! category =
                 getCategoryByIdFromDB ownerId categoryId
-                |> AsyncResult.mapError (fun error ->
-                    match error with
-                    | EntityNotFound _ -> ExerciseCategoryNotFound |> QueryError.domain
-                    | _ -> error |> QueryError.persistence)
+                |> AsyncResult.requireSome (QueryError.categoryNotFound categoryId ownerId)
 
             return
                 { Id = category.Id |> Id.value

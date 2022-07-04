@@ -1,28 +1,28 @@
 namespace GymDiary.Api.DependencyInjection.Leaves
 
 open GymDiary.Core.Domain
-open GymDiary.Core.Workflows
+open GymDiary.Core.Persistence
 open GymDiary.Persistence
 open GymDiary.Persistence.Repositories
 
 open MongoDB.Driver
 
 type ExerciseCategoryRepository =
-    { Create: ExerciseCategory -> PersistenceResult<ExerciseCategoryId>
-      GetAll: SportsmanId -> PersistenceResult<ExerciseCategory list>
-      GetById: SportsmanId -> ExerciseCategoryId -> PersistenceResult<ExerciseCategory>
-      ExistWithName: SportsmanId -> String50 -> PersistenceResult<bool>
-      Update: ExerciseCategory -> PersistenceResult<unit>
-      Delete: ExerciseCategoryId -> PersistenceResult<unit> }
+    { Create: ExerciseCategory -> Async<ExerciseCategoryId>
+      GetAll: SportsmanId -> Async<ExerciseCategory list>
+      GetById: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>
+      ExistWithName: SportsmanId -> String50 -> Async<bool>
+      Update: ExerciseCategory -> ModifyEntityResult
+      Delete: ExerciseCategoryId -> ModifyEntityResult }
 
 type ExerciseTemplateRepository =
-    { Create: ExerciseTemplate -> PersistenceResult<ExerciseTemplateId>
-      GetById: SportsmanId -> ExerciseTemplateId -> PersistenceResult<ExerciseTemplate>
-      Update: ExerciseTemplate -> PersistenceResult<unit>
-      Delete: ExerciseTemplateId -> PersistenceResult<unit> }
+    { Create: ExerciseTemplate -> Async<ExerciseTemplateId>
+      GetById: SportsmanId -> ExerciseTemplateId -> Async<ExerciseTemplate option>
+      Update: ExerciseTemplate -> ModifyEntityResult
+      Delete: ExerciseTemplateId -> ModifyEntityResult }
 
 type SportsmanRepository =
-    { ExistWithId: SportsmanId -> PersistenceResult<bool> }
+    { ExistWithId: SportsmanId -> Async<bool> }
 
 type Persistence =
     { ExerciseCategory: ExerciseCategoryRepository
