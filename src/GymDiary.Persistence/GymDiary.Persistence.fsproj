@@ -28,7 +28,7 @@
     <Compile Include="Conversion\WorkoutTemplateDocument.fs" />
     <Compile Include="Conversion\ExerciseDocument.fs" />
     <Compile Include="Conversion\WorkoutDocument.fs" />
-    <Compile Include="Conversion\SexDocument.fs" />
+    <Compile Include="Conversion\GenderDocument.fs" />
     <Compile Include="Conversion\SportsmanDocument.fs" />
     <Compile Include="DBContext.fs" />
     <Compile Include="Repositories\MongoRepository.fs" />

@@ -48,7 +48,7 @@ type Sportsman =
       FirstName: String50
       LastName: String50
       DateOfBirth: DateOnly option
-      Sex: Sex option }
+      Gender: Gender option }
 
 type ExerciseCategory =
     { Id: Id<ExerciseCategory>
@@ -196,10 +196,10 @@ module Workout =
 
 module Sportsman =
 
-    let create id email firstName lastName dateOfBirth sex : Sportsman =
+    let create id email firstName lastName dateOfBirth gender : Sportsman =
         { Id = id
           Email = email
           FirstName = firstName
           LastName = lastName
           DateOfBirth = dateOfBirth
-          Sex = sex }
+          Gender = gender }

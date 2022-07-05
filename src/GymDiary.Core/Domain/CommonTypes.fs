@@ -23,7 +23,7 @@ type EmailAddress = private EmailAddress of string
 /// Constrained to be a valid phone number
 type PhoneNumber = private PhoneNumber of string
 
-type Sex =
+type Gender =
     | Male
     | Female
     | Other

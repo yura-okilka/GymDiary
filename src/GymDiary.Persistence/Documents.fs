@@ -106,7 +106,7 @@ type WorkoutDocument =
       CompletedOn: DateTime
       OwnerId: string }
 
-type SexDocument =
+type GenderDocument =
     | Male = 1
     | Female = 2
     | Other = 3
@@ -118,4 +118,4 @@ type SportsmanDocument =
       FirstName: string
       LastName: string
       DateOfBirth: Nullable<DateTime>
-      Sex: Nullable<SexDocument> }
+      Gender: Nullable<GenderDocument> }
