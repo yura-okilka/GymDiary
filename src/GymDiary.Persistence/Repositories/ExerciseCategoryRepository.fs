@@ -13,8 +13,6 @@ open MongoDB.Driver
 
 module ExerciseCategoryRepository =
 
-    let private categoryWithIdMsg id = $"ExerciseCategory with id '%s{id}'"
-
     let create
         (collection: IMongoCollection<ExerciseCategoryDocument>)
         (entity: ExerciseCategory)
@@ -90,7 +88,7 @@ module ExerciseCategoryRepository =
                 |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = id))
 
             if result.ModifiedCount = 0 then
-                return! Error(EntityNotFound(categoryWithIdMsg id))
+                return! EntityNotFound(typeof<ExerciseCategory>.Name, id) |> Error
         }
 
     let delete
@@ -103,5 +101,5 @@ module ExerciseCategoryRepository =
             let! result = MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = categoryId))
 
             if result.DeletedCount = 0 then
-                return! Error(EntityNotFound(categoryWithIdMsg categoryId))
+                return! EntityNotFound(typeof<ExerciseCategory>.Name, categoryId) |> Error
         }

@@ -13,8 +13,6 @@ open MongoDB.Driver
 
 module ExerciseTemplateRepository =
 
-    let private templateWithIdMsg id = $"ExerciseTemplate with id '%s{id}'"
-
     let create
         (collection: IMongoCollection<ExerciseTemplateDocument>)
         (entity: ExerciseTemplate)
@@ -61,7 +59,7 @@ module ExerciseTemplateRepository =
                 |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = id))
 
             if result.ModifiedCount = 0 then
-                return! Error(EntityNotFound(templateWithIdMsg id))
+                return! EntityNotFound(typeof<ExerciseTemplate>.Name, id) |> Error
         }
 
     let delete
@@ -74,5 +72,5 @@ module ExerciseTemplateRepository =
             let! result = MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = templateId))
 
             if result.DeletedCount = 0 then
-                return! Error(EntityNotFound(templateWithIdMsg templateId))
+                return! EntityNotFound(typeof<ExerciseTemplate>.Name, templateId) |> Error
         }

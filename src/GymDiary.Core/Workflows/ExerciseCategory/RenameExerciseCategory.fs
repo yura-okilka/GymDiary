@@ -73,8 +73,7 @@ module RenameExerciseCategory =
 
             do!
                 updateCategoryInDB renamedCategory
-                |> AsyncResult.mapError (fun error ->
-                    match error with
+                |> AsyncResult.mapError (function
                     | EntityNotFound _ -> CommandError.categoryNotFound renamedCategory.Id renamedCategory.OwnerId)
 
             logger.LogInformation(

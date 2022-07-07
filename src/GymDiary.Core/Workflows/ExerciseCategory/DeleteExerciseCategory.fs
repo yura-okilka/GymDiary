@@ -48,8 +48,7 @@ module DeleteExerciseCategory =
 
             do! // TODO: ensure it can be deleted.
                 deleteCategoryFromDB categoryId
-                |> AsyncResult.mapError (fun error ->
-                    match error with
+                |> AsyncResult.mapError (function
                     | EntityNotFound _ -> CommandError.categoryNotFound categoryId ownerId)
 
             logger.LogInformation(
