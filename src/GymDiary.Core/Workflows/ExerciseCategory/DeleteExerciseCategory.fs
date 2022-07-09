@@ -30,7 +30,10 @@ module DeleteExerciseCategory =
     let LoggingContext =
         { ErrorEventId = Events.ExerciseCategoryDeletionFailed
           GetErrorMessage = CommandError.toString
-          GetRequestInfo = fun cmd -> Map [ (nameof cmd.Id, cmd.Id) ] }
+          GetRequestInfo =
+            fun cmd ->
+                Map [ (nameof cmd.Id, cmd.Id)
+                      (nameof cmd.OwnerId, cmd.OwnerId) ] }
 
     let runWorkflow
         (deleteCategoryFromDB: ExerciseCategoryId -> ModifyEntityResult)

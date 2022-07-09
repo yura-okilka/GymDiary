@@ -17,18 +17,12 @@
     <Compile Include="InternalExtensions.fs" />
     <Compile Include="Exceptions.fs" />
     <Compile Include="Documents.fs" />
-    <Compile Include="Conversion\RepsSetDocument.fs" />
-    <Compile Include="Conversion\RepsWeightSetDocument.fs" />
-    <Compile Include="Conversion\DurationSetDocument.fs" />
-    <Compile Include="Conversion\DurationWeightSetDocument.fs" />
-    <Compile Include="Conversion\DurationDistanceSetDocument.fs" />
+    <Compile Include="Conversion\ExerciseSetDocument.fs" />
     <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
-    <Compile Include="Conversion\ExerciseSetsDocument.fs" />
     <Compile Include="Conversion\ExerciseTemplateDocument.fs" />
     <Compile Include="Conversion\WorkoutTemplateDocument.fs" />
     <Compile Include="Conversion\ExerciseDocument.fs" />
     <Compile Include="Conversion\WorkoutDocument.fs" />
-    <Compile Include="Conversion\GenderDocument.fs" />
     <Compile Include="Conversion\SportsmanDocument.fs" />
     <Compile Include="DBContext.fs" />
     <Compile Include="Repositories\MongoRepository.fs" />
@@ -40,17 +34,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharpx.Collections" Version="3.0.1" />
-    <PackageReference Include="MongoDB.Driver" Version="2.15.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.16.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.fsproj" />
     <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
+    <ProjectReference Include="..\MongoDB.FSharp.Serialization\MongoDB.FSharp.Serialization.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="6.0.4" />
+    <PackageReference Update="FSharp.Core" Version="6.0.5" />
   </ItemGroup>
 
 </Project>

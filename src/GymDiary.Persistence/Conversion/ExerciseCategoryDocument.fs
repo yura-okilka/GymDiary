@@ -3,7 +3,7 @@ namespace GymDiary.Persistence.Conversion
 open GymDiary.Core.Domain
 open GymDiary.Persistence
 
-open FsToolkit.ErrorHandling.Operator.Result
+open FsToolkit.ErrorHandling
 
 module ExerciseCategoryDocument =
 
@@ -12,9 +12,11 @@ module ExerciseCategoryDocument =
           Name = domain.Name |> String50.value
           OwnerId = domain.OwnerId |> Id.value }
 
-    let toDomain (dto: ExerciseCategoryDocument) : Result<ExerciseCategory, ValidationError> =
-        let id = dto.Id |> Id.create (nameof dto.Id)
-        let name = dto.Name |> String50.create (nameof dto.Name)
-        let ownerId = dto.OwnerId |> Id.create (nameof dto.OwnerId)
+    let toDomain (document: ExerciseCategoryDocument) : Result<ExerciseCategory, ValidationError> =
+        result {
+            let! id = document.Id |> Id.create (nameof document.Id)
+            let! name = document.Name |> String50.create (nameof document.Name)
+            let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
 
-        ExerciseCategory.create <!> id <*> name <*> ownerId
+            return ExerciseCategory.create id name ownerId
+        }

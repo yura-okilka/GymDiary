@@ -9,16 +9,13 @@ open MongoDB.Bson.Serialization.Serializers
 
 module SerializationSettings =
 
-    [<Literal>]
-    let GymDiaryDBConventions = "GymDiary DB Conventions"
-
-    let registerGlobally () =
+    let register () =
         let conventionPack = new ConventionPack()
         conventionPack.Add(new CamelCaseElementNameConvention())
         conventionPack.Add(new StringIdStoredAsObjectIdConvention())
         conventionPack.Add(new EnumRepresentationConvention(BsonType.String))
 
-        ConventionRegistry.Register(GymDiaryDBConventions, conventionPack, (fun _ -> true))
+        ConventionRegistry.Register("GymDiary DB Conventions", conventionPack, (fun _ -> true))
 
         BsonSerializer.RegisterSerializer(typeof<char>, new CharSerializer(BsonType.String))
         BsonSerializer.RegisterSerializer(typeof<Guid>, new GuidSerializer(BsonType.String))

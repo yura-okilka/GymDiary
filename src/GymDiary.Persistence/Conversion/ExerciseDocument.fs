@@ -8,15 +8,18 @@ open FsToolkit.ErrorHandling
 module ExerciseDocument =
 
     let fromDomain (domain: Exercise) : ExerciseDocument =
+        let (setType, sets) = ExerciseSetDocument.fromExerciseSets domain.Sets
+
         { TemplateId = domain.TemplateId |> Id.value
-          Sets = domain.Sets |> ExerciseSetsDocument.fromDomain
+          SetsType = setType
+          Sets = sets
           StartedOn = domain.StartedOn
           CompletedOn = domain.CompletedOn }
 
-    let toDomain (dto: ExerciseDocument) : Result<Exercise, ValidationError> =
+    let toDomain (document: ExerciseDocument) : Result<Exercise, ValidationError> =
         result {
-            let! templateId = dto.TemplateId |> Id.create (nameof dto.TemplateId)
-            let! sets = dto.Sets |> ExerciseSetsDocument.toDomain
+            let! templateId = document.TemplateId |> Id.create (nameof document.TemplateId)
+            let! sets = document.Sets |> ExerciseSetDocument.toExerciseSets document.SetsType
 
-            return Exercise.create templateId sets dto.StartedOn dto.CompletedOn
+            return Exercise.create templateId sets document.StartedOn document.CompletedOn
         }

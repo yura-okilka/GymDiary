@@ -41,6 +41,7 @@ module RenameExerciseCategory =
           GetRequestInfo =
             fun cmd ->
                 Map [ (nameof cmd.Id, cmd.Id)
+                      (nameof cmd.OwnerId, cmd.OwnerId)
                       (nameof cmd.Name, cmd.Name) ] }
 
     let runWorkflow

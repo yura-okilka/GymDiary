@@ -1,7 +1,10 @@
-﻿namespace GymDiary.Persistence
+namespace GymDiary.Persistence
+
+open MongoDB.FSharp.Serialization
 
 module PersistenceModule =
 
     let configure () =
-        // Configure module
-        SerializationSettings.registerGlobally ()
+        ConventionsModule.register ()
+        SerializationProviderModule.register ()
+        SerializationSettings.register ()

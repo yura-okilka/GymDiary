@@ -1,13 +1,9 @@
 namespace GymDiary.Persistence.Conversion
 
-open System
-
 open Common.Extensions
 
 open GymDiary.Core.Domain
 open GymDiary.Persistence
-
-open FSharpx.Collections
 
 open FsToolkit.ErrorHandling
 
@@ -16,38 +12,33 @@ module WorkoutTemplateDocument =
     let fromDomain (domain: WorkoutTemplate) : WorkoutTemplateDocument =
         { Id = domain.Id |> Id.value
           Name = domain.Name |> String50.value
-          Goal = domain.Goal |> Option.map String200.value |> Option.defaultValue defaultof<string>
-          Notes = domain.Notes |> Option.map String1k.value |> Option.defaultValue defaultof<string>
-          Schedule = domain.Schedule |> ResizeArray<DayOfWeek>
-          Exercises =
-            domain.Exercises
-            |> Seq.ofList
-            |> Seq.map ExerciseTemplateDocument.fromDomain
-            |> ResizeArray<ExerciseTemplateDocument>
+          Goal = domain.Goal |> Option.map String200.value
+          Notes = domain.Notes |> Option.map String1k.value
+          Schedule = domain.Schedule |> List.ofSeq
+          Exercises = domain.Exercises |> List.map ExerciseTemplateDocument.fromDomain
           CreatedOn = domain.CreatedOn
           LastModifiedOn = domain.LastModifiedOn
           OwnerId = domain.OwnerId |> Id.value }
 
-    let toDomain (dto: WorkoutTemplateDocument) : Result<WorkoutTemplate, ValidationError> =
+    let toDomain (document: WorkoutTemplateDocument) : Result<WorkoutTemplate, ValidationError> =
         result {
-            let! id = dto.Id |> Id.create (nameof dto.Id)
-            let! name = dto.Name |> String50.create (nameof dto.Name)
-            let! goal = dto.Goal |> String200.createOption (nameof dto.Goal)
-            let! notes = dto.Notes |> String1k.createOption (nameof dto.Notes)
+            let! id = document.Id |> Id.create (nameof document.Id)
+            let! name = document.Name |> String50.create (nameof document.Name)
+            let! goal = document.Goal |> Option.traverseResult (String200.create (nameof document.Goal))
+            let! notes = document.Notes |> Option.traverseResult (String1k.create (nameof document.Notes))
+            let schedule = document.Schedule |> Set.ofSeq
+            let! exercises = document.Exercises |> List.traverseResultM ExerciseTemplateDocument.toDomain
+            let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
 
-            let! schedule =
-                if dto.Schedule = null then
-                    ValidationError(nameof dto.Schedule, ValueNull) |> Error
-                else
-                    dto.Schedule |> ResizeArray.toSeq |> Set.ofSeq |> Ok
-
-            let! exercises =
-                if dto.Exercises = null then
-                    ValidationError(nameof dto.Exercises, ValueNull) |> Error
-                else
-                    dto.Exercises |> ResizeArray.toList |> List.traverseResultM ExerciseTemplateDocument.toDomain
-
-            let! ownerId = dto.OwnerId |> Id.create (nameof dto.OwnerId)
-
-            return WorkoutTemplate.create id name goal notes schedule exercises dto.CreatedOn dto.LastModifiedOn ownerId
+            return
+                WorkoutTemplate.create
+                    id
+                    name
+                    goal
+                    notes
+                    schedule
+                    exercises
+                    document.CreatedOn
+                    document.LastModifiedOn
+                    ownerId
         }

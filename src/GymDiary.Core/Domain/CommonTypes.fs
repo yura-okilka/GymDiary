@@ -84,7 +84,7 @@ module EmailAddress =
         if attribute.IsValid(value) then
             EmailAddress value |> Ok
         else
-            ValidationError(fieldName, InvalidEmailAddress) |> Error
+            ValidationError.invalidEmailAddress fieldName |> Error
 
     let value (EmailAddress value) = value
 
@@ -98,6 +98,6 @@ module PhoneNumber =
         if attribute.IsValid(value) then
             PhoneNumber value |> Ok
         else
-            ValidationError(fieldName, InvalidPhoneNumber) |> Error
+            ValidationError.invalidPhoneNumber fieldName |> Error
 
     let value (PhoneNumber value) = value

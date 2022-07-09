@@ -15,6 +15,17 @@ type ValueError =
 type ValidationError =
     | ValidationError of field: string * error: ValueError
 
+    static member valueNull field = ValidationError(field, ValueNull)
+    static member valueNullOrEmpty field = ValidationError(field, ValueNullOrEmpty)
+    static member valueLessThanLimit field limit = ValidationError(field, ValueLessThanLimit(limit))
+    static member valueGreaterThanLimit field limit = ValidationError(field, ValueGreaterThanLimit(limit))
+    static member lengthLessThanLimit field limit = ValidationError(field, LengthLessThanLimit(limit))
+    static member lengthGreaterThanLimit field limit = ValidationError(field, LengthGreaterThanLimit(limit))
+    static member invalidValue field value = ValidationError(field, InvalidValue(value))
+    static member invalidEmailAddress field = ValidationError(field, InvalidEmailAddress)
+    static member invalidPhoneNumber field = ValidationError(field, InvalidPhoneNumber)
+    static member patternNotMatched field = ValidationError(field, PatternNotMatched)
+
     static member toString (ValidationError (field, error)) =
         match error with
         | ValueNull -> $"'%s{field}' must not be null."

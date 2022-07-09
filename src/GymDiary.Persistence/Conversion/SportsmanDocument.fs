@@ -8,24 +8,38 @@ open GymDiary.Core.Domain
 open GymDiary.Persistence
 
 open FsToolkit.ErrorHandling
-open FsToolkit.ErrorHandling.Operator.Result
 
 module SportsmanDocument =
 
     let fromDomain (domain: Sportsman) : SportsmanDocument =
+        let genderToString =
+            function
+            | Male -> "Male"
+            | Female -> "Female"
+            | Other -> "Other"
+
         { Id = domain.Id |> Id.value
           Email = domain.Email |> EmailAddress.value
           FirstName = domain.FirstName |> String50.value
           LastName = domain.LastName |> String50.value
-          DateOfBirth = domain.DateOfBirth |> Option.map DateOnly.toDateTime |> Option.toNullable
-          Gender = domain.Gender |> Option.map GenderDocument.fromDomain |> Option.toNullable }
+          DateOfBirth = domain.DateOfBirth |> Option.map DateOnly.toDateTime
+          Gender = domain.Gender |> Option.map genderToString }
 
-    let toDomain (dto: SportsmanDocument) : Result<Sportsman, ValidationError> =
-        let id = dto.Id |> Id.create (nameof dto.Id)
-        let email = dto.Email |> EmailAddress.create (nameof dto.Email)
-        let firstName = dto.FirstName |> String50.create (nameof dto.FirstName)
-        let lastName = dto.LastName |> String50.create (nameof dto.LastName)
-        let dateOfBirth = dto.DateOfBirth |> Option.ofNullable |> Option.map DateOnly.FromDateTime |> Ok
-        let gender = dto.Gender |> Option.ofNullable |> Option.traverseResult (GenderDocument.toDomain (nameof dto.Gender))
+    let toDomain (document: SportsmanDocument) : Result<Sportsman, ValidationError> =
+        result {
+            let stringToGender field gender =
+                match gender with
+                | "Male" -> Male |> Ok
+                | "Female" -> Female |> Ok
+                | "Other" -> Other |> Ok
+                | _ -> ValidationError.invalidValue field gender |> Error
 
-        Sportsman.create <!> id <*> email <*> firstName <*> lastName <*> dateOfBirth <*> gender
+            let! id = document.Id |> Id.create (nameof document.Id)
+            let! email = document.Email |> EmailAddress.create (nameof document.Email)
+            let! firstName = document.FirstName |> String50.create (nameof document.FirstName)
+            let! lastName = document.LastName |> String50.create (nameof document.LastName)
+            let dateOfBirth = document.DateOfBirth |> Option.map DateOnly.FromDateTime
+            let! gender = document.Gender |> Option.traverseResult (stringToGender (nameof document.Gender))
+
+            return Sportsman.create id email firstName lastName dateOfBirth gender
+        }

@@ -4,61 +4,18 @@ open System
 
 open MongoDB.Bson.Serialization.Attributes
 
-// Do not use F# types for DTOs: driver cannot deserialize most of them. Use C# analogs instead.
 // It is safe to use non-nullable types for DTOs:
 // driver throws "Cannot deserialize a 'DateTime' from BsonType 'Null'"
 // and does not populate it silently with a default value.
 
 [<CLIMutable>]
-type RepsSetDocument = { OrderNum: int; Reps: int }
-
-[<CLIMutable>]
-type RepsWeightSetDocument =
-    { OrderNum: int
-      Reps: int
-      EquipmentWeight: decimal }
-
-[<CLIMutable>]
-type DurationSetDocument = { OrderNum: int; Duration: TimeSpan }
-
-[<CLIMutable>]
-type DurationWeightSetDocument =
-    { OrderNum: int
-      Duration: TimeSpan
-      EquipmentWeight: decimal }
-
-[<CLIMutable>]
-type DurationDistanceSetDocument =
-    { OrderNum: int
-      Duration: TimeSpan
-      Distance: decimal }
-
-// Tag to discriminate ExerciseSetsDocuments
-type ExerciseSetsDocumentTag =
-    | RepsSets = 1
-    | RepsWeightSets = 2
-    | DurationSets = 3
-    | DurationWeightSets = 4
-    | DurationDistanceSets = 5
-
-[<CLIMutable>]
-type ExerciseSetsDocument =
-    { Tag: ExerciseSetsDocumentTag
-
-      [<BsonIgnoreIfDefault>]
-      RepsSets: ResizeArray<RepsSetDocument>
-
-      [<BsonIgnoreIfDefault>]
-      RepsWeightSets: ResizeArray<RepsWeightSetDocument>
-
-      [<BsonIgnoreIfDefault>]
-      DurationSets: ResizeArray<DurationSetDocument>
-
-      [<BsonIgnoreIfDefault>]
-      DurationWeightSets: ResizeArray<DurationWeightSetDocument>
-
-      [<BsonIgnoreIfDefault>]
-      DurationDistanceSets: ResizeArray<DurationDistanceSetDocument> }
+type SportsmanDocument =
+    { Id: string
+      Email: string
+      FirstName: string
+      LastName: string
+      DateOfBirth: DateTime option
+      Gender: string option }
 
 [<CLIMutable>]
 type ExerciseCategoryDocument =
@@ -66,14 +23,39 @@ type ExerciseCategoryDocument =
       Name: string
       OwnerId: string }
 
+type ExerciseSetType =
+    | RepsSet = 1
+    | RepsWeightSet = 2
+    | DurationSet = 3
+    | DurationWeightSet = 4
+    | DurationDistanceSet = 5
+
+/// A superset of all exercise set types.
+[<CLIMutable>]
+type ExerciseSetDocument =
+    { OrderNum: int
+
+      [<BsonIgnoreIfDefault>]
+      Reps: int option
+
+      [<BsonIgnoreIfDefault>]
+      EquipmentWeight: decimal option
+
+      [<BsonIgnoreIfDefault>]
+      Duration: TimeSpan option
+
+      [<BsonIgnoreIfDefault>]
+      Distance: decimal option }
+
 [<CLIMutable>]
 type ExerciseTemplateDocument =
     { Id: string
       CategoryId: string
       Name: string
-      Notes: string
+      Notes: string option
       RestTime: TimeSpan
-      Sets: ExerciseSetsDocument
+      SetsType: ExerciseSetType
+      Sets: ExerciseSetDocument list
       CreatedOn: DateTime
       LastModifiedOn: DateTime
       OwnerId: string }
@@ -82,10 +64,10 @@ type ExerciseTemplateDocument =
 type WorkoutTemplateDocument =
     { Id: string
       Name: string
-      Goal: string
-      Notes: string
-      Schedule: ResizeArray<DayOfWeek>
-      Exercises: ResizeArray<ExerciseTemplateDocument>
+      Goal: string option
+      Notes: string option
+      Schedule: DayOfWeek list
+      Exercises: ExerciseTemplateDocument list
       CreatedOn: DateTime
       LastModifiedOn: DateTime
       OwnerId: string }
@@ -93,7 +75,8 @@ type WorkoutTemplateDocument =
 [<CLIMutable>]
 type ExerciseDocument =
     { TemplateId: string
-      Sets: ExerciseSetsDocument
+      SetsType: ExerciseSetType
+      Sets: ExerciseSetDocument list
       StartedOn: DateTime
       CompletedOn: DateTime }
 
@@ -101,21 +84,7 @@ type ExerciseDocument =
 type WorkoutDocument =
     { Id: string
       TemplateId: string
-      Exercises: ResizeArray<ExerciseDocument>
+      Exercises: ExerciseDocument list
       StartedOn: DateTime
       CompletedOn: DateTime
       OwnerId: string }
-
-type GenderDocument =
-    | Male = 1
-    | Female = 2
-    | Other = 3
-
-[<CLIMutable>]
-type SportsmanDocument =
-    { Id: string
-      Email: string
-      FirstName: string
-      LastName: string
-      DateOfBirth: Nullable<DateTime>
-      Gender: Nullable<GenderDocument> }
