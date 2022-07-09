@@ -24,7 +24,7 @@ type FSharpTypeSerializationProvider() =
             else
                 null
 
-module SerializationProviderModule =
+module FSharpTypeSerializers =
     let mutable private isRegistered = false
 
     let register () =

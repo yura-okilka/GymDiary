@@ -13,7 +13,7 @@ type OptionConvention() =
                 memberMap.SetDefaultValue None |> ignore
                 memberMap.SetIgnoreIfNull true |> ignore
 
-module ConventionsModule =
+module FSharpTypeConventions =
     let mutable private isRegistered = false
 
     let register () =

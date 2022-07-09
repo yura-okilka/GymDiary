@@ -17,6 +17,7 @@
     <Compile Include="InternalExtensions.fs" />
     <Compile Include="Exceptions.fs" />
     <Compile Include="Documents.fs" />
+    <Compile Include="DBContext.fs" />
     <Compile Include="Conversion\ExerciseSetDocument.fs" />
     <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
     <Compile Include="Conversion\ExerciseTemplateDocument.fs" />
@@ -24,7 +25,6 @@
     <Compile Include="Conversion\ExerciseDocument.fs" />
     <Compile Include="Conversion\WorkoutDocument.fs" />
     <Compile Include="Conversion\SportsmanDocument.fs" />
-    <Compile Include="DBContext.fs" />
     <Compile Include="Repositories\MongoRepository.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseTemplateRepository.fs" />

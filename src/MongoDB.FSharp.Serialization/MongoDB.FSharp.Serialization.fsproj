@@ -10,7 +10,7 @@
     <Compile Include="Serializers\ListSerializer.fs" />
     <Compile Include="Serializers\OptionSerializer.fs" />
     <Compile Include="FSharpTypeConventions.fs" />
-    <Compile Include="FSharpTypeSerializationProvider.fs" />
+    <Compile Include="FSharpTypeSerializers.fs" />
   </ItemGroup>
 
   <ItemGroup>
