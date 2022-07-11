@@ -56,8 +56,8 @@ type ExerciseCategory =
       OwnerId: Id<Sportsman> }
 
 /// Exercise template with description about an exercise
-type ExerciseTemplate =
-    { Id: Id<ExerciseTemplate>
+type Exercise =
+    { Id: Id<Exercise>
       CategoryId: Id<ExerciseCategory>
       Name: String50
       Notes: String1k option
@@ -67,21 +67,21 @@ type ExerciseTemplate =
       LastModifiedOn: DateTime
       OwnerId: Id<Sportsman> }
 
-/// Workout template with description about a workout
-type WorkoutTemplate =
-    { Id: Id<WorkoutTemplate>
+/// Routine with workout description
+type Routine =
+    { Id: Id<Routine>
       Name: String50
       Goal: String200 option
       Notes: String1k option
       Schedule: DayOfWeek Set
-      Exercises: ExerciseTemplate list
+      Exercises: Exercise list
       CreatedOn: DateTime
       LastModifiedOn: DateTime
       OwnerId: Id<Sportsman> }
 
 /// Exercise session completed on a particular date
 type ExerciseSession =
-    { TemplateId: Id<ExerciseTemplate>
+    { ExerciseId: Id<Exercise>
       Sets: ExerciseSets
       StartedOn: DateTime
       CompletedOn: DateTime }
@@ -89,7 +89,7 @@ type ExerciseSession =
 /// Workout session completed on a particular date
 type WorkoutSession =
     { Id: Id<WorkoutSession>
-      TemplateId: Id<WorkoutTemplate>
+      RoutineId: Id<Routine>
       Exercises: ExerciseSession list
       StartedOn: DateTime
       CompletedOn: DateTime
@@ -97,8 +97,8 @@ type WorkoutSession =
 
 type SportsmanId = Id<Sportsman>
 type ExerciseCategoryId = Id<ExerciseCategory>
-type ExerciseTemplateId = Id<ExerciseTemplate>
-type WorkoutTemplateId = Id<WorkoutTemplate>
+type ExerciseId = Id<Exercise>
+type RoutineId = Id<Routine>
 type WorkoutSessionId = Id<WorkoutSession>
 
 module EquipmentWeightKg =
@@ -150,9 +150,9 @@ module ExerciseCategory =
 
     let rename (name: String50) (category: ExerciseCategory) = { category with Name = name }
 
-module ExerciseTemplate =
+module Exercise =
 
-    let create id categoryId name notes restTime sets createdOn lastModifiedOn ownerId : ExerciseTemplate =
+    let create id categoryId name notes restTime sets createdOn lastModifiedOn ownerId : Exercise =
         { Id = id
           CategoryId = categoryId
           Name = name
@@ -163,9 +163,9 @@ module ExerciseTemplate =
           LastModifiedOn = lastModifiedOn
           OwnerId = ownerId }
 
-module WorkoutTemplate =
+module Routine =
 
-    let create id name goal notes schedule exercises createdOn lastModifiedOn ownerId : WorkoutTemplate =
+    let create id name goal notes schedule exercises createdOn lastModifiedOn ownerId : Routine =
         { Id = id
           Name = name
           Goal = goal
@@ -178,17 +178,17 @@ module WorkoutTemplate =
 
 module ExerciseSession =
 
-    let create templateId sets startedOn completedOn : ExerciseSession =
-        { TemplateId = templateId
+    let create exerciseId sets startedOn completedOn : ExerciseSession =
+        { ExerciseId = exerciseId
           Sets = sets
           StartedOn = startedOn
           CompletedOn = completedOn }
 
 module WorkoutSession =
 
-    let create id templateId exercises startedOn completedOn ownerId : WorkoutSession =
+    let create id routineId exercises startedOn completedOn ownerId : WorkoutSession =
         { Id = id
-          TemplateId = templateId
+          RoutineId = routineId
           Exercises = exercises
           StartedOn = startedOn
           CompletedOn = completedOn

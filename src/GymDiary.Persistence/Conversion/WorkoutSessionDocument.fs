@@ -9,7 +9,7 @@ module WorkoutSessionDocument =
 
     let fromDomain (domain: WorkoutSession) : WorkoutSessionDocument =
         { Id = domain.Id |> Id.value
-          TemplateId = domain.TemplateId |> Id.value
+          RoutineId = domain.RoutineId |> Id.value
           Exercises = domain.Exercises |> List.map ExerciseSessionDocument.fromDomain
           StartedOn = domain.StartedOn
           CompletedOn = domain.CompletedOn
@@ -18,9 +18,9 @@ module WorkoutSessionDocument =
     let toDomain (document: WorkoutSessionDocument) : Result<WorkoutSession, ValidationError> =
         result {
             let! id = document.Id |> Id.create (nameof document.Id)
-            let! templateId = document.TemplateId |> Id.create (nameof document.TemplateId)
+            let! routineId = document.RoutineId |> Id.create (nameof document.RoutineId)
             let! exercises = document.Exercises |> List.traverseResultM ExerciseSessionDocument.toDomain
             let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
 
-            return WorkoutSession.create id templateId exercises document.StartedOn document.CompletedOn ownerId
+            return WorkoutSession.create id routineId exercises document.StartedOn document.CompletedOn ownerId
         }

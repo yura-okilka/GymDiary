@@ -4,8 +4,8 @@ open MongoDB.Driver
 
 type DBContext =
     { ExerciseCategories: IMongoCollection<ExerciseCategoryDocument>
-      ExerciseTemplates: IMongoCollection<ExerciseTemplateDocument>
-      WorkoutTemplates: IMongoCollection<WorkoutTemplateDocument>
+      Exercises: IMongoCollection<ExerciseDocument>
+      Routines: IMongoCollection<RoutineDocument>
       WorkoutSessions: IMongoCollection<WorkoutSessionDocument>
       Sportsmen: IMongoCollection<SportsmanDocument> }
 
@@ -15,10 +15,10 @@ module DBContext =
     let ExerciseCategories = "exerciseCategories"
 
     [<Literal>]
-    let ExerciseTemplates = "exerciseTemplates"
+    let Exercises = "exercises"
 
     [<Literal>]
-    let WorkoutTemplates = "workoutTemplates"
+    let Routines = "routines"
 
     [<Literal>]
     let WorkoutSessions = "workoutSessions"
@@ -30,7 +30,7 @@ module DBContext =
         let database = client.GetDatabase(dbName)
 
         { ExerciseCategories = database.GetCollection<ExerciseCategoryDocument>(ExerciseCategories)
-          ExerciseTemplates = database.GetCollection<ExerciseTemplateDocument>(ExerciseTemplates)
-          WorkoutTemplates = database.GetCollection<WorkoutTemplateDocument>(WorkoutTemplates)
+          Exercises = database.GetCollection<ExerciseDocument>(Exercises)
+          Routines = database.GetCollection<RoutineDocument>(Routines)
           WorkoutSessions = database.GetCollection<WorkoutSessionDocument>(WorkoutSessions)
           Sportsmen = database.GetCollection<SportsmanDocument>(Sportsmen) }

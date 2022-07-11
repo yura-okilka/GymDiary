@@ -10,7 +10,7 @@ module ExerciseSessionDocument =
     let fromDomain (domain: ExerciseSession) : ExerciseSessionDocument =
         let (setType, sets) = ExerciseSetDocument.fromExerciseSets domain.Sets
 
-        { TemplateId = domain.TemplateId |> Id.value
+        { ExerciseId = domain.ExerciseId |> Id.value
           SetsType = setType
           Sets = sets
           StartedOn = domain.StartedOn
@@ -18,8 +18,8 @@ module ExerciseSessionDocument =
 
     let toDomain (document: ExerciseSessionDocument) : Result<ExerciseSession, ValidationError> =
         result {
-            let! templateId = document.TemplateId |> Id.create (nameof document.TemplateId)
+            let! exerciseId = document.ExerciseId |> Id.create (nameof document.ExerciseId)
             let! sets = document.Sets |> ExerciseSetDocument.toExerciseSets document.SetsType
 
-            return ExerciseSession.create templateId sets document.StartedOn document.CompletedOn
+            return ExerciseSession.create exerciseId sets document.StartedOn document.CompletedOn
         }

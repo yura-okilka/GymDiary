@@ -20,14 +20,14 @@
     <Compile Include="DBContext.fs" />
     <Compile Include="Conversion\ExerciseSetDocument.fs" />
     <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
-    <Compile Include="Conversion\ExerciseTemplateDocument.fs" />
-    <Compile Include="Conversion\WorkoutTemplateDocument.fs" />
+    <Compile Include="Conversion\ExerciseDocument.fs" />
+    <Compile Include="Conversion\RoutineDocument.fs" />
     <Compile Include="Conversion\ExerciseSessionDocument.fs" />
     <Compile Include="Conversion\WorkoutSessionDocument.fs" />
     <Compile Include="Conversion\SportsmanDocument.fs" />
     <Compile Include="Repositories\MongoRepository.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
-    <Compile Include="Repositories\ExerciseTemplateRepository.fs" />
+    <Compile Include="Repositories\ExerciseRepository.fs" />
     <Compile Include="Repositories\SportsmanRepository.fs" />
     <Compile Include="SerializationSettings.fs" />
     <Compile Include="PersistenceModule.fs" />

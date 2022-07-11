@@ -15,18 +15,18 @@ type ExerciseCategoryRepository =
       Update: ExerciseCategory -> ModifyEntityResult
       Delete: ExerciseCategoryId -> ModifyEntityResult }
 
-type ExerciseTemplateRepository =
-    { Create: ExerciseTemplate -> Async<ExerciseTemplateId>
-      GetById: SportsmanId -> ExerciseTemplateId -> Async<ExerciseTemplate option>
-      Update: ExerciseTemplate -> ModifyEntityResult
-      Delete: ExerciseTemplateId -> ModifyEntityResult }
+type ExerciseRepository =
+    { Create: Exercise -> Async<ExerciseId>
+      GetById: SportsmanId -> ExerciseId -> Async<Exercise option>
+      Update: Exercise -> ModifyEntityResult
+      Delete: ExerciseId -> ModifyEntityResult }
 
 type SportsmanRepository =
     { ExistWithId: SportsmanId -> Async<bool> }
 
 type Persistence =
     { ExerciseCategory: ExerciseCategoryRepository
-      ExerciseTemplate: ExerciseTemplateRepository
+      Exercise: ExerciseRepository
       Sportsman: SportsmanRepository }
 
 module Persistence =
@@ -42,14 +42,14 @@ module Persistence =
               Update = ExerciseCategoryRepository.update context.ExerciseCategories
               Delete = ExerciseCategoryRepository.delete context.ExerciseCategories }
 
-        let exerciseTemplateRepository =
-            { Create = ExerciseTemplateRepository.create context.ExerciseTemplates
-              GetById = ExerciseTemplateRepository.getById context.ExerciseTemplates
-              Update = ExerciseTemplateRepository.update context.ExerciseTemplates
-              Delete = ExerciseTemplateRepository.delete context.ExerciseTemplates }
+        let exerciseRepository =
+            { Create = ExerciseRepository.create context.Exercises
+              GetById = ExerciseRepository.getById context.Exercises
+              Update = ExerciseRepository.update context.Exercises
+              Delete = ExerciseRepository.delete context.Exercises }
 
         let sportsmanRepository = { ExistWithId = SportsmanRepository.existWithId context.Sportsmen }
 
         { ExerciseCategory = exerciseCategoryRepository
-          ExerciseTemplate = exerciseTemplateRepository
+          Exercise = exerciseRepository
           Sportsman = sportsmanRepository }

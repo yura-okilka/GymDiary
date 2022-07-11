@@ -48,7 +48,7 @@ type ExerciseSetDocument =
       Distance: decimal option }
 
 [<CLIMutable>]
-type ExerciseTemplateDocument =
+type ExerciseDocument =
     { Id: string
       CategoryId: string
       Name: string
@@ -61,20 +61,20 @@ type ExerciseTemplateDocument =
       OwnerId: string }
 
 [<CLIMutable>]
-type WorkoutTemplateDocument =
+type RoutineDocument =
     { Id: string
       Name: string
       Goal: string option
       Notes: string option
       Schedule: DayOfWeek list
-      Exercises: ExerciseTemplateDocument list
+      Exercises: ExerciseDocument list
       CreatedOn: DateTime
       LastModifiedOn: DateTime
       OwnerId: string }
 
 [<CLIMutable>]
 type ExerciseSessionDocument =
-    { TemplateId: string
+    { ExerciseId: string
       SetsType: ExerciseSetType
       Sets: ExerciseSetDocument list
       StartedOn: DateTime
@@ -83,7 +83,7 @@ type ExerciseSessionDocument =
 [<CLIMutable>]
 type WorkoutSessionDocument =
     { Id: string
-      TemplateId: string
+      RoutineId: string
       Exercises: ExerciseSessionDocument list
       StartedOn: DateTime
       CompletedOn: DateTime
