@@ -7,6 +7,14 @@ open FSharp.Data.UnitSystems.SI.UnitSymbols
 /// Constrained to be a decimal kilogram between 0.1 and 1000.00
 type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg>
 
+type Sportsman =
+    { Id: Id<Sportsman>
+      Email: EmailAddress
+      FirstName: String50
+      LastName: String50
+      DateOfBirth: DateOnly option
+      Gender: Gender option }
+
 /// Exercise set represented by reps quantity
 type RepsSet =
     { OrderNum: PositiveInt
@@ -41,14 +49,6 @@ type ExerciseSets =
     | DurationSets of DurationSet list
     | DurationWeightSets of DurationWeightSet list
     | DurationDistanceSets of DurationDistanceSet list
-
-type Sportsman =
-    { Id: Id<Sportsman>
-      Email: EmailAddress
-      FirstName: String50
-      LastName: String50
-      DateOfBirth: DateOnly option
-      Gender: Gender option }
 
 type ExerciseCategory =
     { Id: Id<ExerciseCategory>
