@@ -87,8 +87,8 @@ type Exercise =
       CompletedOn: DateTime }
 
 /// Workout completed on a particular date
-type Workout =
-    { Id: Id<Workout>
+type WorkoutSession =
+    { Id: Id<WorkoutSession>
       TemplateId: Id<WorkoutTemplate>
       Exercises: Exercise list
       StartedOn: DateTime
@@ -99,7 +99,7 @@ type SportsmanId = Id<Sportsman>
 type ExerciseCategoryId = Id<ExerciseCategory>
 type ExerciseTemplateId = Id<ExerciseTemplate>
 type WorkoutTemplateId = Id<WorkoutTemplate>
-type WorkoutId = Id<Workout>
+type WorkoutSessionId = Id<WorkoutSession>
 
 module EquipmentWeightKg =
 
@@ -184,9 +184,9 @@ module Exercise =
           StartedOn = startedOn
           CompletedOn = completedOn }
 
-module Workout =
+module WorkoutSession =
 
-    let create id templateId exercises startedOn completedOn ownerId : Workout =
+    let create id templateId exercises startedOn completedOn ownerId : WorkoutSession =
         { Id = id
           TemplateId = templateId
           Exercises = exercises

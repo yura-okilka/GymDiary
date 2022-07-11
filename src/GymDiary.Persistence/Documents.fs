@@ -81,7 +81,7 @@ type ExerciseDocument =
       CompletedOn: DateTime }
 
 [<CLIMutable>]
-type WorkoutDocument =
+type WorkoutSessionDocument =
     { Id: string
       TemplateId: string
       Exercises: ExerciseDocument list

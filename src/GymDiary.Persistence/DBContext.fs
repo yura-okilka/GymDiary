@@ -6,7 +6,7 @@ type DBContext =
     { ExerciseCategories: IMongoCollection<ExerciseCategoryDocument>
       ExerciseTemplates: IMongoCollection<ExerciseTemplateDocument>
       WorkoutTemplates: IMongoCollection<WorkoutTemplateDocument>
-      Workouts: IMongoCollection<WorkoutDocument>
+      WorkoutSessions: IMongoCollection<WorkoutSessionDocument>
       Sportsmen: IMongoCollection<SportsmanDocument> }
 
 module DBContext =
@@ -21,7 +21,7 @@ module DBContext =
     let WorkoutTemplates = "workoutTemplates"
 
     [<Literal>]
-    let Workouts = "workouts"
+    let WorkoutSessions = "workoutSessions"
 
     [<Literal>]
     let Sportsmen = "sportsmen"
@@ -32,5 +32,5 @@ module DBContext =
         { ExerciseCategories = database.GetCollection<ExerciseCategoryDocument>(ExerciseCategories)
           ExerciseTemplates = database.GetCollection<ExerciseTemplateDocument>(ExerciseTemplates)
           WorkoutTemplates = database.GetCollection<WorkoutTemplateDocument>(WorkoutTemplates)
-          Workouts = database.GetCollection<WorkoutDocument>(Workouts)
+          WorkoutSessions = database.GetCollection<WorkoutSessionDocument>(WorkoutSessions)
           Sportsmen = database.GetCollection<SportsmanDocument>(Sportsmen) }
