@@ -22,7 +22,7 @@
     <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
     <Compile Include="Conversion\ExerciseTemplateDocument.fs" />
     <Compile Include="Conversion\WorkoutTemplateDocument.fs" />
-    <Compile Include="Conversion\ExerciseDocument.fs" />
+    <Compile Include="Conversion\ExerciseSessionDocument.fs" />
     <Compile Include="Conversion\WorkoutSessionDocument.fs" />
     <Compile Include="Conversion\SportsmanDocument.fs" />
     <Compile Include="Repositories\MongoRepository.fs" />

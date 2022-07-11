@@ -73,7 +73,7 @@ type WorkoutTemplateDocument =
       OwnerId: string }
 
 [<CLIMutable>]
-type ExerciseDocument =
+type ExerciseSessionDocument =
     { TemplateId: string
       SetsType: ExerciseSetType
       Sets: ExerciseSetDocument list
@@ -84,7 +84,7 @@ type ExerciseDocument =
 type WorkoutSessionDocument =
     { Id: string
       TemplateId: string
-      Exercises: ExerciseDocument list
+      Exercises: ExerciseSessionDocument list
       StartedOn: DateTime
       CompletedOn: DateTime
       OwnerId: string }

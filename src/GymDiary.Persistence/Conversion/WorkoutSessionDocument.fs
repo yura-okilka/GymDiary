@@ -10,7 +10,7 @@ module WorkoutSessionDocument =
     let fromDomain (domain: WorkoutSession) : WorkoutSessionDocument =
         { Id = domain.Id |> Id.value
           TemplateId = domain.TemplateId |> Id.value
-          Exercises = domain.Exercises |> List.map ExerciseDocument.fromDomain
+          Exercises = domain.Exercises |> List.map ExerciseSessionDocument.fromDomain
           StartedOn = domain.StartedOn
           CompletedOn = domain.CompletedOn
           OwnerId = domain.OwnerId |> Id.value }
@@ -19,7 +19,7 @@ module WorkoutSessionDocument =
         result {
             let! id = document.Id |> Id.create (nameof document.Id)
             let! templateId = document.TemplateId |> Id.create (nameof document.TemplateId)
-            let! exercises = document.Exercises |> List.traverseResultM ExerciseDocument.toDomain
+            let! exercises = document.Exercises |> List.traverseResultM ExerciseSessionDocument.toDomain
             let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
 
             return WorkoutSession.create id templateId exercises document.StartedOn document.CompletedOn ownerId
