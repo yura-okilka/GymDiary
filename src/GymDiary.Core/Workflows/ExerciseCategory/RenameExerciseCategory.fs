@@ -79,7 +79,7 @@ module RenameExerciseCategory =
 
             logger.LogInformation(
                 Events.ExerciseCategoryRenamed,
-                "Exercise category with id '{id}' was renamed to '{name}'.",
+                "Exercise category with id '{id}' was renamed to '{name}'",
                 command.Id,
                 command.Name
             )

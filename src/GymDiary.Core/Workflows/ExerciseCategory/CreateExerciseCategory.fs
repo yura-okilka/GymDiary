@@ -71,7 +71,7 @@ module CreateExerciseCategory =
 
             logger.LogInformation(
                 Events.ExerciseCategoryCreated,
-                "Exercise category was created with id '{id}'.",
+                "Exercise category was created with id '{id}'",
                 categoryId
             )
 

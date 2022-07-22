@@ -31,5 +31,5 @@ module ErrorLoggingDecorator =
                 with
                 | ex ->
                     logger.LogError(context.ErrorEventId, ex, "Workflow failed with exception: {exception}", ex.Message)
-                    return raise (exn ("Failed to run workflow.", ex))
+                    return raise (exn ("Failed to run workflow", ex))
             }

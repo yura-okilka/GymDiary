@@ -20,7 +20,7 @@ type ErrorResponse =
 
     static member validationErrors (errors: ValidationError list) =
         { Name = "ValidationErrors"
-          Message = "Validation errors have occurred."
+          Message = "Validation errors have occurred"
           Details =
             errors
             |> List.map (fun (ValidationError (field, _) as error) -> (field, ValidationError.toString error))
@@ -48,11 +48,11 @@ type ErrorResponse =
 
     static member InternalError =
         { Name = "ServerError"
-          Message = "Server error has occurred."
+          Message = "Server error has occurred"
           Details = null }
 
 module ErrorHandler =
 
     let handle (ex: Exception) (logger: ILogger) =
-        logger.LogError(Events.UndefinedFailure, ex, "An unhandled exception has occurred while executing the request.")
+        logger.LogError(Events.UndefinedFailure, ex, "An unhandled exception has occurred while executing the request")
         clearResponse >=> ServerErrors.INTERNAL_ERROR ErrorResponse.InternalError

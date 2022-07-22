@@ -56,7 +56,7 @@ module DeleteExerciseCategory =
 
             logger.LogInformation(
                 Events.ExerciseCategoryDeleted,
-                "Exercise category with id '{id}' was deleted.",
+                "Exercise category with id '{id}' was deleted",
                 command.Id
             )
         }
