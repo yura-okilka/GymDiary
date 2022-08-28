@@ -5,11 +5,13 @@ open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ExerciseCategory
 
 type CompositionRoot =
-    { CreateExerciseCategory: CreateExerciseCategory.Workflow
-      GetAllExerciseCategories: GetAllExerciseCategories.Workflow
-      GetExerciseCategory: GetExerciseCategory.Workflow
-      RenameExerciseCategory: RenameExerciseCategory.Workflow
-      DeleteExerciseCategory: DeleteExerciseCategory.Workflow }
+    {
+        CreateExerciseCategory: CreateExerciseCategory.Workflow
+        GetAllExerciseCategories: GetAllExerciseCategories.Workflow
+        GetExerciseCategory: GetExerciseCategory.Workflow
+        RenameExerciseCategory: RenameExerciseCategory.Workflow
+        DeleteExerciseCategory: DeleteExerciseCategory.Workflow
+    }
 
 module CompositionRoot =
 
@@ -46,8 +48,10 @@ module CompositionRoot =
                 DeleteExerciseCategory.LoggingContext
                 (DeleteExerciseCategory.runWorkflow trunk.Persistence.ExerciseCategory.Delete trunk.Logger)
 
-        { CreateExerciseCategory = createExerciseCategoryWorkflow
-          GetAllExerciseCategories = getAllExerciseCategoriesWorkflow
-          GetExerciseCategory = getExerciseCategoryWorkflow
-          RenameExerciseCategory = renameExerciseCategoryWorkflow
-          DeleteExerciseCategory = deleteExerciseCategoryWorkflow }
+        {
+            CreateExerciseCategory = createExerciseCategoryWorkflow
+            GetAllExerciseCategories = getAllExerciseCategoriesWorkflow
+            GetExerciseCategory = getExerciseCategoryWorkflow
+            RenameExerciseCategory = renameExerciseCategoryWorkflow
+            DeleteExerciseCategory = deleteExerciseCategoryWorkflow
+        }

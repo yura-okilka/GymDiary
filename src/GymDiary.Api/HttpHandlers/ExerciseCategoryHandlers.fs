@@ -18,8 +18,10 @@ module ExerciseCategoryHandlers =
 
                 let! result =
                     createExerciseCategory
-                        { Name = request.Name
-                          OwnerId = sportsmanId }
+                        {
+                            Name = request.Name
+                            OwnerId = sportsmanId
+                        }
 
                 return!
                     match result with
@@ -60,8 +62,10 @@ module ExerciseCategoryHandlers =
             task {
                 let! result =
                     getExerciseCategory
-                        { Id = categoryId
-                          OwnerId = sportsmanId }
+                        {
+                            Id = categoryId
+                            OwnerId = sportsmanId
+                        }
 
                 return!
                     match result with
@@ -90,9 +94,11 @@ module ExerciseCategoryHandlers =
 
                 let! result =
                     renameExerciseCategory
-                        { Id = categoryId
-                          OwnerId = sportsmanId
-                          Name = request.Name }
+                        {
+                            Id = categoryId
+                            OwnerId = sportsmanId
+                            Name = request.Name
+                        }
 
                 return!
                     match result with
@@ -120,8 +126,10 @@ module ExerciseCategoryHandlers =
             task {
                 let! result =
                     deleteExerciseCategory
-                        { Id = categoryId
-                          OwnerId = sportsmanId }
+                        {
+                            Id = categoryId
+                            OwnerId = sportsmanId
+                        }
 
                 return!
                     match result with

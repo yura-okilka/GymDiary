@@ -10,9 +10,11 @@ module GetAllExerciseCategories =
     type Query = { OwnerId: string }
 
     type ExerciseCategoryDto =
-        { Id: string
-          Name: string
-          OwnerId: string }
+        {
+            Id: string
+            Name: string
+            OwnerId: string
+        }
 
     type QueryResult = ExerciseCategoryDto list
 
@@ -29,7 +31,9 @@ module GetAllExerciseCategories =
             return
                 categories
                 |> List.map (fun category ->
-                    { Id = category.Id |> Id.value
-                      Name = category.Name |> String50.value
-                      OwnerId = category.OwnerId |> Id.value })
+                    {
+                        Id = category.Id |> Id.value
+                        Name = category.Name |> String50.value
+                        OwnerId = category.OwnerId |> Id.value
+                    })
         }

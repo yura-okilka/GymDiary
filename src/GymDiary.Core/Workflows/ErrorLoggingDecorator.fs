@@ -5,9 +5,11 @@ open Microsoft.Extensions.Logging
 module ErrorLoggingDecorator =
 
     type LoggingContext<'Request, 'Error> =
-        { GetRequestInfo: 'Request -> Map<string, obj>
-          GetErrorMessage: 'Error -> string
-          ErrorEventId: EventId }
+        {
+            GetRequestInfo: 'Request -> Map<string, obj>
+            GetErrorMessage: 'Error -> string
+            ErrorEventId: EventId
+        }
 
     let logWorkflow
         (logger: ILogger)

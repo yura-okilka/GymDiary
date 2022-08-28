@@ -10,15 +10,17 @@ open FsToolkit.ErrorHandling
 module RoutineDocument =
 
     let fromDomain (domain: Routine) : RoutineDocument =
-        { Id = domain.Id |> Id.value
-          Name = domain.Name |> String50.value
-          Goal = domain.Goal |> Option.map String200.value
-          Notes = domain.Notes |> Option.map String1k.value
-          Schedule = domain.Schedule |> List.ofSeq
-          Exercises = domain.Exercises |> List.map ExerciseDocument.fromDomain
-          CreatedOn = domain.CreatedOn
-          LastModifiedOn = domain.LastModifiedOn
-          OwnerId = domain.OwnerId |> Id.value }
+        {
+            Id = domain.Id |> Id.value
+            Name = domain.Name |> String50.value
+            Goal = domain.Goal |> Option.map String200.value
+            Notes = domain.Notes |> Option.map String1k.value
+            Schedule = domain.Schedule |> List.ofSeq
+            Exercises = domain.Exercises |> List.map ExerciseDocument.fromDomain
+            CreatedOn = domain.CreatedOn
+            LastModifiedOn = domain.LastModifiedOn
+            OwnerId = domain.OwnerId |> Id.value
+        }
 
     let toDomain (document: RoutineDocument) : Result<Routine, ValidationError> =
         result {

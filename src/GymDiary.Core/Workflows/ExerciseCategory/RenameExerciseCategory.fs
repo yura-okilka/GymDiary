@@ -12,9 +12,11 @@ open Microsoft.Extensions.Logging
 module RenameExerciseCategory =
 
     type Command =
-        { Id: string
-          OwnerId: string
-          Name: string }
+        {
+            Id: string
+            OwnerId: string
+            Name: string
+        }
 
     type CommandError =
         | InvalidCommand of ValidationError list
@@ -36,13 +38,15 @@ module RenameExerciseCategory =
     type Workflow = Workflow<Command, unit, CommandError>
 
     let LoggingContext =
-        { ErrorEventId = Events.ExerciseCategoryRenamingFailed
-          GetErrorMessage = CommandError.toString
-          GetRequestInfo =
-            fun cmd ->
-                Map [ (nameof cmd.Id, cmd.Id)
-                      (nameof cmd.OwnerId, cmd.OwnerId)
-                      (nameof cmd.Name, cmd.Name) ] }
+        {
+            ErrorEventId = Events.ExerciseCategoryRenamingFailed
+            GetErrorMessage = CommandError.toString
+            GetRequestInfo =
+                fun cmd ->
+                    Map [ (nameof cmd.Id, cmd.Id)
+                          (nameof cmd.OwnerId, cmd.OwnerId)
+                          (nameof cmd.Name, cmd.Name) ]
+        }
 
     let runWorkflow
         (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>)

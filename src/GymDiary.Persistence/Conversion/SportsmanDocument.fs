@@ -18,12 +18,14 @@ module SportsmanDocument =
             | Female -> "Female"
             | Other -> "Other"
 
-        { Id = domain.Id |> Id.value
-          Email = domain.Email |> EmailAddress.value
-          FirstName = domain.FirstName |> String50.value
-          LastName = domain.LastName |> String50.value
-          DateOfBirth = domain.DateOfBirth |> Option.map DateOnly.toDateTime
-          Gender = domain.Gender |> Option.map genderToString }
+        {
+            Id = domain.Id |> Id.value
+            Email = domain.Email |> EmailAddress.value
+            FirstName = domain.FirstName |> String50.value
+            LastName = domain.LastName |> String50.value
+            DateOfBirth = domain.DateOfBirth |> Option.map DateOnly.toDateTime
+            Gender = domain.Gender |> Option.map genderToString
+        }
 
     let toDomain (document: SportsmanDocument) : Result<Sportsman, ValidationError> =
         result {

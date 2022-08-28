@@ -12,16 +12,18 @@ module ExerciseDocument =
     let fromDomain (domain: Exercise) : ExerciseDocument =
         let (setType, sets) = ExerciseSetDocument.fromExerciseSets domain.Sets
 
-        { Id = domain.Id |> Id.value
-          CategoryId = domain.CategoryId |> Id.value
-          Name = domain.Name |> String50.value
-          Notes = domain.Notes |> Option.map String1k.value
-          RestTime = domain.RestTime
-          SetsType = setType
-          Sets = sets
-          CreatedOn = domain.CreatedOn
-          LastModifiedOn = domain.LastModifiedOn
-          OwnerId = domain.OwnerId |> Id.value }
+        {
+            Id = domain.Id |> Id.value
+            CategoryId = domain.CategoryId |> Id.value
+            Name = domain.Name |> String50.value
+            Notes = domain.Notes |> Option.map String1k.value
+            RestTime = domain.RestTime
+            SetsType = setType
+            Sets = sets
+            CreatedOn = domain.CreatedOn
+            LastModifiedOn = domain.LastModifiedOn
+            OwnerId = domain.OwnerId |> Id.value
+        }
 
     let toDomain (document: ExerciseDocument) : Result<Exercise, ValidationError> =
         result {

@@ -12,8 +12,10 @@ open MongoDB.Driver
 
 /// Host of all the Leaves and common IO dependencies needed in different places.
 type Trunk =
-    { Logger: ILogger
-      Persistence: Persistence }
+    {
+        Logger: ILogger
+        Persistence: Persistence
+    }
 
 module Trunk =
 
@@ -23,5 +25,7 @@ module Trunk =
         let mongoClient = new MongoClient(settings.MongoDb.ConnectionString) // MongoClient & IMongoCollection<TDocument> are thread-safe.
         let logger = serviceProvider.GetRequiredService<ILoggerFactory>().CreateLogger()
 
-        { Logger = logger
-          Persistence = Persistence.compose mongoClient settings.MongoDb.DatabaseName }
+        {
+            Logger = logger
+            Persistence = Persistence.compose mongoClient settings.MongoDb.DatabaseName
+        }

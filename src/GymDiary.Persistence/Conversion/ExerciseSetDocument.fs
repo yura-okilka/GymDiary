@@ -10,39 +10,49 @@ open FsToolkit.ErrorHandling
 module ExerciseSetDocument =
 
     let fromRepsSet (domain: RepsSet) : ExerciseSetDocument =
-        { OrderNum = domain.OrderNum |> PositiveInt.value
-          Reps = domain.Reps |> PositiveInt.value |> Some
-          EquipmentWeight = None
-          Duration = None
-          Distance = None }
+        {
+            OrderNum = domain.OrderNum |> PositiveInt.value
+            Reps = domain.Reps |> PositiveInt.value |> Some
+            EquipmentWeight = None
+            Duration = None
+            Distance = None
+        }
 
     let fromRepsWeightSet (domain: RepsWeightSet) : ExerciseSetDocument =
-        { OrderNum = domain.OrderNum |> PositiveInt.value
-          Reps = domain.Reps |> PositiveInt.value |> Some
-          EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value |> Some
-          Duration = None
-          Distance = None }
+        {
+            OrderNum = domain.OrderNum |> PositiveInt.value
+            Reps = domain.Reps |> PositiveInt.value |> Some
+            EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value |> Some
+            Duration = None
+            Distance = None
+        }
 
     let fromDurationSet (domain: DurationSet) : ExerciseSetDocument =
-        { OrderNum = domain.OrderNum |> PositiveInt.value
-          Reps = None
-          EquipmentWeight = None
-          Duration = domain.Duration |> Some
-          Distance = None }
+        {
+            OrderNum = domain.OrderNum |> PositiveInt.value
+            Reps = None
+            EquipmentWeight = None
+            Duration = domain.Duration |> Some
+            Distance = None
+        }
 
     let fromDurationWeightSet (domain: DurationWeightSet) : ExerciseSetDocument =
-        { OrderNum = domain.OrderNum |> PositiveInt.value
-          Reps = None
-          EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value |> Some
-          Duration = domain.Duration |> Some
-          Distance = None }
+        {
+            OrderNum = domain.OrderNum |> PositiveInt.value
+            Reps = None
+            EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value |> Some
+            Duration = domain.Duration |> Some
+            Distance = None
+        }
 
     let fromDurationDistanceSet (domain: DurationDistanceSet) : ExerciseSetDocument =
-        { OrderNum = domain.OrderNum |> PositiveInt.value
-          Reps = None
-          EquipmentWeight = None
-          Duration = domain.Duration |> Some
-          Distance = domain.Distance |> decimal |> Some }
+        {
+            OrderNum = domain.OrderNum |> PositiveInt.value
+            Reps = None
+            EquipmentWeight = None
+            Duration = domain.Duration |> Some
+            Distance = domain.Distance |> decimal |> Some
+        }
 
     let fromExerciseSets (sets: ExerciseSets) =
         match sets with

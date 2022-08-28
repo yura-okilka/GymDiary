@@ -6,8 +6,10 @@ open Validus
 
 [<CLIMutable>]
 type MongoDbSettings =
-    { ConnectionString: string
-      DatabaseName: string }
+    {
+        ConnectionString: string
+        DatabaseName: string
+    }
 
 [<CLIMutable>]
 type Settings = { MongoDb: MongoDbSettings }

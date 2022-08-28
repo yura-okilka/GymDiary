@@ -10,18 +10,22 @@ open MongoDB.Bson.Serialization.Attributes
 
 [<CLIMutable>]
 type SportsmanDocument =
-    { Id: string
-      Email: string
-      FirstName: string
-      LastName: string
-      DateOfBirth: DateTime option
-      Gender: string option }
+    {
+        Id: string
+        Email: string
+        FirstName: string
+        LastName: string
+        DateOfBirth: DateTime option
+        Gender: string option
+    }
 
 [<CLIMutable>]
 type ExerciseCategoryDocument =
-    { Id: string
-      Name: string
-      OwnerId: string }
+    {
+        Id: string
+        Name: string
+        OwnerId: string
+    }
 
 type ExerciseSetType =
     | RepsSet = 1
@@ -33,58 +37,68 @@ type ExerciseSetType =
 /// A superset of all exercise set types.
 [<CLIMutable>]
 type ExerciseSetDocument =
-    { OrderNum: int
+    {
+        OrderNum: int
 
-      [<BsonIgnoreIfDefault>]
-      Reps: int option
+        [<BsonIgnoreIfDefault>]
+        Reps: int option
 
-      [<BsonIgnoreIfDefault>]
-      EquipmentWeight: decimal option
+        [<BsonIgnoreIfDefault>]
+        EquipmentWeight: decimal option
 
-      [<BsonIgnoreIfDefault>]
-      Duration: TimeSpan option
+        [<BsonIgnoreIfDefault>]
+        Duration: TimeSpan option
 
-      [<BsonIgnoreIfDefault>]
-      Distance: decimal option }
+        [<BsonIgnoreIfDefault>]
+        Distance: decimal option
+    }
 
 [<CLIMutable>]
 type ExerciseDocument =
-    { Id: string
-      CategoryId: string
-      Name: string
-      Notes: string option
-      RestTime: TimeSpan
-      SetsType: ExerciseSetType
-      Sets: ExerciseSetDocument list
-      CreatedOn: DateTime
-      LastModifiedOn: DateTime
-      OwnerId: string }
+    {
+        Id: string
+        CategoryId: string
+        Name: string
+        Notes: string option
+        RestTime: TimeSpan
+        SetsType: ExerciseSetType
+        Sets: ExerciseSetDocument list
+        CreatedOn: DateTime
+        LastModifiedOn: DateTime
+        OwnerId: string
+    }
 
 [<CLIMutable>]
 type RoutineDocument =
-    { Id: string
-      Name: string
-      Goal: string option
-      Notes: string option
-      Schedule: DayOfWeek list
-      Exercises: ExerciseDocument list
-      CreatedOn: DateTime
-      LastModifiedOn: DateTime
-      OwnerId: string }
+    {
+        Id: string
+        Name: string
+        Goal: string option
+        Notes: string option
+        Schedule: DayOfWeek list
+        Exercises: ExerciseDocument list
+        CreatedOn: DateTime
+        LastModifiedOn: DateTime
+        OwnerId: string
+    }
 
 [<CLIMutable>]
 type ExerciseSessionDocument =
-    { ExerciseId: string
-      SetsType: ExerciseSetType
-      Sets: ExerciseSetDocument list
-      StartedOn: DateTime
-      CompletedOn: DateTime }
+    {
+        ExerciseId: string
+        SetsType: ExerciseSetType
+        Sets: ExerciseSetDocument list
+        StartedOn: DateTime
+        CompletedOn: DateTime
+    }
 
 [<CLIMutable>]
 type WorkoutSessionDocument =
-    { Id: string
-      RoutineId: string
-      Exercises: ExerciseSessionDocument list
-      StartedOn: DateTime
-      CompletedOn: DateTime
-      OwnerId: string }
+    {
+        Id: string
+        RoutineId: string
+        Exercises: ExerciseSessionDocument list
+        StartedOn: DateTime
+        CompletedOn: DateTime
+        OwnerId: string
+    }

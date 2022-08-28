@@ -8,9 +8,11 @@ open FsToolkit.ErrorHandling
 module ExerciseCategoryDocument =
 
     let fromDomain (domain: ExerciseCategory) : ExerciseCategoryDocument =
-        { Id = domain.Id |> Id.value
-          Name = domain.Name |> String50.value
-          OwnerId = domain.OwnerId |> Id.value }
+        {
+            Id = domain.Id |> Id.value
+            Name = domain.Name |> String50.value
+            OwnerId = domain.OwnerId |> Id.value
+        }
 
     let toDomain (document: ExerciseCategoryDocument) : Result<ExerciseCategory, ValidationError> =
         result {

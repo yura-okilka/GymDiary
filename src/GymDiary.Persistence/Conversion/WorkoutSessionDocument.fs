@@ -8,12 +8,14 @@ open FsToolkit.ErrorHandling
 module WorkoutSessionDocument =
 
     let fromDomain (domain: WorkoutSession) : WorkoutSessionDocument =
-        { Id = domain.Id |> Id.value
-          RoutineId = domain.RoutineId |> Id.value
-          Exercises = domain.Exercises |> List.map ExerciseSessionDocument.fromDomain
-          StartedOn = domain.StartedOn
-          CompletedOn = domain.CompletedOn
-          OwnerId = domain.OwnerId |> Id.value }
+        {
+            Id = domain.Id |> Id.value
+            RoutineId = domain.RoutineId |> Id.value
+            Exercises = domain.Exercises |> List.map ExerciseSessionDocument.fromDomain
+            StartedOn = domain.StartedOn
+            CompletedOn = domain.CompletedOn
+            OwnerId = domain.OwnerId |> Id.value
+        }
 
     let toDomain (document: WorkoutSessionDocument) : Result<WorkoutSession, ValidationError> =
         result {
