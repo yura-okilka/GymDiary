@@ -23,9 +23,8 @@ module Trunk =
     /// It is the way to take the best of composition root and ASP.NET Core features.
     let compose (settings: Settings) (serviceProvider: IServiceProvider) =
         let mongoClient = new MongoClient(settings.MongoDb.ConnectionString) // MongoClient & IMongoCollection<TDocument> are thread-safe.
-        let logger = serviceProvider.GetRequiredService<ILoggerFactory>().CreateLogger()
 
         {
-            Logger = logger
+            Logger = serviceProvider.GetRequiredService<ILoggerFactory>().CreateLogger()
             Persistence = Persistence.compose mongoClient settings.MongoDb.DatabaseName
         }

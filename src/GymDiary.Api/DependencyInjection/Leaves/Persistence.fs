@@ -42,31 +42,25 @@ module Persistence =
     let compose (client: IMongoClient) (dbName: string) =
         let context = DBContext.create client dbName
 
-        let exerciseCategoryRepository =
-            {
-                Create = ExerciseCategoryRepository.create context.ExerciseCategories
-                GetAll = ExerciseCategoryRepository.getAll context.ExerciseCategories
-                GetById = ExerciseCategoryRepository.getById context.ExerciseCategories
-                ExistWithName = ExerciseCategoryRepository.existWithName context.ExerciseCategories
-                Update = ExerciseCategoryRepository.update context.ExerciseCategories
-                Delete = ExerciseCategoryRepository.delete context.ExerciseCategories
-            }
-
-        let exerciseRepository =
-            {
-                Create = ExerciseRepository.create context.Exercises
-                GetById = ExerciseRepository.getById context.Exercises
-                Update = ExerciseRepository.update context.Exercises
-                Delete = ExerciseRepository.delete context.Exercises
-            }
-
-        let sportsmanRepository =
-            {
-                ExistWithId = SportsmanRepository.existWithId context.Sportsmen
-            }
-
         {
-            ExerciseCategory = exerciseCategoryRepository
-            Exercise = exerciseRepository
-            Sportsman = sportsmanRepository
+            ExerciseCategory =
+                {
+                    Create = ExerciseCategoryRepository.create context.ExerciseCategories
+                    GetAll = ExerciseCategoryRepository.getAll context.ExerciseCategories
+                    GetById = ExerciseCategoryRepository.getById context.ExerciseCategories
+                    ExistWithName = ExerciseCategoryRepository.existWithName context.ExerciseCategories
+                    Update = ExerciseCategoryRepository.update context.ExerciseCategories
+                    Delete = ExerciseCategoryRepository.delete context.ExerciseCategories
+                }
+            Exercise =
+                {
+                    Create = ExerciseRepository.create context.Exercises
+                    GetById = ExerciseRepository.getById context.Exercises
+                    Update = ExerciseRepository.update context.Exercises
+                    Delete = ExerciseRepository.delete context.Exercises
+                }
+            Sportsman =
+                {
+                    ExistWithId = SportsmanRepository.existWithId context.Sportsmen
+                }
         }
