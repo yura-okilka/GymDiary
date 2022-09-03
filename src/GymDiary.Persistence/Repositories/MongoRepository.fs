@@ -37,11 +37,7 @@ module MongoRepository =
         }
         |> Async.AwaitTask
 
-    let replaceOne
-        (collection: IMongoCollection<'Document>)
-        (filter: Expression<Func<'Document, bool>>)
-        (document: 'Document)
-        =
+    let replaceOne (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) (document: 'Document) =
         collection.ReplaceOneAsync(filter, document) |> Async.AwaitTask
 
     let deleteOne (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =

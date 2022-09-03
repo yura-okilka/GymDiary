@@ -38,8 +38,7 @@ module ExerciseRepository =
             return
                 documentOption
                 |> Option.traverseResult ExerciseDocument.toDomain
-                |> Result.valueOr (fun error ->
-                    raise (DocumentConversionException(typeof<ExerciseDocument>.Name, error)))
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseDocument>.Name, error)))
         }
 
     let update (collection: IMongoCollection<ExerciseDocument>) (entity: Exercise) : ModifyEntityResult =

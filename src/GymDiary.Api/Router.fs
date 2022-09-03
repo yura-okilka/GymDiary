@@ -10,13 +10,10 @@ open Microsoft.AspNetCore.Http
 module Router =
 
     let webApp (root: CompositionRoot) : (HttpFunc -> HttpContext -> HttpFuncResult) =
-        choose [
-            subRoutef "/v1/sportsmen/%s/exerciseCategories" (fun sportsmanId ->
-                (choose [
-                    POST >=> route "" >=> ExerciseCategoryHandlers.create root.CreateExerciseCategory sportsmanId
-                    GET >=> route "" >=> ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories sportsmanId
-                    GET >=> routef "/%s" (fun categoryId -> ExerciseCategoryHandlers.getById root.GetExerciseCategory sportsmanId categoryId)
-                    PUT >=> routef "/%s" (fun categoryId -> ExerciseCategoryHandlers.rename root.RenameExerciseCategory sportsmanId categoryId)
-                    DELETE >=> routef "/%s" (fun categoryId -> ExerciseCategoryHandlers.delete root.DeleteExerciseCategory sportsmanId categoryId) ]))
-            route "/ping" >=> noResponseCaching >=> text "pong"
-            RequestErrors.NOT_FOUND "Not Found" ]
+        choose [ POST >=> routef "/v1/sportsmen/%s/exerciseCategories" (ExerciseCategoryHandlers.create root.CreateExerciseCategory)
+                 GET >=> routef "/v1/sportsmen/%s/exerciseCategories" (ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories)
+                 GET >=> routef "/v1/sportsmen/%s/exerciseCategories/%s" (ExerciseCategoryHandlers.getById root.GetExerciseCategory)
+                 PUT >=> routef "/v1/sportsmen/%s/exerciseCategories/%s" (ExerciseCategoryHandlers.rename root.RenameExerciseCategory)
+                 DELETE >=> routef "/v1/sportsmen/%s/exerciseCategories/%s" (ExerciseCategoryHandlers.delete root.DeleteExerciseCategory)
+                 route "/ping" >=> noResponseCaching >=> text "pong"
+                 RequestErrors.NOT_FOUND "Not Found" ]

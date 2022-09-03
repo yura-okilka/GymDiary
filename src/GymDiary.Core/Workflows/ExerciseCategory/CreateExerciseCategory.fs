@@ -71,11 +71,7 @@ module CreateExerciseCategory =
 
             let! categoryId = createCategoryInDB category |> Async.map Id.value
 
-            logger.LogInformation(
-                Events.ExerciseCategoryCreated,
-                "Exercise category was created with id '{id}'",
-                categoryId
-            )
+            logger.LogInformation(Events.ExerciseCategoryCreated, "Exercise category was created with id '{id}'", categoryId)
 
             return { Id = categoryId }
         }

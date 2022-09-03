@@ -52,9 +52,5 @@ module DeleteExerciseCategory =
                 |> AsyncResult.mapError (function
                     | EntityNotFound _ -> CommandError.categoryNotFound categoryId ownerId)
 
-            logger.LogInformation(
-                Events.ExerciseCategoryDeleted,
-                "Exercise category with id '{id}' was deleted",
-                command.Id
-            )
+            logger.LogInformation(Events.ExerciseCategoryDeleted, "Exercise category with id '{id}' was deleted", command.Id)
         }

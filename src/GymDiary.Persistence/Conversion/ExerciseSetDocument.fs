@@ -114,15 +114,11 @@ module ExerciseSetDocument =
             return DurationDistanceSet.create orderNum duration distance
         }
 
-    let toExerciseSets
-        (setType: ExerciseSetType)
-        (documents: ExerciseSetDocument list)
-        : Result<ExerciseSets, ValidationError> =
+    let toExerciseSets (setType: ExerciseSetType) (documents: ExerciseSetDocument list) : Result<ExerciseSets, ValidationError> =
         match setType with
         | ExerciseSetType.RepsSet -> documents |> List.traverseResultM toRepsSet |> Result.map RepsSets
 
-        | ExerciseSetType.RepsWeightSet ->
-            documents |> List.traverseResultM toRepsWeightSet |> Result.map RepsWeightSets
+        | ExerciseSetType.RepsWeightSet -> documents |> List.traverseResultM toRepsWeightSet |> Result.map RepsWeightSets
 
         | ExerciseSetType.DurationSet -> documents |> List.traverseResultM toDurationSet |> Result.map DurationSets
 

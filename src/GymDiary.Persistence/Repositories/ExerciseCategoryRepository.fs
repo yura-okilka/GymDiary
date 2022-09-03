@@ -13,24 +13,17 @@ open MongoDB.Driver
 
 module ExerciseCategoryRepository =
 
-    let create
-        (collection: IMongoCollection<ExerciseCategoryDocument>)
-        (entity: ExerciseCategory)
-        : Async<ExerciseCategoryId> =
+    let create (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) : Async<ExerciseCategoryId> =
         async {
             let! createdDocument = entity |> ExerciseCategoryDocument.fromDomain |> MongoRepository.insertOne collection
 
             return
                 createdDocument.Id
                 |> Id.create<ExerciseCategory> (nameof createdDocument.Id)
-                |> Result.valueOr (fun error ->
-                    raise (DocumentConversionException(typeof<ExerciseCategoryId>.Name, error)))
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryId>.Name, error)))
         }
 
-    let getAll
-        (collection: IMongoCollection<ExerciseCategoryDocument>)
-        (ownerId: SportsmanId)
-        : Async<ExerciseCategory list> =
+    let getAll (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: SportsmanId) : Async<ExerciseCategory list> =
         async {
             let ownerId = ownerId |> Id.value
             let! documents = MongoRepository.find collection (Expr.Quote(fun d -> d.OwnerId = ownerId))
@@ -39,8 +32,7 @@ module ExerciseCategoryRepository =
                 documents
                 |> List.ofSeq
                 |> List.traverseResultM ExerciseCategoryDocument.toDomain
-                |> Result.valueOr (fun error ->
-                    raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
         }
 
     let getById
@@ -58,8 +50,7 @@ module ExerciseCategoryRepository =
             return
                 documentOption
                 |> Option.traverseResult ExerciseCategoryDocument.toDomain
-                |> Result.valueOr (fun error ->
-                    raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
         }
 
     let existWithName
@@ -71,14 +62,9 @@ module ExerciseCategoryRepository =
         let name = name |> String50.value
 
         // Consider using case insensitive index for large collections.
-        MongoRepository.findAny
-            collection
-            (Expr.Quote(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId))
+        MongoRepository.findAny collection (Expr.Quote(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId))
 
-    let update
-        (collection: IMongoCollection<ExerciseCategoryDocument>)
-        (entity: ExerciseCategory)
-        : ModifyEntityResult =
+    let update (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) : ModifyEntityResult =
         asyncResult {
             let id = entity.Id |> Id.value
 
@@ -91,10 +77,7 @@ module ExerciseCategoryRepository =
                 return! EntityNotFound(typeof<ExerciseCategory>.Name, id) |> Error
         }
 
-    let delete
-        (collection: IMongoCollection<ExerciseCategoryDocument>)
-        (categoryId: ExerciseCategoryId)
-        : ModifyEntityResult =
+    let delete (collection: IMongoCollection<ExerciseCategoryDocument>) (categoryId: ExerciseCategoryId) : ModifyEntityResult =
         asyncResult {
             let categoryId = categoryId |> Id.value
 

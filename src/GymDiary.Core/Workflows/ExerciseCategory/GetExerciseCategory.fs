@@ -30,10 +30,7 @@ module GetExerciseCategory =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let execute
-        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>)
-        (query: Query)
-        =
+    let execute (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>) (query: Query) =
         asyncResult {
             let! (categoryId, ownerId) =
                 validation {

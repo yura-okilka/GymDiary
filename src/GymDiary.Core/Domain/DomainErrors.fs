@@ -14,8 +14,7 @@ type ExerciseCategoryAlreadyExistsError =
 
     static member create (name: String50) = ExerciseCategoryAlreadyExistsError(name |> String50.value)
 
-    static member toString (ExerciseCategoryAlreadyExistsError name) =
-        $"Exercise category with name '%s{name}' already exists"
+    static member toString (ExerciseCategoryAlreadyExistsError name) = $"Exercise category with name '%s{name}' already exists"
 
 type OwnerNotFoundError =
     | OwnerNotFoundError of id: string

@@ -38,11 +38,7 @@ module Program =
         if args.Length > 0 then
             builder.AddCommandLine args |> ignore
 
-    let configureLogging (builder: ILoggingBuilder) =
-        builder
-            .AddConsole()
-            .AddDebug()
-        |> ignore
+    let configureLogging (builder: ILoggingBuilder) = builder.AddConsole().AddDebug() |> ignore
 
     let configureServices (services: IServiceCollection) =
         PersistenceModule.configure () // MongoDB conventions must be configured before using MongoClient in the composition root.

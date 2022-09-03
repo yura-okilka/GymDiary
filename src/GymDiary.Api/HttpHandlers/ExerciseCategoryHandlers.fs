@@ -53,11 +53,7 @@ module ExerciseCategoryHandlers =
                         RequestErrors.BAD_REQUEST (ErrorResponse.validationError error) next ctx
             }
 
-    let getById
-        (getExerciseCategory: GetExerciseCategory.Workflow)
-        (sportsmanId: string)
-        (categoryId: string)
-        : HttpHandler =
+    let getById (getExerciseCategory: GetExerciseCategory.Workflow) (sportsmanId: string, categoryId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
                 let! result =
@@ -83,11 +79,7 @@ module ExerciseCategoryHandlers =
 
     type RenameRequest = { Name: string }
 
-    let rename
-        (renameExerciseCategory: RenameExerciseCategory.Workflow)
-        (sportsmanId: string)
-        (categoryId: string)
-        : HttpHandler =
+    let rename (renameExerciseCategory: RenameExerciseCategory.Workflow) (sportsmanId: string, categoryId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
                 let! request = ctx.BindJsonAsync<RenameRequest>()
@@ -117,11 +109,7 @@ module ExerciseCategoryHandlers =
                             RequestErrors.CONFLICT (ErrorResponse.nameAlreadyUsed message) next ctx
             }
 
-    let delete
-        (deleteExerciseCategory: DeleteExerciseCategory.Workflow)
-        (sportsmanId: string)
-        (categoryId: string)
-        : HttpHandler =
+    let delete (deleteExerciseCategory: DeleteExerciseCategory.Workflow) (sportsmanId: string, categoryId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
                 let! result =
