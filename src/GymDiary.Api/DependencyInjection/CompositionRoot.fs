@@ -16,15 +16,13 @@ type CompositionRoot =
 module CompositionRoot =
 
     let compose (trunk: Trunk) =
+
         let createExerciseCategoryWorkflow =
-            ErrorLoggingDecorator.logWorkflow
+            CreateExerciseCategory.runWorkflow
+                trunk.Persistence.ExerciseCategory.ExistWithName
+                trunk.Persistence.Sportsman.ExistWithId
+                trunk.Persistence.ExerciseCategory.Create
                 trunk.Logger
-                CreateExerciseCategory.LoggingContext
-                (CreateExerciseCategory.runWorkflow
-                    trunk.Persistence.ExerciseCategory.ExistWithName
-                    trunk.Persistence.Sportsman.ExistWithId
-                    trunk.Persistence.ExerciseCategory.Create
-                    trunk.Logger)
 
         let getAllExerciseCategoriesWorkflow =
             GetAllExerciseCategories.runWorkflow trunk.Persistence.ExerciseCategory.GetAll
@@ -33,25 +31,25 @@ module CompositionRoot =
             GetExerciseCategory.runWorkflow trunk.Persistence.ExerciseCategory.GetById
 
         let renameExerciseCategoryWorkflow =
-            ErrorLoggingDecorator.logWorkflow
+            RenameExerciseCategory.runWorkflow
+                trunk.Persistence.ExerciseCategory.GetById
+                trunk.Persistence.ExerciseCategory.ExistWithName
+                trunk.Persistence.ExerciseCategory.Update
                 trunk.Logger
-                RenameExerciseCategory.LoggingContext
-                (RenameExerciseCategory.runWorkflow
-                    trunk.Persistence.ExerciseCategory.GetById
-                    trunk.Persistence.ExerciseCategory.ExistWithName
-                    trunk.Persistence.ExerciseCategory.Update
-                    trunk.Logger)
 
         let deleteExerciseCategoryWorkflow =
-            ErrorLoggingDecorator.logWorkflow
-                trunk.Logger
-                DeleteExerciseCategory.LoggingContext
-                (DeleteExerciseCategory.runWorkflow trunk.Persistence.ExerciseCategory.Delete trunk.Logger)
+            DeleteExerciseCategory.runWorkflow trunk.Persistence.ExerciseCategory.Delete trunk.Logger
+
+        let errorLoggingDecorator loggingContext workflow =
+            ErrorLoggingDecorator.logWorkflow trunk.Logger loggingContext workflow
 
         {
-            CreateExerciseCategory = createExerciseCategoryWorkflow
+            CreateExerciseCategory =
+                createExerciseCategoryWorkflow |> errorLoggingDecorator CreateExerciseCategory.LoggingContext
             GetAllExerciseCategories = getAllExerciseCategoriesWorkflow
             GetExerciseCategory = getExerciseCategoryWorkflow
-            RenameExerciseCategory = renameExerciseCategoryWorkflow
-            DeleteExerciseCategory = deleteExerciseCategoryWorkflow
+            RenameExerciseCategory =
+                renameExerciseCategoryWorkflow |> errorLoggingDecorator RenameExerciseCategory.LoggingContext
+            DeleteExerciseCategory =
+                deleteExerciseCategoryWorkflow |> errorLoggingDecorator DeleteExerciseCategory.LoggingContext
         }
