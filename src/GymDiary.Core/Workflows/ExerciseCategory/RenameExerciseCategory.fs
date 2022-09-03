@@ -48,7 +48,7 @@ module RenameExerciseCategory =
                           (nameof cmd.Name, cmd.Name) ]
         }
 
-    let runWorkflow
+    let execute
         (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>)
         (categoryWithNameExistsInDB: SportsmanId -> String50 -> Async<bool>)
         (updateCategoryInDB: ExerciseCategory -> ModifyEntityResult)

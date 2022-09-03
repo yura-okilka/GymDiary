@@ -30,7 +30,7 @@ module GetExerciseCategory =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let runWorkflow
+    let execute
         (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>)
         (query: Query)
         =

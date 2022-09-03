@@ -22,7 +22,7 @@ module GetAllExerciseCategories =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let runWorkflow (getAllCategoriesFromDB: SportsmanId -> Async<ExerciseCategory list>) (query: Query) =
+    let execute (getAllCategoriesFromDB: SportsmanId -> Async<ExerciseCategory list>) (query: Query) =
         asyncResult {
             let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
 

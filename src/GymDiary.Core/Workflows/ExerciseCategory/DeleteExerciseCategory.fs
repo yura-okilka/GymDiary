@@ -37,11 +37,7 @@ module DeleteExerciseCategory =
                           (nameof cmd.OwnerId, cmd.OwnerId) ]
         }
 
-    let runWorkflow
-        (deleteCategoryFromDB: ExerciseCategoryId -> ModifyEntityResult)
-        (logger: ILogger)
-        (command: Command)
-        =
+    let execute (deleteCategoryFromDB: ExerciseCategoryId -> ModifyEntityResult) (logger: ILogger) (command: Command) =
         asyncResult {
             let! (categoryId, ownerId) =
                 validation {

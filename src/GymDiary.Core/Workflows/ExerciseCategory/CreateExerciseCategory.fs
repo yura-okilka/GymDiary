@@ -42,7 +42,7 @@ module CreateExerciseCategory =
                           (nameof cmd.OwnerId, cmd.OwnerId) ]
         }
 
-    let runWorkflow
+    let execute
         (categoryWithNameExistsInDB: SportsmanId -> String50 -> Async<bool>)
         (sportsmanWithIdExistsInDB: SportsmanId -> Async<bool>)
         (createCategoryInDB: ExerciseCategory -> Async<ExerciseCategoryId>)

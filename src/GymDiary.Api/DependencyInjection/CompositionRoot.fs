@@ -18,27 +18,27 @@ module CompositionRoot =
     let compose (trunk: Trunk) =
 
         let createExerciseCategoryWorkflow =
-            CreateExerciseCategory.runWorkflow
+            CreateExerciseCategory.execute
                 trunk.Persistence.ExerciseCategory.ExistWithName
                 trunk.Persistence.Sportsman.ExistWithId
                 trunk.Persistence.ExerciseCategory.Create
                 trunk.Logger
 
         let getAllExerciseCategoriesWorkflow =
-            GetAllExerciseCategories.runWorkflow trunk.Persistence.ExerciseCategory.GetAll
+            GetAllExerciseCategories.execute trunk.Persistence.ExerciseCategory.GetAll
 
         let getExerciseCategoryWorkflow =
-            GetExerciseCategory.runWorkflow trunk.Persistence.ExerciseCategory.GetById
+            GetExerciseCategory.execute trunk.Persistence.ExerciseCategory.GetById
 
         let renameExerciseCategoryWorkflow =
-            RenameExerciseCategory.runWorkflow
+            RenameExerciseCategory.execute
                 trunk.Persistence.ExerciseCategory.GetById
                 trunk.Persistence.ExerciseCategory.ExistWithName
                 trunk.Persistence.ExerciseCategory.Update
                 trunk.Logger
 
         let deleteExerciseCategoryWorkflow =
-            DeleteExerciseCategory.runWorkflow trunk.Persistence.ExerciseCategory.Delete trunk.Logger
+            DeleteExerciseCategory.execute trunk.Persistence.ExerciseCategory.Delete trunk.Logger
 
         let errorLoggingDecorator loggingContext workflow =
             ErrorLoggingDecorator.logWorkflow trunk.Logger loggingContext workflow
