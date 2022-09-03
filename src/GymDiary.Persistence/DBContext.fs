@@ -11,30 +11,13 @@ type DBContext =
         Sportsmen: IMongoCollection<SportsmanDocument>
     }
 
-module DBContext =
-
-    [<Literal>]
-    let ExerciseCategories = "exerciseCategories"
-
-    [<Literal>]
-    let Exercises = "exercises"
-
-    [<Literal>]
-    let Routines = "routines"
-
-    [<Literal>]
-    let WorkoutSessions = "workoutSessions"
-
-    [<Literal>]
-    let Sportsmen = "sportsmen"
-
-    let create (client: IMongoClient) (dbName: string) =
+    static member create (client: IMongoClient) (dbName: string) =
         let database = client.GetDatabase(dbName)
 
         {
-            ExerciseCategories = database.GetCollection<ExerciseCategoryDocument>(ExerciseCategories)
-            Exercises = database.GetCollection<ExerciseDocument>(Exercises)
-            Routines = database.GetCollection<RoutineDocument>(Routines)
-            WorkoutSessions = database.GetCollection<WorkoutSessionDocument>(WorkoutSessions)
-            Sportsmen = database.GetCollection<SportsmanDocument>(Sportsmen)
+            ExerciseCategories = database.GetCollection<ExerciseCategoryDocument>("exerciseCategories")
+            Exercises = database.GetCollection<ExerciseDocument>("exercises")
+            Routines = database.GetCollection<RoutineDocument>("routines")
+            WorkoutSessions = database.GetCollection<WorkoutSessionDocument>("workoutSessions")
+            Sportsmen = database.GetCollection<SportsmanDocument>("sportsmen")
         }
