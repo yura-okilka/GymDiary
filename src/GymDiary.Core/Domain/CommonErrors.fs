@@ -26,7 +26,7 @@ type ValidationError =
     static member invalidPhoneNumber field = ValidationError(field, InvalidPhoneNumber)
     static member patternNotMatched field = ValidationError(field, PatternNotMatched)
 
-    static member toString (ValidationError (field, error)) =
+    static member toString(ValidationError (field, error)) =
         match error with
         | ValueNull -> $"'%s{field}' must not be null"
         | ValueNullOrEmpty -> $"'%s{field}' must not be null or empty"

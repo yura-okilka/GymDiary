@@ -6,7 +6,7 @@ type OptionConvention() =
     inherit ConventionBase("F# Option Type")
 
     interface IMemberMapConvention with
-        member _.Apply (memberMap) =
+        member _.Apply(memberMap) =
             let objType = memberMap.MemberType
 
             if isOption objType then

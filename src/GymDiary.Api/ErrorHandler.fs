@@ -15,14 +15,14 @@ type ErrorResponse =
         Details: obj
     }
 
-    static member validationError (error: ValidationError) =
+    static member validationError(error: ValidationError) =
         {
             Name = "ValidationError"
             Message = ValidationError.toString error
             Details = null
         }
 
-    static member validationErrors (errors: ValidationError list) =
+    static member validationErrors(errors: ValidationError list) =
         {
             Name = "ValidationErrors"
             Message = "Validation errors have occurred"

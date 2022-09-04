@@ -9,7 +9,7 @@ module Extensions =
         /// Creates an Expression from F# lambda. Passing function name won't work.
         /// Compiler automatically quotes a function when it is passed as an argument to a method.
         /// More info: https://stackoverflow.com/questions/23146473/how-do-i-create-a-linq-expression-tree-with-an-f-lambda
-        static member Quote (e: Expression<Func<_, _>>) = e
+        static member Quote(e: Expression<Func<_, _>>) = e
 
     [<AutoOpen>]
     module Interop =

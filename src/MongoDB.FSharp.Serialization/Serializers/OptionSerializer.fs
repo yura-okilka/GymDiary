@@ -11,12 +11,12 @@ type OptionSerializer<'T>() =
 
     let Cases = getUnionCases typeof<'T option>
 
-    override _.Serialize (context, args, value) =
+    override _.Serialize(context, args, value) =
         match value with
         | Some x -> BsonSerializer.Serialize(context.Writer, x)
         | None -> BsonSerializer.Serialize(context.Writer, null)
 
-    override _.Deserialize (context, args) =
+    override _.Deserialize(context, args) =
         let genericTypeArgument = typeof<'T>
 
         let (unionCase, unionArgs) =

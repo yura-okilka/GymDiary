@@ -12,7 +12,7 @@ type FSharpTypeSerializationProvider() =
     let asBsonSerializer (value: obj) = value :?> IBsonSerializer
 
     interface IBsonSerializationProvider with
-        member _.GetSerializer (objType) =
+        member _.GetSerializer(objType) =
             if isOption objType then
                 typedefof<OptionSerializer<_>>.MakeGenericType (objType.GetGenericArguments())
                 |> createInstance
