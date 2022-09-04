@@ -27,14 +27,16 @@ module DeleteExerciseCategory =
 
     type Workflow = Workflow<Command, unit, CommandError>
 
-    let LoggingContext =
-        {
-            ErrorEventId = Events.ExerciseCategoryDeletionFailed
-            GetErrorMessage = CommandError.toString
-            GetRequestInfo =
-                fun cmd ->
-                    Map [ (nameof cmd.Id, cmd.Id)
-                          (nameof cmd.OwnerId, cmd.OwnerId) ]
+    let LoggingInfoProvider =
+        { new ILoggingInfoProvider<Command, CommandError> with
+
+            member _.ErrorEventId = Events.ExerciseCategoryDeletionFailed
+
+            member _.GetErrorMessage(error) = CommandError.toString error
+
+            member _.GetRequestInfo(command) =
+                Map [ (nameof command.Id, command.Id)
+                      (nameof command.OwnerId, command.OwnerId) ]
         }
 
     let execute (deleteCategoryFromDB: ExerciseCategoryId -> ModifyEntityResult) (logger: ILogger) (command: Command) =

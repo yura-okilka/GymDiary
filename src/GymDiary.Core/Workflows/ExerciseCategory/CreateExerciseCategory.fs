@@ -32,14 +32,16 @@ module CreateExerciseCategory =
 
     type Workflow = Workflow<Command, CommandResult, CommandError>
 
-    let LoggingContext =
-        {
-            ErrorEventId = Events.ExerciseCategoryCreationFailed
-            GetErrorMessage = CommandError.toString
-            GetRequestInfo =
-                fun cmd ->
-                    Map [ (nameof cmd.Name, cmd.Name)
-                          (nameof cmd.OwnerId, cmd.OwnerId) ]
+    let LoggingInfoProvider =
+        { new ILoggingInfoProvider<Command, CommandError> with
+
+            member _.ErrorEventId = Events.ExerciseCategoryCreationFailed
+
+            member _.GetErrorMessage(error) = CommandError.toString error
+
+            member _.GetRequestInfo(command) =
+                Map [ (nameof command.Name, command.Name)
+                      (nameof command.OwnerId, command.OwnerId) ]
         }
 
     let execute

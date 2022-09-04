@@ -43,9 +43,12 @@ module CompositionRoot =
             ErrorLoggingDecorator.logWorkflow trunk.Logger loggingContext workflow
 
         {
-            CreateExerciseCategory = createExerciseCategoryWorkflow |> errorLoggingDecorator CreateExerciseCategory.LoggingContext
+            CreateExerciseCategory =
+                createExerciseCategoryWorkflow |> errorLoggingDecorator CreateExerciseCategory.LoggingInfoProvider
             GetAllExerciseCategories = getAllExerciseCategoriesWorkflow
             GetExerciseCategory = getExerciseCategoryWorkflow
-            RenameExerciseCategory = renameExerciseCategoryWorkflow |> errorLoggingDecorator RenameExerciseCategory.LoggingContext
-            DeleteExerciseCategory = deleteExerciseCategoryWorkflow |> errorLoggingDecorator DeleteExerciseCategory.LoggingContext
+            RenameExerciseCategory =
+                renameExerciseCategoryWorkflow |> errorLoggingDecorator RenameExerciseCategory.LoggingInfoProvider
+            DeleteExerciseCategory =
+                deleteExerciseCategoryWorkflow |> errorLoggingDecorator DeleteExerciseCategory.LoggingInfoProvider
         }

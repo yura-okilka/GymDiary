@@ -4,34 +4,33 @@ open Microsoft.Extensions.Logging
 
 module ErrorLoggingDecorator =
 
-    type LoggingContext<'Request, 'Error> =
-        {
-            GetRequestInfo: 'Request -> Map<string, obj>
-            GetErrorMessage: 'Error -> string
-            ErrorEventId: EventId
-        }
+    type ILoggingInfoProvider<'Request, 'Error> =
+        abstract ErrorEventId: EventId
+        abstract GetRequestInfo: 'Request -> Map<string, obj>
+        abstract GetErrorMessage: 'Error -> string
 
     let logWorkflow
         (logger: ILogger)
-        (context: LoggingContext<'Request, 'Error>)
+        (loggingInfo: ILoggingInfoProvider<'Request, 'Error>)
         (workflow: Workflow<'Request, _, 'Error>)
         : Workflow<'Request, _, 'Error> =
         fun request ->
             async {
                 try
-                    use _ = logger.BeginScope(context.GetRequestInfo request)
+                    use _ = logger.BeginScope(loggingInfo.GetRequestInfo request)
 
                     let! result = workflow request
 
                     match result with
                     | Ok _ -> ()
                     | Error error ->
-                        let message = context.GetErrorMessage error
-                        logger.LogError(context.ErrorEventId, "Workflow failed with error: {error}", message) // TODO: use structured logging.
+                        let message = loggingInfo.GetErrorMessage error
+                        logger.LogError(loggingInfo.ErrorEventId, "Workflow failed with error: {error}", message) // TODO: use structured logging.
 
                     return result
                 with
                 | ex ->
-                    logger.LogError(context.ErrorEventId, ex, "Workflow failed with exception: {exception}", ex.Message)
-                    return raise (exn ("Failed to run workflow", ex))
+                    logger.LogError(loggingInfo.ErrorEventId, ex, "Workflow failed with exception: {exception}", ex.Message)
+
+                    return raise (exn ("Failed to execute workflow", ex))
             }

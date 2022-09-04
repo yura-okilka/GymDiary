@@ -37,15 +37,17 @@ module RenameExerciseCategory =
 
     type Workflow = Workflow<Command, unit, CommandError>
 
-    let LoggingContext =
-        {
-            ErrorEventId = Events.ExerciseCategoryRenamingFailed
-            GetErrorMessage = CommandError.toString
-            GetRequestInfo =
-                fun cmd ->
-                    Map [ (nameof cmd.Id, cmd.Id)
-                          (nameof cmd.OwnerId, cmd.OwnerId)
-                          (nameof cmd.Name, cmd.Name) ]
+    let LoggingInfoProvider =
+        { new ILoggingInfoProvider<Command, CommandError> with
+
+            member _.ErrorEventId = Events.ExerciseCategoryRenamingFailed
+
+            member _.GetErrorMessage(error) = CommandError.toString error
+
+            member _.GetRequestInfo(command) =
+                Map [ (nameof command.Id, command.Id)
+                      (nameof command.OwnerId, command.OwnerId)
+                      (nameof command.Name, command.Name) ]
         }
 
     let execute
