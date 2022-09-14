@@ -30,7 +30,7 @@ module DeleteExerciseCategory =
     let LoggingInfoProvider =
         { new ILoggingInfoProvider<Command, CommandError> with
 
-            member _.ErrorEventId = Events.ExerciseCategoryDeletionFailed
+            member _.ErrorEventId = DomainEvents.ExerciseCategoryDeletionFailed
 
             member _.GetErrorMessage(error) = CommandError.toString error
 
@@ -54,5 +54,9 @@ module DeleteExerciseCategory =
                 |> AsyncResult.mapError (function
                     | EntityNotFound _ -> CommandError.categoryNotFound categoryId ownerId)
 
-            logger.LogInformation(Events.ExerciseCategoryDeleted, "Exercise category with id '{id}' was deleted", command.Id)
+            logger.LogInformation(
+                DomainEvents.ExerciseCategoryDeleted,
+                "Exercise category with id '{id}' was deleted",
+                command.Id
+            )
         }

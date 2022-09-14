@@ -35,7 +35,7 @@ module CreateExerciseCategory =
     let LoggingInfoProvider =
         { new ILoggingInfoProvider<Command, CommandError> with
 
-            member _.ErrorEventId = Events.ExerciseCategoryCreationFailed
+            member _.ErrorEventId = DomainEvents.ExerciseCategoryCreationFailed
 
             member _.GetErrorMessage(error) = CommandError.toString error
 
@@ -73,7 +73,11 @@ module CreateExerciseCategory =
 
             let! categoryId = createCategoryInDB category |> Async.map Id.value
 
-            logger.LogInformation(Events.ExerciseCategoryCreated, "Exercise category was created with id '{id}'", categoryId)
+            logger.LogInformation(
+                DomainEvents.ExerciseCategoryCreated,
+                "Exercise category was created with id '{id}'",
+                categoryId
+            )
 
             return { Id = categoryId }
         }

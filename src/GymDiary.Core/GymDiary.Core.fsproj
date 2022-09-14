@@ -26,7 +26,7 @@
     <Compile Include="Domain\ExerciseSession.fs" />
     <Compile Include="Domain\WorkoutSession.fs" />
     <Compile Include="Domain\DomainErrors.fs" />
-    <Compile Include="Domain\Events.fs" />
+    <Compile Include="Domain\DomainEvents.fs" />
     <Compile Include="Persistence\Abstractions.fs" />
     <Compile Include="Workflows\Abstractions.fs" />
     <Compile Include="Workflows\ErrorLoggingDecorator.fs" />

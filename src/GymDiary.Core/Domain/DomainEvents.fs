@@ -2,7 +2,7 @@ namespace GymDiary.Core.Domain
 
 open Microsoft.Extensions.Logging
 
-module Events =
+module DomainEvents =
 
     let UndefinedFailure = EventId(-1, "UndefinedFailure")
 

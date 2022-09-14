@@ -40,7 +40,7 @@ module RenameExerciseCategory =
     let LoggingInfoProvider =
         { new ILoggingInfoProvider<Command, CommandError> with
 
-            member _.ErrorEventId = Events.ExerciseCategoryRenamingFailed
+            member _.ErrorEventId = DomainEvents.ExerciseCategoryRenamingFailed
 
             member _.GetErrorMessage(error) = CommandError.toString error
 
@@ -84,7 +84,7 @@ module RenameExerciseCategory =
                     | EntityNotFound _ -> CommandError.categoryNotFound renamedCategory.Id renamedCategory.OwnerId)
 
             logger.LogInformation(
-                Events.ExerciseCategoryRenamed,
+                DomainEvents.ExerciseCategoryRenamed,
                 "Exercise category with id '{id}' was renamed to '{name}'",
                 command.Id,
                 command.Name

@@ -70,5 +70,5 @@ type ErrorResponse =
 module ErrorHandler =
 
     let handle (ex: Exception) (logger: ILogger) =
-        logger.LogError(Events.UndefinedFailure, ex, "An unhandled exception has occurred while executing the request")
+        logger.LogError(DomainEvents.UndefinedFailure, ex, "An unhandled exception has occurred while executing the request")
         clearResponse >=> ServerErrors.INTERNAL_ERROR ErrorResponse.InternalError
