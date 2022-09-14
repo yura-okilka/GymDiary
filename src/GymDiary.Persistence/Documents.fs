@@ -8,97 +8,100 @@ open MongoDB.Bson.Serialization.Attributes
 // driver throws "Cannot deserialize a 'DateTime' from BsonType 'Null'"
 // and does not populate it silently with a default value.
 
-[<CLIMutable>]
-type SportsmanDocument =
-    {
-        Id: string
-        Email: string
-        FirstName: string
-        LastName: string
-        DateOfBirth: DateTime option
-        Gender: string option
-    }
+[<AutoOpen>]
+module Documents =
 
-[<CLIMutable>]
-type ExerciseCategoryDocument =
-    {
-        Id: string
-        Name: string
-        OwnerId: string
-    }
+    [<CLIMutable>]
+    type SportsmanDocument =
+        {
+            Id: string
+            Email: string
+            FirstName: string
+            LastName: string
+            DateOfBirth: DateTime option
+            Gender: string option
+        }
 
-type ExerciseSetType =
-    | RepsSet = 1
-    | RepsWeightSet = 2
-    | DurationSet = 3
-    | DurationWeightSet = 4
-    | DurationDistanceSet = 5
+    [<CLIMutable>]
+    type ExerciseCategoryDocument =
+        {
+            Id: string
+            Name: string
+            OwnerId: string
+        }
 
-/// A superset of all exercise set types.
-[<CLIMutable>]
-type ExerciseSetDocument =
-    {
-        OrderNum: int
+    type ExerciseSetType =
+        | RepsSet = 1
+        | RepsWeightSet = 2
+        | DurationSet = 3
+        | DurationWeightSet = 4
+        | DurationDistanceSet = 5
 
-        [<BsonIgnoreIfDefault>]
-        Reps: int option
+    /// A superset of all exercise set types.
+    [<CLIMutable>]
+    type ExerciseSetDocument =
+        {
+            OrderNum: int
 
-        [<BsonIgnoreIfDefault>]
-        EquipmentWeight: float option
+            [<BsonIgnoreIfDefault>]
+            Reps: int option
 
-        [<BsonIgnoreIfDefault>]
-        Duration: TimeSpan option
+            [<BsonIgnoreIfDefault>]
+            EquipmentWeight: float option
 
-        [<BsonIgnoreIfDefault>]
-        Distance: decimal option
-    }
+            [<BsonIgnoreIfDefault>]
+            Duration: TimeSpan option
 
-[<CLIMutable>]
-type ExerciseDocument =
-    {
-        Id: string
-        CategoryId: string
-        Name: string
-        Notes: string option
-        RestTime: TimeSpan
-        SetsType: ExerciseSetType
-        Sets: ExerciseSetDocument list
-        CreatedOn: DateTime
-        LastModifiedOn: DateTime
-        OwnerId: string
-    }
+            [<BsonIgnoreIfDefault>]
+            Distance: decimal option
+        }
 
-[<CLIMutable>]
-type RoutineDocument =
-    {
-        Id: string
-        Name: string
-        Goal: string option
-        Notes: string option
-        Schedule: DayOfWeek list
-        Exercises: ExerciseDocument list
-        CreatedOn: DateTime
-        LastModifiedOn: DateTime
-        OwnerId: string
-    }
+    [<CLIMutable>]
+    type ExerciseDocument =
+        {
+            Id: string
+            CategoryId: string
+            Name: string
+            Notes: string option
+            RestTime: TimeSpan
+            SetsType: ExerciseSetType
+            Sets: ExerciseSetDocument list
+            CreatedOn: DateTime
+            LastModifiedOn: DateTime
+            OwnerId: string
+        }
 
-[<CLIMutable>]
-type ExerciseSessionDocument =
-    {
-        ExerciseId: string
-        SetsType: ExerciseSetType
-        Sets: ExerciseSetDocument list
-        StartedOn: DateTime
-        CompletedOn: DateTime
-    }
+    [<CLIMutable>]
+    type RoutineDocument =
+        {
+            Id: string
+            Name: string
+            Goal: string option
+            Notes: string option
+            Schedule: DayOfWeek list
+            Exercises: ExerciseDocument list
+            CreatedOn: DateTime
+            LastModifiedOn: DateTime
+            OwnerId: string
+        }
 
-[<CLIMutable>]
-type WorkoutSessionDocument =
-    {
-        Id: string
-        RoutineId: string
-        Exercises: ExerciseSessionDocument list
-        StartedOn: DateTime
-        CompletedOn: DateTime
-        OwnerId: string
-    }
+    [<CLIMutable>]
+    type ExerciseSessionDocument =
+        {
+            ExerciseId: string
+            SetsType: ExerciseSetType
+            Sets: ExerciseSetDocument list
+            StartedOn: DateTime
+            CompletedOn: DateTime
+        }
+
+    [<CLIMutable>]
+    type WorkoutSessionDocument =
+        {
+            Id: string
+            RoutineId: string
+            Exercises: ExerciseSessionDocument list
+            StartedOn: DateTime
+            CompletedOn: DateTime
+            OwnerId: string
+        }
