@@ -1,35 +1,13 @@
 namespace GymDiary.Core.Domain
 
 open System
+open System.ComponentModel.DataAnnotations
 
 [<AutoOpen>]
 module CommonTypes =
 
     /// Constrained to be a strongly typed id of entity, not null
     type Id<'T> = Id of string
-
-    /// Constrained to be 50 chars or less, not null
-    type String50 = private String50 of string
-
-    /// Constrained to be 200 chars or less, not null
-    type String200 = private String200 of string
-
-    /// Constrained to be 1000 chars or less, not null
-    type String1k = private String1k of string
-
-    /// Constrained to be a non-zero positive natural number
-    type PositiveInt = private PositiveInt of int
-
-    /// Constrained to be a valid email address
-    type EmailAddress = private EmailAddress of string
-
-    /// Constrained to be a valid phone number
-    type PhoneNumber = private PhoneNumber of string
-
-    type Gender =
-        | Male
-        | Female
-        | Other
 
     module Id =
 
@@ -39,48 +17,61 @@ module CommonTypes =
 
         let value (Id value) = value
 
-    module String50 =
+    /// Constrained to be 50 chars or less, not null
+    type String50 =
+        private
+        | String50 of string
 
-        let create fieldName value =
+        static member create fieldName value =
             ConstrainedType.createString fieldName String50 (1, 50) value
 
-        let createOption fieldName value =
+        static member createOption fieldName value =
             ConstrainedType.createStringOption fieldName String50 50 value
 
-        let value (String50 value) = value
+        static member value(String50 value) = value
 
-    module String200 =
+    /// Constrained to be 200 chars or less, not null
+    type String200 =
+        private
+        | String200 of string
 
-        let create fieldName value =
+        static member create fieldName value =
             ConstrainedType.createString fieldName String200 (1, 200) value
 
-        let createOption fieldName value =
+        static member createOption fieldName value =
             ConstrainedType.createStringOption fieldName String200 200 value
 
-        let value (String200 value) = value
+        static member value(String200 value) = value
 
-    module String1k =
+    /// Constrained to be 1000 chars or less, not null
+    type String1k =
+        private
+        | String1k of string
 
-        let create fieldName value =
+        static member create fieldName value =
             ConstrainedType.createString fieldName String1k (1, 1000) value
 
-        let createOption fieldName value =
+        static member createOption fieldName value =
             ConstrainedType.createStringOption fieldName String1k 1000 value
 
-        let value (String1k value) = value
+        static member value(String1k value) = value
 
-    module PositiveInt =
+    /// Constrained to be a non-zero positive natural number
+    type PositiveInt =
+        private
+        | PositiveInt of int
 
-        let create fieldName value =
+        static member create fieldName value =
             ConstrainedType.createInt fieldName PositiveInt (1, Int32.MaxValue) value
 
-        let value (PositiveInt value) = value
+        static member value(PositiveInt value) = value
 
-    module EmailAddress =
+    /// Constrained to be a valid email address
+    type EmailAddress =
+        private
+        | EmailAddress of string
 
-        open System.ComponentModel.DataAnnotations
-
-        let create (fieldName: string) (value: string) =
+        static member create (fieldName: string) (value: string) =
             let attribute = new EmailAddressAttribute()
 
             if attribute.IsValid(value) then
@@ -88,13 +79,14 @@ module CommonTypes =
             else
                 ValidationError.invalidEmailAddress fieldName |> Error
 
-        let value (EmailAddress value) = value
+        static member value(EmailAddress value) = value
 
-    module PhoneNumber =
+    /// Constrained to be a valid phone number
+    type PhoneNumber =
+        private
+        | PhoneNumber of string
 
-        open System.ComponentModel.DataAnnotations
-
-        let create (fieldName: string) (value: string) =
+        static member create (fieldName: string) (value: string) =
             let attribute = new PhoneAttribute()
 
             if attribute.IsValid(value) then
@@ -102,4 +94,9 @@ module CommonTypes =
             else
                 ValidationError.invalidPhoneNumber fieldName |> Error
 
-        let value (PhoneNumber value) = value
+        static member value(PhoneNumber value) = value
+
+    type Gender =
+        | Male
+        | Female
+        | Other
