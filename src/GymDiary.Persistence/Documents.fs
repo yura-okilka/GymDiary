@@ -44,7 +44,7 @@ type ExerciseSetDocument =
         Reps: int option
 
         [<BsonIgnoreIfDefault>]
-        EquipmentWeight: decimal option
+        EquipmentWeight: float option
 
         [<BsonIgnoreIfDefault>]
         Duration: TimeSpan option

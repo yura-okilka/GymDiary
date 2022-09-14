@@ -7,9 +7,6 @@ open FSharp.Data.UnitSystems.SI.UnitSymbols
 [<AutoOpen>]
 module DomainTypes =
 
-    /// Constrained to be a decimal kilogram between 0.1 and 1000.00
-    type EquipmentWeightKg = private EquipmentWeightKg of decimal<kg> // TODO: replace with PositiveFloat
-
     type Sportsman =
         {
             Id: Id<Sportsman>
@@ -32,7 +29,7 @@ module DomainTypes =
         {
             OrderNum: PositiveInt
             Reps: PositiveInt
-            EquipmentWeight: EquipmentWeightKg
+            EquipmentWeight: float<kg>
         }
 
     /// Exercise set represented by exercise duration
@@ -47,7 +44,7 @@ module DomainTypes =
         {
             OrderNum: PositiveInt
             Duration: TimeSpan
-            EquipmentWeight: EquipmentWeightKg
+            EquipmentWeight: float<kg>
         }
 
     /// Exercise set represented by exercise duration & distance
@@ -125,12 +122,3 @@ module DomainTypes =
     type ExerciseId = Id<Exercise>
     type RoutineId = Id<Routine>
     type WorkoutSessionId = Id<WorkoutSession>
-
-    module EquipmentWeightKg =
-
-        open Common.Extensions
-
-        let create (fieldName: string) (value: decimal) =
-            ConstrainedType.createDecimalKg fieldName EquipmentWeightKg (0.1M<kg>, 1000M<kg>) (decimalKg value)
-
-        let value (EquipmentWeightKg value) = decimal value

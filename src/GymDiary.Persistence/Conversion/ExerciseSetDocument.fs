@@ -22,7 +22,7 @@ module ExerciseSetDocument =
         {
             OrderNum = domain.OrderNum |> PositiveInt.value
             Reps = domain.Reps |> PositiveInt.value |> Some
-            EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value |> Some
+            EquipmentWeight = domain.EquipmentWeight |> float |> Some
             Duration = None
             Distance = None
         }
@@ -40,7 +40,7 @@ module ExerciseSetDocument =
         {
             OrderNum = domain.OrderNum |> PositiveInt.value
             Reps = None
-            EquipmentWeight = domain.EquipmentWeight |> EquipmentWeightKg.value |> Some
+            EquipmentWeight = domain.EquipmentWeight |> float |> Some
             Duration = domain.Duration |> Some
             Distance = None
         }
@@ -68,8 +68,7 @@ module ExerciseSetDocument =
     let private toPositiveInt field value =
         value |> requireSome field |> Result.bind (PositiveInt.create field)
 
-    let private toEquipmentWeightKg field value =
-        value |> requireSome field |> Result.bind (EquipmentWeightKg.create field)
+    let private toFloatKg field value = value |> requireSome field |> Result.map floatKg
 
     let toRepsSet (document: ExerciseSetDocument) : Result<RepsSet, ValidationError> =
         result {
@@ -83,7 +82,7 @@ module ExerciseSetDocument =
         result {
             let! orderNum = document.OrderNum |> PositiveInt.create (nameof document.OrderNum)
             let! reps = document.Reps |> toPositiveInt (nameof document.Reps)
-            let! weight = document.EquipmentWeight |> toEquipmentWeightKg (nameof document.EquipmentWeight)
+            let! weight = document.EquipmentWeight |> toFloatKg (nameof document.EquipmentWeight)
 
             return RepsWeightSet.create orderNum reps weight
         }
@@ -100,7 +99,7 @@ module ExerciseSetDocument =
         result {
             let! orderNum = document.OrderNum |> PositiveInt.create (nameof document.OrderNum)
             let! duration = document.Duration |> requireSome (nameof document.Duration)
-            let! weight = document.EquipmentWeight |> toEquipmentWeightKg (nameof document.EquipmentWeight)
+            let! weight = document.EquipmentWeight |> toFloatKg (nameof document.EquipmentWeight)
 
             return DurationWeightSet.create orderNum duration weight
         }

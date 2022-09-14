@@ -46,6 +46,8 @@ module Extensions =
 
         open FSharp.Data.UnitSystems.SI.UnitSymbols
 
+        let floatKg = LanguagePrimitives.FloatWithMeasure<kg>
+
         let decimalM = LanguagePrimitives.DecimalWithMeasure<m>
 
         let decimalKg = LanguagePrimitives.DecimalWithMeasure<kg>
