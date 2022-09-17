@@ -1,4 +1,4 @@
-namespace GymDiary.Api
+namespace GymDiary.Api.HttpHandlers
 
 open System
 open System.Text.Json
@@ -75,7 +75,7 @@ type ErrorResponse =
             Details = null
         }
 
-module ErrorHandler =
+module ErrorHandlers =
 
     let unknownError (ex: Exception) (logger: ILogger) =
         logger.LogError(ex, "An unhandled exception has occurred while executing the request")

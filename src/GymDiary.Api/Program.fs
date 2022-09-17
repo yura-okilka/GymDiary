@@ -8,6 +8,7 @@ open Giraffe
 
 open GymDiary.Api
 open GymDiary.Api.DependencyInjection
+open GymDiary.Api.HttpHandlers
 open GymDiary.Persistence
 
 open Microsoft.AspNetCore.Builder
@@ -66,7 +67,7 @@ module Program =
 
         match env with
         | "Development" -> app.UseDeveloperExceptionPage() |> ignore
-        | _ -> app.UseGiraffeErrorHandler(ErrorHandler.unknownError) |> ignore
+        | _ -> app.UseGiraffeErrorHandler(ErrorHandlers.unknownError) |> ignore
 
         let settings = context.Configuration.Get<AppSettings>()
 

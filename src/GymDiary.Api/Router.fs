@@ -10,7 +10,7 @@ open Microsoft.AspNetCore.Http
 
 module Router =
 
-    let bindJsonSafe<'T> = tryBindJson<'T> ErrorHandler.parsingError
+    let bindJsonSafe<'T> = tryBindJson<'T> ErrorHandlers.parsingError
 
     let webApp (root: CompositionRoot) : (HttpFunc -> HttpContext -> HttpFuncResult) =
         choose [ POST

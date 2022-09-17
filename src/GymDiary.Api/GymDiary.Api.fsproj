@@ -17,8 +17,8 @@
     <Compile Include="DependencyInjection\Leaves\Persistence.fs" />
     <Compile Include="DependencyInjection\Trunk.fs" />
     <Compile Include="DependencyInjection\CompositionRoot.fs" />
-    <Compile Include="ErrorHandler.fs" />
     <Compile Include="JsonBinding.fs" />
+    <Compile Include="HttpHandlers\ErrorHandlers.fs" />
     <Compile Include="HttpHandlers\ExerciseCategoryHandlers.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />
