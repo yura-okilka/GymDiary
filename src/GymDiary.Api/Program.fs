@@ -52,9 +52,9 @@ module Program =
         | "Development" -> app.UseDeveloperExceptionPage() |> ignore
         | _ -> app.UseGiraffeErrorHandler(ErrorHandler.handle) |> ignore
 
-        let settings = context.Configuration.Get<Settings>()
+        let settings = context.Configuration.Get<AppSettings>()
 
-        match Settings.validate settings with
+        match AppSettings.validate settings with
         | Error errors ->
             errors
             |> ValidationErrors.toList

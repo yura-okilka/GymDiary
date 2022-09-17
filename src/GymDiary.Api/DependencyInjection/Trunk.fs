@@ -21,7 +21,7 @@ module Trunk =
 
     /// Composes Trunk with IO dependencies. Only dependencies from framework and libraries should be taken from service provider.
     /// It is the way to take the best of composition root and ASP.NET Core features.
-    let compose (settings: Settings) (serviceProvider: IServiceProvider) =
+    let compose (settings: AppSettings) (serviceProvider: IServiceProvider) =
         let mongoClient = new MongoClient(settings.MongoDb.ConnectionString) // MongoClient & IMongoCollection<TDocument> are thread-safe.
 
         {
