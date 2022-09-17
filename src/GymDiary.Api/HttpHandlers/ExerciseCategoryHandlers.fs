@@ -11,11 +11,13 @@ module ExerciseCategoryHandlers =
 
     type CreateRequest = { Name: string }
 
-    let create (createExerciseCategory: CreateExerciseCategory.Workflow) (sportsmanId: string) : HttpHandler =
+    let create
+        (createExerciseCategory: CreateExerciseCategory.Workflow)
+        (sportsmanId: string)
+        (request: CreateRequest)
+        : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! request = ctx.BindJsonAsync<CreateRequest>()
-
                 let! result =
                     createExerciseCategory
                         {
@@ -79,11 +81,13 @@ module ExerciseCategoryHandlers =
 
     type RenameRequest = { Name: string }
 
-    let rename (renameExerciseCategory: RenameExerciseCategory.Workflow) (sportsmanId: string, categoryId: string) : HttpHandler =
+    let rename
+        (renameExerciseCategory: RenameExerciseCategory.Workflow)
+        (sportsmanId: string, categoryId: string)
+        (request: RenameRequest)
+        : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) ->
             task {
-                let! request = ctx.BindJsonAsync<RenameRequest>()
-
                 let! result =
                     renameExerciseCategory
                         {

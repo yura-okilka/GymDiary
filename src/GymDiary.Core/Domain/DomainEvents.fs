@@ -4,8 +4,6 @@ open Microsoft.Extensions.Logging
 
 module DomainEvents =
 
-    let UndefinedFailure = EventId(-1, "UndefinedFailure")
-
     let ExerciseCategoryCreated = EventId(1, "ExerciseCategoryCreated")
     let ExerciseCategoryCreationFailed = EventId(2, "ExerciseCategoryCreationFailed")
 

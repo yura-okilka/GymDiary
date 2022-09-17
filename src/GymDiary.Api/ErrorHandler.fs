@@ -1,6 +1,7 @@
 namespace GymDiary.Api
 
 open System
+open System.Text.Json
 
 open GymDiary.Core.Domain
 
@@ -67,8 +68,19 @@ type ErrorResponse =
             Details = null
         }
 
+    static member ParsingError =
+        {
+            Name = "ParsingError"
+            Message = "Request cannot be parsed"
+            Details = null
+        }
+
 module ErrorHandler =
 
-    let handle (ex: Exception) (logger: ILogger) =
-        logger.LogError(DomainEvents.UndefinedFailure, ex, "An unhandled exception has occurred while executing the request")
+    let unknownError (ex: Exception) (logger: ILogger) =
+        logger.LogError(ex, "An unhandled exception has occurred while executing the request")
         clearResponse >=> ServerErrors.INTERNAL_ERROR ErrorResponse.InternalError
+
+    let parsingError (ex: JsonException) (logger: ILogger) =
+        logger.LogError(ex, "Failed to parse JSON")
+        clearResponse >=> RequestErrors.BAD_REQUEST ErrorResponse.ParsingError

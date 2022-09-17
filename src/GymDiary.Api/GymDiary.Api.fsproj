@@ -18,12 +18,14 @@
     <Compile Include="DependencyInjection\Trunk.fs" />
     <Compile Include="DependencyInjection\CompositionRoot.fs" />
     <Compile Include="ErrorHandler.fs" />
+    <Compile Include="JsonBinding.fs" />
     <Compile Include="HttpHandlers\ExerciseCategoryHandlers.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FSharp.SystemTextJson" Version="0.19.13" />
     <PackageReference Include="Giraffe" Version="6.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
     <PackageReference Include="Validus" Version="4.0.0" />

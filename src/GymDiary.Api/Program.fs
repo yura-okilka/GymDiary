@@ -1,6 +1,8 @@
 namespace GymDiary.Api
 
 open System
+open System.Text.Json
+open System.Text.Json.Serialization
 
 open Giraffe
 
@@ -45,12 +47,26 @@ module Program =
 
         services.AddGiraffe() |> ignore
 
+        // Configure JSON serialization
+        let jsonOptions = JsonSerializerOptions()
+        jsonOptions.PropertyNamingPolicy <- JsonNamingPolicy.CamelCase
+
+        jsonOptions.Converters.Add(
+            JsonFSharpConverter(
+                unionEncoding = (JsonUnionEncoding.InternalTag ||| JsonUnionEncoding.NamedFields),
+                unionTagName = "type"
+            )
+        )
+
+        services.AddSingleton(jsonOptions) |> ignore
+        services.AddSingleton<Json.ISerializer, SystemTextJson.Serializer>() |> ignore
+
     let configureApp (context: WebHostBuilderContext) (app: IApplicationBuilder) =
         let env = context.HostingEnvironment.EnvironmentName
 
         match env with
         | "Development" -> app.UseDeveloperExceptionPage() |> ignore
-        | _ -> app.UseGiraffeErrorHandler(ErrorHandler.handle) |> ignore
+        | _ -> app.UseGiraffeErrorHandler(ErrorHandler.unknownError) |> ignore
 
         let settings = context.Configuration.Get<AppSettings>()
 
