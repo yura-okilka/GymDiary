@@ -1,27 +1,27 @@
 namespace GymDiary.Api
 
-open System.Text.Json
 open System.Runtime.CompilerServices
+open System.Text.Json
 
 open Giraffe
 
 open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Logging
 
-[<Extension>]
-type HttpContextExtensions() =
+module JsonBinding =
 
     [<Extension>]
-    static member TryBindJsonAsync<'T>(ctx: HttpContext) =
-        task {
-            try
-                let! json = ctx.BindJsonAsync<'T>()
-                return Ok(json)
-            with
-            | :? JsonException as ex -> return Error(ex)
-        }
+    type HttpContextExtensions() =
 
-module JsonBinding =
+        [<Extension>]
+        static member TryBindJsonAsync<'T>(ctx: HttpContext) =
+            task {
+                try
+                    let! json = ctx.BindJsonAsync<'T>()
+                    return Ok(json)
+                with
+                | :? JsonException as ex -> return Error(ex)
+            }
 
     let tryBindJson<'T>
         (parsingErrorHandler: JsonException -> ILogger -> HttpHandler)
