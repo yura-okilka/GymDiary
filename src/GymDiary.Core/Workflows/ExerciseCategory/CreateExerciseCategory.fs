@@ -26,7 +26,7 @@ module CreateExerciseCategory =
 
         static member toString error =
             match error with
-            | InvalidCommand es -> es |> List.map ValidationError.toString |> String.concat " "
+            | InvalidCommand es -> es |> ValidationErrors.toString
             | CategoryAlreadyExists e -> e |> ExerciseCategoryAlreadyExistsError.toString
             | OwnerNotFound e -> e |> OwnerNotFoundError.toString
 

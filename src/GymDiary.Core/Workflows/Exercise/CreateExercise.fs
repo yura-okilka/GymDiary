@@ -37,7 +37,7 @@ module CreateExercise =
 
         static member toString error =
             match error with
-            | InvalidCommand es -> es |> List.map ValidationError.toString |> String.concat " " // TODO: ValidationErrors.toString
+            | InvalidCommand es -> es |> ValidationErrors.toString
             | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
             | OwnerNotFound e -> e |> OwnerNotFoundError.toString
 

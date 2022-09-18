@@ -25,7 +25,7 @@ module GetExerciseCategory =
 
         static member toString error =
             match error with
-            | InvalidQuery es -> es |> List.map ValidationError.toString |> String.concat " "
+            | InvalidQuery es -> es |> ValidationErrors.toString
             | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
 
     type Workflow = Workflow<Query, QueryResult, QueryError>

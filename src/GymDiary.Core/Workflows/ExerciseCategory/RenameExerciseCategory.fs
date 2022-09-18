@@ -31,7 +31,7 @@ module RenameExerciseCategory =
 
         static member toString error =
             match error with
-            | InvalidCommand es -> es |> List.map ValidationError.toString |> String.concat " "
+            | InvalidCommand es -> es |> ValidationErrors.toString
             | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
             | NameAlreadyUsed e -> e |> ExerciseCategoryAlreadyExistsError.toString
 

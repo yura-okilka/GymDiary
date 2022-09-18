@@ -41,3 +41,8 @@ module CommonErrors =
             | InvalidEmailAddress -> $"'%s{field}' is not a valid email address"
             | InvalidPhoneNumber -> $"'%s{field}' is not a valid phone number"
             | PatternNotMatched -> $"'%s{field}' is not in the correct format"
+
+    module ValidationErrors =
+
+        let toString (errors: ValidationError list) =
+            errors |> List.map ValidationError.toString |> String.concat " "
