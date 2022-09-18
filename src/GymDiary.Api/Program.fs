@@ -54,8 +54,13 @@ module Program =
 
         jsonOptions.Converters.Add(
             JsonFSharpConverter(
-                unionEncoding = (JsonUnionEncoding.InternalTag ||| JsonUnionEncoding.NamedFields),
-                unionTagName = "type"
+                unionTagName = "type",
+                unionEncoding =
+                    (JsonUnionEncoding.InternalTag
+                     ||| JsonUnionEncoding.NamedFields
+                     ||| JsonUnionEncoding.UnwrapOption
+                     ||| JsonUnionEncoding.UnwrapSingleCaseUnions
+                     ||| JsonUnionEncoding.AllowUnorderedTag)
             )
         )
 

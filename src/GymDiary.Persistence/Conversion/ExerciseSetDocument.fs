@@ -51,7 +51,7 @@ module ExerciseSetDocument =
             Reps = None
             EquipmentWeight = None
             Duration = domain.Duration |> Some
-            Distance = domain.Distance |> decimal |> Some
+            Distance = domain.Distance |> float |> Some
         }
 
     let fromExerciseSets (sets: ExerciseSets) =
@@ -108,7 +108,7 @@ module ExerciseSetDocument =
         result {
             let! orderNum = document.OrderNum |> PositiveInt.create (nameof document.OrderNum)
             let! duration = document.Duration |> requireSome (nameof document.Duration)
-            let! distance = document.Distance |> requireSome (nameof document.Duration) |> Result.map decimalM
+            let! distance = document.Distance |> requireSome (nameof document.Duration) |> Result.map floatM
 
             return DurationDistanceSet.create orderNum duration distance
         }

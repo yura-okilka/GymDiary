@@ -53,7 +53,7 @@ module Documents =
             Duration: TimeSpan option
 
             [<BsonIgnoreIfDefault>]
-            Distance: decimal option
+            Distance: float option
         }
 
     [<CLIMutable>]

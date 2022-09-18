@@ -2,6 +2,7 @@ namespace GymDiary.Api.DependencyInjection
 
 open GymDiary.Api.DependencyInjection
 open GymDiary.Core.Workflows
+open GymDiary.Core.Workflows.Exercise
 open GymDiary.Core.Workflows.ExerciseCategory
 
 type CompositionRoot =
@@ -11,6 +12,7 @@ type CompositionRoot =
         GetExerciseCategory: GetExerciseCategory.Workflow
         RenameExerciseCategory: RenameExerciseCategory.Workflow
         DeleteExerciseCategory: DeleteExerciseCategory.Workflow
+        CreateExercise: CreateExercise.Workflow
     }
 
 module CompositionRoot =
@@ -42,6 +44,13 @@ module CompositionRoot =
         let errorLoggingDecorator loggingContext workflow =
             ErrorLoggingDecorator.logWorkflow trunk.Logger loggingContext workflow
 
+        let createExerciseWorkflow =
+            CreateExercise.execute
+                trunk.Persistence.ExerciseCategory.GetById
+                trunk.Persistence.Sportsman.ExistWithId
+                trunk.Persistence.Exercise.Create
+                trunk.Logger
+
         {
             CreateExerciseCategory =
                 createExerciseCategoryWorkflow |> errorLoggingDecorator CreateExerciseCategory.LoggingInfoProvider
@@ -51,4 +60,5 @@ module CompositionRoot =
                 renameExerciseCategoryWorkflow |> errorLoggingDecorator RenameExerciseCategory.LoggingInfoProvider
             DeleteExerciseCategory =
                 deleteExerciseCategoryWorkflow |> errorLoggingDecorator DeleteExerciseCategory.LoggingInfoProvider
+            CreateExercise = createExerciseWorkflow |> errorLoggingDecorator CreateExercise.LoggingInfoProvider
         }

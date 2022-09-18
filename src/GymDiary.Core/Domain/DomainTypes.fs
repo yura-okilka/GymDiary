@@ -52,7 +52,7 @@ module DomainTypes =
         {
             OrderNum: PositiveInt
             Duration: TimeSpan
-            Distance: decimal<m>
+            Distance: float<m>
         }
 
     type ExerciseSets =

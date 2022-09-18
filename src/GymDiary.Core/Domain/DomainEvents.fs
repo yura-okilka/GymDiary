@@ -12,3 +12,6 @@ module DomainEvents =
 
     let ExerciseCategoryDeleted = EventId(5, "ExerciseCategoryDeleted")
     let ExerciseCategoryDeletionFailed = EventId(6, "ExerciseCategoryDeletionFailed")
+
+    let ExerciseCreated = EventId(7, "ExerciseCreated")
+    let ExerciseCreationFailed = EventId(8, "ExerciseCreationFailed")

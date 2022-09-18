@@ -2,7 +2,6 @@ namespace GymDiary.Api.HttpHandlers
 
 open Giraffe
 
-open GymDiary.Api
 open GymDiary.Core.Workflows.ExerciseCategory
 
 open Microsoft.AspNetCore.Http

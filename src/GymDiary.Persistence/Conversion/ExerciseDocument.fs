@@ -35,5 +35,14 @@ module ExerciseDocument =
             let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
 
             return
-                Exercise.create id categoryId name notes document.RestTime sets document.CreatedOn document.LastModifiedOn ownerId
+                Exercise.restoreFrom
+                    id
+                    categoryId
+                    name
+                    notes
+                    document.RestTime
+                    sets
+                    document.CreatedOn
+                    document.LastModifiedOn
+                    ownerId
         }

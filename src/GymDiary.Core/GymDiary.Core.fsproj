@@ -30,11 +30,13 @@
     <Compile Include="Persistence\Abstractions.fs" />
     <Compile Include="Workflows\Abstractions.fs" />
     <Compile Include="Workflows\ErrorLoggingDecorator.fs" />
+    <Compile Include="Workflows\CommonDtos.fs" />
     <Compile Include="Workflows\ExerciseCategory\CreateExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\GetAllExerciseCategories.fs" />
     <Compile Include="Workflows\ExerciseCategory\GetExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\RenameExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\DeleteExerciseCategory.fs" />
+    <Compile Include="Workflows\Exercise\CreateExercise.fs" />
   </ItemGroup>
 
   <ItemGroup>
