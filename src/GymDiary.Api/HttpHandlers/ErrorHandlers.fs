@@ -82,5 +82,5 @@ module ErrorHandlers =
         clearResponse >=> ServerErrors.INTERNAL_ERROR ErrorResponse.InternalError
 
     let parsingError (ex: JsonException) (logger: ILogger) =
-        logger.LogError(ex, "Failed to parse JSON")
+        logger.LogError(ex, "Failed to parse JSON request")
         clearResponse >=> RequestErrors.BAD_REQUEST ErrorResponse.ParsingError
