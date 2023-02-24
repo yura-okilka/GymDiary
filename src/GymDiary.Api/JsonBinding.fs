@@ -30,8 +30,10 @@ module JsonBinding =
             let! result = ctx.TryBindJsonAsync<'T>()
             let logger = ctx.GetLogger()
 
-            return!
+            let handler =
                 match result with
-                | Error ex -> (parsingErrorHandler ex logger) next ctx
-                | Ok json -> (successHandler json) next ctx
+                | Error ex -> parsingErrorHandler ex logger
+                | Ok json -> successHandler json
+
+            return! handler next ctx
         }
