@@ -35,28 +35,22 @@ module DeleteExerciseCategory =
             member _.GetErrorMessage(error) = CommandError.toString error
 
             member _.GetRequestInfo(command) =
-                Map [ (nameof command.Id, command.Id)
-                      (nameof command.OwnerId, command.OwnerId) ]
+                Map [ (nameof command.Id, command.Id); (nameof command.OwnerId, command.OwnerId) ]
         }
 
-    let execute (deleteCategoryFromDB: ExerciseCategoryId -> ModifyEntityResult) (logger: ILogger) (command: Command) =
-        asyncResult {
-            let! (categoryId, ownerId) =
-                validation {
-                    let! categoryId = Id.create (nameof command.Id) command.Id
-                    and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
-                    return (categoryId, ownerId)
-                }
-                |> Result.mapError InvalidCommand
+    let execute (deleteCategoryFromDB: ExerciseCategoryId -> ModifyEntityResult) (logger: ILogger) (command: Command) = asyncResult {
+        let! (categoryId, ownerId) =
+            validation {
+                let! categoryId = Id.create (nameof command.Id) command.Id
+                and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
+                return (categoryId, ownerId)
+            }
+            |> Result.mapError InvalidCommand
 
-            do! // TODO: ensure it can be deleted.
-                deleteCategoryFromDB categoryId
-                |> AsyncResult.mapError (function
-                    | EntityNotFound _ -> CommandError.categoryNotFound categoryId ownerId)
+        do! // TODO: ensure it can be deleted.
+            deleteCategoryFromDB categoryId
+            |> AsyncResult.mapError (function
+                | EntityNotFound _ -> CommandError.categoryNotFound categoryId ownerId)
 
-            logger.LogInformation(
-                DomainEvents.ExerciseCategoryDeleted,
-                "Exercise category with id '{id}' was deleted",
-                command.Id
-            )
-        }
+        logger.LogInformation(DomainEvents.ExerciseCategoryDeleted, "Exercise category with id '{id}' was deleted", command.Id)
+    }

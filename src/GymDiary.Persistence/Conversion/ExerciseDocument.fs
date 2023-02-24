@@ -25,24 +25,23 @@ module ExerciseDocument =
             OwnerId = domain.OwnerId |> Id.value
         }
 
-    let toDomain (document: ExerciseDocument) : Result<Exercise, ValidationError> =
-        result {
-            let! id = document.Id |> Id.create (nameof document.Id)
-            let! categoryId = document.CategoryId |> Id.create (nameof document.CategoryId)
-            let! name = document.Name |> String50.create (nameof document.Name)
-            let! notes = document.Notes |> Option.traverseResult (String1k.create (nameof document.Notes))
-            let! sets = document.Sets |> ExerciseSetDocument.toExerciseSets document.SetsType
-            let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
+    let toDomain (document: ExerciseDocument) : Result<Exercise, ValidationError> = result {
+        let! id = document.Id |> Id.create (nameof document.Id)
+        let! categoryId = document.CategoryId |> Id.create (nameof document.CategoryId)
+        let! name = document.Name |> String50.create (nameof document.Name)
+        let! notes = document.Notes |> Option.traverseResult (String1k.create (nameof document.Notes))
+        let! sets = document.Sets |> ExerciseSetDocument.toExerciseSets document.SetsType
+        let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
 
-            return
-                Exercise.restoreFrom
-                    id
-                    categoryId
-                    name
-                    notes
-                    document.RestTime
-                    sets
-                    document.CreatedOn
-                    document.LastModifiedOn
-                    ownerId
-        }
+        return
+            Exercise.restoreFrom
+                id
+                categoryId
+                name
+                notes
+                document.RestTime
+                sets
+                document.CreatedOn
+                document.LastModifiedOn
+                ownerId
+    }

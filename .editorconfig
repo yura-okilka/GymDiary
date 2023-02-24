@@ -19,7 +19,7 @@ fsharp_max_infix_operator_expression=100
 fsharp_max_value_binding_width=100
 fsharp_max_function_binding_width=60
 fsharp_max_dot_get_expression_width=70
-fsharp_multiline_block_brackets_on_same_column=true
+fsharp_multiline_bracket_style = experimental_stroustrup
 
 [src/GymDiary.Api/Router.fs]
 max_line_length=150

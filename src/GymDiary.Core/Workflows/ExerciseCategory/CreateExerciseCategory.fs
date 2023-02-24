@@ -40,8 +40,10 @@ module CreateExerciseCategory =
             member _.GetErrorMessage(error) = CommandError.toString error
 
             member _.GetRequestInfo(command) =
-                Map [ (nameof command.Name, command.Name)
-                      (nameof command.OwnerId, command.OwnerId) ]
+                Map [
+                    (nameof command.Name, command.Name)
+                    (nameof command.OwnerId, command.OwnerId)
+                ]
         }
 
     let execute

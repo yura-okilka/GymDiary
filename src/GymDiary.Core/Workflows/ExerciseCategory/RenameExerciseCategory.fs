@@ -11,12 +11,11 @@ open Microsoft.Extensions.Logging
 
 module RenameExerciseCategory =
 
-    type Command =
-        {
-            Id: string
-            OwnerId: string
-            Name: string
-        }
+    type Command = {
+        Id: string
+        OwnerId: string
+        Name: string
+    }
 
     type CommandError =
         | InvalidCommand of ValidationError list
@@ -45,9 +44,11 @@ module RenameExerciseCategory =
             member _.GetErrorMessage(error) = CommandError.toString error
 
             member _.GetRequestInfo(command) =
-                Map [ (nameof command.Id, command.Id)
-                      (nameof command.OwnerId, command.OwnerId)
-                      (nameof command.Name, command.Name) ]
+                Map [
+                    (nameof command.Id, command.Id)
+                    (nameof command.OwnerId, command.OwnerId)
+                    (nameof command.Name, command.Name)
+                ]
         }
 
     let execute

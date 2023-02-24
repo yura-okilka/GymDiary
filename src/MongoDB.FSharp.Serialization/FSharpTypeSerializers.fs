@@ -14,11 +14,13 @@ type FSharpTypeSerializationProvider() =
     interface IBsonSerializationProvider with
         member _.GetSerializer(objType) =
             if isOption objType then
-                typedefof<OptionSerializer<_>>.MakeGenericType (objType.GetGenericArguments())
+                typedefof<OptionSerializer<_>>
+                    .MakeGenericType(objType.GetGenericArguments())
                 |> createInstance
                 |> asBsonSerializer
             elif isList objType then
-                typedefof<ListSerializer<_>>.MakeGenericType (objType.GetGenericArguments())
+                typedefof<ListSerializer<_>>
+                    .MakeGenericType(objType.GetGenericArguments())
                 |> createInstance
                 |> asBsonSerializer
             else

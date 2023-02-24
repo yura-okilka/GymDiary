@@ -13,15 +13,14 @@ open MongoDB.Driver
 
 module ExerciseRepository =
 
-    let create (collection: IMongoCollection<ExerciseDocument>) (entity: Exercise) : Async<ExerciseId> =
-        async {
-            let! createdDocument = entity |> ExerciseDocument.fromDomain |> MongoRepository.insertOne collection
+    let create (collection: IMongoCollection<ExerciseDocument>) (entity: Exercise) : Async<ExerciseId> = async {
+        let! createdDocument = entity |> ExerciseDocument.fromDomain |> MongoRepository.insertOne collection
 
-            return
-                createdDocument.Id
-                |> Id.create<Exercise> (nameof createdDocument.Id)
-                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseId>.Name, error)))
-        }
+        return
+            createdDocument.Id
+            |> Id.create<Exercise> (nameof createdDocument.Id)
+            |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseId>.Name, error)))
+    }
 
     let getById
         (collection: IMongoCollection<ExerciseDocument>)
@@ -41,25 +40,23 @@ module ExerciseRepository =
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseDocument>.Name, error)))
         }
 
-    let update (collection: IMongoCollection<ExerciseDocument>) (entity: Exercise) : ModifyEntityResult =
-        asyncResult {
-            let id = entity.Id |> Id.value
+    let update (collection: IMongoCollection<ExerciseDocument>) (entity: Exercise) : ModifyEntityResult = asyncResult {
+        let id = entity.Id |> Id.value
 
-            let! result =
-                entity
-                |> ExerciseDocument.fromDomain
-                |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = id))
+        let! result =
+            entity
+            |> ExerciseDocument.fromDomain
+            |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = id))
 
-            if result.ModifiedCount = 0 then
-                return! EntityNotFound(typeof<Exercise>.Name, id) |> Error
-        }
+        if result.ModifiedCount = 0 then
+            return! EntityNotFound(typeof<Exercise>.Name, id) |> Error
+    }
 
-    let delete (collection: IMongoCollection<ExerciseDocument>) (exerciseId: ExerciseId) : ModifyEntityResult =
-        asyncResult {
-            let exerciseId = exerciseId |> Id.value
+    let delete (collection: IMongoCollection<ExerciseDocument>) (exerciseId: ExerciseId) : ModifyEntityResult = asyncResult {
+        let exerciseId = exerciseId |> Id.value
 
-            let! result = MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = exerciseId))
+        let! result = MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = exerciseId))
 
-            if result.DeletedCount = 0 then
-                return! EntityNotFound(typeof<Exercise>.Name, exerciseId) |> Error
-        }
+        if result.DeletedCount = 0 then
+            return! EntityNotFound(typeof<Exercise>.Name, exerciseId) |> Error
+    }

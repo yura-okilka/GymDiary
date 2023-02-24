@@ -9,7 +9,7 @@ module DomainErrors =
         static member create (id: ExerciseCategoryId) (ownerId: SportsmanId) =
             ExerciseCategoryNotFoundError(id |> Id.value, ownerId |> Id.value)
 
-        static member toString(ExerciseCategoryNotFoundError (id, ownerId)) =
+        static member toString(ExerciseCategoryNotFoundError(id, ownerId)) =
             $"Exercise category with id '%s{id}' and owner '%s{ownerId}' is not found"
 
     type ExerciseCategoryAlreadyExistsError =

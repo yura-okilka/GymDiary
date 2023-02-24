@@ -12,23 +12,21 @@ open MongoDB.Bson.Serialization.Attributes
 module Documents =
 
     [<CLIMutable>]
-    type SportsmanDocument =
-        {
-            Id: string
-            Email: string
-            FirstName: string
-            LastName: string
-            DateOfBirth: DateTime option
-            Gender: string option
-        }
+    type SportsmanDocument = {
+        Id: string
+        Email: string
+        FirstName: string
+        LastName: string
+        DateOfBirth: DateTime option
+        Gender: string option
+    }
 
     [<CLIMutable>]
-    type ExerciseCategoryDocument =
-        {
-            Id: string
-            Name: string
-            OwnerId: string
-        }
+    type ExerciseCategoryDocument = {
+        Id: string
+        Name: string
+        OwnerId: string
+    }
 
     type ExerciseSetType =
         | RepsSet = 1
@@ -39,69 +37,64 @@ module Documents =
 
     /// A superset of all exercise set types.
     [<CLIMutable>]
-    type ExerciseSetDocument =
-        {
-            OrderNum: int
+    type ExerciseSetDocument = {
+        OrderNum: int
 
-            [<BsonIgnoreIfDefault>]
-            Reps: int option
+        [<BsonIgnoreIfDefault>]
+        Reps: int option
 
-            [<BsonIgnoreIfDefault>]
-            EquipmentWeight: float option
+        [<BsonIgnoreIfDefault>]
+        EquipmentWeight: float option
 
-            [<BsonIgnoreIfDefault>]
-            Duration: TimeSpan option
+        [<BsonIgnoreIfDefault>]
+        Duration: TimeSpan option
 
-            [<BsonIgnoreIfDefault>]
-            Distance: float option
-        }
-
-    [<CLIMutable>]
-    type ExerciseDocument =
-        {
-            Id: string
-            CategoryId: string
-            Name: string
-            Notes: string option
-            RestTime: TimeSpan
-            SetsType: ExerciseSetType
-            Sets: ExerciseSetDocument list
-            CreatedOn: DateTime
-            LastModifiedOn: DateTime
-            OwnerId: string
-        }
+        [<BsonIgnoreIfDefault>]
+        Distance: float option
+    }
 
     [<CLIMutable>]
-    type RoutineDocument =
-        {
-            Id: string
-            Name: string
-            Goal: string option
-            Notes: string option
-            Schedule: DayOfWeek list
-            Exercises: ExerciseDocument list
-            CreatedOn: DateTime
-            LastModifiedOn: DateTime
-            OwnerId: string
-        }
+    type ExerciseDocument = {
+        Id: string
+        CategoryId: string
+        Name: string
+        Notes: string option
+        RestTime: TimeSpan
+        SetsType: ExerciseSetType
+        Sets: ExerciseSetDocument list
+        CreatedOn: DateTime
+        LastModifiedOn: DateTime
+        OwnerId: string
+    }
 
     [<CLIMutable>]
-    type ExerciseSessionDocument =
-        {
-            ExerciseId: string
-            SetsType: ExerciseSetType
-            Sets: ExerciseSetDocument list
-            StartedOn: DateTime
-            CompletedOn: DateTime
-        }
+    type RoutineDocument = {
+        Id: string
+        Name: string
+        Goal: string option
+        Notes: string option
+        Schedule: DayOfWeek list
+        Exercises: ExerciseDocument list
+        CreatedOn: DateTime
+        LastModifiedOn: DateTime
+        OwnerId: string
+    }
 
     [<CLIMutable>]
-    type WorkoutSessionDocument =
-        {
-            Id: string
-            RoutineId: string
-            Exercises: ExerciseSessionDocument list
-            StartedOn: DateTime
-            CompletedOn: DateTime
-            OwnerId: string
-        }
+    type ExerciseSessionDocument = {
+        ExerciseId: string
+        SetsType: ExerciseSetType
+        Sets: ExerciseSetDocument list
+        StartedOn: DateTime
+        CompletedOn: DateTime
+    }
+
+    [<CLIMutable>]
+    type WorkoutSessionDocument = {
+        Id: string
+        RoutineId: string
+        Exercises: ExerciseSessionDocument list
+        StartedOn: DateTime
+        CompletedOn: DateTime
+        OwnerId: string
+    }

@@ -13,15 +13,14 @@ open Microsoft.Extensions.Logging
 
 module CreateExercise =
 
-    type Command =
-        {
-            CategoryId: string
-            OwnerId: string
-            Name: string
-            Notes: string option
-            RestTime: TimeSpan
-            Sets: ExerciseSetsDto
-        }
+    type Command = {
+        CategoryId: string
+        OwnerId: string
+        Name: string
+        Notes: string option
+        RestTime: TimeSpan
+        Sets: ExerciseSetsDto
+    }
 
     type CommandResult = { Id: string }
 
@@ -51,8 +50,10 @@ module CreateExercise =
             member _.GetErrorMessage(error) = CommandError.toString error
 
             member _.GetRequestInfo(command) =
-                Map [ (nameof command.Name, command.Name)
-                      (nameof command.OwnerId, command.OwnerId) ]
+                Map [
+                    (nameof command.Name, command.Name)
+                    (nameof command.OwnerId, command.OwnerId)
+                ]
         }
 
     let execute
@@ -71,14 +72,13 @@ module CreateExercise =
                     and! notes = Option.traverseResult (String1k.create (nameof command.Notes)) command.Notes
                     and! sets = ExerciseSetsDto.toDomain command.Sets
 
-                    return
-                        {|
-                            CategoryId = categoryId
-                            OwnerId = ownerId
-                            Name = name
-                            Notes = notes
-                            Sets = sets
-                        |}
+                    return {|
+                        CategoryId = categoryId
+                        OwnerId = ownerId
+                        Name = name
+                        Notes = notes
+                        Sets = sets
+                    |}
                 }
                 |> Result.mapError InvalidCommand
 

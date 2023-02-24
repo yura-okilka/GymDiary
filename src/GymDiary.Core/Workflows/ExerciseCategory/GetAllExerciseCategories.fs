@@ -9,12 +9,11 @@ module GetAllExerciseCategories =
 
     type Query = { OwnerId: string }
 
-    type ExerciseCategoryDto =
-        {
-            Id: string
-            Name: string
-            OwnerId: string
-        }
+    type ExerciseCategoryDto = {
+        Id: string
+        Name: string
+        OwnerId: string
+    }
 
     type QueryResult = ExerciseCategoryDto list
 
@@ -22,18 +21,16 @@ module GetAllExerciseCategories =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let execute (getAllCategoriesFromDB: SportsmanId -> Async<ExerciseCategory list>) (query: Query) =
-        asyncResult {
-            let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
+    let execute (getAllCategoriesFromDB: SportsmanId -> Async<ExerciseCategory list>) (query: Query) = asyncResult {
+        let! ownerId = Id.create (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
 
-            let! categories = getAllCategoriesFromDB ownerId
+        let! categories = getAllCategoriesFromDB ownerId
 
-            return
-                categories
-                |> List.map (fun category ->
-                    {
-                        Id = category.Id |> Id.value
-                        Name = category.Name |> String50.value
-                        OwnerId = category.OwnerId |> Id.value
-                    })
-        }
+        return
+            categories
+            |> List.map (fun category -> {
+                Id = category.Id |> Id.value
+                Name = category.Name |> String50.value
+                OwnerId = category.OwnerId |> Id.value
+            })
+    }

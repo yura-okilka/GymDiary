@@ -9,12 +9,11 @@ module GetExerciseCategory =
 
     type Query = { Id: string; OwnerId: string }
 
-    type QueryResult =
-        {
-            Id: string
-            Name: string
-            OwnerId: string
-        }
+    type QueryResult = {
+        Id: string
+        Name: string
+        OwnerId: string
+    }
 
     type QueryError =
         | InvalidQuery of ValidationError list
@@ -30,24 +29,22 @@ module GetExerciseCategory =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let execute (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>) (query: Query) =
-        asyncResult {
-            let! (categoryId, ownerId) =
-                validation {
-                    let! categoryId = Id.create (nameof query.Id) query.Id
-                    and! ownerId = Id.create (nameof query.OwnerId) query.OwnerId
-                    return (categoryId, ownerId)
-                }
-                |> Result.mapError InvalidQuery
+    let execute (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>) (query: Query) = asyncResult {
+        let! (categoryId, ownerId) =
+            validation {
+                let! categoryId = Id.create (nameof query.Id) query.Id
+                and! ownerId = Id.create (nameof query.OwnerId) query.OwnerId
+                return (categoryId, ownerId)
+            }
+            |> Result.mapError InvalidQuery
 
-            let! category =
-                getCategoryByIdFromDB ownerId categoryId
-                |> AsyncResult.requireSome (QueryError.categoryNotFound categoryId ownerId)
+        let! category =
+            getCategoryByIdFromDB ownerId categoryId
+            |> AsyncResult.requireSome (QueryError.categoryNotFound categoryId ownerId)
 
-            return
-                {
-                    Id = category.Id |> Id.value
-                    Name = category.Name |> String50.value
-                    OwnerId = category.OwnerId |> Id.value
-                }
+        return {
+            Id = category.Id |> Id.value
+            Name = category.Name |> String50.value
+            OwnerId = category.OwnerId |> Id.value
         }
+    }

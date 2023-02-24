@@ -13,27 +13,25 @@ open MongoDB.Driver
 
 module ExerciseCategoryRepository =
 
-    let create (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) : Async<ExerciseCategoryId> =
-        async {
-            let! createdDocument = entity |> ExerciseCategoryDocument.fromDomain |> MongoRepository.insertOne collection
+    let create (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) : Async<ExerciseCategoryId> = async {
+        let! createdDocument = entity |> ExerciseCategoryDocument.fromDomain |> MongoRepository.insertOne collection
 
-            return
-                createdDocument.Id
-                |> Id.create<ExerciseCategory> (nameof createdDocument.Id)
-                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryId>.Name, error)))
-        }
+        return
+            createdDocument.Id
+            |> Id.create<ExerciseCategory> (nameof createdDocument.Id)
+            |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryId>.Name, error)))
+    }
 
-    let getAll (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: SportsmanId) : Async<ExerciseCategory list> =
-        async {
-            let ownerId = ownerId |> Id.value
-            let! documents = MongoRepository.find collection (Expr.Quote(fun d -> d.OwnerId = ownerId))
+    let getAll (collection: IMongoCollection<ExerciseCategoryDocument>) (ownerId: SportsmanId) : Async<ExerciseCategory list> = async {
+        let ownerId = ownerId |> Id.value
+        let! documents = MongoRepository.find collection (Expr.Quote(fun d -> d.OwnerId = ownerId))
 
-            return
-                documents
-                |> List.ofSeq
-                |> List.traverseResultM ExerciseCategoryDocument.toDomain
-                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
-        }
+        return
+            documents
+            |> List.ofSeq
+            |> List.traverseResultM ExerciseCategoryDocument.toDomain
+            |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
+    }
 
     let getById
         (collection: IMongoCollection<ExerciseCategoryDocument>)
@@ -64,25 +62,23 @@ module ExerciseCategoryRepository =
         // Consider using case insensitive index for large collections.
         MongoRepository.findAny collection (Expr.Quote(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId))
 
-    let update (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) : ModifyEntityResult =
-        asyncResult {
-            let id = entity.Id |> Id.value
+    let update (collection: IMongoCollection<ExerciseCategoryDocument>) (entity: ExerciseCategory) : ModifyEntityResult = asyncResult {
+        let id = entity.Id |> Id.value
 
-            let! result =
-                entity
-                |> ExerciseCategoryDocument.fromDomain
-                |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = id))
+        let! result =
+            entity
+            |> ExerciseCategoryDocument.fromDomain
+            |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = id))
 
-            if result.ModifiedCount = 0 then
-                return! EntityNotFound(typeof<ExerciseCategory>.Name, id) |> Error
-        }
+        if result.ModifiedCount = 0 then
+            return! EntityNotFound(typeof<ExerciseCategory>.Name, id) |> Error
+    }
 
-    let delete (collection: IMongoCollection<ExerciseCategoryDocument>) (categoryId: ExerciseCategoryId) : ModifyEntityResult =
-        asyncResult {
-            let categoryId = categoryId |> Id.value
+    let delete (collection: IMongoCollection<ExerciseCategoryDocument>) (categoryId: ExerciseCategoryId) : ModifyEntityResult = asyncResult {
+        let categoryId = categoryId |> Id.value
 
-            let! result = MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = categoryId))
+        let! result = MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = categoryId))
 
-            if result.DeletedCount = 0 then
-                return! EntityNotFound(typeof<ExerciseCategory>.Name, categoryId) |> Error
-        }
+        if result.DeletedCount = 0 then
+            return! EntityNotFound(typeof<ExerciseCategory>.Name, categoryId) |> Error
+    }

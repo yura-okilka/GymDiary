@@ -6,35 +6,31 @@ module RepsSet =
 
 module RepsWeightSet =
 
-    let create orderNum reps equipmentWeight : RepsWeightSet =
-        {
-            OrderNum = orderNum
-            Reps = reps
-            EquipmentWeight = equipmentWeight
-        }
+    let create orderNum reps equipmentWeight : RepsWeightSet = {
+        OrderNum = orderNum
+        Reps = reps
+        EquipmentWeight = equipmentWeight
+    }
 
 module DurationSet =
 
-    let create orderNum duration : DurationSet =
-        {
-            OrderNum = orderNum
-            Duration = duration
-        }
+    let create orderNum duration : DurationSet = {
+        OrderNum = orderNum
+        Duration = duration
+    }
 
 module DurationWeightSet =
 
-    let create orderNum duration equipmentWeight : DurationWeightSet =
-        {
-            OrderNum = orderNum
-            Duration = duration
-            EquipmentWeight = equipmentWeight
-        }
+    let create orderNum duration equipmentWeight : DurationWeightSet = {
+        OrderNum = orderNum
+        Duration = duration
+        EquipmentWeight = equipmentWeight
+    }
 
 module DurationDistanceSet =
 
-    let create orderNum duration distance : DurationDistanceSet =
-        {
-            OrderNum = orderNum
-            Duration = duration
-            Distance = distance
-        }
+    let create orderNum duration distance : DurationDistanceSet = {
+        OrderNum = orderNum
+        Duration = duration
+        Distance = distance
+    }

@@ -33,7 +33,7 @@ module Program =
             .AddEnvironmentVariables()
         |> ignore
 
-    let configureAppConfiguration (context: WebHostBuilderContext) (builder: IConfigurationBuilder) (args: string []) =
+    let configureAppConfiguration (context: WebHostBuilderContext) (builder: IConfigurationBuilder) (args: string[]) =
         let env = context.HostingEnvironment.EnvironmentName
         builder.Sources.Clear()
         configureSettings builder env

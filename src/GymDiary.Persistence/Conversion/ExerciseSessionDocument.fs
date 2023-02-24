@@ -18,10 +18,9 @@ module ExerciseSessionDocument =
             CompletedOn = domain.CompletedOn
         }
 
-    let toDomain (document: ExerciseSessionDocument) : Result<ExerciseSession, ValidationError> =
-        result {
-            let! exerciseId = document.ExerciseId |> Id.create (nameof document.ExerciseId)
-            let! sets = document.Sets |> ExerciseSetDocument.toExerciseSets document.SetsType
+    let toDomain (document: ExerciseSessionDocument) : Result<ExerciseSession, ValidationError> = result {
+        let! exerciseId = document.ExerciseId |> Id.create (nameof document.ExerciseId)
+        let! sets = document.Sets |> ExerciseSetDocument.toExerciseSets document.SetsType
 
-            return ExerciseSession.create exerciseId sets document.StartedOn document.CompletedOn
-        }
+        return ExerciseSession.create exerciseId sets document.StartedOn document.CompletedOn
+    }

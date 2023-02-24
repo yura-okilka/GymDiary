@@ -11,11 +11,10 @@ open Microsoft.Extensions.DependencyInjection
 open MongoDB.Driver
 
 /// Host of all the Leaves and common IO dependencies needed in different places.
-type Trunk =
-    {
-        Logger: ILogger
-        Persistence: Persistence
-    }
+type Trunk = {
+    Logger: ILogger
+    Persistence: Persistence
+}
 
 module Trunk =
 

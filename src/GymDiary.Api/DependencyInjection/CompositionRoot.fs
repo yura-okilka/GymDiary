@@ -5,15 +5,14 @@ open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.Exercise
 open GymDiary.Core.Workflows.ExerciseCategory
 
-type CompositionRoot =
-    {
-        CreateExerciseCategory: CreateExerciseCategory.Workflow
-        GetAllExerciseCategories: GetAllExerciseCategories.Workflow
-        GetExerciseCategory: GetExerciseCategory.Workflow
-        RenameExerciseCategory: RenameExerciseCategory.Workflow
-        DeleteExerciseCategory: DeleteExerciseCategory.Workflow
-        CreateExercise: CreateExercise.Workflow
-    }
+type CompositionRoot = {
+    CreateExerciseCategory: CreateExerciseCategory.Workflow
+    GetAllExerciseCategories: GetAllExerciseCategories.Workflow
+    GetExerciseCategory: GetExerciseCategory.Workflow
+    RenameExerciseCategory: RenameExerciseCategory.Workflow
+    DeleteExerciseCategory: DeleteExerciseCategory.Workflow
+    CreateExercise: CreateExercise.Workflow
+}
 
 module CompositionRoot =
 
