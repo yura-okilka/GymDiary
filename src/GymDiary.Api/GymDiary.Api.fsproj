@@ -4,14 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-  </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="AppSettings.fs" />
     <Compile Include="DependencyInjection\Leaves\Persistence.fs" />
