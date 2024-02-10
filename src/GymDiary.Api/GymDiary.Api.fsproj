@@ -29,8 +29,4 @@
     <ProjectReference Include="..\GymDiary.Persistence\GymDiary.Persistence.fsproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="8.0.101" />
-  </ItemGroup>
-
 </Project>

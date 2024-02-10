@@ -5,4 +5,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="8.0.101" Condition=" '$(ProjectExt)'=='.fsproj' " />
+  </ItemGroup>
+
 </Project>

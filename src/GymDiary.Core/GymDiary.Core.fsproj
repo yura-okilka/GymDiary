@@ -40,8 +40,4 @@
     <ProjectReference Include="..\Common\Common.fsproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="8.0.101" />
-  </ItemGroup>
-
 </Project>
