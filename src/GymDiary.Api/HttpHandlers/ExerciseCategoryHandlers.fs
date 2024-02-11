@@ -17,11 +17,10 @@ module ExerciseCategoryHandlers =
         : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
-                createExerciseCategory
-                    {
-                        Name = request.Name
-                        OwnerId = sportsmanId
-                    }
+                createExerciseCategory {
+                    Name = request.Name
+                    OwnerId = sportsmanId
+                }
 
             let handler =
                 match result with
@@ -58,11 +57,10 @@ module ExerciseCategoryHandlers =
     let getById (getExerciseCategory: GetExerciseCategory.Workflow) (sportsmanId: string, categoryId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
-                getExerciseCategory
-                    {
-                        Id = categoryId
-                        OwnerId = sportsmanId
-                    }
+                getExerciseCategory {
+                    Id = categoryId
+                    OwnerId = sportsmanId
+                }
 
             let handler =
                 match result with
@@ -88,12 +86,11 @@ module ExerciseCategoryHandlers =
         : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
-                renameExerciseCategory
-                    {
-                        Id = categoryId
-                        OwnerId = sportsmanId
-                        Name = request.Name
-                    }
+                renameExerciseCategory {
+                    Id = categoryId
+                    OwnerId = sportsmanId
+                    Name = request.Name
+                }
 
             let handler =
                 match result with
@@ -116,11 +113,10 @@ module ExerciseCategoryHandlers =
     let delete (deleteExerciseCategory: DeleteExerciseCategory.Workflow) (sportsmanId: string, categoryId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
-                deleteExerciseCategory
-                    {
-                        Id = categoryId
-                        OwnerId = sportsmanId
-                    }
+                deleteExerciseCategory {
+                    Id = categoryId
+                    OwnerId = sportsmanId
+                }
 
             let handler =
                 match result with

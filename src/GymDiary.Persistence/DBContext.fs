@@ -2,14 +2,13 @@ namespace GymDiary.Persistence
 
 open MongoDB.Driver
 
-type DBContext =
-    {
-        ExerciseCategories: IMongoCollection<ExerciseCategoryDocument>
-        Exercises: IMongoCollection<ExerciseDocument>
-        Routines: IMongoCollection<RoutineDocument>
-        WorkoutSessions: IMongoCollection<WorkoutSessionDocument>
-        Sportsmen: IMongoCollection<SportsmanDocument>
-    }
+type DBContext = {
+    ExerciseCategories: IMongoCollection<ExerciseCategoryDocument>
+    Exercises: IMongoCollection<ExerciseDocument>
+    Routines: IMongoCollection<RoutineDocument>
+    WorkoutSessions: IMongoCollection<WorkoutSessionDocument>
+    Sportsmen: IMongoCollection<SportsmanDocument>
+} with
 
     static member create (client: IMongoClient) (dbName: string) =
         let database = client.GetDatabase(dbName)

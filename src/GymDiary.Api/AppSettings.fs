@@ -11,10 +11,9 @@ type MongoDbSettings = {
 }
 
 [<CLIMutable>]
-type AppSettings =
-    {
-        MongoDb: MongoDbSettings
-    }
+type AppSettings = {
+    MongoDb: MongoDbSettings
+} with
 
     static member validate(settings: AppSettings) : Result<AppSettings, ValidationErrors> = validate {
         let mongoDb = settings.MongoDb

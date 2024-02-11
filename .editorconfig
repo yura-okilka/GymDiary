@@ -14,15 +14,17 @@ trim_trailing_whitespace = true
 
 [*.fs]
 # Fantomas properties https://fsprojects.github.io/fantomas/docs/end-users/Configuration.html
-fsharp_max_infix_operator_expression = 100
-fsharp_max_value_binding_width = 100
-fsharp_max_function_binding_width = 60
-fsharp_max_dot_get_expression_width = 70
-fsharp_multiline_bracket_style = experimental_stroustrup
+fsharp_keep_max_number_of_blank_lines = 1
+fsharp_max_dot_get_expression_width = 70 # Default = 80
+fsharp_max_function_binding_width = 60 # Default = 40
+fsharp_max_infix_operator_expression = 100 # Default = 80
+fsharp_max_value_binding_width = 100 # Default = 80
+fsharp_multiline_bracket_style = stroustrup
+fsharp_newline_before_multiline_computation_expression = false
 
 [src/GymDiary.Api/Router.fs]
 max_line_length = 150
-fsharp_max_infix_operator_expression = 150
+fsharp_max_infix_operator_expression = 150 # Default = 80
 
 [*.json]
 indent_size = 2

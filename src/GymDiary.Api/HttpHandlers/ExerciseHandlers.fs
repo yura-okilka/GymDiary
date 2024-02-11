@@ -22,15 +22,14 @@ module ExerciseHandlers =
     let create (createExercise: CreateExercise.Workflow) (sportsmanId: string) (request: CreateExerciseRequest) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
-                createExercise
-                    {
-                        OwnerId = sportsmanId
-                        CategoryId = request.CategoryId
-                        Name = request.Name
-                        Notes = request.Notes
-                        RestTime = request.RestTime
-                        Sets = request.Sets
-                    }
+                createExercise {
+                    OwnerId = sportsmanId
+                    CategoryId = request.CategoryId
+                    Name = request.Name
+                    Notes = request.Notes
+                    RestTime = request.RestTime
+                    Sets = request.Sets
+                }
 
             let handler =
                 match result with

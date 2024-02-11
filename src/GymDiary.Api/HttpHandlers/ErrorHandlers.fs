@@ -9,12 +9,11 @@ open Giraffe
 
 open Microsoft.Extensions.Logging
 
-type ErrorResponse =
-    {
-        Name: string
-        Message: string
-        Details: obj
-    }
+type ErrorResponse = {
+    Name: string
+    Message: string
+    Details: obj
+} with
 
     static member validationError(error: ValidationError) = {
         Name = "ValidationError"
