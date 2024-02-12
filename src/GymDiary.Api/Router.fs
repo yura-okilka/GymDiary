@@ -14,22 +14,13 @@ module Router =
 
     let webApp (root: CompositionRoot) : (HttpFunc -> HttpContext -> HttpFuncResult) =
         choose [
-            POST
-            >=> routef "/v1/sportsmen/%s/exerciseCategories" (fun sportsmanId ->
-                bindJsonSafe (fun request -> ExerciseCategoryHandlers.create root.CreateExerciseCategory sportsmanId request))
-
+            POST >=> routef "/v1/sportsmen/%s/exerciseCategories" (fun sportsmanId -> bindJsonSafe (ExerciseCategoryHandlers.create root.CreateExerciseCategory sportsmanId))
             GET >=> routef "/v1/sportsmen/%s/exerciseCategories" (ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories)
             GET >=> routef "/v1/sportsmen/%s/exerciseCategories/%s" (ExerciseCategoryHandlers.getById root.GetExerciseCategory)
-
-            PUT
-            >=> routef "/v1/sportsmen/%s/exerciseCategories/%s" (fun ids ->
-                bindJsonSafe (fun request -> ExerciseCategoryHandlers.rename root.RenameExerciseCategory ids request))
-
+            PUT >=> routef "/v1/sportsmen/%s/exerciseCategories/%s" (fun ids -> bindJsonSafe (ExerciseCategoryHandlers.rename root.RenameExerciseCategory ids))
             DELETE >=> routef "/v1/sportsmen/%s/exerciseCategories/%s" (ExerciseCategoryHandlers.delete root.DeleteExerciseCategory)
 
-            POST
-            >=> routef "/v1/sportsmen/%s/exercises" (fun sportsmanId ->
-                bindJsonSafe (fun request -> ExerciseHandlers.create root.CreateExercise sportsmanId request))
+            POST >=> routef "/v1/sportsmen/%s/exercises" (fun sportsmanId -> bindJsonSafe (ExerciseHandlers.create root.CreateExercise sportsmanId))
 
             route "/ping" >=> noResponseCaching >=> text "pong"
             RequestErrors.NOT_FOUND "Not Found"

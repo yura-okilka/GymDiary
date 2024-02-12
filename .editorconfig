@@ -4,7 +4,7 @@ root = true
 # Default settings
 [*]
 charset = utf-8
-end_of_line = crlf
+end_of_line = lf
 indent_style = space
 indent_size = 4
 tab_width = 4
@@ -23,8 +23,8 @@ fsharp_multiline_bracket_style = stroustrup
 fsharp_newline_before_multiline_computation_expression = false
 
 [src/GymDiary.Api/Router.fs]
-max_line_length = 150
-fsharp_max_infix_operator_expression = 150 # Default = 80
+max_line_length = 180
+fsharp_max_infix_operator_expression = 180 # Default = 80
 
 [*.json]
 indent_size = 2
