@@ -4,6 +4,7 @@ open System
 
 open Giraffe
 
+open GymDiary.Api
 open GymDiary.Core.Workflows.CommonDtos
 open GymDiary.Core.Workflows.Exercise
 
@@ -34,15 +35,9 @@ module ExerciseHandlers =
             let handler =
                 match result with
                 | Ok data -> Successful.CREATED data
-                | Error error ->
-                    let message = CreateExercise.CommandError.toString error
-
-                    match error with
-                    | CreateExercise.InvalidCommand errors -> RequestErrors.BAD_REQUEST(ErrorResponse.validationErrors errors)
-
-                    | CreateExercise.CategoryNotFound _ -> RequestErrors.CONFLICT(ErrorResponse.exerciseCategoryNotFound message)
-
-                    | CreateExercise.OwnerNotFound _ -> RequestErrors.CONFLICT(ErrorResponse.ownerNotFound message)
+                | Error(CreateExercise.InvalidCommand es) -> RequestErrors.BAD_REQUEST(Responses.validationErrors es)
+                | Error(CreateExercise.CategoryNotFound e) -> RequestErrors.CONFLICT(Responses.exerciseCategoryNotFound e)
+                | Error(CreateExercise.OwnerNotFound e) -> RequestErrors.CONFLICT(Responses.ownerNotFound e)
 
             return! handler next ctx
         }

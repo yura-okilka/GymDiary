@@ -2,6 +2,7 @@ namespace GymDiary.Api.HttpHandlers
 
 open Giraffe
 
+open GymDiary.Api
 open GymDiary.Core.Workflows.ExerciseCategory
 
 open Microsoft.AspNetCore.Http
@@ -10,11 +11,7 @@ module ExerciseCategoryHandlers =
 
     type CreateRequest = { Name: string }
 
-    let create
-        (createExerciseCategory: CreateExerciseCategory.Workflow)
-        (sportsmanId: string)
-        (request: CreateRequest)
-        : HttpHandler =
+    let create (createExerciseCategory: CreateExerciseCategory.Workflow) (sportsmanId: string) (request: CreateRequest) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
                 createExerciseCategory {
@@ -25,17 +22,9 @@ module ExerciseCategoryHandlers =
             let handler =
                 match result with
                 | Ok data -> Successful.CREATED data
-                | Error error ->
-                    let message = CreateExerciseCategory.CommandError.toString error
-
-                    match error with
-                    | CreateExerciseCategory.InvalidCommand errors ->
-                        RequestErrors.BAD_REQUEST(ErrorResponse.validationErrors errors)
-
-                    | CreateExerciseCategory.CategoryAlreadyExists _ ->
-                        RequestErrors.CONFLICT(ErrorResponse.exerciseCategoryAlreadyExists message)
-
-                    | CreateExerciseCategory.OwnerNotFound _ -> RequestErrors.CONFLICT(ErrorResponse.ownerNotFound message)
+                | Error(CreateExerciseCategory.InvalidCommand es) -> RequestErrors.BAD_REQUEST(Responses.validationErrors es)
+                | Error(CreateExerciseCategory.CategoryAlreadyExists e) -> RequestErrors.CONFLICT(Responses.exerciseCategoryAlreadyExists e)
+                | Error(CreateExerciseCategory.OwnerNotFound e) -> RequestErrors.CONFLICT(Responses.ownerNotFound e)
 
             return! handler next ctx
         }
@@ -47,9 +36,7 @@ module ExerciseCategoryHandlers =
             let handler =
                 match result with
                 | Ok data -> Successful.OK data
-
-                | Error(GetAllExerciseCategories.InvalidQuery error) ->
-                    RequestErrors.BAD_REQUEST(ErrorResponse.validationError error)
+                | Error(GetAllExerciseCategories.InvalidQuery e) -> RequestErrors.BAD_REQUEST(Responses.validationError e)
 
             return! handler next ctx
         }
@@ -65,14 +52,8 @@ module ExerciseCategoryHandlers =
             let handler =
                 match result with
                 | Ok data -> Successful.OK data
-                | Error error ->
-                    let message = GetExerciseCategory.QueryError.toString error
-
-                    match error with
-                    | GetExerciseCategory.InvalidQuery errors -> RequestErrors.BAD_REQUEST(ErrorResponse.validationErrors errors)
-
-                    | GetExerciseCategory.CategoryNotFound _ ->
-                        RequestErrors.NOT_FOUND(ErrorResponse.exerciseCategoryNotFound message)
+                | Error(GetExerciseCategory.InvalidQuery es) -> RequestErrors.BAD_REQUEST(Responses.validationErrors es)
+                | Error(GetExerciseCategory.CategoryNotFound e) -> RequestErrors.NOT_FOUND(Responses.exerciseCategoryNotFound e)
 
             return! handler next ctx
         }
@@ -95,17 +76,9 @@ module ExerciseCategoryHandlers =
             let handler =
                 match result with
                 | Ok _ -> Successful.NO_CONTENT
-                | Error error ->
-                    let message = RenameExerciseCategory.CommandError.toString error
-
-                    match error with
-                    | RenameExerciseCategory.InvalidCommand errors ->
-                        RequestErrors.BAD_REQUEST(ErrorResponse.validationErrors errors)
-
-                    | RenameExerciseCategory.CategoryNotFound _ ->
-                        RequestErrors.NOT_FOUND(ErrorResponse.exerciseCategoryNotFound message)
-
-                    | RenameExerciseCategory.NameAlreadyUsed _ -> RequestErrors.CONFLICT(ErrorResponse.nameAlreadyUsed message)
+                | Error(RenameExerciseCategory.InvalidCommand es) -> RequestErrors.BAD_REQUEST(Responses.validationErrors es)
+                | Error(RenameExerciseCategory.CategoryNotFound e) -> RequestErrors.NOT_FOUND(Responses.exerciseCategoryNotFound e)
+                | Error(RenameExerciseCategory.NameAlreadyUsed e) -> RequestErrors.CONFLICT(Responses.exerciseCategoryAlreadyExists e)
 
             return! handler next ctx
         }
@@ -121,15 +94,8 @@ module ExerciseCategoryHandlers =
             let handler =
                 match result with
                 | Ok _ -> Successful.NO_CONTENT
-                | Error error ->
-                    let message = DeleteExerciseCategory.CommandError.toString error
-
-                    match error with
-                    | DeleteExerciseCategory.InvalidCommand errors ->
-                        RequestErrors.BAD_REQUEST(ErrorResponse.validationErrors errors)
-
-                    | DeleteExerciseCategory.CategoryNotFound _ ->
-                        RequestErrors.NOT_FOUND(ErrorResponse.exerciseCategoryNotFound message)
+                | Error(DeleteExerciseCategory.InvalidCommand es) -> RequestErrors.BAD_REQUEST(Responses.validationErrors es)
+                | Error(DeleteExerciseCategory.CategoryNotFound e) -> RequestErrors.NOT_FOUND(Responses.exerciseCategoryNotFound e)
 
             return! handler next ctx
         }

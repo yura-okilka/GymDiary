@@ -10,6 +10,7 @@
     <Compile Include="DependencyInjection\Trunk.fs" />
     <Compile Include="DependencyInjection\CompositionRoot.fs" />
     <Compile Include="JsonBinding.fs" />
+    <Compile Include="Responses.fs" />
     <Compile Include="HttpHandlers\ErrorHandlers.fs" />
     <Compile Include="HttpHandlers\ExerciseCategoryHandlers.fs" />
     <Compile Include="HttpHandlers\ExerciseHandlers.fs" />

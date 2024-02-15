@@ -22,6 +22,9 @@ fsharp_max_value_binding_width = 100 # Default = 80
 fsharp_multiline_bracket_style = stroustrup
 fsharp_newline_before_multiline_computation_expression = false
 
+[*Handlers.fs]
+max_line_length = 140
+
 [src/GymDiary.Api/Router.fs]
 max_line_length = 180
 fsharp_max_infix_operator_expression = 180 # Default = 80
