@@ -1,5 +1,12 @@
 namespace GymDiary.Api
 
+#nowarn "20"
+
+open Microsoft.AspNetCore.Builder
+open Microsoft.Extensions.Configuration
+open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Hosting
+
 open System.Text.Json
 open System.Text.Json.Serialization
 
@@ -10,71 +17,60 @@ open GymDiary.Api.DependencyInjection
 open GymDiary.Api.HttpHandlers
 open GymDiary.Persistence
 
-open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Hosting
-open Microsoft.Extensions.Configuration
-open Microsoft.Extensions.DependencyInjection
-open Microsoft.Extensions.Hosting
-open Microsoft.Extensions.Logging
-
 open Validus
 
 module Program =
+    let exitCode = 0
 
     [<EntryPoint>]
     let main args =
-        Host
-            .CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(fun webHostBuilder ->
-                webHostBuilder
-                    .ConfigureLogging(fun b -> b.AddConsole().AddDebug() |> ignore)
-                    .ConfigureServices(fun services ->
-                        // MongoDB conventions must be configured before using MongoClient in the composition root.
-                        PersistenceModule.configure ()
 
-                        services.AddGiraffe() |> ignore
+        let builder = WebApplication.CreateBuilder(args)
 
-                        // Configure JSON serialization
-                        let jsonOptions = JsonSerializerOptions()
-                        jsonOptions.PropertyNamingPolicy <- JsonNamingPolicy.CamelCase
+        // MongoDB conventions must be configured before using MongoClient in the composition root.
+        PersistenceModule.configure ()
 
-                        jsonOptions.Converters.Add(
-                            JsonFSharpConverter(
-                                unionTagName = "type",
-                                unionEncoding =
-                                    (JsonUnionEncoding.InternalTag
-                                     ||| JsonUnionEncoding.NamedFields
-                                     ||| JsonUnionEncoding.UnwrapOption
-                                     ||| JsonUnionEncoding.UnwrapSingleCaseUnions
-                                     ||| JsonUnionEncoding.AllowUnorderedTag)
-                            )
-                        )
+        builder.Services.AddGiraffe()
 
-                        services.AddSingleton(jsonOptions) |> ignore
-                        services.AddSingleton<Json.ISerializer, SystemTextJson.Serializer>() |> ignore)
+        // Configure JSON serialization
+        let jsonOptions = JsonSerializerOptions()
+        jsonOptions.PropertyNamingPolicy <- JsonNamingPolicy.CamelCase
 
-                    .Configure(fun context app ->
-                        let env = context.HostingEnvironment.EnvironmentName
+        jsonOptions.Converters.Add(
+            JsonFSharpConverter(
+                unionTagName = "type",
+                unionEncoding =
+                    (JsonUnionEncoding.InternalTag
+                     ||| JsonUnionEncoding.NamedFields
+                     ||| JsonUnionEncoding.UnwrapOption
+                     ||| JsonUnionEncoding.UnwrapSingleCaseUnions
+                     ||| JsonUnionEncoding.AllowUnorderedTag)
+            )
+        )
 
-                        match env with
-                        | "Development" -> app.UseDeveloperExceptionPage() |> ignore
-                        | _ -> app.UseGiraffeErrorHandler(ErrorHandlers.unknownError) |> ignore
+        builder.Services.AddSingleton(jsonOptions)
+        builder.Services.AddSingleton<Json.ISerializer, SystemTextJson.Serializer>()
 
-                        let settings = context.Configuration.Get<AppSettings>()
+        let app = builder.Build()
 
-                        match AppSettings.validate settings with
-                        | Error errors ->
-                            errors
-                            |> ValidationErrors.toList
-                            |> String.concat "; "
-                            |> fun msg -> failwith $"Invalid settings: %s{msg}"
-                        | Ok _ -> ()
+        match builder.Environment.EnvironmentName with
+        | "Development" -> app.UseDeveloperExceptionPage()
+        | _ -> app.UseGiraffeErrorHandler(ErrorHandlers.unknownError)
 
-                        let root = (settings, app.ApplicationServices) ||> Trunk.compose |> CompositionRoot.compose
+        let settings = builder.Configuration.Get<AppSettings>()
 
-                        app.UseGiraffe(Router.webApp root))
-                |> ignore)
-            .Build()
-            .Run()
+        match AppSettings.validate settings with
+        | Error errors ->
+            errors
+            |> ValidationErrors.toList
+            |> String.concat "; "
+            |> fun msg -> failwith $"Invalid settings: %s{msg}"
+        | Ok _ -> ()
 
-        0 // Exit code
+        let root = (settings, app.Services) ||> Trunk.compose |> CompositionRoot.compose
+
+        app.UseGiraffe(Router.webApp root)
+
+        app.Run()
+
+        exitCode
