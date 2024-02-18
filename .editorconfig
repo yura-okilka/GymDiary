@@ -41,3 +41,10 @@ indent_size = 2
 
 [*.{http,rest}]
 indent_size = 0
+
+# Microsoft .NET inspection severities https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/
+[*.{fs,cs}]
+dotnet_diagnostic.CS1591.severity = none # Missing XML comment for publicly visible type or member
+
+[*Test*.cs]
+dotnet_diagnostic.CA1707.severity = none # Identifiers should not contain underscores
