@@ -1,8 +1,10 @@
 ﻿using GymDiary.Api.SystemTests;
+using GymDiary.Api.SystemTests.Infrastructure;
+
 using LightBDD.Core.Configuration;
-using LightBDD.Extensions.DependencyInjection;
+using LightBDD.Core.Dependencies;
+
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 /*
  * This is a way to enable LightBDD - XUnit integration.
@@ -29,15 +31,22 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
     /// </summary>
     protected override void OnConfigure(LightBddConfiguration configuration)
     {
+        configuration
+            .DependencyContainerConfiguration()
+            .UseDefault(ConfigureContainer);
+
+        configuration
+            .ExecutionExtensionsConfiguration()
+            .RegisterGlobalSetUp<GymDiaryApiTestServer>();
+    }
+
+    private static void ConfigureContainer(IDefaultContainerConfigurator cfg)
+    {
         var testConfiguration = new ConfigurationBuilder()
             .AddJsonFile("testsettings.json")
             .AddEnvironmentVariables()
             .Build();
 
-        var serviceProvider = new ServiceCollection().BuildServiceProvider();
-
-        configuration
-            .DependencyContainerConfiguration()
-            .UseContainer(serviceProvider, takeOwnership: true);
+        cfg.RegisterType<GymDiaryApiTestServer>(InstanceScope.Single);
     }
 }

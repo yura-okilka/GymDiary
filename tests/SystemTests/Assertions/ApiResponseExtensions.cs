@@ -6,14 +6,11 @@ namespace SystemTests.Assertions;
 
 public static class ApiResponseExtensions
 {
+    public static void ShouldBeSuccessful(this IApiResponse response) => ShouldBeSuccessfulInternal(response);
+
     public static void ShouldBeSuccessful<T>(this IApiResponse<T> response)
     {
-        // TODO: is IsSuccessStatusCode enough?
-        response.StatusCode.Should().Match(
-            code => (int?)code < (int)HttpStatusCode.BadRequest,
-            "successful HTTP code should be 1XX, 2XX, or 3XX"
-        );
-        response.IsSuccessStatusCode.Should().BeTrue();
+        ShouldBeSuccessfulInternal(response);
         response.Content.Should().NotBeNull();
     }
 
@@ -29,5 +26,15 @@ public static class ApiResponseExtensions
 
         var actualError = await response.Error!.GetContentAsAsync<TError>();
         actualError.Should().BeEquivalentTo(expectedError);
+    }
+
+    private static void ShouldBeSuccessfulInternal(this IApiResponse response)
+    {
+        // TODO: is IsSuccessStatusCode enough?
+        response.StatusCode.Should().Match(
+            code => (int?)code < (int)HttpStatusCode.BadRequest,
+            "successful HTTP code should be 1XX, 2XX, or 3XX"
+        );
+        response.IsSuccessStatusCode.Should().BeTrue();
     }
 }

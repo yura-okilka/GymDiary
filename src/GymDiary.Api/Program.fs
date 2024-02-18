@@ -20,6 +20,10 @@ open GymDiary.Persistence
 open Validus
 
 module Program =
+    type TestEntryPoint() =
+        class
+        end
+
     let exitCode = 0
 
     [<EntryPoint>]

@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="LightBDD.Extensions.DependencyInjection" Version="3.7.0" />
     <PackageReference Include="LightBDD.XUnit2" Version="3.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="xunit" Version="2.7.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
@@ -26,6 +27,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\GymDiary.Api\GymDiary.Api.fsproj" />
     <ProjectReference Include="..\SystemTests\SystemTests.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="testsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
