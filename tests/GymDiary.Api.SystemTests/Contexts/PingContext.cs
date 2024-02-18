@@ -6,7 +6,7 @@ using SystemTests.Assertions;
 
 namespace GymDiary.Api.SystemTests.Contexts;
 
-public class PingContext(GymDiaryApiTestServer gymDiaryApi)
+public class PingContext(GymDiaryTestServer gymDiaryApi)
 {
     private IApiResponse _pingResponse = null!;
 

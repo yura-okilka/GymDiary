@@ -35,9 +35,11 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
             .DependencyContainerConfiguration()
             .UseDefault(ConfigureContainer);
 
+        // The order is important because server depends on DB connection string generated on DB setup.
         configuration
             .ExecutionExtensionsConfiguration()
-            .RegisterGlobalSetUp<GymDiaryApiTestServer>();
+            .RegisterGlobalSetUp<GymDiaryTestDb>()
+            .RegisterGlobalSetUp<GymDiaryTestServer>();
     }
 
     private static void ConfigureContainer(IDefaultContainerConfigurator cfg)
@@ -47,6 +49,19 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
             .AddEnvironmentVariables()
             .Build();
 
-        cfg.RegisterType<GymDiaryApiTestServer>(InstanceScope.Single);
+        var testDbSettings = testConfiguration.GetSection("MongoDb").Get<GymDiaryTestDbSettings>() ??
+                             throw new Exception("Failed to parse MongoDb settings");
+
+        cfg.RegisterType<GymDiaryTestDbSettings>(InstanceScope.Single, _ => testDbSettings);
+        cfg.RegisterType<GymDiaryTestDb>(
+            InstanceScope.Single,
+            d => new GymDiaryTestDb(
+                d.Resolve<GymDiaryTestDbSettings>(),
+                // ConnectionString is generated on DB container start.
+                onSetUpExecuted: db => d.Resolve<GymDiaryTestServerSettings>().TestDbConnectionString = db.ConnectionString
+            )
+        );
+        cfg.RegisterType<GymDiaryTestServerSettings>(InstanceScope.Single);
+        cfg.RegisterType<GymDiaryTestServer>(InstanceScope.Single);
     }
 }

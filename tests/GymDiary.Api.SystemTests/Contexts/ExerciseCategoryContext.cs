@@ -1,10 +1,12 @@
 using FluentAssertions;
+
 using GymDiary.Api.SystemTests.Infrastructure;
+
 using Refit;
 
 namespace GymDiary.Api.SystemTests.Contexts;
 
-public class ExerciseCategoryContext(GymDiaryApiTestServer gymDiaryApi)
+public class ExerciseCategoryContext(GymDiaryTestServer gymDiaryApi)
 {
     private IApiResponse? _pingResponse;
 
