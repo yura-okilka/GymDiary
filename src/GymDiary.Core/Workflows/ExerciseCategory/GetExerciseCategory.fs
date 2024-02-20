@@ -29,7 +29,7 @@ module GetExerciseCategory =
 
     type Workflow = Workflow<Query, QueryResult, QueryError>
 
-    let execute (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>) (query: Query) = asyncResult {
+    let execute (getCategoryByIdFromDB: ExerciseCategoryId -> SportsmanId -> Async<ExerciseCategory option>) (query: Query) = asyncResult {
         let! (categoryId, ownerId) =
             validation {
                 let! categoryId = Id.create (nameof query.Id) query.Id
@@ -39,7 +39,7 @@ module GetExerciseCategory =
             |> Result.mapError InvalidQuery
 
         let! category =
-            getCategoryByIdFromDB ownerId categoryId
+            getCategoryByIdFromDB categoryId ownerId
             |> AsyncResult.requireSome (QueryError.categoryNotFound categoryId ownerId)
 
         return {

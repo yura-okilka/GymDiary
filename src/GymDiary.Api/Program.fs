@@ -2,22 +2,17 @@ namespace GymDiary.Api
 
 #nowarn "20"
 
+open System.Text.Json
+open System.Text.Json.Serialization
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
-
-open System.Text.Json
-open System.Text.Json.Serialization
-
 open Giraffe
-
 open GymDiary.Api
 open GymDiary.Api.DependencyInjection
 open GymDiary.Api.HttpHandlers
 open GymDiary.Persistence
-
-open Validus
 
 module Program =
     type TestEntryPoint() =
@@ -30,9 +25,6 @@ module Program =
     let main args =
 
         let builder = WebApplication.CreateBuilder(args)
-
-        // MongoDB conventions must be configured before using MongoClient in the composition root.
-        PersistenceModule.configure ()
 
         builder.Services.AddGiraffe()
 
@@ -54,6 +46,7 @@ module Program =
 
         builder.Services.AddSingleton(jsonOptions)
         builder.Services.AddSingleton<Json.ISerializer, SystemTextJson.Serializer>()
+        builder.Services.AddPersistence(builder.Configuration)
 
         let app = builder.Build()
 
@@ -61,17 +54,7 @@ module Program =
         | "Development" -> app.UseDeveloperExceptionPage()
         | _ -> app.UseGiraffeErrorHandler(ErrorHandlers.unknownError)
 
-        let settings = builder.Configuration.Get<AppSettings>()
-
-        match AppSettings.validate settings with
-        | Error errors ->
-            errors
-            |> ValidationErrors.toList
-            |> String.concat "; "
-            |> fun msg -> failwith $"Invalid settings: %s{msg}"
-        | Ok _ -> ()
-
-        let root = (settings, app.Services) ||> Trunk.compose |> CompositionRoot.compose
+        let root = app.Services |> CompositionRoot.compose
 
         app.UseGiraffe(Router.webApp root)
 

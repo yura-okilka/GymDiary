@@ -47,7 +47,7 @@ module CreateExerciseCategory =
         }
 
     let execute
-        (categoryWithNameExistsInDB: SportsmanId -> String50 -> Async<bool>)
+        (categoryWithNameExistsInDB: String50 -> SportsmanId -> Async<bool>)
         (sportsmanWithIdExistsInDB: SportsmanId -> Async<bool>)
         (createCategoryInDB: ExerciseCategory -> Async<ExerciseCategoryId>)
         (logger: ILogger)
@@ -68,7 +68,7 @@ module CreateExerciseCategory =
             if not ownerExists then
                 return! CommandError.ownerNotFound category.OwnerId
 
-            let! categoryExists = categoryWithNameExistsInDB category.OwnerId category.Name
+            let! categoryExists = categoryWithNameExistsInDB category.Name category.OwnerId
 
             if categoryExists then
                 return! CommandError.categoryAlreadyExists category.Name

@@ -1,38 +1,29 @@
 namespace GymDiary.Persistence.Repositories
 
 open Common.Extensions
-
 open GymDiary.Core.Domain
 open GymDiary.Core.Persistence
 open GymDiary.Persistence
 open GymDiary.Persistence.Conversion
-
 open FsToolkit.ErrorHandling
 
-open MongoDB.Driver
+type ExerciseRepository(repository: IMongoRepository<ExerciseDocument>) =
+    interface IExerciseRepository with
 
-module ExerciseRepository =
+        member _.Create entity = async {
+            let! createdDocument = entity |> ExerciseDocument.fromDomain |> repository.InsertOne
 
-    let create (collection: IMongoCollection<ExerciseDocument>) (entity: Exercise) : Async<ExerciseId> = async {
-        let! createdDocument = entity |> ExerciseDocument.fromDomain |> MongoRepository.insertOne collection
+            return
+                createdDocument.Id
+                |> Id.create<Exercise> (nameof createdDocument.Id)
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseId>.Name, error)))
+        }
 
-        return
-            createdDocument.Id
-            |> Id.create<Exercise> (nameof createdDocument.Id)
-            |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseId>.Name, error)))
-    }
-
-    let getById
-        (collection: IMongoCollection<ExerciseDocument>)
-        (ownerId: SportsmanId)
-        (exerciseId: ExerciseId)
-        : Async<Exercise option> =
-        async {
-            let ownerId = ownerId |> Id.value
+        member _.GetById (exerciseId: ExerciseId) (ownerId: SportsmanId) = async {
             let exerciseId = exerciseId |> Id.value
+            let ownerId = ownerId |> Id.value
 
-            let! documentOption =
-                MongoRepository.findSingle collection (Expr.Quote(fun d -> d.Id = exerciseId && d.OwnerId = ownerId))
+            let! documentOption = repository.FindSingle(Expr.Quote(fun d -> d.Id = exerciseId && d.OwnerId = ownerId))
 
             return
                 documentOption
@@ -40,23 +31,20 @@ module ExerciseRepository =
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseDocument>.Name, error)))
         }
 
-    let update (collection: IMongoCollection<ExerciseDocument>) (entity: Exercise) : ModifyEntityResult = asyncResult {
-        let id = entity.Id |> Id.value
+        member _.Update entity = asyncResult {
+            let id = entity.Id |> Id.value
 
-        let! result =
-            entity
-            |> ExerciseDocument.fromDomain
-            |> MongoRepository.replaceOne collection (Expr.Quote(fun d -> d.Id = id))
+            let! result = entity |> ExerciseDocument.fromDomain |> repository.ReplaceOne(Expr.Quote(fun d -> d.Id = id))
 
-        if result.ModifiedCount = 0 then
-            return! EntityNotFound(typeof<Exercise>.Name, id) |> Error
-    }
+            if result.ModifiedCount = 0 then
+                return! EntityNotFound(typeof<Exercise>.Name, id) |> Error
+        }
 
-    let delete (collection: IMongoCollection<ExerciseDocument>) (exerciseId: ExerciseId) : ModifyEntityResult = asyncResult {
-        let exerciseId = exerciseId |> Id.value
+        member _.Delete exerciseId = asyncResult {
+            let exerciseId = exerciseId |> Id.value
 
-        let! result = MongoRepository.deleteOne collection (Expr.Quote(fun d -> d.Id = exerciseId))
+            let! result = repository.DeleteOne(Expr.Quote(fun d -> d.Id = exerciseId))
 
-        if result.DeletedCount = 0 then
-            return! EntityNotFound(typeof<Exercise>.Name, exerciseId) |> Error
-    }
+            if result.DeletedCount = 0 then
+                return! EntityNotFound(typeof<Exercise>.Name, exerciseId) |> Error
+        }

@@ -2,43 +2,53 @@ namespace GymDiary.Persistence.Repositories
 
 open System
 open System.Linq.Expressions
-
 open Common.Extensions
-
+open GymDiary.Persistence
 open MongoDB.Driver
 
+type Filter<'TDocument> = Expression<Func<'TDocument, bool>>
+
 /// MongoDB repository to work with data in F# types.
-module MongoRepository =
+type IMongoRepository<'TDocument> =
+    abstract member FindAll: Filter<'TDocument> -> Async<'TDocument seq>
+    abstract member FindSingle: Filter<'TDocument> -> Async<'TDocument option>
+    abstract member Any: Filter<'TDocument> -> Async<bool>
+    abstract member InsertOne: 'TDocument -> Async<'TDocument>
+    abstract member ReplaceOne: Filter<'TDocument> -> 'TDocument -> Async<ReplaceOneResult>
+    abstract member DeleteOne: Filter<'TDocument> -> Async<DeleteResult>
 
-    let find (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =
-        task {
-            let! documents = collection.Find(filter).ToListAsync()
+type MongoRepository<'TDocument>(mongoClient: IMongoClient, mongoSettings: MongoSettings, collection: string) =
+    member private _.GetCollection() =
+        mongoClient
+            .GetDatabase(mongoSettings.Database)
+            .GetCollection<'TDocument>(collection)
 
-            return documents :> seq<_>
-        }
-        |> Async.AwaitTask
+    interface IMongoRepository<'TDocument> with
+        member r.FindAll filter =
+            task {
+                let! documents = r.GetCollection().Find(filter).ToListAsync()
+                return documents :> seq<_>
+            }
+            |> Async.AwaitTask
 
-    let findSingle (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =
-        task {
-            let! document = collection.Find(filter).SingleOrDefaultAsync()
+        member r.FindSingle filter =
+            task {
+                let! document = r.GetCollection().Find(filter).SingleOrDefaultAsync()
+                return Option.ofRecord document
+            }
+            |> Async.AwaitTask
 
-            return Option.ofRecord document
-        }
-        |> Async.AwaitTask
+        member r.Any filter =
+            r.GetCollection().Find(filter).AnyAsync() |> Async.AwaitTask
 
-    let findAny (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =
-        collection.Find(filter).AnyAsync() |> Async.AwaitTask
+        member r.InsertOne document =
+            task {
+                do! r.GetCollection().InsertOneAsync(document)
+                return document
+            }
+            |> Async.AwaitTask
 
-    let insertOne (collection: IMongoCollection<'Document>) (document: 'Document) =
-        task {
-            do! collection.InsertOneAsync(document)
+        member r.ReplaceOne filter document =
+            r.GetCollection().ReplaceOneAsync(filter, document) |> Async.AwaitTask
 
-            return document
-        }
-        |> Async.AwaitTask
-
-    let replaceOne (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) (document: 'Document) =
-        collection.ReplaceOneAsync(filter, document) |> Async.AwaitTask
-
-    let deleteOne (collection: IMongoCollection<'Document>) (filter: Expression<Func<'Document, bool>>) =
-        collection.DeleteOneAsync(filter) |> Async.AwaitTask
+        member r.DeleteOne filter = r.GetCollection().DeleteOneAsync(filter) |> Async.AwaitTask

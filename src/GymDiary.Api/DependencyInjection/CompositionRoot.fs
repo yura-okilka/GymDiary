@@ -1,9 +1,12 @@
 namespace GymDiary.Api.DependencyInjection
 
-open GymDiary.Api.DependencyInjection
+open System
+open GymDiary.Core.Persistence
+open Microsoft.Extensions.DependencyInjection
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.Exercise
 open GymDiary.Core.Workflows.ExerciseCategory
+open Microsoft.Extensions.Logging
 
 type CompositionRoot = {
     CreateExerciseCategory: CreateExerciseCategory.Workflow
@@ -16,39 +19,41 @@ type CompositionRoot = {
 
 module CompositionRoot =
 
-    let compose (trunk: Trunk) =
+    let compose (sp: IServiceProvider) =
+        let logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger()
 
         let createExerciseCategoryWorkflow =
             CreateExerciseCategory.execute
-                trunk.Persistence.ExerciseCategory.ExistWithName
-                trunk.Persistence.Sportsman.ExistWithId
-                trunk.Persistence.ExerciseCategory.Create
-                trunk.Logger
+                (sp.GetRequiredService<IExerciseCategoryRepository>().ExistWithName)
+                (sp.GetRequiredService<ISportsmanRepository>().ExistWithId)
+                (sp.GetRequiredService<IExerciseCategoryRepository>().Create)
+                logger
 
         let getAllExerciseCategoriesWorkflow =
-            GetAllExerciseCategories.execute trunk.Persistence.ExerciseCategory.GetAll
+            GetAllExerciseCategories.execute (sp.GetRequiredService<IExerciseCategoryRepository>().GetAll)
 
-        let getExerciseCategoryWorkflow = GetExerciseCategory.execute trunk.Persistence.ExerciseCategory.GetById
+        let getExerciseCategoryWorkflow =
+            GetExerciseCategory.execute (sp.GetRequiredService<IExerciseCategoryRepository>().GetById)
 
         let renameExerciseCategoryWorkflow =
             RenameExerciseCategory.execute
-                trunk.Persistence.ExerciseCategory.GetById
-                trunk.Persistence.ExerciseCategory.ExistWithName
-                trunk.Persistence.ExerciseCategory.Update
-                trunk.Logger
+                (sp.GetRequiredService<IExerciseCategoryRepository>().GetById)
+                (sp.GetRequiredService<IExerciseCategoryRepository>().ExistWithName)
+                (sp.GetRequiredService<IExerciseCategoryRepository>().Update)
+                logger
 
         let deleteExerciseCategoryWorkflow =
-            DeleteExerciseCategory.execute trunk.Persistence.ExerciseCategory.Delete trunk.Logger
+            DeleteExerciseCategory.execute (sp.GetRequiredService<IExerciseCategoryRepository>().Delete) logger
 
         let errorLoggingDecorator loggingContext workflow =
-            ErrorLoggingDecorator.logWorkflow trunk.Logger loggingContext workflow
+            ErrorLoggingDecorator.logWorkflow logger loggingContext workflow
 
         let createExerciseWorkflow =
             CreateExercise.execute
-                trunk.Persistence.ExerciseCategory.GetById
-                trunk.Persistence.Sportsman.ExistWithId
-                trunk.Persistence.Exercise.Create
-                trunk.Logger
+                (sp.GetRequiredService<IExerciseCategoryRepository>().GetById)
+                (sp.GetRequiredService<ISportsmanRepository>().ExistWithId)
+                (sp.GetRequiredService<IExerciseRepository>().Create)
+                logger
 
         {
             CreateExerciseCategory =

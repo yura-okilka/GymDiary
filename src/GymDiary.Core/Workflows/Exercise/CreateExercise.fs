@@ -57,7 +57,7 @@ module CreateExercise =
         }
 
     let execute
-        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>)
+        (getCategoryByIdFromDB: ExerciseCategoryId -> SportsmanId -> Async<ExerciseCategory option>)
         (sportsmanWithIdExistsInDB: SportsmanId -> Async<bool>)
         (createExerciseInDB: Exercise -> Async<ExerciseId>)
         (logger: ILogger)
@@ -83,7 +83,7 @@ module CreateExercise =
                 |> Result.mapError InvalidCommand
 
             let! _ =
-                getCategoryByIdFromDB validated.OwnerId validated.CategoryId
+                getCategoryByIdFromDB validated.CategoryId validated.OwnerId
                 |> AsyncResult.requireSome (CommandError.categoryNotFound validated.CategoryId validated.OwnerId)
 
             let! ownerExists = sportsmanWithIdExistsInDB validated.OwnerId

@@ -52,8 +52,8 @@ module RenameExerciseCategory =
         }
 
     let execute
-        (getCategoryByIdFromDB: SportsmanId -> ExerciseCategoryId -> Async<ExerciseCategory option>)
-        (categoryWithNameExistsInDB: SportsmanId -> String50 -> Async<bool>)
+        (getCategoryByIdFromDB: ExerciseCategoryId -> SportsmanId -> Async<ExerciseCategory option>)
+        (categoryWithNameExistsInDB: String50 -> SportsmanId -> Async<bool>)
         (updateCategoryInDB: ExerciseCategory -> ModifyEntityResult)
         (logger: ILogger)
         (command: Command)
@@ -68,13 +68,13 @@ module RenameExerciseCategory =
                 }
                 |> Result.mapError InvalidCommand
 
-            let! categoryExists = categoryWithNameExistsInDB ownerId name
+            let! categoryExists = categoryWithNameExistsInDB name ownerId
 
             if categoryExists then
                 return! CommandError.nameAlreadyUsed name
 
             let! category =
-                getCategoryByIdFromDB ownerId categoryId
+                getCategoryByIdFromDB categoryId ownerId
                 |> AsyncResult.requireSome (CommandError.categoryNotFound categoryId ownerId)
 
             let renamedCategory = category |> ExerciseCategory.rename name

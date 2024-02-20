@@ -5,9 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="AppSettings.fs" />
-    <Compile Include="DependencyInjection\Leaves\Persistence.fs" />
-    <Compile Include="DependencyInjection\Trunk.fs" />
     <Compile Include="DependencyInjection\CompositionRoot.fs" />
     <Compile Include="JsonBinding.fs" />
     <Compile Include="Responses.fs" />
