@@ -1,6 +1,9 @@
 using FluentAssertions;
 
 using GymDiary.Api.SystemTests.Infrastructure;
+using GymDiary.Api.SystemTests.Infrastructure.GymDiaryApiModels;
+
+using MongoDB.Bson;
 
 using Refit;
 
@@ -8,16 +11,20 @@ namespace GymDiary.Api.SystemTests.Contexts;
 
 public class ExerciseCategoryContext(GymDiaryTestServer gymDiaryApi)
 {
-    private IApiResponse? _pingResponse;
+    private IApiResponse? _createExerciseCategoryResponse;
 
-    public async Task Ping()
+    public async Task Create_exercise_category()
     {
-        _pingResponse = await gymDiaryApi.Client.Ping();
+        _createExerciseCategoryResponse = await gymDiaryApi.Client.CreateExerciseCategory(
+            sportsmanId: ObjectId.GenerateNewId().ToString(),
+            request: new CreateExerciseCategoryRequest("ExerciseCategory1")
+        );
     }
 
-    public Task Ping_response_should_be_successful()
+    public Task Create_exercise_category_response_should_be_successful()
     {
-        _pingResponse!.IsSuccessStatusCode.Should().BeTrue();
+        // TODO: use Expectation Expressions?
+        _createExerciseCategoryResponse!.IsSuccessStatusCode.Should().BeTrue();
         return Task.CompletedTask;
     }
 }

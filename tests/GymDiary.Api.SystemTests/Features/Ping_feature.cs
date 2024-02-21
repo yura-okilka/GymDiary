@@ -5,7 +5,7 @@ namespace GymDiary.Api.SystemTests.Features;
 public class Ping_feature : FeatureFixture
 {
     [Scenario]
-    public async Task When_call_ping_Then_response_should_be_successful()
+    public async Task When_call_ping_then_response_should_be_successful()
     {
         await Runner
             .WithContext<PingContext>()

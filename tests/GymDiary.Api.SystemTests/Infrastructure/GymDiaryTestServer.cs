@@ -23,7 +23,7 @@ public class GymDiaryTestServer : IDisposable, IGlobalResourceSetUp
         var testDbConnectionString = settings.TestDbConnectionString ??
                                      throw new ArgumentNullException(nameof(settings.TestDbConnectionString));
 
-        _testServer = new GymDiaryWebApplicationFactory(testDbConnectionString);
+        _testServer = new GymDiaryWebApplicationFactory(new GymDiaryApiSettings(testDbConnectionString));
         var httpClient = _testServer.CreateDefaultClient();
 
         Client = RestService.For<IGymDiaryApiClient>(

@@ -4,7 +4,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace GymDiary.Api.SystemTests.Infrastructure;
 
-public class GymDiaryWebApplicationFactory(string TestDbConnectionString) : WebApplicationFactory<Program.TestEntryPoint>
+public record GymDiaryApiSettings(string TestDbConnectionString);
+
+public class GymDiaryWebApplicationFactory(GymDiaryApiSettings settings) : WebApplicationFactory<Program.TestEntryPoint>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -13,19 +15,9 @@ public class GymDiaryWebApplicationFactory(string TestDbConnectionString) : WebA
                 b => b.AddInMemoryCollection(
                     new Dictionary<string, string?>
                     {
-                        ["MongoDb:ConnectionString"] = TestDbConnectionString
+                        ["MongoDb:ConnectionString"] = settings.TestDbConnectionString
                     }
                 )
-            )
-            .ConfigureServices(
-                services =>
-                {
-                    //var mongoClientDescriptor = services.Single(d => d.ServiceType == typeof(IMongoClient));
-
-                    //services.Remove(mongoClientDescriptor);
-
-                    //var mongoClient = new MongoClient(connectionString);
-                }
             );
     }
 }
