@@ -1,12 +1,9 @@
 namespace GymDiary.Persistence.Conversion
 
 open System
-
 open Common.Extensions
-
 open GymDiary.Core.Domain
 open GymDiary.Persistence
-
 open FsToolkit.ErrorHandling
 
 module SportsmanDocument =

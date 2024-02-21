@@ -25,20 +25,4 @@ type MongoSettings = {
             errors
             |> ValidationErrors.toList
             |> String.concat "; "
-            |> fun msg -> failwith $"Invalid settings: %s{msg}"
-
-module MongoCollections =
-    [<Literal>]
-    let ExerciseCategories = "exerciseCategories"
-
-    [<Literal>]
-    let Exercises = "exercises"
-
-    [<Literal>]
-    let Routines = "routines"
-
-    [<Literal>]
-    let WorkoutSessions = "workoutSessions"
-
-    [<Literal>]
-    let Sportsmen = "sportsmen"
+            |> fun msg -> failwith $"Invalid '{section}' settings: {msg}"

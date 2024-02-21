@@ -1,7 +1,6 @@
 namespace GymDiary.Persistence
 
 open System
-
 open MongoDB.Bson.Serialization.Attributes
 
 // It is safe to use non-nullable types for DTOs:

@@ -14,7 +14,7 @@ open MongoDB.Driver
 type PersistenceServiceCollectionExtensions() =
     [<Extension>]
     static member AddPersistence(services: IServiceCollection, configuration: IConfiguration) : IServiceCollection =
-        PersistenceModule.configure ()
+        SerializationSettings.register ()
 
         let mongoSettings = MongoSettings.createFromOrThrow configuration "MongoDb"
 

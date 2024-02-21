@@ -2,7 +2,6 @@ namespace GymDiary.Persistence.Conversion
 
 open GymDiary.Core.Domain
 open GymDiary.Persistence
-
 open FsToolkit.ErrorHandling
 
 module WorkoutSessionDocument =
