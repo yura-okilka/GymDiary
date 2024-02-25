@@ -4,7 +4,7 @@ namespace SystemTests.Context;
 
 public interface ITestContextFakeTime
 {
-    public FakeTimeProvider Time { get; }
+    FakeTimeProvider Time { get; }
 }
 
 /// <summary>

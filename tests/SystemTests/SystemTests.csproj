@@ -12,6 +12,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="LightBDD.Framework" Version="3.7.0" />
     <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" Version="8.2.0" />
     <PackageReference Include="Refit" Version="7.0.0" />
   </ItemGroup>

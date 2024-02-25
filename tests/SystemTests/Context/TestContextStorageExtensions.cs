@@ -2,7 +2,7 @@ namespace SystemTests.Context;
 
 public interface ITestContextStorage
 {
-    public Dictionary<string, object?> Storage { get; }
+    Dictionary<string, object?> Storage { get; }
 }
 
 /// <summary>
