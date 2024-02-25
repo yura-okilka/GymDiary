@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\db\GymDiary.DbMigrations\GymDiary.DbMigrations.csproj" />
     <ProjectReference Include="..\..\src\GymDiary.Api\GymDiary.Api.fsproj" />
     <ProjectReference Include="..\SystemTests\SystemTests.csproj" />
   </ItemGroup>

@@ -1,9 +1,14 @@
 using System.Net;
+
 using FluentAssertions;
+
 using Refit;
 
 namespace SystemTests.Assertions;
 
+/// <summary>
+///     Assertion methods for Refit <see cref="IApiResponse" />
+/// </summary>
 public static class ApiResponseExtensions
 {
     public static void ShouldBeSuccessful(this IApiResponse response) => ShouldBeSuccessfulInternal(response);

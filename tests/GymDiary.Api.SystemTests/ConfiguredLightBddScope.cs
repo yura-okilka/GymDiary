@@ -50,7 +50,7 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
             .Build();
 
         var testDbSettings = testConfiguration.GetSection("MongoDb").Get<GymDiaryTestDbSettings>() ??
-                             throw new Exception("Failed to parse MongoDb settings");
+                             throw new Exception("Failed to parse MongoDB settings");
 
         cfg.RegisterType<GymDiaryTestDbSettings>(InstanceScope.Single, _ => testDbSettings);
         cfg.RegisterType<GymDiaryTestDb>(
