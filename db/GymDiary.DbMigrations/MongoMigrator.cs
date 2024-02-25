@@ -10,7 +10,7 @@ namespace GymDiary.DbMigrations;
 /// <remarks>
 ///     It does not support migration scripts and journaling yet.
 /// </remarks>
-public class MongoMigrator(IMongoDatabase database, ILogger<MongoMigrator> logger) : IDbMigrator
+public class MongoMigrator(IMongoDatabase database, ILogger<MongoMigrator> logger)
 {
     private string DatabaseName => database.DatabaseNamespace.DatabaseName;
 
