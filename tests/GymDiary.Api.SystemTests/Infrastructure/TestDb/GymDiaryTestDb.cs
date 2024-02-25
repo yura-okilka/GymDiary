@@ -8,7 +8,7 @@ using MongoDB.Driver;
 
 using Testcontainers.MongoDb;
 
-namespace GymDiary.Api.SystemTests.Infrastructure;
+namespace GymDiary.Api.SystemTests.Infrastructure.TestDb;
 
 public record GymDiaryTestDbSettings(string Database, string Image);
 

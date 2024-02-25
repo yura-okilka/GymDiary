@@ -5,7 +5,7 @@ using LightBDD.Core.Execution;
 
 using Refit;
 
-namespace GymDiary.Api.SystemTests.Infrastructure;
+namespace GymDiary.Api.SystemTests.Infrastructure.TestServer;
 
 public record GymDiaryTestServerSettings
 {

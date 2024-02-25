@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 
-namespace GymDiary.Api.SystemTests.Infrastructure;
+namespace GymDiary.Api.SystemTests.Infrastructure.TestServer;
 
 public record GymDiaryApiSettings(string TestDbConnectionString);
 

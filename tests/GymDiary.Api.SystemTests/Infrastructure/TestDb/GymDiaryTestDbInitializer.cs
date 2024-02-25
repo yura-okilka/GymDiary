@@ -3,7 +3,7 @@ using GymDiary.DbMigrations;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace GymDiary.Api.SystemTests.Infrastructure;
+namespace GymDiary.Api.SystemTests.Infrastructure.TestDb;
 
 public class GymDiaryTestDbInitializer(IMongoDatabase database, MongoMigrator migrator)
 {
