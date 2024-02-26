@@ -13,7 +13,7 @@ public interface ITestContextEnvCleanup
 public static class BddRunnerEnvCleanupExtensions
 {
     /// <summary>
-    ///     Extension method for running 'Clean up environment' step before <paramref name="steps" />.
+    ///     Extension method for running 'Clean up environment' step before main <paramref name="steps" />.
     /// </summary>
     public static Task RunScenarioWithEnvCleanup<TContext>(
         this IBddRunner<TContext> runner,

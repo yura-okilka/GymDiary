@@ -18,9 +18,9 @@ public static class TestContextFakeTimeExtensions
         return Task.CompletedTask;
     }
 
-    public static Task Set_UTC_now(this ITestContextFakeTime context, DateTime dateTime)
+    public static Task Set_UTC_now(this ITestContextFakeTime context, DateTime value)
     {
-        context.Time.SetUtcNow(dateTime);
+        context.Time.SetUtcNow(value);
         return Task.CompletedTask;
     }
 
