@@ -1,3 +1,3 @@
 namespace GymDiary.Api.SystemTests.Infrastructure.TestServer.GymDiaryApiModels;
 
-public record CreateExerciseCategoryRequest(string Name);
+public record ErrorResponse(string Name, string Message, object? Details);

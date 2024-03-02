@@ -1,9 +1,9 @@
+using FluentAssertions;
+
 using GymDiary.Api.SystemTests.Infrastructure.TestDb;
 using GymDiary.Api.SystemTests.Infrastructure.TestServer;
 
 using Refit;
-
-using SystemTests.Assertions;
 
 namespace GymDiary.Api.SystemTests.Contexts;
 
@@ -16,9 +16,9 @@ public class PingContext(GymDiaryTestServer gymDiaryApi, GymDiaryTestDb gymDiary
         _pingResponse = await GymDiaryApi.Client.Ping();
     }
 
-    public Task Ping_response_should_be_successful()
+    public Task Ping_response_should_have_success()
     {
-        _pingResponse.ShouldBeSuccessful();
+        _pingResponse.IsSuccessStatusCode.Should().BeTrue();
         return Task.CompletedTask;
     }
 }

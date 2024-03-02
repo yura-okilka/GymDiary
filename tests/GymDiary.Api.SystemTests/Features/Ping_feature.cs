@@ -13,7 +13,7 @@ public class Ping_feature : FeatureFixture
             .WithContext<PingContext>()
             .RunScenarioWithEnvCleanup(
                 when => when.Call_ping(),
-                then => then.Ping_response_should_be_successful()
+                then => then.Ping_response_should_have_success()
             );
     }
 }

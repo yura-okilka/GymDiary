@@ -1,3 +1,5 @@
+using System.Net;
+
 using FluentAssertions;
 
 using GymDiary.Api.SystemTests.Infrastructure.TestDb;
@@ -8,25 +10,41 @@ using MongoDB.Bson;
 
 using Refit;
 
+using SystemTests.Assertions;
+
 namespace GymDiary.Api.SystemTests.Contexts;
 
 public class ExerciseCategoryContext(GymDiaryTestServer gymDiaryApi, GymDiaryTestDb gymDiaryDb)
     : GymDiaryContextBase(gymDiaryApi, gymDiaryDb)
 {
+    private string? _sportsmanId;
     private IApiResponse? _createExerciseCategoryResponse;
 
-    public async Task Create_exercise_category()
+    public string SportsmanId => _sportsmanId!;
+
+    public Task Create_exercise_category_for_unknown_sportsman()
     {
+        return Create_exercise_category(ObjectId.GenerateNewId().ToString(), "Cardio");
+    }
+
+    public async Task Create_exercise_category(string sportsmanId, string name)
+    {
+        _sportsmanId = sportsmanId;
         _createExerciseCategoryResponse = await GymDiaryApi.Client.CreateExerciseCategory(
-            sportsmanId: ObjectId.GenerateNewId().ToString(),
-            request: new CreateExerciseCategoryRequest("ExerciseCategory1")
+            sportsmanId,
+            new CreateExerciseCategory.Request(name)
         );
     }
 
-    public Task Create_exercise_category_response_should_be_successful()
+    public Task Create_exercise_category_response_should_have_error<TError>(HttpStatusCode statusCode, TError error)
+    {
+        return _createExerciseCategoryResponse!.ShouldHaveError(statusCode, error);
+    }
+
+    public Task Create_exercise_category_response_should_have(HttpStatusCode statusCode)
     {
         // TODO: use Expectation Expressions?
-        _createExerciseCategoryResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _createExerciseCategoryResponse!.StatusCode.Should().Be(statusCode);
         return Task.CompletedTask;
     }
 }

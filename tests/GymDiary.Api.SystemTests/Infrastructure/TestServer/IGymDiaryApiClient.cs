@@ -10,5 +10,5 @@ public interface IGymDiaryApiClient
     Task<IApiResponse> Ping();
 
     [Post("/v1/sportsmen/{sportsmanId}/exerciseCategories")]
-    Task<IApiResponse> CreateExerciseCategory(string sportsmanId, CreateExerciseCategoryRequest request);
+    Task<IApiResponse> CreateExerciseCategory(string sportsmanId, CreateExerciseCategory.Request request);
 }
