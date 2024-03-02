@@ -2,6 +2,7 @@ namespace GymDiary.Api
 
 #nowarn "20"
 
+open System
 open System.Text.Json
 open System.Text.Json.Serialization
 open Microsoft.AspNetCore.Builder
@@ -9,6 +10,7 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Giraffe
+open GymDiary.Core.Time
 open GymDiary.Api
 open GymDiary.Api.DependencyInjection
 open GymDiary.Api.HttpHandlers
@@ -46,6 +48,7 @@ module Program =
 
         builder.Services.AddSingleton(jsonOptions)
         builder.Services.AddSingleton<Json.ISerializer, SystemTextJson.Serializer>()
+        builder.Services.AddSingleton<IClock>(UtcClock(TimeProvider.System))
         builder.Services.AddPersistence(builder.Configuration)
 
         let app = builder.Build()

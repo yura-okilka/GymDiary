@@ -44,7 +44,7 @@ public class GymDiaryTestDb : IDisposable, IGlobalResourceSetUp
         _onSetUpExecuted?.Invoke(this);
     }
 
-    public Task ResetAsync() => _dbInitializer?.ClearData() ?? Task.CompletedTask;
+    public Task ResetAsync() => _dbInitializer?.Cleanup() ?? Task.CompletedTask;
 
     public Task TearDownAsync() => _container.DisposeAsync().AsTask();
 

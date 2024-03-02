@@ -10,11 +10,12 @@ public class GymDiaryTestDbInitializer(IMongoDatabase database, MongoMigrator mi
     public async Task Initialize()
     {
         await migrator.Upgrade();
-        await ClearData();
+        await Cleanup();
     }
 
-    public async Task ClearData()
+    public async Task Cleanup()
     {
+        // ReSharper disable once MethodHasAsyncOverload
         var collections = await database.ListCollectionNames().ToListAsync();
 
         foreach (var collection in collections)

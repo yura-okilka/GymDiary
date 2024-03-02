@@ -1,10 +1,14 @@
+using GymDiary.Core.Time;
+
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace GymDiary.Api.SystemTests.Infrastructure.TestServer;
 
-public record GymDiaryApiSettings(string TestDbConnectionString);
+public record GymDiaryApiSettings(string TestDbConnectionString, IClock Clock);
 
 public class GymDiaryWebApplicationFactory(GymDiaryApiSettings settings) : WebApplicationFactory<Program.TestEntryPoint>
 {
@@ -18,6 +22,9 @@ public class GymDiaryWebApplicationFactory(GymDiaryApiSettings settings) : WebAp
                         ["MongoDb:ConnectionString"] = settings.TestDbConnectionString
                     }
                 )
+            )
+            .ConfigureServices(
+                services => services.Replace(ServiceDescriptor.Singleton(settings.Clock))
             );
     }
 }

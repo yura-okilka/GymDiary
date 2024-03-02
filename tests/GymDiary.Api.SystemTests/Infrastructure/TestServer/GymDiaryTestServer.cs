@@ -1,6 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
+using GymDiary.Api.SystemTests.Infrastructure.TestServer.Fakes;
+
 using LightBDD.Core.Execution;
 
 using Refit;
@@ -17,13 +19,14 @@ public class GymDiaryTestServer : IDisposable, IGlobalResourceSetUp
     private readonly GymDiaryWebApplicationFactory _testServer;
 
     public IGymDiaryApiClient Client { get; }
+    public FakeClock Clock { get; } = new(); // TODO: GymDiaryTestServerFakes?
 
     public GymDiaryTestServer(GymDiaryTestServerSettings settings)
     {
         var testDbConnectionString = settings.TestDbConnectionString ??
                                      throw new ArgumentNullException(nameof(settings.TestDbConnectionString));
 
-        _testServer = new GymDiaryWebApplicationFactory(new GymDiaryApiSettings(testDbConnectionString));
+        _testServer = new GymDiaryWebApplicationFactory(new GymDiaryApiSettings(testDbConnectionString, Clock));
         var httpClient = _testServer.CreateDefaultClient();
 
         Client = RestService.For<IGymDiaryApiClient>(
@@ -40,6 +43,12 @@ public class GymDiaryTestServer : IDisposable, IGlobalResourceSetUp
     }
 
     public Task SetUpAsync() => Task.CompletedTask;
+
+    public Task ResetAsync()
+    {
+        Clock.Reset();
+        return Task.CompletedTask;
+    }
 
     public async Task TearDownAsync() => await _testServer.DisposeAsync();
 
