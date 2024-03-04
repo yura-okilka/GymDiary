@@ -7,7 +7,7 @@ using Refit;
 
 namespace GymDiary.Api.SystemTests.Contexts;
 
-public class PingContext(IGymDiaryApp gymDiaryApp, GymDiaryTestDb gymDiaryDb) : GymDiaryContextBase(gymDiaryApp, gymDiaryDb)
+public class PingContext(IGymDiaryApp gymDiaryApp, IGymDiaryDb gymDiaryDb) : GymDiaryContextBase(gymDiaryApp, gymDiaryDb)
 {
     private IApiResponse _pingResponse = null!;
 

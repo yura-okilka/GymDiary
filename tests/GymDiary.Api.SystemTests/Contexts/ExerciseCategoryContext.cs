@@ -14,7 +14,7 @@ using SystemTests.Assertions;
 
 namespace GymDiary.Api.SystemTests.Contexts;
 
-public class ExerciseCategoryContext(IGymDiaryApp gymDiaryApp, GymDiaryTestDb gymDiaryDb)
+public class ExerciseCategoryContext(IGymDiaryApp gymDiaryApp, IGymDiaryDb gymDiaryDb)
     : GymDiaryContextBase(gymDiaryApp, gymDiaryDb)
 {
     private string? _sportsmanId;

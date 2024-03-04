@@ -13,7 +13,7 @@ namespace GymDiary.Api.SystemTests.Infrastructure.TestDb;
 public record GymDiaryTestDbSettings(string Database, string Image);
 
 // TODO: Own Managed DB external DB?
-public class GymDiaryTestDb : IDisposable, IGlobalResourceSetUp
+public class GymDiaryTestDb : IDisposable, IGlobalResourceSetUp, IGymDiaryDb
 {
     private readonly GymDiaryTestDbSettings _settings;
     private readonly MongoDbContainer _container;
@@ -44,7 +44,7 @@ public class GymDiaryTestDb : IDisposable, IGlobalResourceSetUp
         _onSetUpExecuted?.Invoke(this);
     }
 
-    public Task ResetAsync() => _dbInitializer?.Cleanup() ?? Task.CompletedTask;
+    public Task Reset() => _dbInitializer?.Cleanup() ?? Task.CompletedTask;
 
     public Task TearDownAsync() => _container.DisposeAsync().AsTask();
 

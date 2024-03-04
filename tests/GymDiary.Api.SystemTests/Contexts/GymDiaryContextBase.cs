@@ -6,17 +6,17 @@ using SystemTests.Context;
 
 namespace GymDiary.Api.SystemTests.Contexts;
 
-public abstract class GymDiaryContextBase(IGymDiaryApp gymDiaryApp, GymDiaryTestDb gymDiaryDb)
+public abstract class GymDiaryContextBase(IGymDiaryApp gymDiaryApp, IGymDiaryDb gymDiaryDb)
     : ITestContextEnvCleanup, ITestContextStorage, ITestContextFakeTime
 {
     protected readonly IGymDiaryApp GymDiaryApp = gymDiaryApp;
-    protected readonly GymDiaryTestDb GymDiaryDb = gymDiaryDb;
+    protected readonly IGymDiaryDb GymDiaryDb = gymDiaryDb;
     protected IGymDiaryApiClient Api => GymDiaryApp.Client;
     public Dictionary<string, object?> Storage { get; } = new();
 
     public async Task Clean_up_environment()
     {
-        await GymDiaryDb.ResetAsync();
+        await GymDiaryDb.Reset();
         GymDiaryApp.Reset();
     }
 
