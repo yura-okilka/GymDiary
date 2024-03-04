@@ -1,6 +1,12 @@
 {
   "MongoDb": {
     "Database": "gymDiaryTests",
-    "Image": "mongo:7.0.5"
+    "HostingType": "ManagedDb",
+    "ManagedDb": {
+      "Image": "mongo:7.0.5"
+    },
+    "ExternalDb": {
+      "ConnectionString": "mongodb://localhost:27017"
+    }
   }
 }

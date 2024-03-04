@@ -6,34 +6,47 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 using MongoDB.Driver;
 
-using Testcontainers.MongoDb;
-
 namespace GymDiary.Api.SystemTests.Infrastructure.TestDb;
 
-public record GymDiaryTestDbSettings(string Database, string Image);
+public record GymDiaryTestDbSettings(
+    string Database,
+    DbHostingType HostingType,
+    ManagedMongoDbContainerSettings? ManagedDb,
+    ExternalMongoDbContainerSettings? ExternalDb
+);
 
-// TODO: Own Managed DB external DB?
+public enum DbHostingType
+{
+    ManagedDb = 1,
+    ExternalDb
+}
+
 public class GymDiaryTestDb : IDisposable, IGlobalResourceSetUp, IGymDiaryDb
 {
     private readonly GymDiaryTestDbSettings _settings;
-    private readonly MongoDbContainer _container;
+    private readonly IDbContainer _container;
     private readonly Action<GymDiaryTestDb>? _onSetUpExecuted;
     private GymDiaryTestDbInitializer? _dbInitializer;
 
     public GymDiaryTestDb(GymDiaryTestDbSettings settings, Action<GymDiaryTestDb>? onSetUpExecuted)
     {
-        _container = new MongoDbBuilder().WithImage(settings.Image).Build();
         _settings = settings;
         _onSetUpExecuted = onSetUpExecuted;
+        _container = settings.HostingType switch
+        {
+            DbHostingType.ManagedDb => new ManagedMongoDbContainer(settings.ManagedDb!),
+            DbHostingType.ExternalDb => new ExternalMongoDbContainer(settings.ExternalDb!),
+            _ => throw new ArgumentOutOfRangeException(nameof(settings.HostingType), settings.HostingType, "Unknown DB hosting type")
+        };
     }
 
-    public string ConnectionString => _container.GetConnectionString();
+    public string ConnectionString => _container.ConnectionString;
 
     public async Task SetUpAsync()
     {
         await _container.StartAsync();
 
-        var mongoClient = new MongoClient(_container.GetConnectionString());
+        var mongoClient = new MongoClient(_container.ConnectionString);
         var database = mongoClient.GetDatabase(_settings.Database);
         _dbInitializer = new GymDiaryTestDbInitializer(
             database,

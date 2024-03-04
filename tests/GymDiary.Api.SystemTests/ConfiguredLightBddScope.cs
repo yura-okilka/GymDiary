@@ -45,8 +45,11 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
 
     private static void ConfigureContainer(IDefaultContainerConfigurator cfg)
     {
+        var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+
         var testConfiguration = new ConfigurationBuilder()
             .AddJsonFile("testsettings.json")
+            .AddJsonFile($"testsettings.{environment}.json", optional: true)
             .AddEnvironmentVariables()
             .Build();
 

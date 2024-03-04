@@ -1,0 +1,5 @@
+{
+  "MongoDb": {
+    "HostingType": "ExternalDb"
+  }
+}
