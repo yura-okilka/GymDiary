@@ -14,8 +14,8 @@ using SystemTests.Assertions;
 
 namespace GymDiary.Api.SystemTests.Contexts;
 
-public class ExerciseCategoryContext(GymDiaryTestServer gymDiaryApi, GymDiaryTestDb gymDiaryDb)
-    : GymDiaryContextBase(gymDiaryApi, gymDiaryDb)
+public class ExerciseCategoryContext(IGymDiaryApp gymDiaryApp, GymDiaryTestDb gymDiaryDb)
+    : GymDiaryContextBase(gymDiaryApp, gymDiaryDb)
 {
     private string? _sportsmanId;
     private IApiResponse? _createExerciseCategoryResponse;
@@ -30,7 +30,7 @@ public class ExerciseCategoryContext(GymDiaryTestServer gymDiaryApi, GymDiaryTes
     public async Task Create_exercise_category(string sportsmanId, string name)
     {
         _sportsmanId = sportsmanId;
-        _createExerciseCategoryResponse = await GymDiaryApi.Client.CreateExerciseCategory(
+        _createExerciseCategoryResponse = await Api.CreateExerciseCategory(
             sportsmanId,
             new CreateExerciseCategory.Request(name)
         );

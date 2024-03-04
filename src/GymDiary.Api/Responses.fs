@@ -55,8 +55,8 @@ module Responses =
         Details = null
     }
 
-    let ownerNotFound (error: OwnerNotFoundError) = {
+    let ownerNotFound (OwnerNotFoundError(id) as error) = {
         Name = "OwnerNotFound"
         Message = OwnerNotFoundError.toString error
-        Details = null
+        Details = {| Id = id |}
     }

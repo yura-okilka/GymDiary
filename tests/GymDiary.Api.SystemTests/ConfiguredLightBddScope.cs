@@ -63,6 +63,6 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
             )
         );
         cfg.RegisterType<GymDiaryTestServerSettings>(InstanceScope.Single);
-        cfg.RegisterType<GymDiaryTestServer>(InstanceScope.Single);
+        cfg.RegisterType<GymDiaryTestServer>(InstanceScope.Single, o => o.As<GymDiaryTestServer>().As<IGymDiaryApp>());
     }
 }

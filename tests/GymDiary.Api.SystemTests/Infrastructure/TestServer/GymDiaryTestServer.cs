@@ -14,19 +14,19 @@ public record GymDiaryTestServerSettings
     public string? TestDbConnectionString { get; set; }
 }
 
-public class GymDiaryTestServer : IDisposable, IGlobalResourceSetUp
+public class GymDiaryTestServer : IDisposable, IGlobalResourceSetUp, IGymDiaryApp
 {
-    private readonly GymDiaryWebApplicationFactory _testServer;
+    private readonly GymDiaryWebAppFactory _testServer;
 
     public IGymDiaryApiClient Client { get; }
-    public FakeClock Clock { get; } = new(); // TODO: GymDiaryTestServerFakes?
+    public GymDiaryAppFakes Fakes { get; } = new();
 
     public GymDiaryTestServer(GymDiaryTestServerSettings settings)
     {
         var testDbConnectionString = settings.TestDbConnectionString ??
                                      throw new ArgumentNullException(nameof(settings.TestDbConnectionString));
 
-        _testServer = new GymDiaryWebApplicationFactory(new GymDiaryApiSettings(testDbConnectionString, Clock));
+        _testServer = new GymDiaryWebAppFactory(new GymDiaryAppSettings(testDbConnectionString), Fakes);
         var httpClient = _testServer.CreateDefaultClient();
 
         Client = RestService.For<IGymDiaryApiClient>(
@@ -44,11 +44,7 @@ public class GymDiaryTestServer : IDisposable, IGlobalResourceSetUp
 
     public Task SetUpAsync() => Task.CompletedTask;
 
-    public Task ResetAsync()
-    {
-        Clock.Reset();
-        return Task.CompletedTask;
-    }
+    public void Reset() => Fakes.Reset();
 
     public async Task TearDownAsync() => await _testServer.DisposeAsync();
 

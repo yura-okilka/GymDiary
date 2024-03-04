@@ -6,28 +6,29 @@ using SystemTests.Context;
 
 namespace GymDiary.Api.SystemTests.Contexts;
 
-public abstract class GymDiaryContextBase(GymDiaryTestServer gymDiaryApi, GymDiaryTestDb gymDiaryDb)
+public abstract class GymDiaryContextBase(IGymDiaryApp gymDiaryApp, GymDiaryTestDb gymDiaryDb)
     : ITestContextEnvCleanup, ITestContextStorage, ITestContextFakeTime
 {
-    protected readonly GymDiaryTestServer GymDiaryApi = gymDiaryApi;
+    protected readonly IGymDiaryApp GymDiaryApp = gymDiaryApp;
     protected readonly GymDiaryTestDb GymDiaryDb = gymDiaryDb;
+    protected IGymDiaryApiClient Api => GymDiaryApp.Client;
     public Dictionary<string, object?> Storage { get; } = new();
 
     public async Task Clean_up_environment()
     {
         await GymDiaryDb.ResetAsync();
-        await GymDiaryApi.ResetAsync();
+        GymDiaryApp.Reset();
     }
 
     public Task Set_UTC_now(DateTime value)
     {
-        GymDiaryApi.Clock.SetUtcNow(value);
+        GymDiaryApp.Fakes.Clock.SetUtcNow(value);
         return Task.CompletedTask;
     }
 
     public Task Advance_time(TimeSpan delta)
     {
-        GymDiaryApi.Clock.Advance(delta);
+        GymDiaryApp.Fakes.Clock.Advance(delta);
         return Task.CompletedTask;
     }
 }
