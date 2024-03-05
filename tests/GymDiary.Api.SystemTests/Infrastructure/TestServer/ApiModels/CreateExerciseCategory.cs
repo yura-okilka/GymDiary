@@ -1,4 +1,4 @@
-namespace GymDiary.Api.SystemTests.Infrastructure.TestServer.GymDiaryApiModels;
+namespace GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiModels;
 
 public static class CreateExerciseCategory
 {

@@ -1,4 +1,4 @@
-using GymDiary.Api.SystemTests.Infrastructure.TestServer.GymDiaryApiModels;
+using GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiModels;
 
 using Refit;
 
