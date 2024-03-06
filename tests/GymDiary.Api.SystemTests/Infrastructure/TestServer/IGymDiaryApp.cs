@@ -1,3 +1,4 @@
+using GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiClients;
 using GymDiary.Api.SystemTests.Infrastructure.TestServer.Fakes;
 
 namespace GymDiary.Api.SystemTests.Infrastructure.TestServer;

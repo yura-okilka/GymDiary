@@ -1,8 +1,8 @@
-using GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiModels;
+using GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiClients.Models;
 
 using Refit;
 
-namespace GymDiary.Api.SystemTests.Infrastructure.TestServer;
+namespace GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiClients;
 
 public interface IGymDiaryApiClient
 {

@@ -4,7 +4,7 @@ using FluentAssertions;
 
 using GymDiary.Api.SystemTests.Infrastructure.TestDb;
 using GymDiary.Api.SystemTests.Infrastructure.TestServer;
-using GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiModels;
+using GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiClients.Models;
 
 using MongoDB.Bson;
 
