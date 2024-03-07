@@ -20,6 +20,7 @@ public class MongoMigrator(IMongoDatabase database, ILogger<MongoMigrator> logge
         {
             logger.LogInformation("Upgrading '{database}' database", DatabaseName);
 
+            // ReSharper disable once MethodHasAsyncOverload
             var existingCollections = await database.ListCollectionNames().ToListAsync();
 
             foreach (var collection in MongoCollections.All.Except(existingCollections))
