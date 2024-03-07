@@ -1,6 +1,6 @@
 ﻿using GymDiary.Api.SystemTests;
-using GymDiary.Api.SystemTests.Infrastructure.TestDb;
-using GymDiary.Api.SystemTests.Infrastructure.TestServer;
+using GymDiary.Api.SystemTests.TestDb;
+using GymDiary.Api.SystemTests.TestServer;
 
 using LightBDD.Core.Configuration;
 using LightBDD.Core.Dependencies;

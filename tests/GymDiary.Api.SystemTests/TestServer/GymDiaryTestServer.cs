@@ -1,14 +1,14 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiClients;
-using GymDiary.Api.SystemTests.Infrastructure.TestServer.Fakes;
+using GymDiary.Api.SystemTests.TestServer.ApiClients;
+using GymDiary.Api.SystemTests.TestServer.Fakes;
 
 using LightBDD.Core.Execution;
 
 using Refit;
 
-namespace GymDiary.Api.SystemTests.Infrastructure.TestServer;
+namespace GymDiary.Api.SystemTests.TestServer;
 
 public record GymDiaryTestServerSettings
 {

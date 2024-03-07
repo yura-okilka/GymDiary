@@ -1,4 +1,4 @@
-using GymDiary.Api.SystemTests.Infrastructure.TestServer.Fakes;
+using GymDiary.Api.SystemTests.TestServer.Fakes;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
-namespace GymDiary.Api.SystemTests.Infrastructure.TestServer;
+namespace GymDiary.Api.SystemTests.TestServer;
 
 public record GymDiaryAppSettings(string TestDbConnectionString, string TestDbName);
 
@@ -30,5 +30,6 @@ public class GymDiaryWebAppFactory(GymDiaryAppSettings settings, GymDiaryAppFake
             .ConfigureServices(
                 services => services.Replace(ServiceDescriptor.Singleton(fakes.Clock))
             );
+        // TODO: check env
     }
 }

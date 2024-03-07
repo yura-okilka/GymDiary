@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 using MongoDB.Driver;
 
-namespace GymDiary.Api.SystemTests.Infrastructure.TestDb;
+namespace GymDiary.Api.SystemTests.TestDb;
 
 public record GymDiaryTestDbSettings(
     string Database,

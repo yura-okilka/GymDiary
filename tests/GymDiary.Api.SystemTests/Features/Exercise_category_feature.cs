@@ -1,7 +1,7 @@
 using System.Net;
 
 using GymDiary.Api.SystemTests.Contexts;
-using GymDiary.Api.SystemTests.Infrastructure.TestServer.ApiClients.Models;
+using GymDiary.Api.SystemTests.TestServer.ApiClients.Models;
 
 using SystemTests.BddRunner;
 

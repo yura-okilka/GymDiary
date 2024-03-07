@@ -1,4 +1,4 @@
-namespace GymDiary.Api.SystemTests.Infrastructure.TestDb;
+namespace GymDiary.Api.SystemTests.TestDb;
 
 public record ExternalMongoDbContainerSettings(string ConnectionString);
 
