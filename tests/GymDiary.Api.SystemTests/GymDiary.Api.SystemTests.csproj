@@ -33,12 +33,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="testsettings.json">
+    <None Update="test.settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="testsettings.Development.json">
+    <None Update="test.settings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <DependentUpon>testsettings.json</DependentUpon>
+      <DependentUpon>test.settings.json</DependentUpon>
     </None>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
