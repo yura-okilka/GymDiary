@@ -18,13 +18,16 @@ public class GymDiaryWebAppFactory(GymDiaryAppSettings settings, GymDiaryAppFake
     {
         builder
             .ConfigureAppConfiguration(
-                b => b.AddInMemoryCollection(
-                    new Dictionary<string, string?>
-                    {
-                        ["MongoDb:ConnectionString"] = settings.TestDbConnectionString,
-                        ["MongoDb:Database"] = settings.TestDbName
-                    }
-                )
+                b => b
+                    .SetBasePath(Directory.GetCurrentDirectory()) // switch from app directory to tests one
+                    .AddJsonFile("gymdiary.appsettings.json")
+                    .AddInMemoryCollection(
+                        new Dictionary<string, string?>
+                        {
+                            ["MongoDb:ConnectionString"] = settings.TestDbConnectionString,
+                            ["MongoDb:Database"] = settings.TestDbName
+                        }
+                    )
             )
             .ConfigureLogging(b => b.ClearProviders())
             .ConfigureServices(
