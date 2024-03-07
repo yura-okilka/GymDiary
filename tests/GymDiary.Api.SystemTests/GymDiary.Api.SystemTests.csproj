@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.4.1" />
     <PackageReference Include="LightBDD.Extensions.DependencyInjection" Version="3.7.0" />
     <PackageReference Include="LightBDD.XUnit2" Version="3.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.2" />

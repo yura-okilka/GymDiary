@@ -1,6 +1,8 @@
 using System.Net;
+using System.Text.Json;
 
 using FluentAssertions;
+using FluentAssertions.Execution;
 
 using Refit;
 
@@ -11,26 +13,55 @@ namespace SystemTests.Assertions;
 /// </summary>
 public static class ApiResponseExtensions
 {
-    public static void ShouldHaveSuccess<TContent>(
+    public static async Task ShouldHaveSuccess(this IApiResponse response)
+    {
+        using var _ = new AssertionScope(); // for throwing one exception with all failures
+
+        response.IsSuccessStatusCode.Should().Be(true);
+        await response.ShouldNotHaveError();
+    }
+
+    public static async Task ShouldHaveSuccess(this IApiResponse response, HttpStatusCode statusCode)
+    {
+        using var _ = new AssertionScope(); // for throwing one exception with all failures
+
+        response.StatusCode.Should().Be(statusCode);
+        await response.ShouldNotHaveError();
+    }
+
+    public static async Task ShouldHaveSuccess<TContent>(
         this IApiResponse<TContent> response,
         HttpStatusCode statusCode,
         TContent expectedContent
     )
     {
-        response.IsSuccessStatusCode.Should().BeTrue();
+        using var _ = new AssertionScope(); // for throwing one exception with all failures
+
         response.StatusCode.Should().Be(statusCode);
-        response.Content.Should().NotBeNull();
+        await response.ShouldNotHaveError();
         response.Content.Should().BeEquivalentTo(expectedContent);
     }
 
     public static async Task ShouldHaveError<TError>(this IApiResponse response, HttpStatusCode statusCode, TError expectedError)
     {
-        response.IsSuccessStatusCode.Should().BeFalse();
+        using var _ = new AssertionScope(); // for throwing one exception with all failures
+
         response.StatusCode.Should().Be(statusCode);
-        response.Error.Should().NotBeNull();
-        response.Error!.Content.Should().NotBeNull();
+        response.Error?.Content.Should().NotBeNull();
 
         var actualError = await response.Error!.GetContentAsAsync<TError>();
         actualError.Should().BeEquivalentTo(expectedError);
+    }
+
+    private static async Task ShouldNotHaveError(this IApiResponse response)
+    {
+        if (response.Error?.Content is not null)
+        {
+            // TODO: consider writing a custom IValueFormatter to write indented JSON. https://fluentassertions.com/extensibility/#rendering-objects-with-beauty
+            using var jsonContent = await response.Error.GetContentAsAsync<JsonDocument>();
+            var errorContent = JsonSerializer.Serialize(jsonContent, new JsonSerializerOptions { WriteIndented = true });
+
+            errorContent.Should().BeNull(); // for showing raw error response in the test output
+        }
     }
 }

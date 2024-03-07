@@ -1,6 +1,6 @@
 using System.Net;
 
-using FluentAssertions;
+using Bogus;
 
 using GymDiary.Api.SystemTests.Infrastructure.TestDb;
 using GymDiary.Api.SystemTests.Infrastructure.TestServer;
@@ -17,10 +17,9 @@ namespace GymDiary.Api.SystemTests.Contexts;
 public class ExerciseCategoryContext(IGymDiaryApp gymDiaryApp, IGymDiaryDb gymDiaryDb)
     : GymDiaryContextBase(gymDiaryApp, gymDiaryDb)
 {
-    private string? _sportsmanId;
-    private IApiResponse? _createExerciseCategoryResponse;
-
-    public string SportsmanId => _sportsmanId!;
+    private IApiResponse _createExerciseCategoryResponse = null!;
+    public IApiResponse<CreateSportsman.Response> CreateSportsmanResponse { get; private set; } = null!;
+    public string SportsmanId { get; private set; } = null!;
 
     public Task Create_exercise_category_for_unknown_sportsman()
     {
@@ -29,22 +28,40 @@ public class ExerciseCategoryContext(IGymDiaryApp gymDiaryApp, IGymDiaryDb gymDi
 
     public async Task Create_exercise_category(string sportsmanId, string name)
     {
-        _sportsmanId = sportsmanId;
+        SportsmanId = sportsmanId;
         _createExerciseCategoryResponse = await Api.CreateExerciseCategory(
             sportsmanId,
             new CreateExerciseCategory.Request(name)
         );
     }
 
-    public Task Create_exercise_category_response_should_have_error<TError>(HttpStatusCode statusCode, TError error)
+    public async Task Create_sportsman()
     {
-        return _createExerciseCategoryResponse!.ShouldHaveError(statusCode, error);
+        var requestFaker = new Faker<CreateSportsman.Request>()
+            .RuleFor(r => r.Email, (f, u) => f.Internet.Email(u.FirstName, u.LastName))
+            .RuleFor(r => r.FirstName, f => f.Name.FirstName())
+            .RuleFor(r => r.LastName, f => f.Name.LastName())
+            .RuleFor(r => r.DateOfBirth, f => f.Date.Past(yearsToGoBack: 20, DateTime.UtcNow));
+        //.RuleFor(r => r.Gender, f => f.PickRandom<CreateSportsman.GenderType>()); // "Male", "Female", "Other"
+
+        var request = requestFaker.Generate();
+
+        CreateSportsmanResponse = await Api.CreateSportsman(request);
     }
 
-    public Task Create_exercise_category_response_should_have(HttpStatusCode statusCode)
+    public Task Create_sportsman_response_should_have_success(HttpStatusCode statusCode)
+    {
+        return CreateSportsmanResponse.ShouldHaveSuccess(statusCode);
+    }
+
+    public Task Create_exercise_category_response_should_have_error<TError>(HttpStatusCode statusCode, TError error)
+    {
+        return _createExerciseCategoryResponse.ShouldHaveError(statusCode, error);
+    }
+
+    public Task Create_exercise_category_response_should_have_success(HttpStatusCode statusCode)
     {
         // TODO: use Expectation Expressions?
-        _createExerciseCategoryResponse!.StatusCode.Should().Be(statusCode);
-        return Task.CompletedTask;
+        return _createExerciseCategoryResponse.ShouldHaveSuccess(statusCode);
     }
 }
