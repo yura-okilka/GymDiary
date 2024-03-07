@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace GymDiary.Api.SystemTests.TestServer;
 
-public record GymDiaryAppSettings(string TestDbConnectionString, string TestDbName);
+public record GymDiaryTestAppSettings(string DbConnectionString, string DbName);
 
-public class GymDiaryWebAppFactory(GymDiaryAppSettings settings, GymDiaryAppFakes fakes)
+public class GymDiaryTestAppFactory(GymDiaryTestAppSettings settings, GymDiaryAppFakes fakes)
     : WebApplicationFactory<Program.TestEntryPoint>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -24,8 +24,8 @@ public class GymDiaryWebAppFactory(GymDiaryAppSettings settings, GymDiaryAppFake
                     .AddInMemoryCollection(
                         new Dictionary<string, string?>
                         {
-                            ["MongoDb:ConnectionString"] = settings.TestDbConnectionString,
-                            ["MongoDb:Database"] = settings.TestDbName
+                            ["MongoDb:ConnectionString"] = settings.DbConnectionString,
+                            ["MongoDb:Database"] = settings.DbName
                         }
                     )
             )

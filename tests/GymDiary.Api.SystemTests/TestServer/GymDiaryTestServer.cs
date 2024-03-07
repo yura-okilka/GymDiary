@@ -12,23 +12,22 @@ namespace GymDiary.Api.SystemTests.TestServer;
 
 public record GymDiaryTestServerSettings
 {
-    public required string TestDbName { get; init; }
-    public string? TestDbConnectionString { get; set; }
+    public required string DbName { get; init; }
+    public string? DbConnectionString { get; set; }
 }
 
 public class GymDiaryTestServer : IDisposable, IGlobalResourceSetUp, IGymDiaryApp
 {
-    private readonly GymDiaryWebAppFactory _testServer;
+    private readonly GymDiaryTestAppFactory _testServer;
 
     public IGymDiaryApiClient Client { get; }
     public GymDiaryAppFakes Fakes { get; } = new();
 
     public GymDiaryTestServer(GymDiaryTestServerSettings settings)
     {
-        var testDbConnectionString = settings.TestDbConnectionString ??
-                                     throw new ArgumentNullException(nameof(settings.TestDbConnectionString));
+        var dbConnectionString = settings.DbConnectionString ?? throw new ArgumentNullException(nameof(settings.DbConnectionString));
 
-        _testServer = new GymDiaryWebAppFactory(new GymDiaryAppSettings(testDbConnectionString, settings.TestDbName), Fakes);
+        _testServer = new GymDiaryTestAppFactory(new GymDiaryTestAppSettings(dbConnectionString, settings.DbName), Fakes);
         var httpClient = _testServer.CreateDefaultClient();
 
         Client = RestService.For<IGymDiaryApiClient>(

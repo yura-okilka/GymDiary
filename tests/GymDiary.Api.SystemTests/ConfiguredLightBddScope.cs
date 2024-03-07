@@ -62,13 +62,13 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
             d => new GymDiaryTestDb(
                 d.Resolve<GymDiaryTestDbSettings>(),
                 // ConnectionString is generated on DB container start.
-                onSetUpExecuted: db => d.Resolve<GymDiaryTestServerSettings>().TestDbConnectionString = db.ConnectionString
+                onSetUpExecuted: db => d.Resolve<GymDiaryTestServerSettings>().DbConnectionString = db.ConnectionString
             ),
             o => o.As<GymDiaryTestDb>().As<IGymDiaryDb>()
         );
         cfg.RegisterType<GymDiaryTestServerSettings>(
             InstanceScope.Single,
-            _ => new GymDiaryTestServerSettings { TestDbName = testDbSettings.Database }
+            _ => new GymDiaryTestServerSettings { DbName = testDbSettings.Database }
         );
         cfg.RegisterType<GymDiaryTestServer>(InstanceScope.Single, o => o.As<GymDiaryTestServer>().As<IGymDiaryApp>());
     }
