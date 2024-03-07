@@ -49,7 +49,7 @@ module Program =
         builder.Services.AddSingleton(jsonOptions)
         builder.Services.AddSingleton<Json.ISerializer, SystemTextJson.Serializer>()
         builder.Services.AddSingleton<IClock>(UtcClock(TimeProvider.System))
-        builder.Services.AddPersistence(builder.Configuration)
+        builder.Services.AddPersistence()
 
         let app = builder.Build()
 

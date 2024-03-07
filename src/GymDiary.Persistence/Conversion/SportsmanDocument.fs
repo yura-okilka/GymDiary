@@ -39,5 +39,5 @@ module SportsmanDocument =
         let dateOfBirth = document.DateOfBirth |> Option.map DateOnly.FromDateTime
         let! gender = document.Gender |> Option.traverseResult (stringToGender (nameof document.Gender))
 
-        return Sportsman.create id email firstName lastName dateOfBirth gender
+        return Sportsman.restoreFrom id email firstName lastName dateOfBirth gender
     }

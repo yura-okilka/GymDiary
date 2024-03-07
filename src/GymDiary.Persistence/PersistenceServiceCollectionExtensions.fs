@@ -13,16 +13,15 @@ open MongoDB.Driver
 [<Extension>]
 type PersistenceServiceCollectionExtensions() =
     [<Extension>]
-    static member AddPersistence(services: IServiceCollection, configuration: IConfiguration) : IServiceCollection =
+    static member AddPersistence(services: IServiceCollection) : IServiceCollection =
         SerializationSettings.register ()
-
-        let mongoSettings = MongoSettings.createFromOrThrow configuration "MongoDb"
 
         let newMongoRepository collection (sp: IServiceProvider) =
             MongoRepository(sp.GetRequiredService<IMongoClient>(), sp.GetRequiredService<MongoSettings>(), collection)
 
-        services.AddSingleton(mongoSettings)
-        services.AddSingleton<IMongoClient>(MongoClient(mongoSettings.ConnectionString))
+        // Create settings instance in the implementation factory to defer its creation and allow overriding IConfiguration in the test host.
+        services.AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow "MongoDb" (sp.GetRequiredService<IConfiguration>()))
+        services.AddSingleton<IMongoClient, MongoClient>(fun sp -> MongoClient(sp.GetRequiredService<MongoSettings>().ConnectionString))
 
         services.AddSingleton<ISportsmanRepository, SportsmanRepository>(fun sp ->
             SportsmanRepository(newMongoRepository MongoCollections.Sportsmen sp))

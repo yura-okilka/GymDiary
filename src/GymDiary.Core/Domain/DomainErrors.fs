@@ -19,6 +19,14 @@ module DomainErrors =
 
         static member toString(ExerciseCategoryAlreadyExistsError name) = $"Exercise category with name '%s{name}' already exists"
 
+    type SportsmanWithEmailAlreadyExistsError =
+        | SportsmanWithEmailAlreadyExistsError of email: string
+
+        static member create(email: EmailAddress) =
+            SportsmanWithEmailAlreadyExistsError(email |> EmailAddress.value)
+
+        static member toString(SportsmanWithEmailAlreadyExistsError email) = $"Sportsman with email '%s{email}' already exists"
+
     type OwnerNotFoundError =
         | OwnerNotFoundError of id: string
 

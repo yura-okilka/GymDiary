@@ -22,6 +22,8 @@ module Router =
 
             POST >=> routef "/v1/sportsmen/%s/exercises" (fun sportsmanId -> bindJsonSafe (ExerciseHandlers.create root.CreateExercise sportsmanId))
 
+            POST >=> route "/v1/sportsmen" >=> bindJsonSafe (SportsmanHandlers.create root.CreateSportsman)
+
             route "/ping" >=> noResponseCaching >=> text "pong"
             RequestErrors.NOT_FOUND "Not Found"
         ]

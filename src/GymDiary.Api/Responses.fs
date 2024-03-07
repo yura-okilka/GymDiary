@@ -49,6 +49,12 @@ module Responses =
         Details = null
     }
 
+    let sportsmanAlreadyExists (error: SportsmanWithEmailAlreadyExistsError) = {
+        Name = "SportsmanWithEmailAlreadyExists"
+        Message = SportsmanWithEmailAlreadyExistsError.toString error
+        Details = null
+    }
+
     let nameAlreadyUsed (error: ExerciseCategoryAlreadyExistsError) = {
         Name = "NameAlreadyUsed"
         Message = ExerciseCategoryAlreadyExistsError.toString error

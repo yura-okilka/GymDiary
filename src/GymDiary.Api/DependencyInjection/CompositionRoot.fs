@@ -2,6 +2,7 @@ namespace GymDiary.Api.DependencyInjection
 
 open System
 open GymDiary.Core.Persistence
+open GymDiary.Core.Workflows.Sportsman
 open Microsoft.Extensions.DependencyInjection
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.Exercise
@@ -15,6 +16,7 @@ type CompositionRoot = {
     RenameExerciseCategory: RenameExerciseCategory.Workflow
     DeleteExerciseCategory: DeleteExerciseCategory.Workflow
     CreateExercise: CreateExercise.Workflow
+    CreateSportsman: CreateSportsman.Workflow
 }
 
 module CompositionRoot =
@@ -55,14 +57,18 @@ module CompositionRoot =
                 (sp.GetRequiredService<IExerciseRepository>().Create)
                 logger
 
+        let createSportsmanWorkflow =
+            CreateSportsman.execute
+                (sp.GetRequiredService<ISportsmanRepository>().ExistWithEmail)
+                (sp.GetRequiredService<ISportsmanRepository>().Create)
+                logger
+
         {
-            CreateExerciseCategory =
-                createExerciseCategoryWorkflow |> errorLoggingDecorator CreateExerciseCategory.LoggingInfoProvider
+            CreateExerciseCategory = createExerciseCategoryWorkflow |> errorLoggingDecorator CreateExerciseCategory.LoggingInfoProvider
             GetAllExerciseCategories = getAllExerciseCategoriesWorkflow
             GetExerciseCategory = getExerciseCategoryWorkflow
-            RenameExerciseCategory =
-                renameExerciseCategoryWorkflow |> errorLoggingDecorator RenameExerciseCategory.LoggingInfoProvider
-            DeleteExerciseCategory =
-                deleteExerciseCategoryWorkflow |> errorLoggingDecorator DeleteExerciseCategory.LoggingInfoProvider
+            RenameExerciseCategory = renameExerciseCategoryWorkflow |> errorLoggingDecorator RenameExerciseCategory.LoggingInfoProvider
+            DeleteExerciseCategory = deleteExerciseCategoryWorkflow |> errorLoggingDecorator DeleteExerciseCategory.LoggingInfoProvider
             CreateExercise = createExerciseWorkflow |> errorLoggingDecorator CreateExercise.LoggingInfoProvider
+            CreateSportsman = createSportsmanWorkflow |> errorLoggingDecorator CreateSportsman.LoggingInfoProvider
         }

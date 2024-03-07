@@ -29,6 +29,7 @@
     <Compile Include="Workflows\ExerciseCategory\RenameExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\DeleteExerciseCategory.fs" />
     <Compile Include="Workflows\Exercise\CreateExercise.fs" />
+    <Compile Include="Workflows\Sportsman\CreateSportsman.fs" />
   </ItemGroup>
 
   <ItemGroup>

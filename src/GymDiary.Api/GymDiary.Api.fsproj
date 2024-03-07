@@ -11,6 +11,7 @@
     <Compile Include="HttpHandlers\ErrorHandlers.fs" />
     <Compile Include="HttpHandlers\ExerciseCategoryHandlers.fs" />
     <Compile Include="HttpHandlers\ExerciseHandlers.fs" />
+    <Compile Include="HttpHandlers\SportsmanHandlers.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

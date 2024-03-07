@@ -15,3 +15,6 @@ module DomainEvents =
 
     let ExerciseCreated = EventId(7, "ExerciseCreated")
     let ExerciseCreationFailed = EventId(8, "ExerciseCreationFailed")
+
+    let SportsmanCreated = EventId(9, "SportsmanCreated")
+    let SportsmanCreationFailed = EventId(10, "SportsmanCreationFailed")

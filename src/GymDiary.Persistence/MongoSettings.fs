@@ -11,7 +11,7 @@ type MongoSettings = {
     Database: string
 } with
 
-    static member createFrom (configuration: IConfiguration) (section: string) : Result<MongoSettings, ValidationErrors> =
+    static member createFrom (section: string) (configuration: IConfiguration) : Result<MongoSettings, ValidationErrors> =
         let settingsOption = configuration.GetSection(section).Get<MongoSettings>() |> Option.ofRecord
 
         match settingsOption with
@@ -22,8 +22,8 @@ type MongoSettings = {
           }
         | None -> ValidationErrors.create "settings" [ $"'{section}' settings must not be null" ] |> Error
 
-    static member createFromOrThrow (configuration: IConfiguration) (section: string) : MongoSettings =
-        match MongoSettings.createFrom configuration section with
+    static member createFromOrThrow (section: string) (configuration: IConfiguration) : MongoSettings =
+        match MongoSettings.createFrom section configuration with
         | Ok settings -> settings
         | Error errors ->
             errors

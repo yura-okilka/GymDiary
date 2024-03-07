@@ -21,4 +21,6 @@ type IExerciseRepository =
     abstract member Delete: ExerciseId -> ModifyEntityResult
 
 type ISportsmanRepository =
+    abstract member Create: Sportsman -> Async<SportsmanId>
     abstract member ExistWithId: SportsmanId -> Async<bool>
+    abstract member ExistWithEmail: EmailAddress -> Async<bool>
