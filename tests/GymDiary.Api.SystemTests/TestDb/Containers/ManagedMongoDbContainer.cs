@@ -1,6 +1,6 @@
 using Testcontainers.MongoDb;
 
-namespace GymDiary.Api.SystemTests.TestDb;
+namespace GymDiary.Api.SystemTests.TestDb.Containers;
 
 public record ManagedMongoDbContainerSettings(string Image);
 
