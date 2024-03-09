@@ -2,7 +2,7 @@ using GymDiary.Core.Time;
 
 using Microsoft.Extensions.Time.Testing;
 
-namespace GymDiary.Api.SystemTests.TestServer.Fakes;
+namespace GymDiary.Api.SystemTests.TestApp.Fakes;
 
 /// <summary>
 ///     A wrapper around <see cref="FakeTimeProvider" /> because it doesn't allow going back in time.

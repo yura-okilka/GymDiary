@@ -1,4 +1,4 @@
-using GymDiary.Api.SystemTests.TestServer.Fakes;
+using GymDiary.Api.SystemTests.TestApp.Fakes;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -7,9 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
-namespace GymDiary.Api.SystemTests.TestServer;
+namespace GymDiary.Api.SystemTests.TestApp;
 
-public record GymDiaryTestAppSettings(string DbConnectionString, string DbName);
+public record GymDiaryTestAppSettings
+{
+    public required string DbName { get; init; }
+    public string? DbConnectionString { get; set; }
+}
 
 public class GymDiaryTestAppFactory(GymDiaryTestAppSettings settings, GymDiaryAppFakes fakes)
     : WebApplicationFactory<Program.TestEntryPoint>
@@ -19,12 +23,13 @@ public class GymDiaryTestAppFactory(GymDiaryTestAppSettings settings, GymDiaryAp
         builder
             .ConfigureAppConfiguration(
                 b => b
-                    .SetBasePath(Directory.GetCurrentDirectory()) // switch from app directory to tests one
+                    .SetBasePath(Directory.GetCurrentDirectory()) // Switch from app directory to tests one.
                     .AddJsonFile("gymdiary.appsettings.json")
                     .AddInMemoryCollection(
                         new Dictionary<string, string?>
                         {
-                            ["MongoDb:ConnectionString"] = settings.DbConnectionString,
+                            ["MongoDb:ConnectionString"] = settings.DbConnectionString ??
+                                                           throw new ArgumentNullException(nameof(settings.DbConnectionString)),
                             ["MongoDb:Database"] = settings.DbName
                         }
                     )

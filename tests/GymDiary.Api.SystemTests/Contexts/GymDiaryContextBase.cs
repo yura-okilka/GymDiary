@@ -1,6 +1,6 @@
+using GymDiary.Api.SystemTests.TestApp;
+using GymDiary.Api.SystemTests.TestApp.ApiClients;
 using GymDiary.Api.SystemTests.TestDb;
-using GymDiary.Api.SystemTests.TestServer;
-using GymDiary.Api.SystemTests.TestServer.ApiClients;
 
 using SystemTests.BddRunner;
 using SystemTests.Context;

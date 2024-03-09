@@ -1,4 +1,4 @@
-namespace GymDiary.Api.SystemTests.TestServer.Fakes;
+namespace GymDiary.Api.SystemTests.TestApp.Fakes;
 
 public class GymDiaryAppFakes
 {

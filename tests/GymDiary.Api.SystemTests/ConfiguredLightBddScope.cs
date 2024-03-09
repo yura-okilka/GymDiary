@@ -1,6 +1,6 @@
 ﻿using GymDiary.Api.SystemTests;
+using GymDiary.Api.SystemTests.TestApp;
 using GymDiary.Api.SystemTests.TestDb;
-using GymDiary.Api.SystemTests.TestServer;
 
 using LightBDD.Core.Configuration;
 using LightBDD.Core.Dependencies;
@@ -36,11 +36,11 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
             .DependencyContainerConfiguration()
             .UseDefault(ConfigureContainer);
 
-        // The order is important because server depends on DB connection string generated on DB setup.
+        // The order is important because app depends on DB connection string generated on DB setup.
         configuration
             .ExecutionExtensionsConfiguration()
             .RegisterGlobalSetUp<GymDiaryTestDb>()
-            .RegisterGlobalSetUp<GymDiaryTestServer>();
+            .RegisterGlobalSetUp<GymDiaryTestApp>();
     }
 
     private static void ConfigureContainer(IDefaultContainerConfigurator cfg)
@@ -62,14 +62,14 @@ public class ConfiguredLightBddScopeAttribute : LightBddScopeAttribute
             d => new GymDiaryTestDb(
                 d.Resolve<GymDiaryTestDbSettings>(),
                 // ConnectionString is generated on DB container start.
-                onSetUpExecuted: db => d.Resolve<GymDiaryTestServerSettings>().DbConnectionString = db.ConnectionString
+                onSetUpExecuted: db => d.Resolve<GymDiaryTestAppSettings>().DbConnectionString = db.ConnectionString
             ),
             o => o.As<GymDiaryTestDb>().As<IGymDiaryDb>()
         );
-        cfg.RegisterType<GymDiaryTestServerSettings>(
+        cfg.RegisterType<GymDiaryTestAppSettings>(
             InstanceScope.Single,
-            _ => new GymDiaryTestServerSettings { DbName = testDbSettings.Database }
+            _ => new GymDiaryTestAppSettings { DbName = testDbSettings.Database } // ConnectionString will be added later.
         );
-        cfg.RegisterType<GymDiaryTestServer>(InstanceScope.Single, o => o.As<GymDiaryTestServer>().As<IGymDiaryApp>());
+        cfg.RegisterType<GymDiaryTestApp>(InstanceScope.Single, o => o.As<GymDiaryTestApp>().As<IGymDiaryApp>());
     }
 }

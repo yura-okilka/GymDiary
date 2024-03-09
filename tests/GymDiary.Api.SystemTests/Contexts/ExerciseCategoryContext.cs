@@ -2,9 +2,9 @@ using System.Net;
 
 using Bogus;
 
+using GymDiary.Api.SystemTests.TestApp;
+using GymDiary.Api.SystemTests.TestApp.ApiClients.Models;
 using GymDiary.Api.SystemTests.TestDb;
-using GymDiary.Api.SystemTests.TestServer;
-using GymDiary.Api.SystemTests.TestServer.ApiClients.Models;
 
 using MongoDB.Bson;
 
