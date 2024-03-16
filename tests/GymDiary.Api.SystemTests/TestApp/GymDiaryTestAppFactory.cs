@@ -21,6 +21,7 @@ public class GymDiaryTestAppFactory(GymDiaryTestAppSettings settings, GymDiaryAp
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder
+            .UseEnvironment("Production")
             .ConfigureAppConfiguration(
                 b => b
                     .SetBasePath(Directory.GetCurrentDirectory()) // Switch from app directory to tests one.
@@ -38,6 +39,5 @@ public class GymDiaryTestAppFactory(GymDiaryTestAppSettings settings, GymDiaryAp
             .ConfigureServices(
                 services => services.Replace(ServiceDescriptor.Singleton(fakes.Clock))
             );
-        // TODO: check env
     }
 }
