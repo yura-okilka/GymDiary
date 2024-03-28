@@ -11,9 +11,8 @@ open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Giraffe
 open GymDiary.Core.Time
-open GymDiary.Api
+open GymDiary.Api.Endpoints
 open GymDiary.Api.DependencyInjection
-open GymDiary.Api.HttpHandlers
 open GymDiary.Persistence
 
 module Program =
@@ -27,6 +26,9 @@ module Program =
     let main args =
 
         let builder = WebApplication.CreateBuilder(args)
+
+        builder.Services.AddEndpointsApiExplorer()
+        builder.Services.AddSwaggerGen()
 
         builder.Services.AddGiraffe()
 
@@ -46,6 +48,8 @@ module Program =
             )
         )
 
+        jsonOptions.Converters.Add(JsonStringEnumConverter())
+
         builder.Services.AddSingleton(jsonOptions)
         builder.Services.AddSingleton<Json.ISerializer, SystemTextJson.Serializer>()
         builder.Services.AddSingleton<IClock>(UtcClock(TimeProvider.System))
@@ -53,13 +57,14 @@ module Program =
 
         let app = builder.Build()
 
-        match builder.Environment.EnvironmentName with
-        | "Development" -> app.UseDeveloperExceptionPage()
-        | _ -> app.UseGiraffeErrorHandler(ErrorHandlers.unknownError)
+        if app.Environment.IsDevelopment() then
+            app.UseDeveloperExceptionPage() |> ignore
+            app.UseSwagger() |> ignore
+            app.UseSwaggerUI() |> ignore
 
         let root = app.Services |> CompositionRoot.compose
 
-        app.UseGiraffe(Router.webApp root)
+        app.MapGymDiaryApi(root)
 
         app.Run()
 
