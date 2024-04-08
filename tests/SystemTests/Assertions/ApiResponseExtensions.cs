@@ -55,6 +55,8 @@ public static class ApiResponseExtensions
 
     private static async Task ShouldNotHaveError(this IApiResponse response)
     {
+        response.Error.Should().BeNull();
+
         if (response.Error?.Content is not null)
         {
             // TODO: consider writing a custom IValueFormatter to write indented JSON. https://fluentassertions.com/extensibility/#rendering-objects-with-beauty
