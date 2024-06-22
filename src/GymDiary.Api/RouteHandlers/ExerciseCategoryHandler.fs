@@ -87,5 +87,4 @@ type ExerciseCategoryHandler() =
             match result with
             | Ok _ -> Results.NoContent()
             | Error(DeleteExerciseCategory.InvalidCommand es) -> Results.BadRequest(Responses.validationErrors es)
-            | Error(DeleteExerciseCategory.CategoryNotFound e) -> Results.NotFound(Responses.exerciseCategoryNotFound e)
     }

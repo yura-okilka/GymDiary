@@ -46,7 +46,7 @@ type ExerciseCategoryRepository(repository: IMongoDocumentRepository<ExerciseCat
             let name = name |> String50.value
             let ownerId = ownerId |> Id.value
 
-            // Consider using case insensitive index for large collections.
+            // Consider using case-insensitive index for large collections.
             repository.Any(Expr.Quote(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId))
 
         member _.Update entity = asyncResult {
@@ -61,11 +61,9 @@ type ExerciseCategoryRepository(repository: IMongoDocumentRepository<ExerciseCat
                 return! EntityNotFound(typeof<ExerciseCategory>.Name, id) |> Error
         }
 
-        member _.Delete categoryId = asyncResult {
+        member _.Delete categoryId = async {
             let categoryId = categoryId |> Id.value
 
-            let! result = repository.DeleteOne(Expr.Quote(fun d -> d.Id = categoryId))
-
-            if result.DeletedCount = 0 then
-                return! EntityNotFound(typeof<ExerciseCategory>.Name, categoryId) |> Error
+            let! _ = repository.DeleteOne(Expr.Quote(fun d -> d.Id = categoryId))
+            return ()
         }

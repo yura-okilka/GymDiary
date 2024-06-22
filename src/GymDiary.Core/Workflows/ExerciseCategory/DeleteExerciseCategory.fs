@@ -3,7 +3,6 @@ namespace GymDiary.Core.Workflows.ExerciseCategory
 open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
-open GymDiary.Core.Persistence
 
 open FsToolkit.ErrorHandling
 
@@ -15,15 +14,10 @@ module DeleteExerciseCategory =
 
     type CommandError =
         | InvalidCommand of ValidationError list
-        | CategoryNotFound of ExerciseCategoryNotFoundError
-
-        static member categoryNotFound id ownerId =
-            ExerciseCategoryNotFoundError.create id ownerId |> CategoryNotFound
 
         static member toString error =
             match error with
             | InvalidCommand es -> es |> ValidationErrors.toString
-            | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
 
     type Workflow = Workflow<Command, unit, CommandError>
 
@@ -38,7 +32,7 @@ module DeleteExerciseCategory =
                 Map [ (nameof command.Id, command.Id); (nameof command.OwnerId, command.OwnerId) ]
         }
 
-    let execute (deleteCategoryFromDB: ExerciseCategoryId -> ModifyEntityResult) (logger: ILogger) (command: Command) = asyncResult {
+    let execute (deleteCategoryFromDB: ExerciseCategoryId -> Async<unit>) (logger: ILogger) (command: Command) = asyncResult {
         let! (categoryId, ownerId) =
             validation {
                 let! categoryId = Id.create (nameof command.Id) command.Id
@@ -47,10 +41,8 @@ module DeleteExerciseCategory =
             }
             |> Result.mapError InvalidCommand
 
-        do! // TODO: ensure it can be deleted.
-            deleteCategoryFromDB categoryId
-            |> AsyncResult.mapError (function
-                | EntityNotFound _ -> CommandError.categoryNotFound categoryId ownerId)
+        // TODO: ensure it can be deleted.
+        do! deleteCategoryFromDB categoryId
 
         logger.LogInformation(DomainEvents.ExerciseCategoryDeleted, "Exercise category with id '{id}' was deleted", command.Id)
     }

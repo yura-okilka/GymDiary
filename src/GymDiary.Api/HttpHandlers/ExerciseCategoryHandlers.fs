@@ -95,7 +95,6 @@ module ExerciseCategoryHandlers =
                 match result with
                 | Ok _ -> Successful.NO_CONTENT
                 | Error(DeleteExerciseCategory.InvalidCommand es) -> RequestErrors.BAD_REQUEST(Responses.validationErrors es)
-                | Error(DeleteExerciseCategory.CategoryNotFound e) -> RequestErrors.NOT_FOUND(Responses.exerciseCategoryNotFound e)
 
             return! handler next ctx
         }

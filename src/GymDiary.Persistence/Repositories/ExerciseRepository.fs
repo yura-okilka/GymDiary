@@ -40,11 +40,9 @@ type ExerciseRepository(repository: IMongoDocumentRepository<ExerciseDocument>) 
                 return! EntityNotFound(typeof<Exercise>.Name, id) |> Error
         }
 
-        member _.Delete exerciseId = asyncResult {
+        member _.Delete exerciseId = async {
             let exerciseId = exerciseId |> Id.value
 
-            let! result = repository.DeleteOne(Expr.Quote(fun d -> d.Id = exerciseId))
-
-            if result.DeletedCount = 0 then
-                return! EntityNotFound(typeof<Exercise>.Name, exerciseId) |> Error
+            let! _ = repository.DeleteOne(Expr.Quote(fun d -> d.Id = exerciseId))
+            return ()
         }
