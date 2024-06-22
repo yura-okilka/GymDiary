@@ -9,7 +9,7 @@ open MongoDB.Driver
 type Filter<'TDocument> = Expression<Func<'TDocument, bool>>
 
 /// MongoDB repository to work with data in F# types.
-type IMongoRepository<'TDocument> =
+type IMongoDocumentRepository<'TDocument> =
     abstract member FindAll: Filter<'TDocument> -> Async<'TDocument seq>
     abstract member FindSingle: Filter<'TDocument> -> Async<'TDocument option>
     abstract member Any: Filter<'TDocument> -> Async<bool>
@@ -17,13 +17,13 @@ type IMongoRepository<'TDocument> =
     abstract member ReplaceOne: Filter<'TDocument> -> 'TDocument -> Async<ReplaceOneResult>
     abstract member DeleteOne: Filter<'TDocument> -> Async<DeleteResult>
 
-type MongoRepository<'TDocument>(mongoClient: IMongoClient, mongoSettings: MongoSettings, collection: string) =
+type MongoDocumentRepository<'TDocument>(mongoClient: IMongoClient, mongoSettings: MongoSettings, collection: string) =
     member private _.GetCollection() =
         mongoClient
             .GetDatabase(mongoSettings.Database)
             .GetCollection<'TDocument>(collection)
 
-    interface IMongoRepository<'TDocument> with
+    interface IMongoDocumentRepository<'TDocument> with
         member r.FindAll filter =
             task {
                 let! documents = r.GetCollection().Find(filter).ToListAsync()

@@ -7,7 +7,7 @@ open GymDiary.Persistence
 open GymDiary.Persistence.Conversion
 open FsToolkit.ErrorHandling
 
-type ExerciseRepository(repository: IMongoRepository<ExerciseDocument>) =
+type ExerciseRepository(repository: IMongoDocumentRepository<ExerciseDocument>) =
     interface IExerciseRepository with
 
         member _.Create entity = async {

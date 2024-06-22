@@ -17,7 +17,7 @@ type PersistenceServiceCollectionExtensions() =
         SerializationSettings.register ()
 
         let newMongoRepository collection (sp: IServiceProvider) =
-            MongoRepository(sp.GetRequiredService<IMongoClient>(), sp.GetRequiredService<MongoSettings>(), collection)
+            MongoDocumentRepository(sp.GetRequiredService<IMongoClient>(), sp.GetRequiredService<MongoSettings>(), collection)
 
         // Create settings instance in the implementation factory to defer its creation and allow overriding IConfiguration in the test host.
         services.AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow "MongoDb" (sp.GetRequiredService<IConfiguration>()))

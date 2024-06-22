@@ -12,7 +12,7 @@ module Documents =
 
     [<CLIMutable>]
     type SportsmanDocument = {
-        Id: string
+        Id: string // TODO: use ObjectId here.
         Email: string
         FirstName: string
         LastName: string
