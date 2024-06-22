@@ -18,7 +18,7 @@
     <Compile Include="Domain\WorkoutSession.fs" />
     <Compile Include="Domain\DomainErrors.fs" />
     <Compile Include="Domain\DomainEvents.fs" />
-    <Compile Include="Time\UtcClock.fs" />
+    <Compile Include="Time\SystemClock.fs" />
     <Compile Include="Persistence\Abstractions.fs" />
     <Compile Include="Workflows\Abstractions.fs" />
     <Compile Include="Workflows\ErrorLoggingDecorator.fs" />

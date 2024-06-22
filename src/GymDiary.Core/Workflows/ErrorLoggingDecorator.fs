@@ -2,7 +2,7 @@ namespace GymDiary.Core.Workflows
 
 open Microsoft.Extensions.Logging
 
-module ErrorLoggingDecorator =
+module ErrorLoggingDecorator = // LogWorkflowDecorator
 
     type ILoggingInfoProvider<'Request, 'Error> =
         abstract ErrorEventId: EventId

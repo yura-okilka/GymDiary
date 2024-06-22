@@ -29,6 +29,9 @@ module Program =
 
         builder.Services.AddEndpointsApiExplorer()
         builder.Services.AddSwaggerGen()
+        // TODO: is it needed?
+        // Error fix. https://github.com/swagger-api/swagger-ui/issues/7911
+        builder.Services.AddSwaggerGen(fun o -> o.CustomSchemaIds(fun t -> t.FullName.Replace("+", ".")))
 
         builder.Services.AddGiraffe()
 
@@ -52,7 +55,7 @@ module Program =
 
         builder.Services.AddSingleton(jsonOptions)
         builder.Services.AddSingleton<Json.ISerializer, SystemTextJson.Serializer>()
-        builder.Services.AddSingleton<IClock>(UtcClock(TimeProvider.System))
+        builder.Services.AddSingleton<IClock>(SystemClock(TimeProvider.System))
         builder.Services.AddPersistence()
 
         let app = builder.Build()

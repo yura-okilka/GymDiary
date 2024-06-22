@@ -11,12 +11,17 @@ open Microsoft.Extensions.Logging
 
 module CreateSportsman =
 
+    type GenderDto =
+        | Male
+        | Female
+        | Other
+
     type Command = {
         Email: string
         FirstName: string
         LastName: string
         DateOfBirth: DateTime option
-        Gender: Gender option
+        Gender: GenderDto option
     }
 
     type CommandResult = { Id: string }
@@ -54,11 +59,17 @@ module CreateSportsman =
         asyncResult {
             let! sportsman =
                 validation {
+                    let dtoToGender =
+                        function
+                        | GenderDto.Male -> Gender.Male
+                        | GenderDto.Female -> Gender.Female
+                        | GenderDto.Other -> Gender.Other
+
                     let! email = EmailAddress.create (nameof command.Email) command.Email
                     and! firstName = String50.create (nameof command.FirstName) command.FirstName
                     and! lastName = String50.create (nameof command.LastName) command.LastName
                     and! dateOfBirth = command.DateOfBirth |> Option.map DateOnly.FromDateTime |> Ok
-                    and! gender = command.Gender |> Ok
+                    and! gender = command.Gender |> Option.map dtoToGender |> Ok
                     return Sportsman.create email firstName lastName dateOfBirth gender
                 }
                 |> Result.mapError InvalidCommand
