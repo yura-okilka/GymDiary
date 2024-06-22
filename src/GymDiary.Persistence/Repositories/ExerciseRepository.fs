@@ -19,7 +19,7 @@ type ExerciseRepository(repository: IMongoDocumentRepository<ExerciseDocument>) 
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseId>.Name, error)))
         }
 
-        member _.GetById (exerciseId: ExerciseId) (ownerId: SportsmanId) = async {
+        member _.GetById (exerciseId: ExerciseId) (ownerId: UserId) = async {
             let exerciseId = exerciseId |> Id.value
             let ownerId = ownerId |> Id.value
 

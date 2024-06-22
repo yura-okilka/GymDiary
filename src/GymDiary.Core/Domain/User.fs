@@ -1,9 +1,9 @@
 namespace GymDiary.Core.Domain
 
-module Sportsman =
+module User =
 
     /// Restores exercise from provided data. Use only for serialization.
-    let restoreFrom id email firstName lastName dateOfBirth gender : Sportsman = {
+    let restoreFrom id email firstName lastName dateOfBirth gender : User = {
         Id = id
         Email = email
         FirstName = firstName
@@ -12,7 +12,7 @@ module Sportsman =
         Gender = gender
     }
 
-    let create email firstName lastName dateOfBirth gender : Sportsman = {
+    let create email firstName lastName dateOfBirth gender : User = {
         Id = Id.Empty
         Email = email
         FirstName = firstName

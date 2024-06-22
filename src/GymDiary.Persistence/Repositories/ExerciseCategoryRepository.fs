@@ -30,7 +30,7 @@ type ExerciseCategoryRepository(repository: IMongoDocumentRepository<ExerciseCat
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
         }
 
-        member _.GetById (categoryId: ExerciseCategoryId) (ownerId: SportsmanId) = async {
+        member _.GetById (categoryId: ExerciseCategoryId) (ownerId: UserId) = async {
             let categoryId = categoryId |> Id.value
             let ownerId = ownerId |> Id.value
 
@@ -42,7 +42,7 @@ type ExerciseCategoryRepository(repository: IMongoDocumentRepository<ExerciseCat
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
         }
 
-        member _.ExistWithName (name: String50) (ownerId: SportsmanId) =
+        member _.ExistWithName (name: String50) (ownerId: UserId) =
             let name = name |> String50.value
             let ownerId = ownerId |> Id.value
 

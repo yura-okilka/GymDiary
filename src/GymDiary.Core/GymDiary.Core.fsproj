@@ -9,7 +9,7 @@
     <Compile Include="Domain\ConstrainedType.fs" />
     <Compile Include="Domain\CommonTypes.fs" />
     <Compile Include="Domain\DomainTypes.fs" />
-    <Compile Include="Domain\Sportsman.fs" />
+    <Compile Include="Domain\User.fs" />
     <Compile Include="Domain\ExerciseSets.fs" />
     <Compile Include="Domain\ExerciseCategory.fs" />
     <Compile Include="Domain\Exercise.fs" />
@@ -29,7 +29,7 @@
     <Compile Include="Workflows\ExerciseCategory\RenameExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\DeleteExerciseCategory.fs" />
     <Compile Include="Workflows\Exercise\CreateExercise.fs" />
-    <Compile Include="Workflows\Sportsman\CreateSportsman.fs" />
+    <Compile Include="Workflows\User\CreateUser.fs" />
   </ItemGroup>
 
   <ItemGroup>

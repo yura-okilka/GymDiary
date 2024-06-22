@@ -14,4 +14,4 @@ module MongoCollections =
     let WorkoutSessions = "workoutSessions"
 
     [<Literal>]
-    let Sportsmen = "sportsmen"
+    let Users = "users"

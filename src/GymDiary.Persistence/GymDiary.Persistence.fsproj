@@ -10,7 +10,7 @@
     <Compile Include="Documents.fs" />
     <Compile Include="MongoCollections.fs" />
     <Compile Include="MongoSettings.fs" />
-    <Compile Include="Conversion\SportsmanDocument.fs" />
+    <Compile Include="Conversion\UserDocument.fs" />
     <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
     <Compile Include="Conversion\ExerciseSetDocument.fs" />
     <Compile Include="Conversion\ExerciseDocument.fs" />
@@ -18,7 +18,7 @@
     <Compile Include="Conversion\ExerciseSessionDocument.fs" />
     <Compile Include="Conversion\WorkoutSessionDocument.fs" />
     <Compile Include="Repositories\MongoDocumentRepository.fs" />
-    <Compile Include="Repositories\SportsmanRepository.fs" />
+    <Compile Include="Repositories\UserRepository.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseRepository.fs" />
     <Compile Include="SerializationSettings.fs" />

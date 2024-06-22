@@ -52,8 +52,8 @@ module RenameExerciseCategory =
         }
 
     let execute
-        (getCategoryByIdFromDB: ExerciseCategoryId -> SportsmanId -> Async<ExerciseCategory option>)
-        (categoryWithNameExistsInDB: String50 -> SportsmanId -> Async<bool>)
+        (getCategoryByIdFromDB: ExerciseCategoryId -> UserId -> Async<ExerciseCategory option>)
+        (categoryWithNameExistsInDB: String50 -> UserId -> Async<bool>)
         (updateCategoryInDB: ExerciseCategory -> UpdateEntityResult)
         (logger: ILogger)
         (command: Command)

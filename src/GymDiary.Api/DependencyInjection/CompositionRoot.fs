@@ -2,7 +2,7 @@ namespace GymDiary.Api.DependencyInjection
 
 open System
 open GymDiary.Core.Persistence
-open GymDiary.Core.Workflows.Sportsman
+open GymDiary.Core.Workflows.User
 open Microsoft.Extensions.DependencyInjection
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.Exercise
@@ -16,7 +16,7 @@ type CompositionRoot = {
     RenameExerciseCategory: RenameExerciseCategory.Workflow
     DeleteExerciseCategory: DeleteExerciseCategory.Workflow
     CreateExercise: CreateExercise.Workflow
-    CreateSportsman: CreateSportsman.Workflow
+    CreateUser: CreateUser.Workflow
 }
 
 module CompositionRoot =
@@ -27,7 +27,7 @@ module CompositionRoot =
         let createExerciseCategoryWorkflow =
             CreateExerciseCategory.execute
                 (sp.GetRequiredService<IExerciseCategoryRepository>().ExistWithName)
-                (sp.GetRequiredService<ISportsmanRepository>().ExistWithId)
+                (sp.GetRequiredService<IUserRepository>().ExistWithId)
                 (sp.GetRequiredService<IExerciseCategoryRepository>().Create)
                 logger
 
@@ -53,14 +53,14 @@ module CompositionRoot =
         let createExerciseWorkflow =
             CreateExercise.execute
                 (sp.GetRequiredService<IExerciseCategoryRepository>().GetById)
-                (sp.GetRequiredService<ISportsmanRepository>().ExistWithId)
+                (sp.GetRequiredService<IUserRepository>().ExistWithId)
                 (sp.GetRequiredService<IExerciseRepository>().Create)
                 logger
 
-        let createSportsmanWorkflow =
-            CreateSportsman.execute
-                (sp.GetRequiredService<ISportsmanRepository>().ExistWithEmail)
-                (sp.GetRequiredService<ISportsmanRepository>().Create)
+        let createUserWorkflow =
+            CreateUser.execute
+                (sp.GetRequiredService<IUserRepository>().ExistWithEmail)
+                (sp.GetRequiredService<IUserRepository>().Create)
                 logger
 
         {
@@ -70,5 +70,5 @@ module CompositionRoot =
             RenameExerciseCategory = renameExerciseCategoryWorkflow |> errorLoggingDecorator RenameExerciseCategory.LoggingInfoProvider
             DeleteExerciseCategory = deleteExerciseCategoryWorkflow |> errorLoggingDecorator DeleteExerciseCategory.LoggingInfoProvider
             CreateExercise = createExerciseWorkflow |> errorLoggingDecorator CreateExercise.LoggingInfoProvider
-            CreateSportsman = createSportsmanWorkflow |> errorLoggingDecorator CreateSportsman.LoggingInfoProvider
+            CreateUser = createUserWorkflow |> errorLoggingDecorator CreateUser.LoggingInfoProvider
         }

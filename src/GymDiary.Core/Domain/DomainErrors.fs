@@ -6,7 +6,7 @@ module DomainErrors =
     type ExerciseCategoryNotFoundError =
         | ExerciseCategoryNotFoundError of id: string * ownerId: string
 
-        static member create (id: ExerciseCategoryId) (ownerId: SportsmanId) =
+        static member create (id: ExerciseCategoryId) (ownerId: UserId) =
             ExerciseCategoryNotFoundError(id |> Id.value, ownerId |> Id.value)
 
         static member toString(ExerciseCategoryNotFoundError(id, ownerId)) =
@@ -19,17 +19,17 @@ module DomainErrors =
 
         static member toString(ExerciseCategoryAlreadyExistsError name) = $"Exercise category with name '%s{name}' already exists"
 
-    type SportsmanWithEmailAlreadyExistsError =
-        | SportsmanWithEmailAlreadyExistsError of email: string
+    type UserWithEmailAlreadyExistsError =
+        | UserWithEmailAlreadyExistsError of email: string
 
         static member create(email: EmailAddress) =
-            SportsmanWithEmailAlreadyExistsError(email |> EmailAddress.value)
+            UserWithEmailAlreadyExistsError(email |> EmailAddress.value)
 
-        static member toString(SportsmanWithEmailAlreadyExistsError email) = $"Sportsman with email '%s{email}' already exists"
+        static member toString(UserWithEmailAlreadyExistsError email) = $"User with email '%s{email}' already exists"
 
     type OwnerNotFoundError =
         | OwnerNotFoundError of id: string
 
-        static member create(id: SportsmanId) = OwnerNotFoundError(id |> Id.value)
+        static member create(id: UserId) = OwnerNotFoundError(id |> Id.value)
 
         static member toString(OwnerNotFoundError id) = $"Owner with id '%s{id}' is not found"

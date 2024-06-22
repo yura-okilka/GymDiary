@@ -1,6 +1,6 @@
 namespace GymDiary.Api.SystemTests.TestApp.ApiClients.Models;
 
-public static class CreateSportsman
+public static class CreateUser
 {
     public record Request
     {

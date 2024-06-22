@@ -11,12 +11,12 @@ module ExerciseCategoryHandlers =
 
     type CreateRequest = { Name: string }
 
-    let create (createExerciseCategory: CreateExerciseCategory.Workflow) (sportsmanId: string) (request: CreateRequest) : HttpHandler =
+    let create (createExerciseCategory: CreateExerciseCategory.Workflow) (userId: string) (request: CreateRequest) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
                 createExerciseCategory {
                     Name = request.Name
-                    OwnerId = sportsmanId
+                    OwnerId = userId
                 }
 
             let handler =
@@ -29,9 +29,9 @@ module ExerciseCategoryHandlers =
             return! handler next ctx
         }
 
-    let getAll (getAllExerciseCategories: GetAllExerciseCategories.Workflow) (sportsmanId: string) : HttpHandler =
+    let getAll (getAllExerciseCategories: GetAllExerciseCategories.Workflow) (userId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
-            let! result = getAllExerciseCategories { OwnerId = sportsmanId }
+            let! result = getAllExerciseCategories { OwnerId = userId }
 
             let handler =
                 match result with
@@ -41,12 +41,12 @@ module ExerciseCategoryHandlers =
             return! handler next ctx
         }
 
-    let getById (getExerciseCategory: GetExerciseCategory.Workflow) (sportsmanId: string, categoryId: string) : HttpHandler =
+    let getById (getExerciseCategory: GetExerciseCategory.Workflow) (userId: string, categoryId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
                 getExerciseCategory {
                     Id = categoryId
-                    OwnerId = sportsmanId
+                    OwnerId = userId
                 }
 
             let handler =
@@ -62,14 +62,14 @@ module ExerciseCategoryHandlers =
 
     let rename
         (renameExerciseCategory: RenameExerciseCategory.Workflow)
-        (sportsmanId: string, categoryId: string)
+        (userId: string, categoryId: string)
         (request: RenameRequest)
         : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
                 renameExerciseCategory {
                     Id = categoryId
-                    OwnerId = sportsmanId
+                    OwnerId = userId
                     Name = request.Name
                 }
 
@@ -83,12 +83,12 @@ module ExerciseCategoryHandlers =
             return! handler next ctx
         }
 
-    let delete (deleteExerciseCategory: DeleteExerciseCategory.Workflow) (sportsmanId: string, categoryId: string) : HttpHandler =
+    let delete (deleteExerciseCategory: DeleteExerciseCategory.Workflow) (userId: string, categoryId: string) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
                 deleteExerciseCategory {
                     Id = categoryId
-                    OwnerId = sportsmanId
+                    OwnerId = userId
                 }
 
             let handler =

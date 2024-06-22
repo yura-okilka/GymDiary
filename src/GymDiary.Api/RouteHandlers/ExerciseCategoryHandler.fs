@@ -12,14 +12,14 @@ type ExerciseCategoryHandler() =
     static member Create
         (
             createExerciseCategory: CreateExerciseCategory.Workflow,
-            sportsmanId: string,
+            userId: string,
             request: CreateExerciseCategoryRequest
         ) : Task<IResult> =
         task {
             let! result =
                 createExerciseCategory {
                     Name = request.Name
-                    OwnerId = sportsmanId
+                    OwnerId = userId
                 }
 
             return
@@ -30,8 +30,8 @@ type ExerciseCategoryHandler() =
                 | Error(CreateExerciseCategory.OwnerNotFound e) -> Results.Conflict(Responses.ownerNotFound e)
         }
 
-    static member GetAll(getAllExerciseCategories: GetAllExerciseCategories.Workflow, sportsmanId: string) : Task<IResult> = task {
-        let! result = getAllExerciseCategories { OwnerId = sportsmanId }
+    static member GetAll(getAllExerciseCategories: GetAllExerciseCategories.Workflow, userId: string) : Task<IResult> = task {
+        let! result = getAllExerciseCategories { OwnerId = userId }
 
         return
             match result with
@@ -39,11 +39,11 @@ type ExerciseCategoryHandler() =
             | Error(GetAllExerciseCategories.InvalidQuery e) -> Results.BadRequest(Responses.validationError e)
     }
 
-    static member GetById(getExerciseCategory: GetExerciseCategory.Workflow, sportsmanId: string, categoryId: string) : Task<IResult> = task {
+    static member GetById(getExerciseCategory: GetExerciseCategory.Workflow, userId: string, categoryId: string) : Task<IResult> = task {
         let! result =
             getExerciseCategory {
                 Id = categoryId
-                OwnerId = sportsmanId
+                OwnerId = userId
             }
 
         return
@@ -56,7 +56,7 @@ type ExerciseCategoryHandler() =
     static member Rename
         (
             renameExerciseCategory: RenameExerciseCategory.Workflow,
-            sportsmanId: string,
+            userId: string,
             categoryId: string,
             request: RenameExerciseCategoryRequest
         ) : Task<IResult> =
@@ -64,7 +64,7 @@ type ExerciseCategoryHandler() =
             let! result =
                 renameExerciseCategory {
                     Id = categoryId
-                    OwnerId = sportsmanId
+                    OwnerId = userId
                     Name = request.Name
                 }
 
@@ -76,11 +76,11 @@ type ExerciseCategoryHandler() =
                 | Error(RenameExerciseCategory.NameAlreadyUsed e) -> Results.Conflict(Responses.exerciseCategoryAlreadyExists e)
         }
 
-    static member Delete(deleteExerciseCategory: DeleteExerciseCategory.Workflow, sportsmanId: string, categoryId: string) : Task<IResult> = task {
+    static member Delete(deleteExerciseCategory: DeleteExerciseCategory.Workflow, userId: string, categoryId: string) : Task<IResult> = task {
         let! result =
             deleteExerciseCategory {
                 Id = categoryId
-                OwnerId = sportsmanId
+                OwnerId = userId
             }
 
         return

@@ -7,8 +7,8 @@ open FSharp.Data.UnitSystems.SI.UnitSymbols
 [<AutoOpen>]
 module DomainTypes =
 
-    type Sportsman = {
-        Id: Id<Sportsman>
+    type User = {
+        Id: Id<User>
         Email: EmailAddress
         FirstName: String50
         LastName: String50
@@ -59,7 +59,7 @@ module DomainTypes =
     type ExerciseCategory = {
         Id: Id<ExerciseCategory>
         Name: String50
-        OwnerId: Id<Sportsman>
+        OwnerId: Id<User>
     }
 
     /// Exercise template with description about an exercise
@@ -72,7 +72,7 @@ module DomainTypes =
         Sets: ExerciseSets
         CreatedOn: DateTime
         LastModifiedOn: DateTime
-        OwnerId: Id<Sportsman>
+        OwnerId: Id<User>
     }
 
     /// Routine with workout description
@@ -85,7 +85,7 @@ module DomainTypes =
         Exercises: Exercise list
         CreatedOn: DateTime
         LastModifiedOn: DateTime
-        OwnerId: Id<Sportsman>
+        OwnerId: Id<User>
     }
 
     /// Exercise session completed on a particular date
@@ -103,10 +103,10 @@ module DomainTypes =
         Exercises: ExerciseSession list
         StartedOn: DateTime
         CompletedOn: DateTime
-        OwnerId: Id<Sportsman>
+        OwnerId: Id<User>
     }
 
-    type SportsmanId = Id<Sportsman>
+    type UserId = Id<User>
     type ExerciseCategoryId = Id<ExerciseCategory>
     type ExerciseId = Id<Exercise>
     type RoutineId = Id<Routine>

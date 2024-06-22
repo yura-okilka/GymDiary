@@ -9,9 +9,9 @@ public interface IGymDiaryApiClient
     [Get("/ping")]
     Task<IApiResponse> Ping();
 
-    [Post("/v1/sportsmen/{sportsmanId}/exerciseCategories")]
-    Task<IApiResponse> CreateExerciseCategory(string sportsmanId, CreateExerciseCategory.Request request);
+    [Post("/v1/users/{userId}/exerciseCategories")]
+    Task<IApiResponse> CreateExerciseCategory(string userId, CreateExerciseCategory.Request request);
 
-    [Post("/v1/sportsmen")]
-    Task<IApiResponse<CreateSportsman.Response>> CreateSportsman(CreateSportsman.Request request);
+    [Post("/v1/users")]
+    Task<IApiResponse<CreateUser.Response>> CreateUser(CreateUser.Request request);
 }

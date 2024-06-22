@@ -16,10 +16,10 @@ type CreateExerciseRequest = {
 }
 
 type ExerciseHandler() =
-    static member Create(createExercise: CreateExercise.Workflow, sportsmanId: string, request: CreateExerciseRequest) : Task<IResult> = task {
+    static member Create(createExercise: CreateExercise.Workflow, userId: string, request: CreateExerciseRequest) : Task<IResult> = task {
         let! result =
             createExercise {
-                OwnerId = sportsmanId
+                OwnerId = userId
                 CategoryId = request.CategoryId
                 Name = request.Name
                 Notes = request.Notes

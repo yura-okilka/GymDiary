@@ -14,7 +14,7 @@ public static class Endpoints
 
         app.MapPost("/exercises", () => "This is a POST");
 
-        app.MapPost("/sportsmen", () => "This is a POST");
+        app.MapPost("/users", () => "This is a POST");
 
         return app;
     }

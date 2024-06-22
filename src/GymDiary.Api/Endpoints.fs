@@ -17,42 +17,42 @@ type EndpointRouteBuilderExtensions() =
         let categories = app.MapGroup("/").WithTags("Exercise categories")
 
         categories.MapPost(
-            "/v1/sportsmen/{sportsmanId}/exerciseCategories",
-            Func<_, _, _>(fun sportsmanId request -> ExerciseCategoryHandler.Create(root.CreateExerciseCategory, sportsmanId, request))
+            "/v1/users/{userId}/exerciseCategories",
+            Func<_, _, _>(fun userId request -> ExerciseCategoryHandler.Create(root.CreateExerciseCategory, userId, request))
         )
 
         categories.MapGet(
-            "/v1/sportsmen/{sportsmanId}/exerciseCategories",
-            Func<_, _>(fun sportsmanId -> ExerciseCategoryHandler.GetAll(root.GetAllExerciseCategories, sportsmanId))
+            "/v1/users/{userId}/exerciseCategories",
+            Func<_, _>(fun userId -> ExerciseCategoryHandler.GetAll(root.GetAllExerciseCategories, userId))
         )
 
         categories.MapGet(
-            "/v1/sportsmen/{sportsmanId}/exerciseCategories/{categoryId}",
-            Func<_, _, _>(fun sportsmanId categoryId -> ExerciseCategoryHandler.GetById(root.GetExerciseCategory, sportsmanId, categoryId))
+            "/v1/users/{userId}/exerciseCategories/{categoryId}",
+            Func<_, _, _>(fun userId categoryId -> ExerciseCategoryHandler.GetById(root.GetExerciseCategory, userId, categoryId))
         )
 
         categories.MapPut(
-            "/v1/sportsmen/{sportsmanId}/exerciseCategories/{categoryId}",
-            Func<_, _, _, _>(fun sportsmanId categoryId request ->
-                ExerciseCategoryHandler.Rename(root.RenameExerciseCategory, sportsmanId, categoryId, request))
+            "/v1/users/{userId}/exerciseCategories/{categoryId}",
+            Func<_, _, _, _>(fun userId categoryId request ->
+                ExerciseCategoryHandler.Rename(root.RenameExerciseCategory, userId, categoryId, request))
         )
 
         categories.MapDelete(
-            "/v1/sportsmen/{sportsmanId}/exerciseCategories/{categoryId}",
-            Func<_, _, _>(fun sportsmanId categoryId ->
-                ExerciseCategoryHandler.Delete(root.DeleteExerciseCategory, sportsmanId, categoryId))
+            "/v1/users/{userId}/exerciseCategories/{categoryId}",
+            Func<_, _, _>(fun userId categoryId ->
+                ExerciseCategoryHandler.Delete(root.DeleteExerciseCategory, userId, categoryId))
         )
 
         app
             .MapPost(
-                "/v1/sportsmen/{sportsmanId}/exercises",
-                Func<_, _, _>(fun sportsmanId request -> ExerciseHandler.Create(root.CreateExercise, sportsmanId, request))
+                "/v1/users/{userId}/exercises",
+                Func<_, _, _>(fun userId request -> ExerciseHandler.Create(root.CreateExercise, userId, request))
             )
             .WithTags("Exercises")
 
         app
-            .MapPost("/v1/sportsmen", Func<_, _>(fun request -> SportsmanHandler.Create(root.CreateSportsman, request)))
-            .WithTags("Sportsmen")
+            .MapPost("/v1/users", Func<_, _>(fun request -> UserHandler.Create(root.CreateUser, request)))
+            .WithTags("Users")
 
         app.MapGet("/ping", Func<_>(fun () -> "pong")).WithTags("Ping")
 

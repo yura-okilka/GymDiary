@@ -1,4 +1,4 @@
-namespace GymDiary.Core.Workflows.Sportsman
+namespace GymDiary.Core.Workflows.User
 
 open System
 open GymDiary.Core.Domain
@@ -9,7 +9,7 @@ open FsToolkit.ErrorHandling
 
 open Microsoft.Extensions.Logging
 
-module CreateSportsman =
+module CreateUser =
 
     type GenderDto =
         | Male
@@ -28,22 +28,22 @@ module CreateSportsman =
 
     type CommandError =
         | InvalidCommand of ValidationError list
-        | SportsmanAlreadyExists of SportsmanWithEmailAlreadyExistsError
+        | UserAlreadyExists of UserWithEmailAlreadyExistsError
 
-        static member sportsmanAlreadyExists email =
-            SportsmanWithEmailAlreadyExistsError.create email |> SportsmanAlreadyExists |> Error
+        static member userAlreadyExists email =
+            UserWithEmailAlreadyExistsError.create email |> UserAlreadyExists |> Error
 
         static member toString error =
             match error with
             | InvalidCommand es -> es |> ValidationErrors.toString
-            | SportsmanAlreadyExists e -> e |> SportsmanWithEmailAlreadyExistsError.toString
+            | UserAlreadyExists e -> e |> UserWithEmailAlreadyExistsError.toString
 
     type Workflow = Workflow<Command, CommandResult, CommandError>
 
     let LoggingInfoProvider =
         { new ILoggingInfoProvider<Command, CommandError> with
 
-            member _.ErrorEventId = DomainEvents.SportsmanCreationFailed
+            member _.ErrorEventId = DomainEvents.UserCreationFailed
 
             member _.GetErrorMessage(error) = CommandError.toString error
 
@@ -51,13 +51,13 @@ module CreateSportsman =
         }
 
     let execute
-        (sportsmanWithEmailExistsInDB: EmailAddress -> Async<bool>)
-        (createSportsmanInDB: Sportsman -> Async<SportsmanId>)
+        (userWithEmailExistsInDB: EmailAddress -> Async<bool>)
+        (createUserInDB: User -> Async<UserId>)
         (logger: ILogger)
         (command: Command)
         =
         asyncResult {
-            let! sportsman =
+            let! user =
                 validation {
                     let dtoToGender =
                         function
@@ -70,18 +70,18 @@ module CreateSportsman =
                     and! lastName = String50.create (nameof command.LastName) command.LastName
                     and! dateOfBirth = command.DateOfBirth |> Option.map DateOnly.FromDateTime |> Ok
                     and! gender = command.Gender |> Option.map dtoToGender |> Ok
-                    return Sportsman.create email firstName lastName dateOfBirth gender
+                    return User.create email firstName lastName dateOfBirth gender
                 }
                 |> Result.mapError InvalidCommand
 
-            let! sportsmanExists = sportsmanWithEmailExistsInDB sportsman.Email
+            let! userExists = userWithEmailExistsInDB user.Email
 
-            if sportsmanExists then
-                return! CommandError.sportsmanAlreadyExists sportsman.Email
+            if userExists then
+                return! CommandError.userAlreadyExists user.Email
 
-            let! sportsmanId = createSportsmanInDB sportsman |> Async.map Id.value
+            let! userId = createUserInDB user |> Async.map Id.value
 
-            logger.LogInformation(DomainEvents.SportsmanCreated, "Exercise sportsman was created with id '{id}'", sportsmanId)
+            logger.LogInformation(DomainEvents.UserCreated, "Exercise user was created with id '{id}'", userId)
 
-            return { Id = sportsmanId }
+            return { Id = userId }
         }

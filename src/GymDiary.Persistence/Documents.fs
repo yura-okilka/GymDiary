@@ -11,7 +11,7 @@ open MongoDB.Bson.Serialization.Attributes
 module Documents =
 
     [<CLIMutable>]
-    type SportsmanDocument = {
+    type UserDocument = {
         Id: string // TODO: use ObjectId here.
         Email: string
         FirstName: string

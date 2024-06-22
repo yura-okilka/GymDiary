@@ -6,9 +6,9 @@ open GymDiary.Core.Domain
 open GymDiary.Persistence
 open FsToolkit.ErrorHandling
 
-module SportsmanDocument =
+module UserDocument =
 
-    let fromDomain (domain: Sportsman) : SportsmanDocument =
+    let fromDomain (domain: User) : UserDocument =
         let genderToString =
             function
             | Male -> "Male"
@@ -24,7 +24,7 @@ module SportsmanDocument =
             Gender = domain.Gender |> Option.map genderToString
         }
 
-    let toDomain (document: SportsmanDocument) : Result<Sportsman, ValidationError> = result {
+    let toDomain (document: UserDocument) : Result<User, ValidationError> = result {
         let stringToGender field gender =
             match gender with
             | "Male" -> Male |> Ok
@@ -39,5 +39,5 @@ module SportsmanDocument =
         let dateOfBirth = document.DateOfBirth |> Option.map DateOnly.FromDateTime
         let! gender = document.Gender |> Option.traverseResult (stringToGender (nameof document.Gender))
 
-        return Sportsman.restoreFrom id email firstName lastName dateOfBirth gender
+        return User.restoreFrom id email firstName lastName dateOfBirth gender
     }

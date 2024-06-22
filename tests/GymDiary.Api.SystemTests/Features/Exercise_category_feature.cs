@@ -15,23 +15,23 @@ public class Exercise_category_feature : FeatureFixture
         await Runner
             .WithContext<ExerciseCategoryContext>()
             .RunScenarioWithEnvCleanup(
-                given => given.Create_sportsman(),
-                given => given.Create_sportsman_response_should_have_success(HttpStatusCode.Created),
-                when => when.Create_exercise_category(when.CreateSportsmanResponse.Content!.Id, "Cardio"),
+                given => given.Create_user(),
+                given => given.Create_user_response_should_have_success(HttpStatusCode.Created),
+                when => when.Create_exercise_category(when.CreateUserResponse.Content!.Id, "Cardio"),
                 then => then.Create_exercise_category_response_should_have_success(HttpStatusCode.Created)
             );
     }
 
     [Scenario]
-    public async Task Create_exercise_category_for_unknown_sportsman_should_fail()
+    public async Task Create_exercise_category_for_unknown_user_should_fail()
     {
         await Runner
             .WithContext<ExerciseCategoryContext>()
             .RunScenarioWithEnvCleanup(
-                when => when.Create_exercise_category_for_unknown_sportsman(),
+                when => when.Create_exercise_category_for_unknown_user(),
                 then => then.Create_exercise_category_response_should_have_error(
                     HttpStatusCode.Conflict,
-                    CreateExerciseCategory.OwnerNotFoundError(then.SportsmanId)
+                    CreateExerciseCategory.OwnerNotFoundError(then.UserId)
                 )
             );
     }

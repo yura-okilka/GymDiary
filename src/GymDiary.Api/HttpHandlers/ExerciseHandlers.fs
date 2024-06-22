@@ -20,11 +20,11 @@ module ExerciseHandlers =
         Sets: ExerciseSetsDto
     }
 
-    let create (createExercise: CreateExercise.Workflow) (sportsmanId: string) (request: CreateExerciseRequest) : HttpHandler =
+    let create (createExercise: CreateExercise.Workflow) (userId: string) (request: CreateExerciseRequest) : HttpHandler =
         fun (next: HttpFunc) (ctx: HttpContext) -> task {
             let! result =
                 createExercise {
-                    OwnerId = sportsmanId
+                    OwnerId = userId
                     CategoryId = request.CategoryId
                     Name = request.Name
                     Notes = request.Notes
