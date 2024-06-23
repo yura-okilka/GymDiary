@@ -18,10 +18,10 @@ type IExerciseCategoryRepository =
     abstract member Delete: ExerciseCategoryId -> Async<unit>
 
 type IExerciseRepository =
-    abstract member Create: Exercise -> Async<ExerciseId>
-    abstract member GetById: ExerciseId -> UserId -> Async<Exercise option>
-    abstract member Update: Exercise -> Async<UpdateEntityResult>
-    abstract member Delete: ExerciseId -> Async<unit>
+    abstract member Create: ExerciseDefinition -> Async<ExerciseDefinitionId>
+    abstract member GetById: ExerciseDefinitionId -> UserId -> Async<ExerciseDefinition option>
+    abstract member Update: ExerciseDefinition -> Async<UpdateEntityResult>
+    abstract member Delete: ExerciseDefinitionId -> Async<unit>
 
 type IUserRepository =
     abstract member Create: User -> Async<UserId>

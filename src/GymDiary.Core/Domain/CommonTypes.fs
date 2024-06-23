@@ -16,11 +16,12 @@ module CommonTypes =
 
         let create<'T> value : Id<'T> = Id value
 
-        let tryCreate<'T> fieldName value : Result<Id<'T>, ValidationError> = ConstrainedType.createStringNotNull fieldName Id value
+        let tryCreate<'T> fieldName value : Result<Id<'T>, ValidationError> = ConstrainedType.createStringNotNull fieldName Id value // TODO: return narrow error
 
         let value (Id value) = value
 
     /// Constrained to be 50 chars or less, not null
+    [<Struct>]
     type String50 =
         private
         | String50 of string
@@ -34,6 +35,7 @@ module CommonTypes =
         static member value(String50 value) = value
 
     /// Constrained to be 200 chars or less, not null
+    [<Struct>]
     type String200 =
         private
         | String200 of string
@@ -47,6 +49,7 @@ module CommonTypes =
         static member value(String200 value) = value
 
     /// Constrained to be 1000 chars or less, not null
+    [<Struct>]
     type String1k =
         private
         | String1k of string
@@ -60,6 +63,7 @@ module CommonTypes =
         static member value(String1k value) = value
 
     /// Constrained to be a non-zero positive natural number
+    [<Struct>]
     type PositiveInt =
         private
         | PositiveInt of int
@@ -70,6 +74,7 @@ module CommonTypes =
         static member value(PositiveInt value) = value
 
     /// Constrained to be a valid email address
+    [<Struct>]
     type EmailAddress =
         private
         | EmailAddress of string
@@ -85,6 +90,7 @@ module CommonTypes =
         static member value(EmailAddress value) = value
 
     /// Constrained to be a valid phone number
+    [<Struct>]
     type PhoneNumber =
         private
         | PhoneNumber of string

@@ -8,7 +8,7 @@ open FsToolkit.ErrorHandling
 module ExerciseSetDocument =
 
     let fromRepsSet (domain: RepsSet) : ExerciseSetDocument = {
-        OrderNum = domain.OrderNum |> PositiveInt.value
+        SequenceNumber = domain.SequenceNumber |> PositiveInt.value
         Reps = domain.Reps |> PositiveInt.value |> Some
         EquipmentWeight = None
         Duration = None
@@ -16,7 +16,7 @@ module ExerciseSetDocument =
     }
 
     let fromRepsWeightSet (domain: RepsWeightSet) : ExerciseSetDocument = {
-        OrderNum = domain.OrderNum |> PositiveInt.value
+        SequenceNumber = domain.SequenceNumber |> PositiveInt.value
         Reps = domain.Reps |> PositiveInt.value |> Some
         EquipmentWeight = domain.EquipmentWeight |> float |> Some
         Duration = None
@@ -24,7 +24,7 @@ module ExerciseSetDocument =
     }
 
     let fromDurationSet (domain: DurationSet) : ExerciseSetDocument = {
-        OrderNum = domain.OrderNum |> PositiveInt.value
+        SequenceNumber = domain.SequenceNumber |> PositiveInt.value
         Reps = None
         EquipmentWeight = None
         Duration = domain.Duration |> Some
@@ -32,7 +32,7 @@ module ExerciseSetDocument =
     }
 
     let fromDurationWeightSet (domain: DurationWeightSet) : ExerciseSetDocument = {
-        OrderNum = domain.OrderNum |> PositiveInt.value
+        SequenceNumber = domain.SequenceNumber |> PositiveInt.value
         Reps = None
         EquipmentWeight = domain.EquipmentWeight |> float |> Some
         Duration = domain.Duration |> Some
@@ -40,7 +40,7 @@ module ExerciseSetDocument =
     }
 
     let fromDurationDistanceSet (domain: DurationDistanceSet) : ExerciseSetDocument = {
-        OrderNum = domain.OrderNum |> PositiveInt.value
+        SequenceNumber = domain.SequenceNumber |> PositiveInt.value
         Reps = None
         EquipmentWeight = None
         Duration = domain.Duration |> Some
@@ -64,41 +64,41 @@ module ExerciseSetDocument =
     let private toFloatKg field value = value |> requireSome field |> Result.map floatKg
 
     let toRepsSet (document: ExerciseSetDocument) : Result<RepsSet, ValidationError> = result {
-        let! orderNum = document.OrderNum |> PositiveInt.create (nameof document.OrderNum)
+        let! sequenceNumber = document.SequenceNumber |> PositiveInt.create (nameof document.SequenceNumber)
         let! reps = document.Reps |> toPositiveInt (nameof document.Reps)
 
-        return RepsSet.create orderNum reps
+        return RepsSet.create sequenceNumber reps
     }
 
     let toRepsWeightSet (document: ExerciseSetDocument) : Result<RepsWeightSet, ValidationError> = result {
-        let! orderNum = document.OrderNum |> PositiveInt.create (nameof document.OrderNum)
+        let! sequenceNumber = document.SequenceNumber |> PositiveInt.create (nameof document.SequenceNumber)
         let! reps = document.Reps |> toPositiveInt (nameof document.Reps)
         let! weight = document.EquipmentWeight |> toFloatKg (nameof document.EquipmentWeight)
 
-        return RepsWeightSet.create orderNum reps weight
+        return RepsWeightSet.create sequenceNumber reps weight
     }
 
     let toDurationSet (document: ExerciseSetDocument) : Result<DurationSet, ValidationError> = result {
-        let! orderNum = document.OrderNum |> PositiveInt.create (nameof document.OrderNum)
+        let! sequenceNumber = document.SequenceNumber |> PositiveInt.create (nameof document.SequenceNumber)
         let! duration = document.Duration |> requireSome (nameof document.Duration)
 
-        return DurationSet.create orderNum duration
+        return DurationSet.create sequenceNumber duration
     }
 
     let toDurationWeightSet (document: ExerciseSetDocument) : Result<DurationWeightSet, ValidationError> = result {
-        let! orderNum = document.OrderNum |> PositiveInt.create (nameof document.OrderNum)
+        let! sequenceNumber = document.SequenceNumber |> PositiveInt.create (nameof document.SequenceNumber)
         let! duration = document.Duration |> requireSome (nameof document.Duration)
         let! weight = document.EquipmentWeight |> toFloatKg (nameof document.EquipmentWeight)
 
-        return DurationWeightSet.create orderNum duration weight
+        return DurationWeightSet.create sequenceNumber duration weight
     }
 
     let toDurationDistanceSet (document: ExerciseSetDocument) : Result<DurationDistanceSet, ValidationError> = result {
-        let! orderNum = document.OrderNum |> PositiveInt.create (nameof document.OrderNum)
+        let! sequenceNumber = document.SequenceNumber |> PositiveInt.create (nameof document.SequenceNumber)
         let! duration = document.Duration |> requireSome (nameof document.Duration)
         let! distance = document.Distance |> requireSome (nameof document.Duration) |> Result.map floatM
 
-        return DurationDistanceSet.create orderNum duration distance
+        return DurationDistanceSet.create sequenceNumber duration distance
     }
 
     let toExerciseSets (setType: ExerciseSetType) (documents: ExerciseSetDocument list) : Result<ExerciseSets, ValidationError> =

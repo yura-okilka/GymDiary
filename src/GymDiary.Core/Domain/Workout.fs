@@ -1,8 +1,8 @@
 namespace GymDiary.Core.Domain
 
-module WorkoutSession =
+module Workout =
 
-    let create id routineId exercises startedOn completedOn ownerId : WorkoutSession = {
+    let create id routineId exercises startedOn completedOn ownerId : Workout = {
         Id = id
         RoutineId = routineId
         Exercises = exercises

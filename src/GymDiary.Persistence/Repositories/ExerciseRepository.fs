@@ -15,7 +15,7 @@ type ExerciseRepository(repository: IMongoDocumentRepository<ExerciseDocument>) 
 
             return
                 createdDocument.Id
-                |> Id.tryCreate<Exercise> (nameof createdDocument.Id)
+                |> Id.tryCreate<ExerciseDefinition> (nameof createdDocument.Id)
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseId>.Name, error)))
         }
 
@@ -37,7 +37,7 @@ type ExerciseRepository(repository: IMongoDocumentRepository<ExerciseDocument>) 
             let! result = entity |> ExerciseDocument.fromDomain |> repository.ReplaceOne(Expr.Quote(fun d -> d.Id = id))
 
             if result.ModifiedCount = 0 then
-                return! EntityNotFound(typeof<Exercise>.Name, id) |> Error
+                return! EntityNotFound(typeof<ExerciseDefinition>.Name, id) |> Error
         }
 
         member _.Delete exerciseId = async {

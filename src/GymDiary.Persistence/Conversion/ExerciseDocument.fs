@@ -6,7 +6,7 @@ open FsToolkit.ErrorHandling
 
 module ExerciseDocument =
 
-    let fromDomain (domain: Exercise) : ExerciseDocument =
+    let fromDomain (domain: ExerciseDefinition) : ExerciseDocument =
         let (setType, sets) = ExerciseSetDocument.fromExerciseSets domain.Sets
 
         {
@@ -22,7 +22,7 @@ module ExerciseDocument =
             OwnerId = domain.OwnerId |> Id.value
         }
 
-    let toDomain (document: ExerciseDocument) : Result<Exercise, ValidationError> = result {
+    let toDomain (document: ExerciseDocument) : Result<ExerciseDefinition, ValidationError> = result {
         let! id = document.Id |> Id.tryCreate (nameof document.Id)
         let! categoryId = document.CategoryId |> Id.tryCreate (nameof document.CategoryId)
         let! name = document.Name |> String50.create (nameof document.Name)

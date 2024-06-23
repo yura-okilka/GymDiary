@@ -37,19 +37,19 @@ module Documents =
     /// A superset of all exercise set types.
     [<CLIMutable>]
     type ExerciseSetDocument = {
-        OrderNum: int
+        SequenceNumber: int
 
         [<BsonIgnoreIfDefault>]
         Reps: int option
 
         [<BsonIgnoreIfDefault>]
-        EquipmentWeight: float option
+        EquipmentWeight: float option // WeightKg
 
         [<BsonIgnoreIfDefault>]
         Duration: TimeSpan option
 
         [<BsonIgnoreIfDefault>]
-        Distance: float option
+        Distance: float option // DistanceM
     }
 
     [<CLIMutable>]

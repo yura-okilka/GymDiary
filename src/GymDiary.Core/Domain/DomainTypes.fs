@@ -1,7 +1,6 @@
 namespace GymDiary.Core.Domain
 
 open System
-
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 [<AutoOpen>]
@@ -16,56 +15,35 @@ module DomainTypes =
         Gender: Gender option
     }
 
-    /// Exercise set represented by reps quantity
-    type RepsSet = {
-        OrderNum: PositiveInt
-        Reps: PositiveInt
-    }
-
-    /// Exercise set represented by reps quantity & equipment weight
-    type RepsWeightSet = {
-        OrderNum: PositiveInt
-        Reps: PositiveInt
-        EquipmentWeight: float<kg>
-    }
-
-    /// Exercise set represented by exercise duration
-    type DurationSet = {
-        OrderNum: PositiveInt
-        Duration: TimeSpan
-    }
-
-    /// Exercise set represented by exercise duration & equipment weight
-    type DurationWeightSet = {
-        OrderNum: PositiveInt
-        Duration: TimeSpan
-        EquipmentWeight: float<kg>
-    }
-
-    /// Exercise set represented by exercise duration & distance
-    type DurationDistanceSet = {
-        OrderNum: PositiveInt
-        Duration: TimeSpan
-        Distance: float<m>
-    }
-
-    type ExerciseSets =
-        | RepsSets of RepsSet list
-        | RepsWeightSets of RepsWeightSet list
-        | DurationSets of DurationSet list
-        | DurationWeightSets of DurationWeightSet list
-        | DurationDistanceSets of DurationDistanceSet list
-
     type ExerciseCategory = {
         Id: Id<ExerciseCategory>
         Name: String50
         OwnerId: Id<User>
     }
 
-    // ExerciseDescription
-    /// Exercise template with description about an exercise
-    type Exercise = {
-        Id: Id<Exercise>
+    type ExerciseSetType =
+        | Repetitions
+        | RepetitionsWithWeight
+        | Duration
+        | DurationWithWeight
+        | DurationWithDistance
+
+    type ExerciseSetData = {
+        SequenceNumber: PositiveInt
+        Repetitions: uint
+        Weight: float<kg>
+        Distance: float<m>
+        Duration: TimeSpan
+    }
+
+    type ExerciseSets = {
+        Type: ExerciseSetType
+        Items: ExerciseSetData list
+    }
+
+    /// A template of an exercise
+    type ExerciseDefinition = {
+        Id: Id<ExerciseDefinition>
         CategoryId: Id<ExerciseCategory>
         Name: String50
         Notes: String1k option
@@ -76,34 +54,60 @@ module DomainTypes =
         OwnerId: Id<User>
     }
 
-    /// Routine with workout description
+    /// A template of a workout
     type Routine = {
         Id: Id<Routine>
         Name: String50
         Goal: String200 option
         Notes: String1k option
         Schedule: DayOfWeek Set
-        Exercises: Exercise list
+        Exercises: Id<ExerciseDefinition> Set
         CreatedOn: DateTime
         LastModifiedOn: DateTime
         OwnerId: Id<User>
     }
 
-    // Exercise
-    /// Exercise session completed on a particular date
-    type ExerciseSession = {
-        ExerciseId: Id<Exercise>
+    /// A snapshot of exercise category at a particular time
+    type ExerciseCategorySnapshot = {
+        Id: Id<ExerciseCategory>
+        Name: String50
+        OwnerId: Id<User>
+    }
+
+    /// A snapshot of exercise definition at a particular time
+    type ExerciseDefinitionSnapshot = {
+        Id: Id<ExerciseDefinition>
+        Category: ExerciseCategorySnapshot
+        Name: String50
+        Notes: String1k option
+        RestTime: TimeSpan
+        Sets: ExerciseSets
+        OwnerId: Id<User>
+    }
+
+    /// A snapshot of routine at a particular time
+    type RoutineSnapshot = {
+        Id: Id<Routine>
+        Name: String50
+        Goal: String200 option
+        Notes: String1k option
+        Schedule: DayOfWeek Set
+        OwnerId: Id<User>
+    }
+
+    /// An exercise completed at a particular time
+    type Exercise = {
+        Definition: ExerciseDefinitionSnapshot
         Sets: ExerciseSets
         StartedOn: DateTime
         CompletedOn: DateTime
     }
 
-    // Workout
-    /// Workout session completed on a particular date
-    type WorkoutSession = {
-        Id: Id<WorkoutSession>
-        RoutineId: Id<Routine>
-        Exercises: ExerciseSession list
+    /// A workout completed at a particular time
+    type Workout = {
+        Id: Id<Workout>
+        Routine: RoutineSnapshot
+        Exercises: Exercise list
         StartedOn: DateTime
         CompletedOn: DateTime
         OwnerId: Id<User>
@@ -111,6 +115,6 @@ module DomainTypes =
 
     type UserId = Id<User>
     type ExerciseCategoryId = Id<ExerciseCategory>
-    type ExerciseId = Id<Exercise>
+    type ExerciseDefinitionId = Id<ExerciseDefinition>
     type RoutineId = Id<Routine>
-    type WorkoutSessionId = Id<WorkoutSession>
+    type WorkoutId = Id<Workout>

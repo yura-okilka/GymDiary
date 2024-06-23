@@ -10,12 +10,11 @@
     <Compile Include="Domain\CommonTypes.fs" />
     <Compile Include="Domain\DomainTypes.fs" />
     <Compile Include="Domain\User.fs" />
-    <Compile Include="Domain\ExerciseSets.fs" />
     <Compile Include="Domain\ExerciseCategory.fs" />
-    <Compile Include="Domain\Exercise.fs" />
+    <Compile Include="Domain\ExerciseDefinition.fs" />
     <Compile Include="Domain\Routine.fs" />
-    <Compile Include="Domain\ExerciseSession.fs" />
-    <Compile Include="Domain\WorkoutSession.fs" />
+    <Compile Include="Domain\Exercise.fs" />
+    <Compile Include="Domain\Workout.fs" />
     <Compile Include="Domain\DomainErrors.fs" />
     <Compile Include="Domain\DomainEvents.fs" />
     <Compile Include="Time\SystemClock.fs" />

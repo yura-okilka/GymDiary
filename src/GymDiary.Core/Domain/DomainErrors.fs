@@ -27,7 +27,7 @@ module DomainErrors =
 
         static member toString(UserWithEmailAlreadyExistsError email) = $"User with email '%s{email}' already exists"
 
-    type OwnerNotFoundError =
+    type OwnerNotFoundError = // TODO: User
         | OwnerNotFoundError of id: string
 
         static member create(id: UserId) = OwnerNotFoundError(id |> Id.value)

@@ -10,24 +10,24 @@ open FsToolkit.ErrorHandling
 
 module CommonDtos =
 
-    type RepsSetDto = { OrderNum: int; Reps: int }
+    type RepsSetDto = { SequenceNumber: int; Reps: int }
 
     type RepsWeightSetDto = {
-        OrderNum: int
+        SequenceNumber: int
         Reps: int
         EquipmentWeight: float
     }
 
-    type DurationSetDto = { OrderNum: int; Duration: TimeSpan }
+    type DurationSetDto = { SequenceNumber: int; Duration: TimeSpan }
 
     type DurationWeightSetDto = {
-        OrderNum: int
+        SequenceNumber: int
         Duration: TimeSpan
         EquipmentWeight: float
     }
 
     type DurationDistanceSetDto = {
-        OrderNum: int
+        SequenceNumber: int
         Duration: TimeSpan
         Distance: float
     }
@@ -41,38 +41,38 @@ module CommonDtos =
 
         static member toDomain(setsDto: ExerciseSetsDto) : Result<ExerciseSets, ValidationError list> =
             let toRepsSet (dto: RepsSetDto) = validation {
-                let! orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
+                let! sequenceNumber = dto.SequenceNumber |> PositiveInt.create (nameof dto.SequenceNumber)
                 and! reps = dto.Reps |> PositiveInt.create (nameof dto.Reps)
 
-                return RepsSet.create orderNum reps
+                return RepsSet.create sequenceNumber reps
             }
 
             let toRepsWeightSet (dto: RepsWeightSetDto) = validation {
-                let! orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
+                let! sequenceNumber = dto.SequenceNumber |> PositiveInt.create (nameof dto.SequenceNumber)
                 and! reps = dto.Reps |> PositiveInt.create (nameof dto.Reps)
                 let weight = dto.EquipmentWeight |> floatKg
 
-                return RepsWeightSet.create orderNum reps weight
+                return RepsWeightSet.create sequenceNumber reps weight
             }
 
             let toDurationSet (dto: DurationSetDto) = validation {
-                let! orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
+                let! sequenceNumber = dto.SequenceNumber |> PositiveInt.create (nameof dto.SequenceNumber)
 
-                return DurationSet.create orderNum dto.Duration
+                return DurationSet.create sequenceNumber dto.Duration
             }
 
             let toDurationWeightSet (dto: DurationWeightSetDto) = validation {
-                let! orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
+                let! sequenceNumber = dto.SequenceNumber |> PositiveInt.create (nameof dto.SequenceNumber)
                 let weight = dto.EquipmentWeight |> floatKg
 
-                return DurationWeightSet.create orderNum dto.Duration weight
+                return DurationWeightSet.create sequenceNumber dto.Duration weight
             }
 
             let toDurationDistanceSet (dto: DurationDistanceSetDto) = validation {
-                let! orderNum = dto.OrderNum |> PositiveInt.create (nameof dto.OrderNum)
+                let! sequenceNumber = dto.SequenceNumber |> PositiveInt.create (nameof dto.SequenceNumber)
                 let distance = dto.Distance |> floatM
 
-                return DurationDistanceSet.create orderNum dto.Duration distance
+                return DurationDistanceSet.create sequenceNumber dto.Duration distance
             }
 
             match setsDto with
