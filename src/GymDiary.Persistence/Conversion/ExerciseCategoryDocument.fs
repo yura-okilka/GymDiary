@@ -13,9 +13,9 @@ module ExerciseCategoryDocument =
     }
 
     let toDomain (document: ExerciseCategoryDocument) : Result<ExerciseCategory, ValidationError> = result {
-        let! id = document.Id |> Id.create (nameof document.Id)
+        let! id = document.Id |> Id.tryCreate (nameof document.Id)
         let! name = document.Name |> String50.create (nameof document.Name)
-        let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
+        let! ownerId = document.OwnerId |> Id.tryCreate (nameof document.OwnerId)
 
         return ExerciseCategory.create id name ownerId
     }

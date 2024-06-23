@@ -12,8 +12,8 @@ module User =
         Gender = gender
     }
 
-    let create email firstName lastName dateOfBirth gender : User = {
-        Id = Id.Empty
+    let create id email firstName lastName dateOfBirth gender : User = {
+        Id = id
         Email = email
         FirstName = firstName
         LastName = lastName

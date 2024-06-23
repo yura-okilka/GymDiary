@@ -6,6 +6,7 @@ open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.CommonDtos
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
+open GymDiary.Core.Persistence
 
 open FsToolkit.ErrorHandling
 
@@ -57,6 +58,7 @@ module CreateExercise =
         }
 
     let execute
+        (idGenerator : IIdGenerator)
         (getCategoryByIdFromDB: ExerciseCategoryId -> UserId -> Async<ExerciseCategory option>)
         (userWithIdExistsInDB: UserId -> Async<bool>)
         (createExerciseInDB: Exercise -> Async<ExerciseId>)
@@ -66,8 +68,8 @@ module CreateExercise =
         asyncResult {
             let! validated =
                 validation {
-                    let! categoryId = Id.create (nameof command.CategoryId) command.CategoryId
-                    and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
+                    let! categoryId = Id.tryCreate (nameof command.CategoryId) command.CategoryId
+                    and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
                     and! name = String50.create (nameof command.Name) command.Name
                     and! notes = Option.traverseResult (String1k.create (nameof command.Notes)) command.Notes
                     and! sets = ExerciseSetsDto.toDomain command.Sets
@@ -93,6 +95,7 @@ module CreateExercise =
 
             let exercise =
                 Exercise.create
+                    (idGenerator.GenerateId<Exercise>())
                     validated.CategoryId
                     validated.OwnerId
                     validated.Name

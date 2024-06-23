@@ -32,8 +32,8 @@ module GetExerciseCategory =
     let execute (getCategoryByIdFromDB: ExerciseCategoryId -> UserId -> Async<ExerciseCategory option>) (query: Query) = asyncResult {
         let! (categoryId, ownerId) =
             validation {
-                let! categoryId = Id.create (nameof query.Id) query.Id
-                and! ownerId = Id.create (nameof query.OwnerId) query.OwnerId
+                let! categoryId = Id.tryCreate (nameof query.Id) query.Id
+                and! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId
                 return (categoryId, ownerId)
             }
             |> Result.mapError InvalidQuery

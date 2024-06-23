@@ -1,6 +1,7 @@
 namespace GymDiary.Core.Workflows.ExerciseCategory
 
 open GymDiary.Core.Domain
+open GymDiary.Core.Persistence
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
 
@@ -47,6 +48,7 @@ module CreateExerciseCategory =
         }
 
     let execute
+        (idGenerator : IIdGenerator)
         (categoryWithNameExistsInDB: String50 -> UserId -> Async<bool>)
         (userWithIdExistsInDB: UserId -> Async<bool>)
         (createCategoryInDB: ExerciseCategory -> Async<ExerciseCategoryId>)
@@ -56,9 +58,9 @@ module CreateExerciseCategory =
         asyncResult {
             let! category =
                 validation {
-                    let! id = Id.Empty |> Ok
+                    let! id = idGenerator.GenerateId() |> Ok
                     and! name = String50.create (nameof command.Name) command.Name
-                    and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
+                    and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
                     return ExerciseCategory.create id name ownerId
                 }
                 |> Result.mapError InvalidCommand

@@ -23,9 +23,11 @@ module CompositionRoot =
 
     let compose (sp: IServiceProvider) =
         let logger = sp.GetRequiredService<ILoggerFactory>().CreateLogger()
+        let idGenerator = sp.GetRequiredService<IIdGenerator>()
 
         let createExerciseCategoryWorkflow =
             CreateExerciseCategory.execute
+                idGenerator
                 (sp.GetRequiredService<IExerciseCategoryRepository>().ExistWithName)
                 (sp.GetRequiredService<IUserRepository>().ExistWithId)
                 (sp.GetRequiredService<IExerciseCategoryRepository>().Create)
@@ -52,6 +54,7 @@ module CompositionRoot =
 
         let createExerciseWorkflow =
             CreateExercise.execute
+                idGenerator
                 (sp.GetRequiredService<IExerciseCategoryRepository>().GetById)
                 (sp.GetRequiredService<IUserRepository>().ExistWithId)
                 (sp.GetRequiredService<IExerciseRepository>().Create)
@@ -59,6 +62,7 @@ module CompositionRoot =
 
         let createUserWorkflow =
             CreateUser.execute
+                idGenerator
                 (sp.GetRequiredService<IUserRepository>().ExistWithEmail)
                 (sp.GetRequiredService<IUserRepository>().Create)
                 logger

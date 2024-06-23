@@ -16,10 +16,10 @@ module WorkoutSessionDocument =
     }
 
     let toDomain (document: WorkoutSessionDocument) : Result<WorkoutSession, ValidationError> = result {
-        let! id = document.Id |> Id.create (nameof document.Id)
-        let! routineId = document.RoutineId |> Id.create (nameof document.RoutineId)
+        let! id = document.Id |> Id.tryCreate (nameof document.Id)
+        let! routineId = document.RoutineId |> Id.tryCreate (nameof document.RoutineId)
         let! exercises = document.Exercises |> List.traverseResultM ExerciseSessionDocument.toDomain
-        let! ownerId = document.OwnerId |> Id.create (nameof document.OwnerId)
+        let! ownerId = document.OwnerId |> Id.tryCreate (nameof document.OwnerId)
 
         return WorkoutSession.create id routineId exercises document.StartedOn document.CompletedOn ownerId
     }

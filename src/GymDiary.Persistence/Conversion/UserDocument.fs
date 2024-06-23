@@ -32,7 +32,7 @@ module UserDocument =
             | "Other" -> Other |> Ok
             | _ -> ValidationError.invalidValue field gender |> Error
 
-        let! id = document.Id |> Id.create (nameof document.Id)
+        let! id = document.Id |> Id.tryCreate (nameof document.Id)
         let! email = document.Email |> EmailAddress.create (nameof document.Email)
         let! firstName = document.FirstName |> String50.create (nameof document.FirstName)
         let! lastName = document.LastName |> String50.create (nameof document.LastName)

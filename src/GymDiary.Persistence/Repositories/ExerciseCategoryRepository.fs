@@ -15,7 +15,7 @@ type ExerciseCategoryRepository(repository: IMongoDocumentRepository<ExerciseCat
 
             return
                 createdDocument.Id
-                |> Id.create<ExerciseCategory> (nameof createdDocument.Id)
+                |> Id.tryCreate<ExerciseCategory> (nameof createdDocument.Id)
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryId>.Name, error)))
         }
 

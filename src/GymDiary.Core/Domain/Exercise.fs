@@ -15,8 +15,8 @@ module Exercise =
         OwnerId = ownerId
     }
 
-    let create categoryId ownerId name notes restTime sets utcNow : Exercise = {
-        Id = Id.Empty
+    let create id categoryId ownerId name notes restTime sets utcNow : Exercise = {
+        Id = id
         CategoryId = categoryId
         OwnerId = ownerId
         Name = name

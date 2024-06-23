@@ -62,6 +62,7 @@ module DomainTypes =
         OwnerId: Id<User>
     }
 
+    // ExerciseDescription
     /// Exercise template with description about an exercise
     type Exercise = {
         Id: Id<Exercise>
@@ -88,6 +89,7 @@ module DomainTypes =
         OwnerId: Id<User>
     }
 
+    // Exercise
     /// Exercise session completed on a particular date
     type ExerciseSession = {
         ExerciseId: Id<Exercise>
@@ -96,6 +98,7 @@ module DomainTypes =
         CompletedOn: DateTime
     }
 
+    // Workout
     /// Workout session completed on a particular date
     type WorkoutSession = {
         Id: Id<WorkoutSession>

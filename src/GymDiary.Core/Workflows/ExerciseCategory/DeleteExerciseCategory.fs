@@ -35,8 +35,8 @@ module DeleteExerciseCategory =
     let execute (deleteCategoryFromDB: ExerciseCategoryId -> Async<unit>) (logger: ILogger) (command: Command) = asyncResult {
         let! (categoryId, ownerId) =
             validation {
-                let! categoryId = Id.create (nameof command.Id) command.Id
-                and! ownerId = Id.create (nameof command.OwnerId) command.OwnerId
+                let! categoryId = Id.tryCreate (nameof command.Id) command.Id
+                and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
                 return (categoryId, ownerId)
             }
             |> Result.mapError InvalidCommand

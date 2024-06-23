@@ -13,7 +13,9 @@ module CommonTypes =
 
         let Empty = Id ""
 
-        let create<'T> fieldName value : Result<Id<'T>, ValidationError> = ConstrainedType.createStringNotNull fieldName Id value
+        let create<'T> value : Id<'T> = Id value
+
+        let tryCreate<'T> fieldName value : Result<Id<'T>, ValidationError> = ConstrainedType.createStringNotNull fieldName Id value
 
         let value (Id value) = value
 

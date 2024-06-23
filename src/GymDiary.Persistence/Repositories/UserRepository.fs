@@ -15,7 +15,7 @@ type UserRepository(repository: IMongoDocumentRepository<UserDocument>) =
 
             return
                 createdDocument.Id
-                |> Id.create<User> (nameof createdDocument.Id)
+                |> Id.tryCreate<User> (nameof createdDocument.Id)
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<UserId>.Name, error)))
         }
 

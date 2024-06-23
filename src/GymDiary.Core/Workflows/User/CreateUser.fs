@@ -4,6 +4,7 @@ open System
 open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.ErrorLoggingDecorator
+open GymDiary.Core.Persistence
 
 open FsToolkit.ErrorHandling
 
@@ -51,6 +52,7 @@ module CreateUser =
         }
 
     let execute
+        (idGenerator : IIdGenerator)
         (userWithEmailExistsInDB: EmailAddress -> Async<bool>)
         (createUserInDB: User -> Async<UserId>)
         (logger: ILogger)
@@ -65,12 +67,13 @@ module CreateUser =
                         | GenderDto.Female -> Gender.Female
                         | GenderDto.Other -> Gender.Other
 
+                    let id = idGenerator.GenerateId()
                     let! email = EmailAddress.create (nameof command.Email) command.Email
                     and! firstName = String50.create (nameof command.FirstName) command.FirstName
                     and! lastName = String50.create (nameof command.LastName) command.LastName
                     and! dateOfBirth = command.DateOfBirth |> Option.map DateOnly.FromDateTime |> Ok
                     and! gender = command.Gender |> Option.map dtoToGender |> Ok
-                    return User.create email firstName lastName dateOfBirth gender
+                    return User.create id email firstName lastName dateOfBirth gender
                 }
                 |> Result.mapError InvalidCommand
 

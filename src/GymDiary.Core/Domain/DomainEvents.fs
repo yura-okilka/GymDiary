@@ -2,7 +2,7 @@ namespace GymDiary.Core.Domain
 
 open Microsoft.Extensions.Logging
 
-module DomainEvents =
+module DomainEvents = // TODO: delete
 
     let ExerciseCategoryCreated = EventId(1, "ExerciseCategoryCreated")
     let ExerciseCategoryCreationFailed = EventId(2, "ExerciseCategoryCreationFailed")
