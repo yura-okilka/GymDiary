@@ -7,6 +7,7 @@ open System.ComponentModel.DataAnnotations
 module CommonTypes =
 
     /// Constrained to be a strongly typed id of entity, not null
+    [<Struct>]
     type Id<'T> = Id of string
 
     module Id =
