@@ -10,6 +10,7 @@
     <Compile Include="Documents.fs" />
     <Compile Include="MongoCollections.fs" />
     <Compile Include="MongoSettings.fs" />
+    <Compile Include="MongoContext.fs" />
     <Compile Include="IdGenerator.fs" />
     <Compile Include="Conversion\UserDocument.fs" />
     <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
