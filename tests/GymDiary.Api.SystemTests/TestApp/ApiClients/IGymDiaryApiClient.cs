@@ -9,7 +9,7 @@ public interface IGymDiaryApiClient
     [Get("/ping")]
     Task<IApiResponse> Ping();
 
-    [Post("/v1/users/{userId}/exerciseCategories")]
+    [Post("/v1/users/{userId}/exercise-categories")]
     Task<IApiResponse> CreateExerciseCategory(string userId, CreateExerciseCategory.Request request);
 
     [Post("/v1/users")]

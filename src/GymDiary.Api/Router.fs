@@ -14,11 +14,11 @@ module Router =
 
     let webApp (root: CompositionRoot) : (HttpFunc -> HttpContext -> HttpFuncResult) =
         choose [
-            POST >=> routef "/v1/users/%s/exerciseCategories" (fun userId -> bindJsonSafe (ExerciseCategoryHandlers.create root.CreateExerciseCategory userId))
-            GET >=> routef "/v1/users/%s/exerciseCategories" (ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories)
-            GET >=> routef "/v1/users/%s/exerciseCategories/%s" (ExerciseCategoryHandlers.getById root.GetExerciseCategory)
-            PUT >=> routef "/v1/users/%s/exerciseCategories/%s" (fun ids -> bindJsonSafe (ExerciseCategoryHandlers.rename root.RenameExerciseCategory ids))
-            DELETE >=> routef "/v1/users/%s/exerciseCategories/%s" (ExerciseCategoryHandlers.delete root.DeleteExerciseCategory)
+            POST >=> routef "/v1/users/%s/exercise-categories" (fun userId -> bindJsonSafe (ExerciseCategoryHandlers.create root.CreateExerciseCategory userId))
+            GET >=> routef "/v1/users/%s/exercise-categories" (ExerciseCategoryHandlers.getAll root.GetAllExerciseCategories)
+            GET >=> routef "/v1/users/%s/exercise-categories/%s" (ExerciseCategoryHandlers.getById root.GetExerciseCategory)
+            PUT >=> routef "/v1/users/%s/exercise-categories/%s" (fun ids -> bindJsonSafe (ExerciseCategoryHandlers.rename root.RenameExerciseCategory ids))
+            DELETE >=> routef "/v1/users/%s/exercise-categories/%s" (ExerciseCategoryHandlers.delete root.DeleteExerciseCategory)
 
             POST >=> routef "/v1/users/%s/exercises" (fun userId -> bindJsonSafe (ExerciseHandlers.create root.CreateExercise userId))
 

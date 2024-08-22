@@ -17,28 +17,28 @@ type EndpointRouteBuilderExtensions() =
         let categories = app.MapGroup("/").WithTags("Exercise categories")
 
         categories.MapPost(
-            "/v1/users/{userId}/exerciseCategories",
+            "/v1/users/{userId}/exercise-categories",
             Func<_, _, _>(fun userId request -> ExerciseCategoryHandler.Create(root.CreateExerciseCategory, userId, request))
         )
 
         categories.MapGet(
-            "/v1/users/{userId}/exerciseCategories",
+            "/v1/users/{userId}/exercise-categories",
             Func<_, _>(fun userId -> ExerciseCategoryHandler.GetAll(root.GetAllExerciseCategories, userId))
         )
 
         categories.MapGet(
-            "/v1/users/{userId}/exerciseCategories/{categoryId}",
+            "/v1/users/{userId}/exercise-categories/{categoryId}",
             Func<_, _, _>(fun userId categoryId -> ExerciseCategoryHandler.GetById(root.GetExerciseCategory, userId, categoryId))
         )
 
         categories.MapPut(
-            "/v1/users/{userId}/exerciseCategories/{categoryId}",
+            "/v1/users/{userId}/exercise-categories/{categoryId}",
             Func<_, _, _, _>(fun userId categoryId request ->
                 ExerciseCategoryHandler.Rename(root.RenameExerciseCategory, userId, categoryId, request))
         )
 
         categories.MapDelete(
-            "/v1/users/{userId}/exerciseCategories/{categoryId}",
+            "/v1/users/{userId}/exercise-categories/{categoryId}",
             Func<_, _, _>(fun userId categoryId ->
                 ExerciseCategoryHandler.Delete(root.DeleteExerciseCategory, userId, categoryId))
         )
