@@ -53,7 +53,7 @@ module Documents =
     }
 
     [<CLIMutable>]
-    type ExerciseDocument = {
+    type ExerciseDefinitionDocument = {
         Id: string
         CategoryId: string
         Name: string
@@ -73,7 +73,7 @@ module Documents =
         Goal: string option
         Notes: string option
         Schedule: DayOfWeek list
-        Exercises: ExerciseDocument list
+        Exercises: ExerciseDefinitionDocument list
         CreatedOn: DateTime
         LastModifiedOn: DateTime
         OwnerId: string
@@ -89,7 +89,7 @@ module Documents =
     }
 
     [<CLIMutable>]
-    type WorkoutSessionDocument = {
+    type WorkoutDocument = {
         Id: string
         RoutineId: string
         Exercises: ExerciseSessionDocument list

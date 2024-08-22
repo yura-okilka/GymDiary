@@ -6,7 +6,7 @@ open FsToolkit.ErrorHandling
 
 module WorkoutSessionDocument =
 
-    let fromDomain (domain: Workout) : WorkoutSessionDocument = {
+    let fromDomain (domain: Workout) : WorkoutDocument = {
         Id = domain.Id |> Id.value
         RoutineId = domain.RoutineId |> Id.value
         Exercises = domain.Exercises |> List.map ExerciseSessionDocument.fromDomain
@@ -15,7 +15,7 @@ module WorkoutSessionDocument =
         OwnerId = domain.OwnerId |> Id.value
     }
 
-    let toDomain (document: WorkoutSessionDocument) : Result<Workout, ValidationError> = result {
+    let toDomain (document: WorkoutDocument) : Result<Workout, ValidationError> = result {
         let! id = document.Id |> Id.tryCreate (nameof document.Id)
         let! routineId = document.RoutineId |> Id.tryCreate (nameof document.RoutineId)
         let! exercises = document.Exercises |> List.traverseResultM ExerciseSessionDocument.toDomain

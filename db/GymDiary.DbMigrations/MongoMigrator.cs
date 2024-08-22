@@ -18,7 +18,7 @@ public class MongoMigrator(IMongoDatabase database, ILogger<MongoMigrator> logge
     {
         try
         {
-            logger.LogInformation("Upgrading '{database}' database", DatabaseName);
+            logger.LogInformation("Upgrading '{Database}' database", DatabaseName);
 
             // ReSharper disable once MethodHasAsyncOverload
             var existingCollections = await database.ListCollectionNames().ToListAsync();
@@ -33,7 +33,7 @@ public class MongoMigrator(IMongoDatabase database, ILogger<MongoMigrator> logge
         catch (Exception ex)
         {
             var upgradeEx = new DbUpgradeException(DatabaseName, ex);
-            logger.LogError(upgradeEx, "Failed to upgrade '{database}' database", DatabaseName);
+            logger.LogError(upgradeEx, "Failed to upgrade '{Database}' database", DatabaseName);
 
             throw upgradeEx;
         }
@@ -43,6 +43,6 @@ public class MongoMigrator(IMongoDatabase database, ILogger<MongoMigrator> logge
     {
         await database.CreateCollectionAsync(collection);
 
-        logger.LogInformation($"Created '{collection}' collection with default settings");
+        logger.LogInformation("Created '{Collection}' collection with default settings", collection);
     }
 }

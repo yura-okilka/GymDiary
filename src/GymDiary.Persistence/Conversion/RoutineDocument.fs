@@ -12,7 +12,7 @@ module RoutineDocument =
         Goal = domain.Goal |> Option.map String200.value
         Notes = domain.Notes |> Option.map String1k.value
         Schedule = domain.Schedule |> List.ofSeq
-        Exercises = domain.Exercises |> List.map ExerciseDocument.fromDomain
+        Exercises = domain.Exercises |> List.map ExerciseDefinitionDocument.fromDomain
         CreatedOn = domain.CreatedOn
         LastModifiedOn = domain.LastModifiedOn
         OwnerId = domain.OwnerId |> Id.value
@@ -24,7 +24,7 @@ module RoutineDocument =
         let! goal = document.Goal |> Option.traverseResult (String200.create (nameof document.Goal))
         let! notes = document.Notes |> Option.traverseResult (String1k.create (nameof document.Notes))
         let schedule = document.Schedule |> Set.ofSeq
-        let! exercises = document.Exercises |> List.traverseResultM ExerciseDocument.toDomain
+        let! exercises = document.Exercises |> List.traverseResultM ExerciseDefinitionDocument.toDomain
         let! ownerId = document.OwnerId |> Id.tryCreate (nameof document.OwnerId)
 
         return Routine.create id name goal notes schedule exercises document.CreatedOn document.LastModifiedOn ownerId

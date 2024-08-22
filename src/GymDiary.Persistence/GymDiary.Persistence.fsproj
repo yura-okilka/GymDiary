@@ -6,28 +6,28 @@
 
   <ItemGroup>
     <Compile Include="InternalExtensions.fs" />
+    <Compile Include="FindFluentExtensions.fs" />
     <Compile Include="Exceptions.fs" />
     <Compile Include="Documents.fs" />
-    <Compile Include="MongoCollections.fs" />
     <Compile Include="MongoSettings.fs" />
     <Compile Include="MongoContext.fs" />
-    <Compile Include="IdGenerator.fs" />
+    <Compile Include="IdProvider.fs" />
     <Compile Include="Conversion\UserDocument.fs" />
     <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
     <Compile Include="Conversion\ExerciseSetDocument.fs" />
-    <Compile Include="Conversion\ExerciseDocument.fs" />
+    <Compile Include="Conversion\ExerciseDefinitionDocument.fs" />
     <Compile Include="Conversion\RoutineDocument.fs" />
     <Compile Include="Conversion\ExerciseSessionDocument.fs" />
     <Compile Include="Conversion\WorkoutSessionDocument.fs" />
-    <Compile Include="Repositories\MongoDocumentRepository.fs" />
     <Compile Include="Repositories\UserRepository.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
-    <Compile Include="Repositories\ExerciseRepository.fs" />
+    <Compile Include="Repositories\ExerciseDefinitionRepository.fs" />
     <Compile Include="SerializationSettings.fs" />
     <Compile Include="PersistenceServiceCollectionExtensions.fs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FsToolkit.ErrorHandling.TaskResult" Version="4.16.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.23.2" />
     <PackageReference Include="Validus" Version="4.1.3" />

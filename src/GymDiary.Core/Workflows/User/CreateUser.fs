@@ -52,7 +52,7 @@ module CreateUser =
         }
 
     let execute
-        (idGenerator : IIdGenerator)
+        (idProvider: IIdProvider)
         (userWithEmailExistsInDB: EmailAddress -> Async<bool>)
         (createUserInDB: User -> Async<UserId>)
         (logger: ILogger)
@@ -67,7 +67,7 @@ module CreateUser =
                         | GenderDto.Female -> Gender.Female
                         | GenderDto.Other -> Gender.Other
 
-                    let id = idGenerator.GenerateId()
+                    let id = idProvider.GenerateId()
                     let! email = EmailAddress.create (nameof command.Email) command.Email
                     and! firstName = String50.create (nameof command.FirstName) command.FirstName
                     and! lastName = String50.create (nameof command.LastName) command.LastName

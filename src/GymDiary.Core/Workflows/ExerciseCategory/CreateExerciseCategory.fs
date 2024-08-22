@@ -48,7 +48,7 @@ module CreateExerciseCategory =
         }
 
     let execute
-        (idGenerator : IIdGenerator)
+        (idProvider: IIdProvider)
         (categoryWithNameExistsInDB: String50 -> UserId -> Async<bool>)
         (userWithIdExistsInDB: UserId -> Async<bool>)
         (createCategoryInDB: ExerciseCategory -> Async<ExerciseCategoryId>)
@@ -58,7 +58,7 @@ module CreateExerciseCategory =
         asyncResult {
             let! category =
                 validation {
-                    let! id = idGenerator.GenerateId() |> Ok
+                    let! id = idProvider.GenerateId() |> Ok
                     and! name = String50.create (nameof command.Name) command.Name
                     and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
                     return ExerciseCategory.create id name ownerId
@@ -77,11 +77,7 @@ module CreateExerciseCategory =
 
             let! categoryId = createCategoryInDB category |> Async.map Id.value
 
-            logger.LogInformation(
-                DomainEvents.ExerciseCategoryCreated,
-                "Exercise category was created with id '{id}'",
-                categoryId
-            )
+            logger.LogInformation(DomainEvents.ExerciseCategoryCreated, "Exercise category was created with id '{id}'", categoryId)
 
             return { Id = categoryId }
         }

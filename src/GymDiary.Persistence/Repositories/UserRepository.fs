@@ -1,28 +1,23 @@
 namespace GymDiary.Persistence.Repositories
 
-open Common.Extensions
 open GymDiary.Core.Domain
 open GymDiary.Core.Persistence
 open GymDiary.Persistence
 open GymDiary.Persistence.Conversion
-open FsToolkit.ErrorHandling
+open MongoDB.Driver
 
-type UserRepository(repository: IMongoDocumentRepository<UserDocument>) =
+type UserRepository(context: IMongoContext) =
     interface IUserRepository with
 
-        member _.Create entity = async {
-            let! createdDocument = entity |> UserDocument.fromDomain |> repository.InsertOne
-
-            return
-                createdDocument.Id
-                |> Id.tryCreate<User> (nameof createdDocument.Id)
-                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<UserId>.Name, error)))
+        member _.Create entity = task {
+            let document = entity |> UserDocument.fromDomain
+            do! context.Users.InsertOneAsync(document)
         }
 
-        member _.ExistWithId userId =
-            let userId = userId |> Id.value
-            repository.Any(Expr.Quote(fun d -> d.Id = userId))
+        member _.ExistWithId id =
+            let id = id |> Id.value
+            context.Users.Find(fun d -> d.Id = id).AnyAsync()
 
         member _.ExistWithEmail email =
             let email = email |> EmailAddress.value
-            repository.Any(Expr.Quote(fun d -> d.Email = email))
+            context.Users.Find(fun d -> d.Email = email).AnyAsync()

@@ -2,7 +2,6 @@ namespace GymDiary.Persistence
 
 #nowarn "20"
 
-open System
 open System.Runtime.CompilerServices
 open GymDiary.Core.Persistence
 open GymDiary.Persistence.Repositories
@@ -16,20 +15,11 @@ type PersistenceServiceCollectionExtensions() =
     static member AddPersistence(services: IServiceCollection) : IServiceCollection =
         SerializationSettings.register ()
 
-        let newMongoRepository collection (sp: IServiceProvider) =
-            MongoDocumentRepository(sp.GetRequiredService<IMongoClient>(), sp.GetRequiredService<MongoSettings>(), collection)
-
         // Create settings instance in the implementation factory to defer its creation and allow overriding IConfiguration in the test host.
-        services.AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow "MongoDb" (sp.GetRequiredService<IConfiguration>()))
-        services.AddSingleton<IMongoClient, MongoClient>(fun sp -> MongoClient(sp.GetRequiredService<MongoSettings>().ConnectionString))
-
-        services.AddSingleton<IUserRepository, UserRepository>(fun sp ->
-            UserRepository(newMongoRepository MongoCollections.Users sp))
-
-        services.AddSingleton<IExerciseCategoryRepository, ExerciseCategoryRepository>(fun sp ->
-            ExerciseCategoryRepository(newMongoRepository MongoCollections.ExerciseCategories sp))
-
-        services.AddSingleton<IExerciseRepository, ExerciseRepository>(fun sp ->
-            ExerciseRepository(newMongoRepository MongoCollections.Exercises sp))
-
         services
+            .AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow "MongoDb" (sp.GetRequiredService<IConfiguration>()))
+            .AddSingleton<IMongoClient, MongoClient>(fun sp -> MongoClient(sp.GetRequiredService<MongoSettings>().ConnectionString))
+            .AddSingleton<IMongoContext, MongoContext>()
+            .AddSingleton<IUserRepository, UserRepository>()
+            .AddSingleton<IExerciseCategoryRepository, ExerciseCategoryRepository>()
+            .AddSingleton<IExerciseDefinitionRepository, ExerciseDefinitionRepository>()

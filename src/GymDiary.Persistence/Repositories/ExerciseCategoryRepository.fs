@@ -1,27 +1,57 @@
 namespace GymDiary.Persistence.Repositories
 
-open Common.Extensions
 open GymDiary.Core.Domain
 open GymDiary.Core.Persistence
 open GymDiary.Persistence
 open GymDiary.Persistence.Conversion
 open FsToolkit.ErrorHandling
+open MongoDB.Driver
 
-type ExerciseCategoryRepository(repository: IMongoDocumentRepository<ExerciseCategoryDocument>) =
+type ExerciseCategoryRepository(context: IMongoContext) =
     interface IExerciseCategoryRepository with
 
-        member _.Create entity = async {
-            let! createdDocument = entity |> ExerciseCategoryDocument.fromDomain |> repository.InsertOne
-
-            return
-                createdDocument.Id
-                |> Id.tryCreate<ExerciseCategory> (nameof createdDocument.Id)
-                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryId>.Name, error)))
+        member _.Create entity = task {
+            let document = entity |> ExerciseCategoryDocument.fromDomain
+            do! context.ExerciseCategories.InsertOneAsync(document)
         }
 
-        member _.GetAll ownerId = async {
+        member _.Update entity = taskResult {
+            let id = entity.Id |> Id.value
+            let document = entity |> ExerciseCategoryDocument.fromDomain
+            let! result = context.ExerciseCategories.ReplaceOneAsync((fun d -> d.Id = id), document)
+
+            if result.ModifiedCount = 0 then
+                return! EntityNotFound(typeof<ExerciseCategory>.Name, id) |> Error
+        }
+
+        member _.Delete id = task {
+            let id = id |> Id.value
+            let! _ = context.ExerciseCategories.DeleteOneAsync(fun d -> d.Id = id)
+            return ()
+        }
+
+        member _.Get id ownerId = task {
+            let id = id |> Id.value
             let ownerId = ownerId |> Id.value
-            let! documents = repository.FindAll(Expr.Quote(fun d -> d.OwnerId = ownerId))
+
+            let! documentOption =
+                context.ExerciseCategories
+                    .Find(fun d -> d.Id = id && d.OwnerId = ownerId)
+                    .SingleOrNoneAsync()
+
+            return
+                documentOption
+                |> Option.traverseResult ExerciseCategoryDocument.toDomain
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
+        }
+
+        member _.GetAll ownerId = task {
+            let ownerId = ownerId |> Id.value
+
+            let! documents =
+                context.ExerciseCategories
+                    .Find(fun d -> d.OwnerId = ownerId)
+                    .ToListAsync()
 
             return
                 documents
@@ -30,40 +60,11 @@ type ExerciseCategoryRepository(repository: IMongoDocumentRepository<ExerciseCat
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
         }
 
-        member _.GetById (categoryId: ExerciseCategoryId) (ownerId: UserId) = async {
-            let categoryId = categoryId |> Id.value
-            let ownerId = ownerId |> Id.value
-
-            let! documentOption = repository.FindSingle(Expr.Quote(fun d -> d.Id = categoryId && d.OwnerId = ownerId))
-
-            return
-                documentOption
-                |> Option.traverseResult ExerciseCategoryDocument.toDomain
-                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<ExerciseCategoryDocument>.Name, error)))
-        }
-
-        member _.ExistWithName (name: String50) (ownerId: UserId) =
+        member _.ExistWithName name ownerId =
             let name = name |> String50.value
             let ownerId = ownerId |> Id.value
 
             // Consider using case-insensitive index for large collections.
-            repository.Any(Expr.Quote(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId))
-
-        member _.Update entity = asyncResult {
-            let id = entity.Id |> Id.value
-
-            let! result =
-                entity
-                |> ExerciseCategoryDocument.fromDomain
-                |> repository.ReplaceOne(Expr.Quote(fun d -> d.Id = id))
-
-            if result.ModifiedCount = 0 then
-                return! EntityNotFound(typeof<ExerciseCategory>.Name, id) |> Error
-        }
-
-        member _.Delete categoryId = async {
-            let categoryId = categoryId |> Id.value
-
-            let! _ = repository.DeleteOne(Expr.Quote(fun d -> d.Id = categoryId))
-            return ()
-        }
+            context.ExerciseCategories
+                .Find(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId)
+                .AnyAsync()

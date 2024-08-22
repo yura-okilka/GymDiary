@@ -58,7 +58,7 @@ module CreateExercise =
         }
 
     let execute
-        (idGenerator : IIdGenerator)
+        (idProvider: IIdProvider)
         (getCategoryByIdFromDB: ExerciseCategoryId -> UserId -> Async<ExerciseCategory option>)
         (userWithIdExistsInDB: UserId -> Async<bool>)
         (createExerciseInDB: ExerciseDefinition -> Async<ExerciseDefinitionId>)
@@ -95,7 +95,7 @@ module CreateExercise =
 
             let exercise =
                 Exercise.create
-                    (idGenerator.GenerateId<ExerciseDefinition>())
+                    (idProvider.GenerateId<ExerciseDefinition>())
                     validated.CategoryId
                     validated.OwnerId
                     validated.Name

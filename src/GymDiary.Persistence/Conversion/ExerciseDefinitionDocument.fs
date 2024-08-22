@@ -4,9 +4,9 @@ open GymDiary.Core.Domain
 open GymDiary.Persistence
 open FsToolkit.ErrorHandling
 
-module ExerciseDocument =
+module ExerciseDefinitionDocument =
 
-    let fromDomain (domain: ExerciseDefinition) : ExerciseDocument =
+    let fromDomain (domain: ExerciseDefinition) : ExerciseDefinitionDocument =
         let (setType, sets) = ExerciseSetDocument.fromExerciseSets domain.Sets
 
         {
@@ -22,7 +22,7 @@ module ExerciseDocument =
             OwnerId = domain.OwnerId |> Id.value
         }
 
-    let toDomain (document: ExerciseDocument) : Result<ExerciseDefinition, ValidationError> = result {
+    let toDomain (document: ExerciseDefinitionDocument) : Result<ExerciseDefinition, ValidationError> = result {
         let! id = document.Id |> Id.tryCreate (nameof document.Id)
         let! categoryId = document.CategoryId |> Id.tryCreate (nameof document.CategoryId)
         let! name = document.Name |> String50.create (nameof document.Name)
@@ -31,7 +31,7 @@ module ExerciseDocument =
         let! ownerId = document.OwnerId |> Id.tryCreate (nameof document.OwnerId)
 
         return
-            Exercise.restoreFrom
+            ExerciseDefinition.restoreFrom
                 id
                 categoryId
                 name
