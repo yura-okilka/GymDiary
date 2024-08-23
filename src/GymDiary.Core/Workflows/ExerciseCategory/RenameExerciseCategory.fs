@@ -77,7 +77,7 @@ module RenameExerciseCategory =
                 getCategoryByIdFromDB categoryId ownerId
                 |> AsyncResult.requireSome (CommandError.categoryNotFound categoryId ownerId)
 
-            let renamedCategory = category |> ExerciseCategory.rename name
+            let renamedCategory = category |> ExerciseCategoryAggregate.rename name
 
             do!
                 updateCategoryInDB renamedCategory

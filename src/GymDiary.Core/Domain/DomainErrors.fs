@@ -1,5 +1,8 @@
 namespace GymDiary.Core.Domain
 
+open GymDiary.Core.Domain.ExerciseCategoryAggregate
+open GymDiary.Core.Domain.UserAggregate
+
 [<AutoOpen>]
 module DomainErrors =
 

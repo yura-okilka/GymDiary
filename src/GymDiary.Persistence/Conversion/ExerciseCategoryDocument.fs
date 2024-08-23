@@ -17,5 +17,5 @@ module ExerciseCategoryDocument =
         let! name = document.Name |> String50.create (nameof document.Name)
         let! ownerId = document.OwnerId |> Id.tryCreate (nameof document.OwnerId)
 
-        return ExerciseCategory.create id name ownerId
+        return ExerciseCategoryAggregate.create id name ownerId
     }

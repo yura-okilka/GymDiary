@@ -27,5 +27,5 @@ module RoutineDocument =
         let! exercises = document.Exercises |> List.traverseResultM ExerciseDefinitionDocument.toDomain
         let! ownerId = document.OwnerId |> Id.tryCreate (nameof document.OwnerId)
 
-        return Routine.create id name goal notes schedule exercises document.CreatedOn document.LastModifiedOn ownerId
+        return RoutineAggregate.create id name goal notes schedule exercises document.CreatedOn document.LastModifiedOn ownerId
     }

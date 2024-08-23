@@ -61,7 +61,7 @@ module CreateExerciseCategory =
                     let! id = idProvider.GenerateId() |> Ok
                     and! name = String50.create (nameof command.Name) command.Name
                     and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
-                    return ExerciseCategory.create id name ownerId
+                    return ExerciseCategoryAggregate.create id name ownerId
                 }
                 |> Result.mapError InvalidCommand
 

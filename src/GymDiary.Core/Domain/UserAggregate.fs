@@ -1,6 +1,19 @@
 namespace GymDiary.Core.Domain
 
-module User =
+open System
+
+module UserAggregate =
+
+    type User = {
+        Id: Id<User>
+        Email: EmailAddress
+        FirstName: String50
+        LastName: String50
+        DateOfBirth: DateOnly option
+        Gender: Gender option
+    }
+
+    type UserId = Id<User>
 
     /// Restores exercise from provided data. Use only for serialization.
     let restoreFrom id email firstName lastName dateOfBirth gender : User = {
