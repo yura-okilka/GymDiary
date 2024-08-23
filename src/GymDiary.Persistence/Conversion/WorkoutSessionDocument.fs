@@ -1,6 +1,7 @@
 namespace GymDiary.Persistence.Conversion
 
 open GymDiary.Core.Domain
+open GymDiary.Core.Domain.WorkoutAggregate
 open GymDiary.Persistence
 open FsToolkit.ErrorHandling
 

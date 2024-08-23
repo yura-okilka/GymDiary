@@ -3,7 +3,7 @@ namespace GymDiary.Persistence.Repositories
 open GymDiary.Core.Domain
 open GymDiary.Core.Persistence
 open GymDiary.Persistence
-open GymDiary.Persistence.Conversion
+open GymDiary.Persistence.Documents
 open MongoDB.Driver
 
 type UserRepository(context: IMongoContext) =

@@ -1,6 +1,7 @@
 namespace GymDiary.Persistence.Repositories
 
 open GymDiary.Core.Domain
+open GymDiary.Core.Domain.ExerciseCategoryAggregate
 open GymDiary.Core.Persistence
 open GymDiary.Persistence
 open GymDiary.Persistence.Conversion

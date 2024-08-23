@@ -10,9 +10,9 @@
     <Compile Include="Exceptions.fs" />
     <Compile Include="Documents.fs" />
     <Compile Include="MongoSettings.fs" />
-    <Compile Include="MongoContext.fs" />
     <Compile Include="IdProvider.fs" />
-    <Compile Include="Conversion\UserDocument.fs" />
+    <Compile Include="Documents\UserDocument.fs" />
+    <Compile Include="MongoContext.fs" />
     <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
     <Compile Include="Conversion\ExerciseSetDocument.fs" />
     <Compile Include="Conversion\ExerciseDefinitionDocument.fs" />

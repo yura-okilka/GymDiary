@@ -1,6 +1,7 @@
 namespace GymDiary.Persistence.Conversion
 
 open GymDiary.Core.Domain
+open GymDiary.Core.Domain.ExerciseDefinitionAggregate
 open GymDiary.Persistence
 open FsToolkit.ErrorHandling
 
@@ -31,7 +32,7 @@ module ExerciseDefinitionDocument =
         let! ownerId = document.OwnerId |> Id.tryCreate (nameof document.OwnerId)
 
         return
-            ExerciseDefinition.restoreFrom
+            ExerciseDefinitionAggregate.restoreFrom
                 id
                 categoryId
                 name

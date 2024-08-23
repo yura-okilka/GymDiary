@@ -2,13 +2,16 @@ namespace GymDiary.Core.Persistence
 
 open System.Threading.Tasks
 open GymDiary.Core.Domain.CommonTypes
-open GymDiary.Core.Domain
+open GymDiary.Core.Domain.ExerciseCategoryAggregate
+open GymDiary.Core.Domain.ExerciseDefinitionAggregate
+open GymDiary.Core.Domain.UserAggregate
 
 type UpdateEntityError = EntityNotFound of entity: string * id: string
 type UpdateEntityResult = Result<unit, UpdateEntityError>
 
 type IIdProvider =
-    abstract member GenerateId<'T> : unit -> Id<'T>
+    abstract member GenerateId: unit -> Id<'T>
+    abstract member TryParse: string -> Id<'T> option
 
 type IExerciseCategoryRepository =
     abstract member Create: ExerciseCategory -> Task<unit>
