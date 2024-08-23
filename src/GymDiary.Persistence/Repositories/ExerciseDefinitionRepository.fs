@@ -10,14 +10,14 @@ open MongoDB.Driver
 type ExerciseDefinitionRepository(context: IMongoContext) =
     interface IExerciseDefinitionRepository with
 
-        member _.Create entity = task {
-            let document = entity |> ExerciseDefinitionDocument.fromDomain
+        member _.Create definition = task {
+            let document = definition |> ExerciseDefinitionDocument.fromDomain
             do! context.ExerciseDefinitions.InsertOneAsync(document)
         }
 
-        member _.Update entity = taskResult {
-            let id = entity.Id |> Id.value
-            let document = entity |> ExerciseDefinitionDocument.fromDomain
+        member _.Update definition = taskResult {
+            let id = definition.Id |> Id.value
+            let document = definition |> ExerciseDefinitionDocument.fromDomain
             let! result = context.ExerciseDefinitions.ReplaceOneAsync((fun d -> d.Id = id), document)
 
             if result.ModifiedCount = 0 then

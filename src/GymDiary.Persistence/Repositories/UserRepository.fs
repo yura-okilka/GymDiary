@@ -9,8 +9,8 @@ open MongoDB.Driver
 type UserRepository(context: IMongoContext) =
     interface IUserRepository with
 
-        member _.Create entity = task {
-            let document = entity |> UserDocument.fromDomain
+        member _.Create user = task {
+            let document = user |> UserDocument.fromDomain
             do! context.Users.InsertOneAsync(document)
         }
 

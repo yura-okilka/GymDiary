@@ -10,14 +10,14 @@ open MongoDB.Driver
 type ExerciseCategoryRepository(context: IMongoContext) =
     interface IExerciseCategoryRepository with
 
-        member _.Create entity = task {
-            let document = entity |> ExerciseCategoryDocument.fromDomain
+        member _.Create category = task {
+            let document = category |> ExerciseCategoryDocument.fromDomain
             do! context.ExerciseCategories.InsertOneAsync(document)
         }
 
-        member _.Update entity = taskResult {
-            let id = entity.Id |> Id.value
-            let document = entity |> ExerciseCategoryDocument.fromDomain
+        member _.Update category = taskResult {
+            let id = category.Id |> Id.value
+            let document = category |> ExerciseCategoryDocument.fromDomain
             let! result = context.ExerciseCategories.ReplaceOneAsync((fun d -> d.Id = id), document)
 
             if result.ModifiedCount = 0 then
