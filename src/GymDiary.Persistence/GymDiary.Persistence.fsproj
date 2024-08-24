@@ -12,8 +12,8 @@
     <Compile Include="MongoSettings.fs" />
     <Compile Include="ObjectIdProvider.fs" />
     <Compile Include="Documents\UserDocument.fs" />
+    <Compile Include="Documents\ExerciseCategoryDocument.fs" />
     <Compile Include="MongoContext.fs" />
-    <Compile Include="Conversion\ExerciseCategoryDocument.fs" />
     <Compile Include="Conversion\ExerciseSetDocument.fs" />
     <Compile Include="Conversion\ExerciseDefinitionDocument.fs" />
     <Compile Include="Conversion\RoutineDocument.fs" />

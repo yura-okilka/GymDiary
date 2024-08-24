@@ -10,13 +10,6 @@ open MongoDB.Bson.Serialization.Attributes
 [<AutoOpen>]
 module Documents =
 
-    [<CLIMutable>]
-    type ExerciseCategoryDocument = {
-        Id: string
-        Name: string
-        OwnerId: string
-    }
-
     type ExerciseSetType =
         | RepsSet = 1
         | RepsWeightSet = 2
