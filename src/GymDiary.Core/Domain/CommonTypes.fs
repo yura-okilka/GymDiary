@@ -12,8 +12,6 @@ module CommonTypes =
 
     module Id =
 
-        let Empty = Id ""
-
         let create<'T> value : Id<'T> = Id value
 
         let tryCreate<'T> fieldName value : Result<Id<'T>, ValidationError> = ConstrainedType.createStringNotNull fieldName Id value // TODO: return narrow error
@@ -80,9 +78,8 @@ module CommonTypes =
         | EmailAddress of string
 
         static member create (fieldName: string) (value: string) =
-            let attribute = new EmailAddressAttribute()
 
-            if attribute.IsValid(value) then
+            if EmailAddressAttribute().IsValid(value) then
                 EmailAddress value |> Ok
             else
                 ValidationError.invalidEmailAddress fieldName |> Error
@@ -96,9 +93,8 @@ module CommonTypes =
         | PhoneNumber of string
 
         static member create (fieldName: string) (value: string) =
-            let attribute = new PhoneAttribute()
 
-            if attribute.IsValid(value) then
+            if PhoneAttribute().IsValid(value) then
                 PhoneNumber value |> Ok
             else
                 ValidationError.invalidPhoneNumber fieldName |> Error
