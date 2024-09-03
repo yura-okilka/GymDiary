@@ -22,5 +22,9 @@ type ExerciseCategoryDocument = {
         let! name = document.Name |> String50.create (nameof document.Name)
         let! ownerId = document.OwnerId |> Id.tryCreate (nameof document.OwnerId)
 
-        return ExerciseCategoryAggregate.create id name ownerId
+        return {
+            Id = id
+            Name = name
+            OwnerId = ownerId
+        }
     }

@@ -8,21 +8,19 @@
     <Compile Include="InternalExtensions.fs" />
     <Compile Include="FindFluentExtensions.fs" />
     <Compile Include="Exceptions.fs" />
-    <Compile Include="Documents.fs" />
     <Compile Include="MongoSettings.fs" />
+    <Compile Include="SerializationSettings.fs" />
     <Compile Include="ObjectIdProvider.fs" />
+    <Compile Include="Documents\ExerciseSetsDto.fs" />
     <Compile Include="Documents\UserDocument.fs" />
     <Compile Include="Documents\ExerciseCategoryDocument.fs" />
+    <Compile Include="Documents\ExerciseDefinitionDocument.fs" />
+    <Compile Include="Documents\RoutineDocument.fs" />
+    <Compile Include="Documents\WorkoutDocument.fs" />
     <Compile Include="MongoContext.fs" />
-    <Compile Include="Conversion\ExerciseSetDocument.fs" />
-    <Compile Include="Conversion\ExerciseDefinitionDocument.fs" />
-    <Compile Include="Conversion\RoutineDocument.fs" />
-    <Compile Include="Conversion\ExerciseSessionDocument.fs" />
-    <Compile Include="Conversion\WorkoutSessionDocument.fs" />
     <Compile Include="Repositories\UserRepository.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseDefinitionRepository.fs" />
-    <Compile Include="SerializationSettings.fs" />
     <Compile Include="PersistenceServiceCollectionExtensions.fs" />
   </ItemGroup>
 

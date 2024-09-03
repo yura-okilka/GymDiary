@@ -8,6 +8,7 @@
     <Compile Include="Domain\CommonErrors.fs" />
     <Compile Include="Domain\ConstrainedType.fs" />
     <Compile Include="Domain\CommonTypes.fs" />
+    <Compile Include="Domain\ExerciseSets.fs" />
     <Compile Include="Domain\UserAggregate.fs" />
     <Compile Include="Domain\ExerciseCategoryAggregate.fs" />
     <Compile Include="Domain\ExerciseDefinitionAggregate.fs" />

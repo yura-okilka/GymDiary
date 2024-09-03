@@ -15,4 +15,4 @@ module SerializationSettings =
         conventionPack.Add(StringIdStoredAsObjectIdConvention())
         conventionPack.Add(EnumRepresentationConvention(BsonType.String))
 
-        ConventionRegistry.Register("GymDiary DB Conventions", conventionPack, (fun _ -> true))
+        ConventionRegistry.Register("GymDiary Conventions", conventionPack, (fun _ -> true))

@@ -4,7 +4,7 @@ open GymDiary.Core.Domain
 open GymDiary.Core.Domain.ExerciseDefinitionAggregate
 open GymDiary.Core.Persistence
 open GymDiary.Persistence
-open GymDiary.Persistence.Conversion
+open GymDiary.Persistence.Documents
 open FsToolkit.ErrorHandling
 open MongoDB.Driver
 

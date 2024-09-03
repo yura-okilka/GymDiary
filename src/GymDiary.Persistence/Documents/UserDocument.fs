@@ -52,5 +52,12 @@ type UserDocument = {
         let dateOfBirth = document.DateOfBirth |> Option.map DateOnly.FromDateTime
         let! gender = document.Gender |> Option.traverseResult (dtoToGender (nameof document.Gender))
 
-        return UserAggregate.restoreFrom id email firstName lastName dateOfBirth gender
+        return {
+            Id = id
+            Email = email
+            FirstName = firstName
+            LastName = lastName
+            DateOfBirth = dateOfBirth
+            Gender = gender
+        }
     }
