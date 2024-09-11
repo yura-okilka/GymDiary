@@ -1,3 +1,4 @@
 namespace GymDiary.Core.Workflows
 
-type Workflow<'Request, 'Response, 'Error> = 'Request -> Async<Result<'Response, 'Error>>
+type IRequestHandler<'TRequest, 'TResponse, 'TError> =
+    abstract member Handle: 'TRequest -> Async<Result<'TResponse, 'TError>>

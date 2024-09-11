@@ -5,7 +5,6 @@ open GymDiary.Core.Persistence
 open GymDiary.Core.Workflows.User
 open Microsoft.Extensions.DependencyInjection
 open GymDiary.Core.Workflows
-open GymDiary.Core.Workflows.Exercise
 open GymDiary.Core.Workflows.ExerciseCategory
 open Microsoft.Extensions.Logging
 
@@ -15,7 +14,7 @@ type CompositionRoot = {
     GetExerciseCategory: GetExerciseCategory.Workflow
     RenameExerciseCategory: RenameExerciseCategory.Workflow
     DeleteExerciseCategory: DeleteExerciseCategory.Workflow
-    CreateExercise: CreateExercise.Workflow
+    CreateExercise: CreateExerciseDefinition.Workflow
     CreateUser: CreateUser.Workflow
 }
 
@@ -53,7 +52,7 @@ module CompositionRoot =
             ErrorLoggingDecorator.logWorkflow logger loggingContext workflow
 
         let createExerciseWorkflow =
-            CreateExercise.execute
+            CreateExerciseDefinition.execute
                 idProvider
                 (sp.GetRequiredService<IExerciseCategoryRepository>().GetById)
                 (sp.GetRequiredService<IUserRepository>().ExistWithId)
@@ -73,6 +72,6 @@ module CompositionRoot =
             GetExerciseCategory = getExerciseCategoryWorkflow
             RenameExerciseCategory = renameExerciseCategoryWorkflow |> errorLoggingDecorator RenameExerciseCategory.LoggingInfoProvider
             DeleteExerciseCategory = deleteExerciseCategoryWorkflow |> errorLoggingDecorator DeleteExerciseCategory.LoggingInfoProvider
-            CreateExercise = createExerciseWorkflow |> errorLoggingDecorator CreateExercise.LoggingInfoProvider
+            CreateExercise = createExerciseWorkflow |> errorLoggingDecorator CreateExerciseDefinition.LoggingInfoProvider
             CreateUser = createUserWorkflow |> errorLoggingDecorator CreateUser.LoggingInfoProvider
         }
