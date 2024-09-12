@@ -5,7 +5,6 @@ open System
 open FsToolkit.ErrorHandling
 open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
-open GymDiary.Core.Workflows.CommonDtos
 open GymDiary.Core.Persistence
 open Microsoft.Extensions.Logging
 
@@ -15,7 +14,7 @@ type Command = {
     Name: string
     Notes: string option
     RestTime: TimeSpan
-    Sets: ExerciseSetsDto
+// TODO: add Sets: ExerciseSetsDto
 }
 
 type CommandResult = { Id: string }
@@ -53,7 +52,11 @@ type CommandHandler
                     and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
                     and! name = String50.create (nameof command.Name) command.Name
                     and! notes = Option.traverseResult (String1k.create (nameof command.Notes)) command.Notes
-                    and! sets = ExerciseSetsDto.toDomain command.Sets
+
+                    let sets = {
+                        Type = ExerciseSetType.Duration
+                        Items = []
+                    }
 
                     return {|
                         CategoryId = categoryId

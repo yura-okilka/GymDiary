@@ -19,7 +19,6 @@
     <Compile Include="Persistence\Abstractions.fs" />
     <Compile Include="Workflows\Abstractions.fs" />
     <Compile Include="Workflows\ErrorLoggingDecorator.fs" />
-    <Compile Include="Workflows\CommonDtos.fs" />
     <Compile Include="Workflows\ExerciseCategory\CreateExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseCategory\GetAllExerciseCategories.fs" />
     <Compile Include="Workflows\ExerciseCategory\GetExerciseCategory.fs" />
