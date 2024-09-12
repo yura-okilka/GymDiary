@@ -15,7 +15,6 @@
     <Compile Include="Domain\RoutineAggregate.fs" />
     <Compile Include="Domain\WorkoutAggregate.fs" />
     <Compile Include="Domain\DomainErrors.fs" />
-    <Compile Include="Domain\DomainEvents.fs" />
     <Compile Include="Time\SystemClock.fs" />
     <Compile Include="Persistence\Abstractions.fs" />
     <Compile Include="Workflows\Abstractions.fs" />
