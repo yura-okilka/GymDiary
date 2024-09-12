@@ -2,13 +2,11 @@ module GymDiary.Core.Workflows.Exercise.CreateExerciseDefinition
 
 open System
 
+open FsToolkit.ErrorHandling
 open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
 open GymDiary.Core.Workflows.CommonDtos
 open GymDiary.Core.Persistence
-
-open FsToolkit.ErrorHandling
-
 open Microsoft.Extensions.Logging
 
 type Command = {
@@ -30,7 +28,7 @@ type CommandError =
     static member categoryNotFound id ownerId =
         ExerciseCategoryNotFoundError.create id ownerId |> CategoryNotFound
 
-    static member ownerNotFound id = OwnerNotFoundError.create id |> OwnerNotFound |> Error
+    static member ownerNotFound id = OwnerNotFoundError.create id |> OwnerNotFound
 
     static member toString error =
         match error with
@@ -75,7 +73,7 @@ type CommandHandler
             let! ownerExists = userRepository.ExistWithId validated.OwnerId
 
             if not ownerExists then
-                return! CommandError.ownerNotFound validated.OwnerId
+                return! CommandError.ownerNotFound validated.OwnerId |> Error
 
             let exercise =
                 ExerciseDefinitionAggregate.create

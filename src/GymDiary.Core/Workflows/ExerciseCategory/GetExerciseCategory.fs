@@ -1,50 +1,51 @@
-namespace GymDiary.Core.Workflows.ExerciseCategory
-
-open GymDiary.Core.Domain
-open GymDiary.Core.Workflows
+module GymDiary.Core.Workflows.ExerciseCategory.GetExerciseCategory
 
 open FsToolkit.ErrorHandling
+open GymDiary.Core.Domain
+open GymDiary.Core.Persistence
+open GymDiary.Core.Workflows
+open Microsoft.Extensions.Logging
 
-module GetExerciseCategory =
+type Query = { Id: string; OwnerId: string }
 
-    type Query = { Id: string; OwnerId: string }
+type QueryResult = {
+    Id: string
+    Name: string
+    OwnerId: string
+}
 
-    type QueryResult = {
-        Id: string
-        Name: string
-        OwnerId: string
-    }
+type QueryError =
+    | InvalidQuery of ValidationError list
+    | CategoryNotFound of ExerciseCategoryNotFoundError
 
-    type QueryError =
-        | InvalidQuery of ValidationError list
-        | CategoryNotFound of ExerciseCategoryNotFoundError
+    static member categoryNotFound id ownerId =
+        ExerciseCategoryNotFoundError.create id ownerId |> CategoryNotFound
 
-        static member categoryNotFound id ownerId =
-            ExerciseCategoryNotFoundError.create id ownerId |> CategoryNotFound
+    static member toString error =
+        match error with
+        | InvalidQuery es -> es |> ValidationErrors.toString
+        | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
 
-        static member toString error =
-            match error with
-            | InvalidQuery es -> es |> ValidationErrors.toString
-            | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
+type QueryHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
+    interface IRequestHandler<Query, QueryResult, QueryError> with
 
-    type Workflow = Workflow<Query, QueryResult, QueryError>
+        member _.Handle query = asyncResult {
+            let! categoryId, ownerId =
+                validation {
+                    let! categoryId = Id.tryCreate (nameof query.Id) query.Id
+                    and! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId
+                    return (categoryId, ownerId)
+                }
+                |> Result.mapError InvalidQuery
 
-    let execute (getCategoryByIdFromDB: ExerciseCategoryId -> UserId -> Async<ExerciseCategory option>) (query: Query) = asyncResult {
-        let! (categoryId, ownerId) =
-            validation {
-                let! categoryId = Id.tryCreate (nameof query.Id) query.Id
-                and! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId
-                return (categoryId, ownerId)
+            let! category =
+                categoryRepository.Get categoryId ownerId
+                |> Async.AwaitTask
+                |> AsyncResult.requireSome (QueryError.categoryNotFound categoryId ownerId)
+
+            return {
+                Id = category.Id |> Id.value
+                Name = category.Name |> String50.value
+                OwnerId = category.OwnerId |> Id.value
             }
-            |> Result.mapError InvalidQuery
-
-        let! category =
-            getCategoryByIdFromDB categoryId ownerId
-            |> AsyncResult.requireSome (QueryError.categoryNotFound categoryId ownerId)
-
-        return {
-            Id = category.Id |> Id.value
-            Name = category.Name |> String50.value
-            OwnerId = category.OwnerId |> Id.value
         }
-    }

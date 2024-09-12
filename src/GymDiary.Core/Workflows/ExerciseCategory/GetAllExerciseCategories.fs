@@ -1,36 +1,36 @@
-namespace GymDiary.Core.Workflows.ExerciseCategory
-
-open GymDiary.Core.Domain
-open GymDiary.Core.Workflows
+module GymDiary.Core.Workflows.ExerciseCategory.GetAllExerciseCategories
 
 open FsToolkit.ErrorHandling
+open GymDiary.Core.Domain
+open GymDiary.Core.Persistence
+open GymDiary.Core.Workflows
+open Microsoft.Extensions.Logging
 
-module GetAllExerciseCategories =
+type Query = { OwnerId: string }
 
-    type Query = { OwnerId: string }
+type ExerciseCategoryDto = {
+    Id: string
+    Name: string
+    OwnerId: string
+}
 
-    type ExerciseCategoryDto = {
-        Id: string
-        Name: string
-        OwnerId: string
-    }
+type QueryResult = ExerciseCategoryDto list
 
-    type QueryResult = ExerciseCategoryDto list
+type QueryError = InvalidQuery of ValidationError
 
-    type QueryError = InvalidQuery of ValidationError
+type QueryHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
+    interface IRequestHandler<Query, QueryResult, QueryError> with
 
-    type Workflow = Workflow<Query, QueryResult, QueryError>
+        member _.Handle query = asyncResult {
+            let! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
 
-    let execute (getAllCategoriesFromDB: UserId -> Async<ExerciseCategory list>) (query: Query) = asyncResult {
-        let! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
+            let! categories = categoryRepository.GetAll ownerId
 
-        let! categories = getAllCategoriesFromDB ownerId
-
-        return
-            categories
-            |> List.map (fun category -> {
-                Id = category.Id |> Id.value
-                Name = category.Name |> String50.value
-                OwnerId = category.OwnerId |> Id.value
-            })
-    }
+            return
+                categories
+                |> List.map (fun category -> {
+                    Id = category.Id |> Id.value
+                    Name = category.Name |> String50.value
+                    OwnerId = category.OwnerId |> Id.value
+                })
+        }

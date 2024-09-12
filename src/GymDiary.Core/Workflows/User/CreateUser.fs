@@ -1,10 +1,10 @@
 module GymDiary.Core.Workflows.User.CreateUser
 
 open System
+open FsToolkit.ErrorHandling
 open GymDiary.Core.Domain
 open GymDiary.Core.Workflows
 open GymDiary.Core.Persistence
-open FsToolkit.ErrorHandling
 open Microsoft.Extensions.Logging
 
 type GenderDto =

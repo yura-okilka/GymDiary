@@ -1,61 +1,36 @@
-namespace GymDiary.Core.Workflows.ExerciseCategory
+module GymDiary.Core.Workflows.ExerciseCategory.CreateExerciseCategory
 
+open FsToolkit.ErrorHandling
 open GymDiary.Core.Domain
 open GymDiary.Core.Persistence
 open GymDiary.Core.Workflows
-open GymDiary.Core.Workflows.ErrorLoggingDecorator
-
-open FsToolkit.ErrorHandling
-
 open Microsoft.Extensions.Logging
 
-module CreateExerciseCategory =
+type Command = { Name: string; OwnerId: string }
 
-    type Command = { Name: string; OwnerId: string }
+type CommandResult = { Id: string }
 
-    type CommandResult = { Id: string }
+type CommandError =
+    | InvalidCommand of ValidationError list
+    | CategoryAlreadyExists of ExerciseCategoryAlreadyExistsError
+    | OwnerNotFound of OwnerNotFoundError
 
-    type CommandError =
-        | InvalidCommand of ValidationError list
-        | CategoryAlreadyExists of ExerciseCategoryAlreadyExistsError
-        | OwnerNotFound of OwnerNotFoundError
+    static member categoryAlreadyExists name =
+        ExerciseCategoryAlreadyExistsError.create name |> CategoryAlreadyExists
 
-        static member categoryAlreadyExists name =
-            ExerciseCategoryAlreadyExistsError.create name |> CategoryAlreadyExists |> Error
+    static member ownerNotFound id = OwnerNotFoundError.create id |> OwnerNotFound
 
-        static member ownerNotFound id = OwnerNotFoundError.create id |> OwnerNotFound |> Error
+    static member toString error =
+        match error with
+        | InvalidCommand es -> es |> ValidationErrors.toString
+        | CategoryAlreadyExists e -> e |> ExerciseCategoryAlreadyExistsError.toString
+        | OwnerNotFound e -> e |> OwnerNotFoundError.toString
 
-        static member toString error =
-            match error with
-            | InvalidCommand es -> es |> ValidationErrors.toString
-            | CategoryAlreadyExists e -> e |> ExerciseCategoryAlreadyExistsError.toString
-            | OwnerNotFound e -> e |> OwnerNotFoundError.toString
+type CommandHandler
+    (idProvider: IIdProvider, userRepository: IUserRepository, categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
+    interface IRequestHandler<Command, CommandResult, CommandError> with
 
-    type Workflow = Workflow<Command, CommandResult, CommandError>
-
-    let LoggingInfoProvider =
-        { new ILoggingInfoProvider<Command, CommandError> with
-
-            member _.ErrorEventId = DomainEvents.ExerciseCategoryCreationFailed
-
-            member _.GetErrorMessage(error) = CommandError.toString error
-
-            member _.GetRequestInfo(command) =
-                Map [
-                    (nameof command.Name, command.Name)
-                    (nameof command.OwnerId, command.OwnerId)
-                ]
-        }
-
-    let execute
-        (idProvider: IIdProvider)
-        (categoryWithNameExistsInDB: String50 -> UserId -> Async<bool>)
-        (userWithIdExistsInDB: UserId -> Async<bool>)
-        (createCategoryInDB: ExerciseCategory -> Async<ExerciseCategoryId>)
-        (logger: ILogger)
-        (command: Command)
-        =
-        asyncResult {
+        member _.Handle command = asyncResult {
             let! category =
                 validation {
                     let! id = idProvider.GenerateId() |> Ok
@@ -65,19 +40,19 @@ module CreateExerciseCategory =
                 }
                 |> Result.mapError InvalidCommand
 
-            let! ownerExists = userWithIdExistsInDB category.OwnerId
+            let! ownerExists = userRepository.ExistWithId category.OwnerId
 
             if not ownerExists then
-                return! CommandError.ownerNotFound category.OwnerId
+                return! CommandError.ownerNotFound category.OwnerId |> Error
 
-            let! categoryExists = categoryWithNameExistsInDB category.Name category.OwnerId
+            let! categoryExists = categoryRepository.ExistWithName category.Name category.OwnerId
 
             if categoryExists then
-                return! CommandError.categoryAlreadyExists category.Name
+                return! CommandError.categoryAlreadyExists category.Name |> Error
 
-            let! categoryId = createCategoryInDB category |> Async.map Id.value
+            do! categoryRepository.Create category
 
-            logger.LogInformation(DomainEvents.ExerciseCategoryCreated, "Exercise category was created with id '{id}'", categoryId)
+            logger.LogInformation("Exercise category was created with id '{id}'", category.Id)
 
-            return { Id = categoryId }
+            return { Id = category.Id |> Id.value }
         }
