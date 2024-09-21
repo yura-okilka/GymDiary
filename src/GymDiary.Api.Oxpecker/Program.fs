@@ -1,18 +1,11 @@
 namespace GymDiary.Api.Oxpecker
+
 #nowarn "20"
-open System
-open System.Collections.Generic
-open System.IO
-open System.Linq
-open System.Threading.Tasks
-open Microsoft.AspNetCore
+
+open Oxpecker
 open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Hosting
-open Microsoft.AspNetCore.HttpsPolicy
-open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
-open Microsoft.Extensions.Logging
 
 module Program =
     let exitCode = 0
@@ -20,16 +13,16 @@ module Program =
     [<EntryPoint>]
     let main args =
 
+        let webApp = [ route "/" <| text "Hello world"; route "/ping" <| text "pong" ]
+
         let builder = WebApplication.CreateBuilder(args)
 
-        builder.Services.AddControllers()
+        builder.Services.AddRouting().AddOxpecker()
 
         let app = builder.Build()
 
-        app.UseHttpsRedirection()
-
-        app.UseAuthorization()
-        app.MapControllers()
+        app.UseRouting()
+        app.UseOxpecker(webApp)
 
         app.Run()
 
