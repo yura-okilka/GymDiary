@@ -1,4 +1,4 @@
-module GymDiary.Core.Workflows.Exercise.CreateExerciseDefinition
+module GymDiary.Core.Workflows.ExerciseDefinition.CreateExerciseDefinition
 
 open System
 

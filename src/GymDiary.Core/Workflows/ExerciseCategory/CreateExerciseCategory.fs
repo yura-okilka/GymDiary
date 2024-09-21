@@ -1,4 +1,4 @@
-module GymDiary.Core.Workflows.CreateExerciseCategoryWorkflow
+module GymDiary.Core.Workflows.ExerciseCategory.CreateExerciseCategory
 
 open FsToolkit.ErrorHandling
 open GymDiary.Core.Domain
@@ -26,11 +26,9 @@ type CommandError =
         | CategoryAlreadyExists e -> e |> ExerciseCategoryAlreadyExistsError.toString
         | OwnerNotFound e -> e |> OwnerNotFoundError.toString
 
-type ICreateExerciseCategoryCommandHandler = IRequestHandler<Command, CommandResult, CommandError>
-
 type CommandHandler
     (idProvider: IIdProvider, userRepository: IUserRepository, categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
-    interface ICreateExerciseCategoryCommandHandler with
+    interface IRequestHandler<Command, CommandResult, CommandError> with
 
         member _.Handle command = asyncResult {
             let! category =

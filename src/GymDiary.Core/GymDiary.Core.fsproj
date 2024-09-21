@@ -26,11 +26,13 @@
     <Compile Include="Workflows\ExerciseCategory\DeleteExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseDefinition\CreateExerciseDefinition.fs" />
     <Compile Include="Workflows\User\CreateUser.fs" />
+    <Compile Include="CoreServiceCollectionExtensions.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FsToolkit.ErrorHandling" Version="4.16.0" />
     <PackageReference Include="FsToolkit.ErrorHandling.TaskResult" Version="4.16.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
