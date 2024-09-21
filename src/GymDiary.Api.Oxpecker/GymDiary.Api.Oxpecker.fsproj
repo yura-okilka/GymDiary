@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Handlers\ExerciseCategoryHandlers.fs" />
+    <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -18,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
+    <ProjectReference Include="..\GymDiary.Persistence\GymDiary.Persistence.fsproj" />
   </ItemGroup>
 
   <ItemGroup>

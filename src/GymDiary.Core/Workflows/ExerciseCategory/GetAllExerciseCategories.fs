@@ -18,8 +18,10 @@ type QueryResult = ExerciseCategoryDto list
 
 type QueryError = InvalidQuery of ValidationError
 
+type IQueryHandler = IRequestHandler<Query, QueryResult, QueryError>
+
 type QueryHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
-    interface IRequestHandler<Query, QueryResult, QueryError> with
+    interface IQueryHandler with
 
         member _.Handle query = asyncResult {
             let! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
