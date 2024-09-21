@@ -8,27 +8,21 @@ open Microsoft.AspNetCore.Http
 type CreateExerciseCategoryRequest = { Name: string }
 type RenameExerciseCategoryRequest = { Name: string }
 
-type ExerciseCategoryHandler() =
-    static member Create
-        (
-            createExerciseCategory: CreateExerciseCategory.Workflow,
-            userId: string,
-            request: CreateExerciseCategoryRequest
-        ) : Task<IResult> =
-        task {
-            let! result =
-                createExerciseCategory {
-                    Name = request.Name
-                    OwnerId = userId
-                }
+type ExerciseCategoryHandler(createExerciseCategory: CreateExerciseCategory.CommandHandler) =
+    member _.Create(userId: string, request: CreateExerciseCategoryRequest) : Task<IResult> = task {
+        let! result =
+            createExerciseCategory {
+                Name = request.Name
+                OwnerId = userId
+            }
 
-            return
-                match result with
-                | Ok data -> Results.Ok(data) // TODO: use Results.Created
-                | Error(CreateExerciseCategory.InvalidCommand es) -> Results.BadRequest(Responses.validationErrors es)
-                | Error(CreateExerciseCategory.CategoryAlreadyExists e) -> Results.Conflict(Responses.exerciseCategoryAlreadyExists e)
-                | Error(CreateExerciseCategory.OwnerNotFound e) -> Results.Conflict(Responses.ownerNotFound e)
-        }
+        return
+            match result with
+            | Ok data -> Results.Ok(data) // TODO: use Results.Created
+            | Error(CreateExerciseCategory.InvalidCommand es) -> Results.BadRequest(Responses.validationErrors es)
+            | Error(CreateExerciseCategory.CategoryAlreadyExists e) -> Results.Conflict(Responses.exerciseCategoryAlreadyExists e)
+            | Error(CreateExerciseCategory.OwnerNotFound e) -> Results.Conflict(Responses.ownerNotFound e)
+    }
 
     static member GetAll(getAllExerciseCategories: GetAllExerciseCategories.Workflow, userId: string) : Task<IResult> = task {
         let! result = getAllExerciseCategories { OwnerId = userId }
@@ -40,11 +34,7 @@ type ExerciseCategoryHandler() =
     }
 
     static member GetById(getExerciseCategory: GetExerciseCategory.Workflow, userId: string, categoryId: string) : Task<IResult> = task {
-        let! result =
-            getExerciseCategory {
-                Id = categoryId
-                OwnerId = userId
-            }
+        let! result = getExerciseCategory { Id = categoryId; OwnerId = userId }
 
         return
             match result with
@@ -77,11 +67,7 @@ type ExerciseCategoryHandler() =
         }
 
     static member Delete(deleteExerciseCategory: DeleteExerciseCategory.Workflow, userId: string, categoryId: string) : Task<IResult> = task {
-        let! result =
-            deleteExerciseCategory {
-                Id = categoryId
-                OwnerId = userId
-            }
+        let! result = deleteExerciseCategory { Id = categoryId; OwnerId = userId }
 
         return
             match result with
