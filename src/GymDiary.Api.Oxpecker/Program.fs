@@ -20,6 +20,8 @@ module Program =
         let services = builder.Services
         services.AddRouting()
         services.AddOxpecker()
+        services.AddEndpointsApiExplorer()
+        services.AddSwaggerGen()
         services.AddCore()
         services.AddPersistence()
 
@@ -27,6 +29,8 @@ module Program =
 
         app.UseRouting()
         app.UseOxpecker(Router.webApp)
+        app.UseSwagger()
+        app.UseSwaggerUI()
 
         app.Run()
 

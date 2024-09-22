@@ -26,6 +26,8 @@
 
   <ItemGroup>
     <PackageReference Include="Oxpecker" Version="0.14.1" />
+    <PackageReference Include="Oxpecker.OpenApi" Version="0.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
   </ItemGroup>
 
 </Project>
