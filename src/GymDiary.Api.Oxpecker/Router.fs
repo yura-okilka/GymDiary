@@ -11,5 +11,6 @@ let webApp = [
             route "/" <| ExerciseCategoryHandlers.getAllCategories
             routef "/{%s}" <| ExerciseCategoryHandlers.getCategoryById
         ]
+        POST [ route "/" <| ExerciseCategoryHandlers.createCategory ]
     ]
 ]
