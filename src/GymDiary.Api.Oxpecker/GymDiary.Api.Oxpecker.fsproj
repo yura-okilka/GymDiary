@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Responses.fs" />
     <Compile Include="Handlers\ExerciseCategoryHandlers.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />

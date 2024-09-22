@@ -19,7 +19,7 @@ type CoreServiceCollectionExtensions() =
             .AddSingleton<CreateExerciseCategory.CommandHandler>()
             .AddSingleton<RenameExerciseCategory.CommandHandler>()
             .AddSingleton<DeleteExerciseCategory.CommandHandler>()
-            .AddSingleton<GetExerciseCategory.QueryHandler>()
+            .AddSingleton<GetExerciseCategory.IQueryHandler, GetExerciseCategory.QueryHandler>()
             .AddSingleton<GetAllExerciseCategories.IQueryHandler, GetAllExerciseCategories.QueryHandler>()
             .AddSingleton<CreateExerciseDefinition.CommandHandler>()
             .AddSingleton<CreateUser.CommandHandler>()

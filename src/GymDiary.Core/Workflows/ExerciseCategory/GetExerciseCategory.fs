@@ -26,8 +26,10 @@ type QueryError =
         | InvalidQuery es -> es |> ValidationErrors.toString
         | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
 
+type IQueryHandler = IRequestHandler<Query, QueryResult, QueryError>
+
 type QueryHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
-    interface IRequestHandler<Query, QueryResult, QueryError> with
+    interface IQueryHandler with
 
         member _.Handle query = asyncResult {
             let! categoryId, ownerId =
