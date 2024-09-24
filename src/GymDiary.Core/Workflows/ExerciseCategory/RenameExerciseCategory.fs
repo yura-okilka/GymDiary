@@ -29,8 +29,10 @@ type CommandError =
         | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
         | NameAlreadyUsed e -> e |> ExerciseCategoryAlreadyExistsError.toString
 
+type ICommandHandler = IRequestHandler<Command, unit, CommandError>
+
 type CommandHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
-    interface IRequestHandler<Command, unit, CommandError> with
+    interface ICommandHandler with
 
         member _.Handle command = asyncResult {
             let! categoryId, ownerId, name =

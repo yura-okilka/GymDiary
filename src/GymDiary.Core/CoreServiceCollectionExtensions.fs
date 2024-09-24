@@ -17,7 +17,7 @@ type CoreServiceCollectionExtensions() =
         services
             .AddSingleton<IClock>(SystemClock(TimeProvider.System))
             .AddSingleton<CreateExerciseCategory.ICommandHandler, CreateExerciseCategory.CommandHandler>()
-            .AddSingleton<RenameExerciseCategory.CommandHandler>()
+            .AddSingleton<RenameExerciseCategory.ICommandHandler, RenameExerciseCategory.CommandHandler>()
             .AddSingleton<DeleteExerciseCategory.CommandHandler>()
             .AddSingleton<GetExerciseCategory.IQueryHandler, GetExerciseCategory.QueryHandler>()
             .AddSingleton<GetAllExerciseCategories.IQueryHandler, GetAllExerciseCategories.QueryHandler>()

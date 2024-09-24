@@ -67,3 +67,29 @@ let createCategory (ctx: HttpContext) =
         return! ctx.Write <| response
     }
     :> Task
+
+type RenameRequest = { Name: string }
+
+let renameCategory (id: string) (ctx: HttpContext) =
+    task {
+        let handler = ctx.GetService<RenameExerciseCategory.ICommandHandler>()
+        let! request = ctx.BindJson<RenameRequest>()
+
+        let! result =
+            handler.Handle {
+                Id = id
+                Name = request.Name
+                OwnerId = "65e8edad477943d2b3844853"
+            }
+            |> Async.StartAsTask
+
+        let response: IResult =
+            match result with
+            | Ok _ -> NoContent()
+            | Error(RenameExerciseCategory.InvalidCommand es) -> BadRequest(Responses.validationErrors es)
+            | Error(RenameExerciseCategory.CategoryNotFound e) -> NotFound(Responses.exerciseCategoryNotFound e)
+            | Error(RenameExerciseCategory.NameAlreadyUsed e) -> Conflict(Responses.exerciseCategoryAlreadyExists e)
+
+        return! ctx.Write <| response
+    }
+    :> Task
