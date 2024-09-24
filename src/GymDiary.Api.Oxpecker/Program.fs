@@ -5,7 +5,7 @@ namespace GymDiary.Api.Oxpecker
 open Oxpecker
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
-open Microsoft.Extensions.Hosting
+open GymDiary.Api.Oxpecker.Handlers
 open GymDiary.Core
 open GymDiary.Persistence
 
@@ -28,10 +28,11 @@ module Program =
         let app = builder.Build()
 
         app.UseRouting()
+        app.Use(ErrorHandlers.onError)
         app.UseOxpecker(Router.webApp)
         app.UseSwagger()
         app.UseSwaggerUI()
 
-        app.Run()
+        app.Run(ErrorHandlers.resourceNotFound)
 
         exitCode
