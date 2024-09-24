@@ -1,11 +1,11 @@
-namespace GymDiary.Api.Oxpecker
+namespace GymDiary.Api
 
 #nowarn "20"
 
 open Oxpecker
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
-open GymDiary.Api.Oxpecker.Handlers
+open GymDiary.Api.Handlers
 open GymDiary.Core
 open GymDiary.Persistence
 

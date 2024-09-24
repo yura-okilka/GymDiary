@@ -1,4 +1,4 @@
-module GymDiary.Api.Oxpecker.Handlers.ErrorHandlers
+module GymDiary.Api.Handlers.ErrorHandlers
 
 open Oxpecker
 open System.Threading.Tasks

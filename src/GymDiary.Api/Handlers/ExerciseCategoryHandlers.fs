@@ -1,9 +1,9 @@
-module GymDiary.Api.Oxpecker.Handlers.ExerciseCategoryHandlers
+module GymDiary.Api.Handlers.ExerciseCategoryHandlers
 
 open Oxpecker
 open Oxpecker.OpenApi
 open System.Threading.Tasks
-open GymDiary.Api.Oxpecker
+open GymDiary.Api
 open GymDiary.Core.Workflows.ExerciseCategory
 open Microsoft.AspNetCore.Http
 open type Microsoft.AspNetCore.Http.TypedResults

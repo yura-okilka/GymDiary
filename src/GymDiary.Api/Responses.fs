@@ -1,4 +1,4 @@
-namespace GymDiary.Api.Oxpecker
+namespace GymDiary.Api
 
 open GymDiary.Core.Domain
 

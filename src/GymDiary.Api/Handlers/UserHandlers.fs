@@ -1,9 +1,9 @@
-module GymDiary.Api.Oxpecker.Handlers.UserHandlers
+module GymDiary.Api.Handlers.UserHandlers
 
 open Oxpecker
 open Oxpecker.OpenApi
 open System.Threading.Tasks
-open GymDiary.Api.Oxpecker
+open GymDiary.Api
 open GymDiary.Core.Workflows.User
 open Microsoft.AspNetCore.Http
 open type Microsoft.AspNetCore.Http.TypedResults

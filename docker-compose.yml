@@ -1,6 +1,6 @@
 ﻿services:
-  gymdiary.api.oxpecker:
-    image: gymdiary.api.oxpecker
+  gymdiary.api:
+    image: gymdiary.api
     build:
       context: .
-      dockerfile: src/GymDiary.Api.Oxpecker/Dockerfile
+      dockerfile: src/GymDiary.Api/Dockerfile
