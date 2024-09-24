@@ -10,6 +10,10 @@ open GymDiary.Core
 open GymDiary.Persistence
 
 module Program =
+    type TestEntryPoint() =
+        class
+        end
+
     let exitCode = 0
 
     [<EntryPoint>]
@@ -22,8 +26,8 @@ module Program =
         services.AddOxpecker()
         services.AddEndpointsApiExplorer()
         services.AddSwaggerGen(fun o -> o.CustomSchemaIds(fun t -> t.FullName.Replace("+", "."))) // Error fix. https://github.com/swagger-api/swagger-ui/issues/7911
-        services.AddCore()
-        services.AddPersistence()
+        services.AddGymDiaryCore()
+        services.AddGymDiaryPersistence()
 
         let app = builder.Build()
 

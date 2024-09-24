@@ -12,7 +12,7 @@ open MongoDB.Driver
 [<Extension>]
 type PersistenceServiceCollectionExtensions() =
     [<Extension>]
-    static member AddPersistence(services: IServiceCollection) : IServiceCollection =
+    static member AddGymDiaryPersistence(services: IServiceCollection) : IServiceCollection =
         SerializationSettings.register ()
 
         // Create settings instance in the implementation factory to defer its creation and allow overriding IConfiguration in the test host.

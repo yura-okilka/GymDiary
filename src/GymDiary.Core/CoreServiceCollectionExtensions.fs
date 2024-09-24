@@ -13,7 +13,7 @@ open Microsoft.Extensions.DependencyInjection
 [<Extension>]
 type CoreServiceCollectionExtensions() =
     [<Extension>]
-    static member AddCore(services: IServiceCollection) : IServiceCollection =
+    static member AddGymDiaryCore(services: IServiceCollection) : IServiceCollection =
         services
             .AddSingleton<IClock>(SystemClock(TimeProvider.System))
             .AddSingleton<CreateExerciseCategory.ICommandHandler, CreateExerciseCategory.CommandHandler>()
