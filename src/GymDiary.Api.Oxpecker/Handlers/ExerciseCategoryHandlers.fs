@@ -93,3 +93,23 @@ let renameCategory (id: string) (ctx: HttpContext) =
         return! ctx.Write <| response
     }
     :> Task
+
+let deleteCategory (id: string) (ctx: HttpContext) =
+    task {
+        let handler = ctx.GetService<DeleteExerciseCategory.ICommandHandler>()
+
+        let! result =
+            handler.Handle {
+                Id = id
+                OwnerId = "65e8edad477943d2b3844853"
+            }
+            |> Async.StartAsTask
+
+        let response: IResult =
+            match result with
+            | Ok _ -> NoContent()
+            | Error(DeleteExerciseCategory.InvalidCommand es) -> BadRequest(Responses.validationErrors es)
+
+        return! ctx.Write <| response
+    }
+    :> Task

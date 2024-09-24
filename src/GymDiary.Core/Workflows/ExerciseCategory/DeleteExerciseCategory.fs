@@ -15,8 +15,10 @@ type CommandError =
         match error with
         | InvalidCommand es -> es |> ValidationErrors.toString
 
+type ICommandHandler = IRequestHandler<Command, unit, CommandError>
+
 type CommandHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
-    interface IRequestHandler<Command, unit, CommandError> with
+    interface ICommandHandler with
 
         member _.Handle command = asyncResult {
             let! categoryId, ownerId =

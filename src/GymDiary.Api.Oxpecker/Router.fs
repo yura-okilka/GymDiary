@@ -31,5 +31,6 @@ let webApp = [
             )
         ]
         PUT [ routef "/{%s}" <| ExerciseCategoryHandlers.renameCategory ]
+        DELETE [ routef "/{%s}" <| ExerciseCategoryHandlers.deleteCategory ]
     ]
 ]
