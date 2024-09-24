@@ -21,5 +21,5 @@ type CoreServiceCollectionExtensions() =
             .AddSingleton<DeleteExerciseCategory.ICommandHandler, DeleteExerciseCategory.CommandHandler>()
             .AddSingleton<GetExerciseCategory.IQueryHandler, GetExerciseCategory.QueryHandler>()
             .AddSingleton<GetAllExerciseCategories.IQueryHandler, GetAllExerciseCategories.QueryHandler>()
-            .AddSingleton<CreateExerciseDefinition.CommandHandler>()
+            .AddSingleton<CreateExerciseDefinition.ICommandHandler, CreateExerciseDefinition.CommandHandler>()
             .AddSingleton<CreateUser.CommandHandler>()

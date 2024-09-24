@@ -8,6 +8,7 @@
   <ItemGroup>
     <Compile Include="Responses.fs" />
     <Compile Include="Handlers\ExerciseCategoryHandlers.fs" />
+    <Compile Include="Handlers\ExerciseDefinitionHandlers.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

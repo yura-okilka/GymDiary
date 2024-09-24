@@ -35,6 +35,8 @@ type CommandError =
         | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
         | OwnerNotFound e -> e |> OwnerNotFoundError.toString
 
+type ICommandHandler = IRequestHandler<Command, CommandResult, CommandError>
+
 type CommandHandler
     (
         idProvider: IIdProvider,
@@ -43,7 +45,7 @@ type CommandHandler
         exerciseRepository: IExerciseDefinitionRepository,
         logger: ILogger
     ) =
-    interface IRequestHandler<Command, CommandResult, CommandError> with
+    interface ICommandHandler with
 
         member _.Handle command = asyncResult {
             let! validated =

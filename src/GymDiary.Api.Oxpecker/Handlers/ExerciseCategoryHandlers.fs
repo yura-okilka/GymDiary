@@ -44,12 +44,12 @@ let getCategoryById (id: string) (ctx: HttpContext) =
     }
     :> Task
 
-type CreateRequest = { Name: string }
+type CreateExerciseCategoryRequest = { Name: string }
 
 let createCategory (ctx: HttpContext) =
     task {
         let handler = ctx.GetService<CreateExerciseCategory.ICommandHandler>()
-        let! request = ctx.BindJson<CreateRequest>()
+        let! request = ctx.BindJson<CreateExerciseCategoryRequest>()
 
         let! result =
             handler.Handle {
@@ -73,7 +73,7 @@ let createCategoryOpenApi =
     configureEndpoint _.WithTags("Exercise Categories")
     >> addOpenApi (
         OpenApiConfig(
-            requestBody = RequestBody(typeof<CreateRequest>),
+            requestBody = RequestBody(typeof<CreateExerciseCategoryRequest>),
             responseBodies = [|
                 ResponseBody(typeof<CreateExerciseCategory.CommandResult>, ?statusCode = Some StatusCodes.Status200OK)
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status400BadRequest)
@@ -87,12 +87,12 @@ let createCategoryOpenApi =
         )
     )
 
-type RenameRequest = { Name: string }
+type RenameExerciseCategoryRequest = { Name: string }
 
 let renameCategory (id: string) (ctx: HttpContext) =
     task {
         let handler = ctx.GetService<RenameExerciseCategory.ICommandHandler>()
-        let! request = ctx.BindJson<RenameRequest>()
+        let! request = ctx.BindJson<RenameExerciseCategoryRequest>()
 
         let! result =
             handler.Handle {
