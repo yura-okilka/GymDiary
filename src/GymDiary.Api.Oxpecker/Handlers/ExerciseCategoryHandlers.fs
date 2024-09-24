@@ -1,6 +1,7 @@
 module GymDiary.Api.Oxpecker.Handlers.ExerciseCategoryHandlers
 
 open Oxpecker
+open Oxpecker.OpenApi
 open System.Threading.Tasks
 open GymDiary.Api.Oxpecker
 open GymDiary.Core.Workflows.ExerciseCategory
@@ -67,6 +68,24 @@ let createCategory (ctx: HttpContext) =
         return! ctx.Write <| response
     }
     :> Task
+
+let createCategoryOpenApi =
+    configureEndpoint _.WithTags("Exercise Categories")
+    >> addOpenApi (
+        OpenApiConfig(
+            requestBody = RequestBody(typeof<CreateRequest>),
+            responseBodies = [|
+                ResponseBody(typeof<CreateExerciseCategory.CommandResult>, ?statusCode = Some StatusCodes.Status200OK)
+                ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status400BadRequest)
+                ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status409Conflict)
+            |],
+            configureOperation =
+                (fun o ->
+                    o.OperationId <- "CreateExerciseCategory"
+                    o.Summary <- "Create exercise category"
+                    o)
+        )
+    )
 
 type RenameRequest = { Name: string }
 
