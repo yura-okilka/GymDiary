@@ -32,4 +32,8 @@ let webApp = [
             |> ExerciseDefinitionHandlers.createDefinitionOpenApi
         ]
     ]
+
+    subRoute "/v1/users" [
+        POST [ route "/" <| UserHandlers.createUser |> UserHandlers.createUserOpenApi ]
+    ]
 ]

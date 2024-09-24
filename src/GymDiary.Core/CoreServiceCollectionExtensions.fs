@@ -22,4 +22,4 @@ type CoreServiceCollectionExtensions() =
             .AddSingleton<GetExerciseCategory.IQueryHandler, GetExerciseCategory.QueryHandler>()
             .AddSingleton<GetAllExerciseCategories.IQueryHandler, GetAllExerciseCategories.QueryHandler>()
             .AddSingleton<CreateExerciseDefinition.ICommandHandler, CreateExerciseDefinition.CommandHandler>()
-            .AddSingleton<CreateUser.CommandHandler>()
+            .AddSingleton<CreateUser.ICommandHandler, CreateUser.CommandHandler>()

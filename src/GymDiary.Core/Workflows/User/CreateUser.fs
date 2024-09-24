@@ -34,8 +34,10 @@ type CommandError =
         | InvalidCommand es -> es |> ValidationErrors.toString
         | UserAlreadyExists e -> e |> UserWithEmailAlreadyExistsError.toString
 
+type ICommandHandler = IRequestHandler<Command, CommandResult, CommandError>
+
 type CommandHandler(idProvider: IIdProvider, userRepository: IUserRepository, logger: ILogger) =
-    interface IRequestHandler<Command, CommandResult, CommandError> with
+    interface ICommandHandler with
 
         member _.Handle command = asyncResult {
             let! user =
