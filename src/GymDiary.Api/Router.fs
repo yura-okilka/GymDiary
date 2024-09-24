@@ -8,7 +8,9 @@ open type Microsoft.AspNetCore.Http.TypedResults
 
 let webApp = [
     GET [
-        route "/ping" (text "pong") |> configureEndpoint _.WithTags("Ping") |> addOpenApiSimple<unit, string>
+        route "/ping" (text "pong")
+        |> configureEndpoint _.WithTags("Ping")
+        |> addOpenApiSimple<unit, string>
     ]
 
     subRoute "/v1/exercise-categories" [
@@ -17,7 +19,8 @@ let webApp = [
             routef "/{%s}" <| ExerciseCategoryHandlers.getCategoryById
         ]
         POST [
-            route "/" <| ExerciseCategoryHandlers.createCategory |> ExerciseCategoryHandlers.createCategoryOpenApi
+            route "/" <| ExerciseCategoryHandlers.createCategory
+            |> ExerciseCategoryHandlers.createCategoryOpenApi
         ]
         PUT [ routef "/{%s}" <| ExerciseCategoryHandlers.renameCategory ]
         DELETE [ routef "/{%s}" <| ExerciseCategoryHandlers.deleteCategory ]
@@ -25,7 +28,8 @@ let webApp = [
 
     subRoute "/v1/exercise-definitions" [
         POST [
-            route "/" <| ExerciseDefinitionHandlers.createDefinition |> ExerciseDefinitionHandlers.createDefinitionOpenApi
+            route "/" <| ExerciseDefinitionHandlers.createDefinition
+            |> ExerciseDefinitionHandlers.createDefinitionOpenApi
         ]
     ]
 
