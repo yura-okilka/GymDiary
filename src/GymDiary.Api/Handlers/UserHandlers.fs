@@ -13,7 +13,7 @@ let createUser (ctx: HttpContext) =
         let handler = ctx.GetService<CreateUser.ICommandHandler>()
         let! request = ctx.BindJson<CreateUser.Command>()
 
-        let! result = handler.Handle request |> Async.StartAsTask
+        let! result = handler.Handle request
 
         let response: IResult =
             match result with

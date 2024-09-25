@@ -47,53 +47,55 @@ type CommandHandler
     ) =
     interface ICommandHandler with
 
-        member _.Handle command = asyncResult {
-            let! validated =
-                validation {
-                    let! categoryId = Id.tryCreate (nameof command.CategoryId) command.CategoryId
-                    and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
-                    and! name = String50.create (nameof command.Name) command.Name
-                    and! notes = Option.traverseResult (String1k.create (nameof command.Notes)) command.Notes
+        member _.Handle command =
+            asyncResult {
+                let! validated =
+                    validation {
+                        let! categoryId = Id.tryCreate (nameof command.CategoryId) command.CategoryId
+                        and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
+                        and! name = String50.create (nameof command.Name) command.Name
+                        and! notes = Option.traverseResult (String1k.create (nameof command.Notes)) command.Notes
 
-                    let sets = {
-                        Type = ExerciseSetType.Duration
-                        Items = []
+                        let sets = {
+                            Type = ExerciseSetType.Duration
+                            Items = []
+                        }
+
+                        return {|
+                            CategoryId = categoryId
+                            OwnerId = ownerId
+                            Name = name
+                            Notes = notes
+                            Sets = sets
+                        |}
                     }
+                    |> Result.mapError InvalidCommand
 
-                    return {|
-                        CategoryId = categoryId
-                        OwnerId = ownerId
-                        Name = name
-                        Notes = notes
-                        Sets = sets
-                    |}
-                }
-                |> Result.mapError InvalidCommand
+                let! _ =
+                    categoryRepository.Get validated.CategoryId validated.OwnerId
+                    |> Async.AwaitTask
+                    |> AsyncResult.requireSome (CommandError.categoryNotFound validated.CategoryId validated.OwnerId)
 
-            let! _ =
-                categoryRepository.Get validated.CategoryId validated.OwnerId
-                |> Async.AwaitTask
-                |> AsyncResult.requireSome (CommandError.categoryNotFound validated.CategoryId validated.OwnerId)
+                let! ownerExists = userRepository.ExistWithId validated.OwnerId
 
-            let! ownerExists = userRepository.ExistWithId validated.OwnerId
+                if not ownerExists then
+                    return! CommandError.ownerNotFound validated.OwnerId |> Error
 
-            if not ownerExists then
-                return! CommandError.ownerNotFound validated.OwnerId |> Error
+                let exercise =
+                    ExerciseDefinitionAggregate.create
+                        (idProvider.GenerateId())
+                        validated.CategoryId
+                        validated.OwnerId
+                        validated.Name
+                        validated.Notes
+                        command.RestTime
+                        validated.Sets
+                        DateTime.UtcNow // TODO: ITimeProvider
 
-            let exercise =
-                ExerciseDefinitionAggregate.create
-                    (idProvider.GenerateId())
-                    validated.CategoryId
-                    validated.OwnerId
-                    validated.Name
-                    validated.Notes
-                    command.RestTime
-                    validated.Sets
-                    DateTime.UtcNow // TODO: ITimeProvider
+                do! exerciseRepository.Create exercise
 
-            do! exerciseRepository.Create exercise
+                logger.LogInformation("Exercise definition was created with id '{id}'", exercise.Id)
 
-            logger.LogInformation("Exercise definition was created with id '{id}'", exercise.Id)
-
-            return { Id = exercise.Id |> Id.value }
-        }
+                return { Id = exercise.Id |> Id.value }
+            }
+            |> Async.StartAsTask

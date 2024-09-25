@@ -12,7 +12,7 @@ let getAllCategories (ctx: HttpContext) =
     task {
         let handler = ctx.GetService<GetAllExerciseCategories.IQueryHandler>()
 
-        let! result = handler.Handle { OwnerId = "65e8edad477943d2b3844853" } |> Async.StartAsTask
+        let! result = handler.Handle { OwnerId = "65e8edad477943d2b3844853" }
 
         let response: IResult =
             match result with
@@ -32,7 +32,6 @@ let getCategoryById (id: string) (ctx: HttpContext) =
                 Id = id
                 OwnerId = "65e8edad477943d2b3844853"
             }
-            |> Async.StartAsTask
 
         let response: IResult =
             match result with
@@ -56,7 +55,6 @@ let createCategory (ctx: HttpContext) =
                 Name = request.Name
                 OwnerId = "65e8edad477943d2b3844853"
             }
-            |> Async.StartAsTask
 
         let response: IResult =
             match result with
@@ -100,7 +98,6 @@ let renameCategory (id: string) (ctx: HttpContext) =
                 Name = request.Name
                 OwnerId = "65e8edad477943d2b3844853"
             }
-            |> Async.StartAsTask
 
         let response: IResult =
             match result with
@@ -122,7 +119,6 @@ let deleteCategory (id: string) (ctx: HttpContext) =
                 Id = id
                 OwnerId = "65e8edad477943d2b3844853"
             }
-            |> Async.StartAsTask
 
         let response: IResult =
             match result with

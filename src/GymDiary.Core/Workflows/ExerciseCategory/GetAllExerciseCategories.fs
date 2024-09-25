@@ -23,16 +23,18 @@ type IQueryHandler = IRequestHandler<Query, QueryResult, QueryError>
 type QueryHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
     interface IQueryHandler with
 
-        member _.Handle query = asyncResult {
-            let! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
+        member _.Handle query =
+            asyncResult {
+                let! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery
 
-            let! categories = categoryRepository.GetAll ownerId
+                let! categories = categoryRepository.GetAll ownerId
 
-            return
-                categories
-                |> List.map (fun category -> {
-                    Id = category.Id |> Id.value
-                    Name = category.Name |> String50.value
-                    OwnerId = category.OwnerId |> Id.value
-                })
-        }
+                return
+                    categories
+                    |> List.map (fun category -> {
+                        Id = category.Id |> Id.value
+                        Name = category.Name |> String50.value
+                        OwnerId = category.OwnerId |> Id.value
+                    })
+            }
+            |> Async.StartAsTask

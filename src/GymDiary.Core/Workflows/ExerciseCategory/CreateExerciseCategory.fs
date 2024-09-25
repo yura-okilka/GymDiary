@@ -32,29 +32,31 @@ type CommandHandler
     (idProvider: IIdProvider, userRepository: IUserRepository, categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
     interface ICommandHandler with
 
-        member _.Handle command = asyncResult {
-            let! category =
-                validation {
-                    let! id = idProvider.GenerateId() |> Ok
-                    and! name = String50.create (nameof command.Name) command.Name
-                    and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
-                    return ExerciseCategoryAggregate.create id name ownerId
-                }
-                |> Result.mapError InvalidCommand
+        member _.Handle command =
+            asyncResult {
+                let! category =
+                    validation {
+                        let! id = idProvider.GenerateId() |> Ok
+                        and! name = String50.create (nameof command.Name) command.Name
+                        and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
+                        return ExerciseCategoryAggregate.create id name ownerId
+                    }
+                    |> Result.mapError InvalidCommand
 
-            let! ownerExists = userRepository.ExistWithId category.OwnerId
+                let! ownerExists = userRepository.ExistWithId category.OwnerId
 
-            if not ownerExists then
-                return! CommandError.ownerNotFound category.OwnerId |> Error
+                if not ownerExists then
+                    return! CommandError.ownerNotFound category.OwnerId |> Error
 
-            let! categoryExists = categoryRepository.ExistWithName category.Name category.OwnerId
+                let! categoryExists = categoryRepository.ExistWithName category.Name category.OwnerId
 
-            if categoryExists then
-                return! CommandError.categoryAlreadyExists category.Name |> Error
+                if categoryExists then
+                    return! CommandError.categoryAlreadyExists category.Name |> Error
 
-            do! categoryRepository.Create category
+                do! categoryRepository.Create category
 
-            logger.LogInformation("Exercise category was created with id '{id}'", category.Id)
+                logger.LogInformation("Exercise category was created with id '{id}'", category.Id)
 
-            return { Id = category.Id |> Id.value }
-        }
+                return { Id = category.Id |> Id.value }
+            }
+            |> Async.StartAsTask

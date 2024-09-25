@@ -39,33 +39,35 @@ type ICommandHandler = IRequestHandler<Command, CommandResult, CommandError>
 type CommandHandler(idProvider: IIdProvider, userRepository: IUserRepository, logger: ILogger) =
     interface ICommandHandler with
 
-        member _.Handle command = asyncResult {
-            let! user =
-                validation {
-                    let dtoToGender =
-                        function
-                        | GenderDto.Male -> Gender.Male
-                        | GenderDto.Female -> Gender.Female
-                        | GenderDto.Other -> Gender.Other
+        member _.Handle command =
+            asyncResult {
+                let! user =
+                    validation {
+                        let dtoToGender =
+                            function
+                            | GenderDto.Male -> Gender.Male
+                            | GenderDto.Female -> Gender.Female
+                            | GenderDto.Other -> Gender.Other
 
-                    let id = idProvider.GenerateId()
-                    let! email = EmailAddress.create (nameof command.Email) command.Email
-                    and! firstName = String50.create (nameof command.FirstName) command.FirstName
-                    and! lastName = String50.create (nameof command.LastName) command.LastName
-                    and! dateOfBirth = command.DateOfBirth |> Option.map DateOnly.FromDateTime |> Ok
-                    and! gender = command.Gender |> Option.map dtoToGender |> Ok
-                    return UserAggregate.create id email firstName lastName dateOfBirth gender
-                }
-                |> Result.mapError InvalidCommand
+                        let id = idProvider.GenerateId()
+                        let! email = EmailAddress.create (nameof command.Email) command.Email
+                        and! firstName = String50.create (nameof command.FirstName) command.FirstName
+                        and! lastName = String50.create (nameof command.LastName) command.LastName
+                        and! dateOfBirth = command.DateOfBirth |> Option.map DateOnly.FromDateTime |> Ok
+                        and! gender = command.Gender |> Option.map dtoToGender |> Ok
+                        return UserAggregate.create id email firstName lastName dateOfBirth gender
+                    }
+                    |> Result.mapError InvalidCommand
 
-            let! userExists = userRepository.ExistWithEmail user.Email
+                let! userExists = userRepository.ExistWithEmail user.Email
 
-            if userExists then
-                return! CommandError.userAlreadyExists user.Email
+                if userExists then
+                    return! CommandError.userAlreadyExists user.Email
 
-            do! userRepository.Create user
+                do! userRepository.Create user
 
-            logger.LogInformation("User was created with id '{id}'", user.Id)
+                logger.LogInformation("User was created with id '{id}'", user.Id)
 
-            return { Id = user.Id |> Id.value }
-        }
+                return { Id = user.Id |> Id.value }
+            }
+            |> Async.StartAsTask

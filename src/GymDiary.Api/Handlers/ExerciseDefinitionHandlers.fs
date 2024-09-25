@@ -32,7 +32,6 @@ let createDefinition (ctx: HttpContext) =
                 //Sets = request.Sets
                 OwnerId = "65e8edad477943d2b3844853"
             }
-            |> Async.StartAsTask
 
         let response: IResult =
             match result with

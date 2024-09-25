@@ -34,33 +34,35 @@ type ICommandHandler = IRequestHandler<Command, unit, CommandError>
 type CommandHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
     interface ICommandHandler with
 
-        member _.Handle command = asyncResult {
-            let! categoryId, ownerId, name =
-                validation {
-                    let! categoryId = Id.tryCreate (nameof command.Id) command.Id
-                    and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
-                    and! name = String50.create (nameof command.Name) command.Name
-                    return (categoryId, ownerId, name)
-                }
-                |> Result.mapError InvalidCommand
+        member _.Handle command =
+            asyncResult {
+                let! categoryId, ownerId, name =
+                    validation {
+                        let! categoryId = Id.tryCreate (nameof command.Id) command.Id
+                        and! ownerId = Id.tryCreate (nameof command.OwnerId) command.OwnerId
+                        and! name = String50.create (nameof command.Name) command.Name
+                        return (categoryId, ownerId, name)
+                    }
+                    |> Result.mapError InvalidCommand
 
-            let! categoryExists = categoryRepository.ExistWithName name ownerId
+                let! categoryExists = categoryRepository.ExistWithName name ownerId
 
-            if categoryExists then
-                return! CommandError.nameAlreadyUsed name |> Error
+                if categoryExists then
+                    return! CommandError.nameAlreadyUsed name |> Error
 
-            let! category =
-                categoryRepository.Get categoryId ownerId
-                |> Async.AwaitTask
-                |> AsyncResult.requireSome (CommandError.categoryNotFound categoryId ownerId)
+                let! category =
+                    categoryRepository.Get categoryId ownerId
+                    |> Async.AwaitTask
+                    |> AsyncResult.requireSome (CommandError.categoryNotFound categoryId ownerId)
 
-            let renamedCategory = category |> ExerciseCategoryAggregate.rename name
+                let renamedCategory = category |> ExerciseCategoryAggregate.rename name
 
-            do!
-                categoryRepository.Update renamedCategory
-                |> Async.AwaitTask
-                |> AsyncResult.mapError (function
-                    | EntityNotFound _ -> CommandError.categoryNotFound renamedCategory.Id renamedCategory.OwnerId)
+                do!
+                    categoryRepository.Update renamedCategory
+                    |> Async.AwaitTask
+                    |> AsyncResult.mapError (function
+                        | EntityNotFound _ -> CommandError.categoryNotFound renamedCategory.Id renamedCategory.OwnerId)
 
-            logger.LogInformation("Exercise category with id '{id}' was renamed to '{name}'", command.Id, command.Name)
-        }
+                logger.LogInformation("Exercise category with id '{id}' was renamed to '{name}'", command.Id, command.Name)
+            }
+            |> Async.StartAsTask
