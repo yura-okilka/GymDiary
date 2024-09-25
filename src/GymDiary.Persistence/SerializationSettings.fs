@@ -10,9 +10,9 @@ module SerializationSettings =
         FSharpTypeConventions.register ()
         FSharpTypeSerializers.register ()
 
-        let conventionPack = ConventionPack()
-        conventionPack.Add(CamelCaseElementNameConvention())
-        conventionPack.Add(StringIdStoredAsObjectIdConvention())
-        conventionPack.Add(EnumRepresentationConvention(BsonType.String))
+        let conventions = ConventionPack()
+        conventions.Add(CamelCaseElementNameConvention())
+        conventions.Add(StringIdStoredAsObjectIdConvention())
+        conventions.Add(EnumRepresentationConvention(BsonType.String))
 
-        ConventionRegistry.Register("GymDiary Conventions", conventionPack, (fun _ -> true))
+        ConventionRegistry.Register("GymDiary Conventions", conventions, (fun _ -> true))
