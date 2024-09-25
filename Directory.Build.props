@@ -1,13 +1,7 @@
 <Project>
-
   <!-- Common to all projects -->
   <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="8.0.400" Condition=" '$(ProjectExt)'=='.fsproj' " />
-  </ItemGroup>
-
 </Project>

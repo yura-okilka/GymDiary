@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="FluentAssertions.Analyzers" Version="0.30.0">
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="FluentAssertions.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="LightBDD.Framework" Version="3.7.0" />
-    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" Version="8.2.0" />
-    <PackageReference Include="Refit" Version="7.0.0" />
+    <PackageReference Include="LightBDD.Framework" />
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
+    <PackageReference Include="Refit" />
   </ItemGroup>
 
 </Project>
