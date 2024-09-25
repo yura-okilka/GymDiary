@@ -36,7 +36,8 @@ module Program =
         app.UseOxpecker(Router.webApp)
         app.UseSwagger()
         app.UseSwaggerUI()
-
         app.Run(ErrorHandlers.resourceNotFound)
+
+        app.Run()
 
         exitCode
