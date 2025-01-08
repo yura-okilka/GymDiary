@@ -14,5 +14,6 @@ module SerializationSettings =
         conventions.Add(CamelCaseElementNameConvention())
         conventions.Add(StringIdStoredAsObjectIdConvention())
         conventions.Add(EnumRepresentationConvention(BsonType.String))
+        conventions.Add(IgnoreIfNullConvention(true)) // Filtering with $exists has a better performance
 
         ConventionRegistry.Register("GymDiary Conventions", conventions, (fun _ -> true))
