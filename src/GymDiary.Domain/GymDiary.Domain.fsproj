@@ -14,6 +14,8 @@
     <Compile Include="ExerciseDefinitions\ExerciseSetCollection.fs" />
     <Compile Include="ExerciseDefinitions\ExerciseDefinition.fs" />
     <Compile Include="Routines\Routine.fs" />
+    <Compile Include="Workouts\Snapshots.fs" />
+    <Compile Include="Workouts\Workout.fs" />
   </ItemGroup>
 
   <ItemGroup>
