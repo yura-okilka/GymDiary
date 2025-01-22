@@ -10,49 +10,50 @@ type ExerciseSetKind =
     | DurationWithWeight
     | DurationWithDistance
 
-type ExerciseSetData = {
+type ExerciseSet = {
+    Kind: ExerciseSetKind
     Repetitions: uint
     Weight: float<kg>
     Distance: float<m>
     Duration: TimeSpan
 } with
 
-    static member createFromRepetitions repetitions : ExerciseSetData = {
+    static member ofRepetitions repetitions : ExerciseSet = {
+        Kind = ExerciseSetKind.Repetitions
         Repetitions = repetitions
         Weight = 0.0<kg>
         Distance = 0.0<m>
         Duration = TimeSpan.Zero
     }
 
-    static member createFromRepetitionsWithWeight repetitions weight : ExerciseSetData = {
+    static member ofRepetitionsWithWeight repetitions weight : ExerciseSet = {
+        Kind = ExerciseSetKind.RepetitionsWithWeight
         Repetitions = repetitions
         Weight = weight
         Distance = 0.0<m>
         Duration = TimeSpan.Zero
     }
 
-    static member createFromDuration duration : ExerciseSetData = {
+    static member ofDuration duration : ExerciseSet = {
+        Kind = ExerciseSetKind.Duration
         Repetitions = 0u
         Weight = 0.0<kg>
         Distance = 0.0<m>
         Duration = duration
     }
 
-    static member createFromDurationWithWeight duration weight : ExerciseSetData = {
+    static member ofDurationWithWeight duration weight : ExerciseSet = {
+        Kind = ExerciseSetKind.DurationWithWeight
         Repetitions = 0u
         Weight = weight
         Distance = 0.0<m>
         Duration = duration
     }
 
-    static member createFromDurationWithDistance duration distance : ExerciseSetData = {
+    static member ofDurationWithDistance duration distance : ExerciseSet = {
+        Kind = ExerciseSetKind.DurationWithDistance
         Repetitions = 0u
         Weight = 0.0<kg>
         Distance = distance
         Duration = duration
     }
-
-type ExerciseSetCollection = {
-    Type: ExerciseSetKind
-    Items: ExerciseSetData list
-}

@@ -21,7 +21,7 @@ type ExerciseDefinitionSnapshot = {
     Name: String50
     Notes: String1k option
     RestTime: TimeSpan
-    Sets: ExerciseSetCollection
+    Sets: ExerciseSet list
     OwnerId: Id<User>
 }
 
