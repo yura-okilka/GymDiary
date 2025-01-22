@@ -11,7 +11,7 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Common", "src\Common\Common
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "MongoDB.FSharp.Serialization", "src\MongoDB.FSharp.Serialization\MongoDB.FSharp.Serialization.fsproj", "{72B7D4CF-36AC-49D6-8315-614F2E15F461}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{529D6432-E5D3-472D-AE7C-F106AEF47C8D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{529D6432-E5D3-472D-AE7C-F106AEF47C8D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		docker-compose.yml = docker-compose.yml
@@ -34,6 +34,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DBB74340-5992-419B-9798-C1B31F9D0D39}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GymDiary.Api", "src\GymDiary.Api\GymDiary.Api.fsproj", "{83D14C64-2358-4B30-82ED-76C886722673}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GymDiary.Domain", "src\GymDiary.Domain\GymDiary.Domain.fsproj", "{2D0653C8-222C-4E1F-8135-FEA78AD02B30}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GymDiary.Domain.UnitTests", "tests\GymDiary.Domain.UnitTests\GymDiary.Domain.UnitTests.fsproj", "{582E6A89-DE13-40AF-9657-4736A33DA9CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +81,14 @@ Global
 		{83D14C64-2358-4B30-82ED-76C886722673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83D14C64-2358-4B30-82ED-76C886722673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83D14C64-2358-4B30-82ED-76C886722673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D0653C8-222C-4E1F-8135-FEA78AD02B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D0653C8-222C-4E1F-8135-FEA78AD02B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D0653C8-222C-4E1F-8135-FEA78AD02B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D0653C8-222C-4E1F-8135-FEA78AD02B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{582E6A89-DE13-40AF-9657-4736A33DA9CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{582E6A89-DE13-40AF-9657-4736A33DA9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{582E6A89-DE13-40AF-9657-4736A33DA9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{582E6A89-DE13-40AF-9657-4736A33DA9CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,5 +106,7 @@ Global
 		{056FC5AC-DE2A-400D-960F-FFB34A134D7E} = {4D01C9B4-8B7D-4109-A8B1-CBBC4B3E18ED}
 		{72B7D4CF-36AC-49D6-8315-614F2E15F461} = {4D01C9B4-8B7D-4109-A8B1-CBBC4B3E18ED}
 		{83D14C64-2358-4B30-82ED-76C886722673} = {4D01C9B4-8B7D-4109-A8B1-CBBC4B3E18ED}
+		{2D0653C8-222C-4E1F-8135-FEA78AD02B30} = {4D01C9B4-8B7D-4109-A8B1-CBBC4B3E18ED}
+		{582E6A89-DE13-40AF-9657-4736A33DA9CF} = {DBB74340-5992-419B-9798-C1B31F9D0D39}
 	EndGlobalSection
 EndGlobal
