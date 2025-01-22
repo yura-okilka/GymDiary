@@ -11,6 +11,8 @@
     <Compile Include="Primitives\SharedTypes.fs" />
     <Compile Include="Users\User.fs" />
     <Compile Include="ExerciseCategories\ExerciseCategory.fs" />
+    <Compile Include="ExerciseDefinitions\ExerciseSetCollection.fs" />
+    <Compile Include="ExerciseDefinitions\ExerciseDefinition.fs" />
   </ItemGroup>
 
   <ItemGroup>
