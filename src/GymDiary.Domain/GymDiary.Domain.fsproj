@@ -10,6 +10,7 @@
     <Compile Include="Primitives\ConstrainedType.fs" />
     <Compile Include="Primitives\SharedTypes.fs" />
     <Compile Include="Users\User.fs" />
+    <Compile Include="ExerciseCategories\ExerciseCategory.fs" />
   </ItemGroup>
 
   <ItemGroup>
