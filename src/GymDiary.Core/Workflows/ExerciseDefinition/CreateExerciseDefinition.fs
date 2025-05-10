@@ -17,8 +17,6 @@ type Command = {
 // TODO: add Sets: ExerciseSetsDto
 }
 
-type CommandResult = { Id: string }
-
 type CommandError =
     | InvalidCommand of ValidationError list
     | CategoryNotFound of ExerciseCategoryNotFoundError
@@ -35,7 +33,7 @@ type CommandError =
         | CategoryNotFound e -> e |> ExerciseCategoryNotFoundError.toString
         | OwnerNotFound e -> e |> OwnerNotFoundError.toString
 
-type ICommandHandler = IRequestHandler<Command, CommandResult, CommandError>
+type ICommandHandler = IRequestHandler<Command, string, CommandError>
 
 type CommandHandler
     (
@@ -96,6 +94,6 @@ type CommandHandler
 
                 logger.LogInformation("Exercise definition was created with id '{id}'", exercise.Id)
 
-                return { Id = exercise.Id |> Id.value }
+                return exercise.Id |> Id.value
             }
             |> Async.StartAsTask

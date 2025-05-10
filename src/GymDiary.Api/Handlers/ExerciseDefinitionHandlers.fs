@@ -35,7 +35,7 @@ let createDefinition (ctx: HttpContext) =
 
         let response: IResult =
             match result with
-            | Ok data -> Ok data // TODO: use Created
+            | Ok id -> Ok(Responses.id id) // TODO: use Created
             | Error(CreateExerciseDefinition.InvalidCommand es) -> BadRequest(Responses.validationErrors es)
             | Error(CreateExerciseDefinition.CategoryNotFound e) -> Conflict(Responses.exerciseCategoryNotFound e)
             | Error(CreateExerciseDefinition.OwnerNotFound e) -> Conflict(Responses.ownerNotFound e)
@@ -50,7 +50,7 @@ let createDefinitionOpenApi =
         OpenApiConfig(
             requestBody = RequestBody(typeof<CreateExerciseDefinitionRequest>),
             responseBodies = [|
-                ResponseBody(typeof<CreateExerciseDefinition.CommandResult>, ?statusCode = Some StatusCodes.Status200OK)
+                ResponseBody(typeof<IdResponse>, ?statusCode = Some StatusCodes.Status200OK)
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status400BadRequest)
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status409Conflict)
             |],

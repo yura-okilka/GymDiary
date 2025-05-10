@@ -14,11 +14,9 @@ type ExerciseCategoryDto = {
     OwnerId: string
 }
 
-type QueryResult = ExerciseCategoryDto list
-
 type QueryError = InvalidQuery of ValidationError
 
-type IQueryHandler = IRequestHandler<Query, QueryResult, QueryError>
+type IQueryHandler = IRequestHandler<Query, ExerciseCategoryDto list, QueryError>
 
 type QueryHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
     interface IQueryHandler with

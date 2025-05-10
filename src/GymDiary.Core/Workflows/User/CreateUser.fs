@@ -20,8 +20,6 @@ type Command = {
     Gender: GenderDto option
 }
 
-type CommandResult = { Id: string }
-
 type CommandError =
     | InvalidCommand of ValidationError list
     | UserAlreadyExists of UserWithEmailAlreadyExistsError
@@ -34,7 +32,7 @@ type CommandError =
         | InvalidCommand es -> es |> ValidationErrors.toString
         | UserAlreadyExists e -> e |> UserWithEmailAlreadyExistsError.toString
 
-type ICommandHandler = IRequestHandler<Command, CommandResult, CommandError>
+type ICommandHandler = IRequestHandler<Command, string, CommandError>
 
 type CommandHandler(idProvider: IIdProvider, userRepository: IUserRepository, logger: ILogger) =
     interface ICommandHandler with
@@ -68,6 +66,6 @@ type CommandHandler(idProvider: IIdProvider, userRepository: IUserRepository, lo
 
                 logger.LogInformation("User was created with id '{id}'", user.Id)
 
-                return { Id = user.Id |> Id.value }
+                return user.Id |> Id.value
             }
             |> Async.StartAsTask

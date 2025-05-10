@@ -1,6 +1,9 @@
 namespace GymDiary.Api
 
 open GymDiary.Core.Domain
+open type Microsoft.AspNetCore.Http.TypedResults
+
+type IdResponse = { Id: string }
 
 type ErrorResponse = {
     Name: string
@@ -9,6 +12,8 @@ type ErrorResponse = {
 }
 
 module Responses =
+
+    let id value = { Id = value }
 
     let internalError = {
         Name = "ServerError"

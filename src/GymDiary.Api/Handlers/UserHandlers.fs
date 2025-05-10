@@ -17,7 +17,7 @@ let createUser (ctx: HttpContext) =
 
         let response: IResult =
             match result with
-            | Ok data -> Ok data // TODO: use Created
+            | Ok id -> Ok(Responses.id id) // TODO: use Created
             | Error(CreateUser.InvalidCommand es) -> BadRequest(Responses.validationErrors es)
             | Error(CreateUser.UserAlreadyExists e) -> Conflict(Responses.userAlreadyExists e)
 
@@ -31,7 +31,7 @@ let createUserOpenApi =
         OpenApiConfig(
             requestBody = RequestBody(typeof<CreateUser.Command>),
             responseBodies = [|
-                ResponseBody(typeof<CreateUser.CommandResult>, ?statusCode = Some StatusCodes.Status200OK)
+                ResponseBody(typeof<IdResponse>, ?statusCode = Some StatusCodes.Status200OK)
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status400BadRequest)
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status409Conflict)
             |],

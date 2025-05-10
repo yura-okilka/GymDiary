@@ -8,8 +8,6 @@ open Microsoft.Extensions.Logging
 
 type Command = { Name: string; OwnerId: string }
 
-type CommandResult = { Id: string }
-
 type CommandError =
     | InvalidCommand of ValidationError list
     | CategoryAlreadyExists of ExerciseCategoryAlreadyExistsError
@@ -26,7 +24,7 @@ type CommandError =
         | CategoryAlreadyExists e -> e |> ExerciseCategoryAlreadyExistsError.toString
         | OwnerNotFound e -> e |> OwnerNotFoundError.toString
 
-type ICommandHandler = IRequestHandler<Command, CommandResult, CommandError>
+type ICommandHandler = IRequestHandler<Command, string, CommandError>
 
 type CommandHandler
     (idProvider: IIdProvider, userRepository: IUserRepository, categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
@@ -57,6 +55,6 @@ type CommandHandler
 
                 logger.LogInformation("Exercise category was created with id '{id}'", category.Id)
 
-                return { Id = category.Id |> Id.value }
+                return category.Id |> Id.value
             }
             |> Async.StartAsTask

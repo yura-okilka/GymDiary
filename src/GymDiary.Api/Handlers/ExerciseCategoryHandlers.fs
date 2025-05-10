@@ -16,7 +16,7 @@ let getAllCategories (ctx: HttpContext) =
 
         let response: IResult =
             match result with
-            | Ok data -> Ok data
+            | Ok categories -> Ok categories
             | Error(GetAllExerciseCategories.InvalidQuery e) -> BadRequest(Responses.validationError e)
 
         return! ctx.Write <| response
@@ -58,7 +58,7 @@ let createCategory (ctx: HttpContext) =
 
         let response: IResult =
             match result with
-            | Ok data -> Ok data // TODO: use Created
+            | Ok id -> Ok(Responses.id id) // TODO: use Created
             | Error(CreateExerciseCategory.InvalidCommand es) -> BadRequest(Responses.validationErrors es)
             | Error(CreateExerciseCategory.CategoryAlreadyExists e) -> Conflict(Responses.exerciseCategoryAlreadyExists e)
             | Error(CreateExerciseCategory.OwnerNotFound e) -> Conflict(Responses.ownerNotFound e)
@@ -73,7 +73,7 @@ let createCategoryOpenApi =
         OpenApiConfig(
             requestBody = RequestBody(typeof<CreateExerciseCategoryRequest>),
             responseBodies = [|
-                ResponseBody(typeof<CreateExerciseCategory.CommandResult>, ?statusCode = Some StatusCodes.Status200OK)
+                ResponseBody(typeof<IdResponse>, ?statusCode = Some StatusCodes.Status200OK)
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status400BadRequest)
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status409Conflict)
             |],
