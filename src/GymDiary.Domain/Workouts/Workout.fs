@@ -22,15 +22,22 @@ type Workout = {
     StartedOn: DateTime
     CompletedOn: DateTime
     OwnerId: Id<User>
-} with
-
-    static member create id routine exercises startedOn completedOn ownerId : Workout = {
-        Id = id
-        Routine = routine
-        Exercises = exercises
-        StartedOn = startedOn
-        CompletedOn = completedOn
-        OwnerId = ownerId
-    }
+}
 
 type WorkoutId = Id<Workout>
+
+module Workout =
+    let create id routine exercises startedOn completedOn ownerId =
+        if exercises |> List.isEmpty then
+            failwith "Workout must have at least one exercise"
+        elif startedOn > completedOn then
+            failwith "Workout cannot be completed before it started"
+
+        {
+            Id = id
+            Routine = routine
+            Exercises = exercises
+            StartedOn = startedOn
+            CompletedOn = completedOn
+            OwnerId = ownerId
+        }

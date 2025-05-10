@@ -7,14 +7,15 @@ type ExerciseCategory = {
     Id: Id<ExerciseCategory>
     Name: String50
     OwnerId: Id<User>
-} with
+}
 
-    static member create id name ownerId : ExerciseCategory = {
+type ExerciseCategoryId = Id<ExerciseCategory>
+
+module ExerciseCategory =
+    let create id name ownerId = {
         Id = id
         Name = name
         OwnerId = ownerId
     }
 
-    static member rename name category = { category with Name = name }
-
-type ExerciseCategoryId = Id<ExerciseCategory>
+    let rename name category = { category with Name = name }

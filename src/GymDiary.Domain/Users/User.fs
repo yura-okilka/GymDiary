@@ -15,9 +15,12 @@ type User = {
     LastName: String50
     DateOfBirth: DateOnly option
     Gender: Gender option
-} with
+}
 
-    static member create id email firstName lastName dateOfBirth gender : User = {
+type UserId = Id<User>
+
+module User =
+    let create id email firstName lastName dateOfBirth gender = {
         Id = id
         Email = email
         FirstName = firstName
@@ -26,12 +29,10 @@ type User = {
         Gender = gender
     }
 
-    static member update firstName lastName dateOfBirth gender user : User = {
+    let update firstName lastName dateOfBirth gender user = {
         user with
             FirstName = firstName
             LastName = lastName
             DateOfBirth = dateOfBirth
             Gender = gender
     }
-
-type UserId = Id<User>

@@ -14,19 +14,26 @@ type Routine = {
     Schedule: DayOfWeek Set
     Exercises: Id<ExerciseDefinition> Set
     OwnerId: Id<User>
-} with
+}
 
-    static member create id name goal notes schedule exercises ownerId : Routine = {
-        Id = id
-        Name = name
-        Goal = goal
-        Notes = notes
-        Schedule = schedule
-        Exercises = exercises
-        OwnerId = ownerId
-    }
+type RoutineId = Id<Routine>
 
-    static member update name goal notes schedule exercises routine : Routine = {
+module Routine =
+    let create id name goal notes schedule exercises ownerId : Result<Routine, string> =
+        if Set.isEmpty exercises then
+            Error "Routine must have at least one exercise"
+        else
+            Ok {
+                Id = id
+                Name = name
+                Goal = goal
+                Notes = notes
+                Schedule = schedule
+                Exercises = exercises
+                OwnerId = ownerId
+            }
+
+    let update name goal notes schedule exercises routine = {
         routine with
             Name = name
             Goal = goal
@@ -34,5 +41,3 @@ type Routine = {
             Schedule = schedule
             Exercises = exercises
     }
-
-type RoutineId = Id<Routine>

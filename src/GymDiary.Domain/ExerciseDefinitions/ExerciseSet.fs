@@ -18,7 +18,7 @@ type ExerciseSet = {
     Duration: TimeSpan
 } with
 
-    static member ofRepetitions repetitions : ExerciseSet = {
+    static member ofRepetitions repetitions = {
         Kind = ExerciseSetKind.Repetitions
         Repetitions = repetitions
         Weight = 0.0<kg>
@@ -26,7 +26,7 @@ type ExerciseSet = {
         Duration = TimeSpan.Zero
     }
 
-    static member ofRepetitionsWithWeight repetitions weight : ExerciseSet = {
+    static member ofRepetitionsWithWeight repetitions weight = {
         Kind = ExerciseSetKind.RepetitionsWithWeight
         Repetitions = repetitions
         Weight = weight
@@ -34,7 +34,7 @@ type ExerciseSet = {
         Duration = TimeSpan.Zero
     }
 
-    static member ofDuration duration : ExerciseSet = {
+    static member ofDuration duration = {
         Kind = ExerciseSetKind.Duration
         Repetitions = 0u
         Weight = 0.0<kg>
@@ -42,7 +42,7 @@ type ExerciseSet = {
         Duration = duration
     }
 
-    static member ofDurationWithWeight duration weight : ExerciseSet = {
+    static member ofDurationWithWeight duration weight = {
         Kind = ExerciseSetKind.DurationWithWeight
         Repetitions = 0u
         Weight = weight
@@ -50,7 +50,7 @@ type ExerciseSet = {
         Duration = duration
     }
 
-    static member ofDurationWithDistance duration distance : ExerciseSet = {
+    static member ofDurationWithDistance duration distance = {
         Kind = ExerciseSetKind.DurationWithDistance
         Repetitions = 0u
         Weight = 0.0<kg>
