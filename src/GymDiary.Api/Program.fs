@@ -36,6 +36,8 @@ module Program =
                     context.ProblemDetails.Extensions.TryAdd("traceId", activity.Id) |> ignore
                     context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier) |> ignore)
 
+        services.AddExceptionHandler<OxpeckerExceptionHandler>()
+
         services.AddGymDiaryCore()
         services.AddGymDiaryPersistence()
 
