@@ -7,7 +7,6 @@ open Oxpecker
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http.Features
 open Microsoft.Extensions.DependencyInjection
-open GymDiary.Api.Handlers
 open GymDiary.Core
 open GymDiary.Persistence
 
@@ -48,7 +47,6 @@ module Program =
         app.UseOxpecker(Router.webApp)
         app.UseSwagger()
         app.UseSwaggerUI()
-        app.Run(ErrorHandlers.resourceNotFound)
 
         app.Run()
 

@@ -7,11 +7,10 @@
 
   <ItemGroup>
     <Compile Include="Responses.fs" />
-    <Compile Include="OxpeckerExceptionHandler.fs" />
-    <Compile Include="Handlers\ErrorHandlers.fs" />
     <Compile Include="Handlers\ExerciseCategoryHandlers.fs" />
     <Compile Include="Handlers\ExerciseDefinitionHandlers.fs" />
     <Compile Include="Handlers\UserHandlers.fs" />
+    <Compile Include="OxpeckerExceptionHandler.fs" />
     <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
