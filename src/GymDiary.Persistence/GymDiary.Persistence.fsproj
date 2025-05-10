@@ -10,7 +10,7 @@
     <Compile Include="Exceptions.fs" />
     <Compile Include="MongoSettings.fs" />
     <Compile Include="SerializationSettings.fs" />
-    <Compile Include="ObjectIdProvider.fs" />
+    <Compile Include="MongoObjectIdProvider.fs" />
     <Compile Include="Documents\ExerciseSetsDto.fs" />
     <Compile Include="Documents\UserDocument.fs" />
     <Compile Include="Documents\ExerciseCategoryDocument.fs" />

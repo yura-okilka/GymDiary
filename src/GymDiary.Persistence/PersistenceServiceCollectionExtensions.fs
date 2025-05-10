@@ -20,7 +20,7 @@ type PersistenceServiceCollectionExtensions() =
             .AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow "MongoDb" (sp.GetRequiredService<IConfiguration>()))
             .AddSingleton<IMongoClient, MongoClient>(fun sp -> MongoClient(sp.GetRequiredService<MongoSettings>().ConnectionString))
             .AddSingleton<IMongoContext, MongoContext>()
-            .AddSingleton<IIdProvider, ObjectIdProvider>()
+            .AddSingleton<IIdProvider, MongoObjectIdProvider>()
             .AddSingleton<IUserRepository, UserRepository>()
             .AddSingleton<IExerciseCategoryRepository, ExerciseCategoryRepository>()
             .AddSingleton<IExerciseDefinitionRepository, ExerciseDefinitionRepository>()
