@@ -25,7 +25,7 @@ module Program =
         services.AddRouting()
         services.AddOxpecker()
         services.AddEndpointsApiExplorer()
-        services.AddSwaggerGen(fun o -> o.CustomSchemaIds(fun t -> t.FullName.Replace("+", "."))) // Error fix. https://github.com/swagger-api/swagger-ui/issues/7911
+        services.AddSwaggerGen(_.CustomSchemaIds(_.FullName.Replace("+", "."))) // Error fix. https://github.com/swagger-api/swagger-ui/issues/7911
         services.AddGymDiaryCore()
         services.AddGymDiaryPersistence()
 

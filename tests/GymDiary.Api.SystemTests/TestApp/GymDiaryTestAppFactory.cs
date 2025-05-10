@@ -29,8 +29,8 @@ public class GymDiaryTestAppFactory(GymDiaryTestAppSettings settings, GymDiaryAp
                     .AddInMemoryCollection(
                         new Dictionary<string, string?>
                         {
-                            ["MongoDb:ConnectionString"] = settings.DbConnectionString ??
-                                                           throw new ArgumentNullException(nameof(settings.DbConnectionString)),
+                            ["ConnectionStrings:MongoDb"] = settings.DbConnectionString ??
+                                                            throw new ArgumentNullException(nameof(settings.DbConnectionString)),
                             ["MongoDb:Database"] = settings.DbName
                         }
                     )

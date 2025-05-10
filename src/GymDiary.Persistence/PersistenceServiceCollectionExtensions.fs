@@ -18,7 +18,8 @@ type PersistenceServiceCollectionExtensions() =
         // Create settings instance in the implementation factory to defer its creation and allow overriding IConfiguration in the test host.
         services
             .AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow "MongoDb" (sp.GetRequiredService<IConfiguration>()))
-            .AddSingleton<IMongoClient, MongoClient>(fun sp -> MongoClient(sp.GetRequiredService<MongoSettings>().ConnectionString))
+            .AddSingleton<IMongoClient, MongoClient>(fun sp ->
+                MongoClient(sp.GetRequiredService<IConfiguration>().GetConnectionString("MongoDb")))
             .AddSingleton<IMongoContext, MongoContext>()
             .AddSingleton<IIdProvider, MongoObjectIdProvider>()
             .AddSingleton<IUserRepository, UserRepository>()

@@ -7,7 +7,6 @@ open Validus
 // F# types are not supported in settings retrieved from IConfiguration. Customize serializer or use FsConfig library if needed.
 
 type MongoSettings = {
-    ConnectionString: string
     Database: string
 } with
 
@@ -16,8 +15,7 @@ type MongoSettings = {
 
         match settingsOption with
         | Some settings -> validate {
-            let! _ = Check.String.notEmpty (nameof settings.ConnectionString) settings.ConnectionString
-            and! _ = Check.String.notEmpty (nameof settings.Database) settings.Database
+            let! _ = Check.String.notEmpty (nameof settings.Database) settings.Database
             return settings
           }
         | None -> ValidationErrors.create "settings" [ $"'{section}' settings must not be null" ] |> Error
