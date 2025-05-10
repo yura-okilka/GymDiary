@@ -2,8 +2,10 @@ namespace GymDiary.Api
 
 #nowarn "20"
 
+open System.Collections.Generic
 open Oxpecker
 open Microsoft.AspNetCore.Builder
+open Microsoft.AspNetCore.Http.Features
 open Microsoft.Extensions.DependencyInjection
 open GymDiary.Api.Handlers
 open GymDiary.Core
@@ -26,13 +28,21 @@ module Program =
         services.AddOxpecker()
         services.AddEndpointsApiExplorer()
         services.AddSwaggerGen(_.CustomSchemaIds(_.FullName.Replace("+", "."))) // Error fix. https://github.com/swagger-api/swagger-ui/issues/7911
+
+        services.AddProblemDetails(fun options ->
+            options.CustomizeProblemDetails <-
+                fun context ->
+                    let activity = context.HttpContext.Features.Get<IHttpActivityFeature>().Activity
+                    context.ProblemDetails.Extensions.TryAdd("traceId", activity.Id) |> ignore
+                    context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier) |> ignore)
+
         services.AddGymDiaryCore()
         services.AddGymDiaryPersistence()
 
         let app = builder.Build()
 
         app.UseRouting()
-        app.Use(ErrorHandlers.onError)
+        app.UseExceptionHandler()
         app.UseOxpecker(Router.webApp)
         app.UseSwagger()
         app.UseSwaggerUI()

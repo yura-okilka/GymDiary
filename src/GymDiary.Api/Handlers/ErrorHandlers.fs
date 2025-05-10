@@ -10,7 +10,7 @@ let onError (ctx: HttpContext) (next: RequestDelegate) =
     task {
         try
             return! next.Invoke(ctx)
-        with
+        with // TODO: write to IProblemDetailsService
         | :? ModelBindException
         | :? RouteParseException as ex ->
             let logger = ctx.GetLogger()
