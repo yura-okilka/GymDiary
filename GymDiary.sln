@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymDiary.DbMigrations", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymDiary.ServiceDefaults", "src\GymDiary.ServiceDefaults\GymDiary.ServiceDefaults.csproj", "{D6392A8D-BE56-4A37-B800-6AB2C0FD1D21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymDiary.AppHost", "src\GymDiary.AppHost\GymDiary.AppHost.csproj", "{87562977-567B-4E9C-AD75-1955A8858CA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{D6392A8D-BE56-4A37-B800-6AB2C0FD1D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6392A8D-BE56-4A37-B800-6AB2C0FD1D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6392A8D-BE56-4A37-B800-6AB2C0FD1D21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87562977-567B-4E9C-AD75-1955A8858CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87562977-567B-4E9C-AD75-1955A8858CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87562977-567B-4E9C-AD75-1955A8858CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87562977-567B-4E9C-AD75-1955A8858CA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,5 +112,6 @@ Global
 		{582E6A89-DE13-40AF-9657-4736A33DA9CF} = {DBB74340-5992-419B-9798-C1B31F9D0D39}
 		{8989E30F-4A0E-4876-BF84-BF9027F21BAE} = {4D01C9B4-8B7D-4109-A8B1-CBBC4B3E18ED}
 		{D6392A8D-BE56-4A37-B800-6AB2C0FD1D21} = {4D01C9B4-8B7D-4109-A8B1-CBBC4B3E18ED}
+		{87562977-567B-4E9C-AD75-1955A8858CA2} = {4D01C9B4-8B7D-4109-A8B1-CBBC4B3E18ED}
 	EndGlobalSection
 EndGlobal
