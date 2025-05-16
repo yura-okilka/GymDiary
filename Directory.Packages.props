@@ -8,21 +8,21 @@
     <PackageVersion Include="Oxpecker" Version="1.3.0" />
     <PackageVersion Include="Oxpecker.OpenApi" Version="1.0.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageVersion Include="FsToolkit.ErrorHandling" Version="4.18.0" />
     <PackageVersion Include="FsToolkit.ErrorHandling.TaskResult" Version="4.18.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.5" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.5" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.5.0" />
     <PackageVersion Include="MongoDB.Driver" Version="3.4.0" />
     <PackageVersion Include="Validus" Version="4.1.4" />
     <PackageVersion Include="Bogus" Version="35.6.3" />
     <PackageVersion Include="LightBDD.Extensions.DependencyInjection" Version="3.11.0" />
     <PackageVersion Include="LightBDD.Framework" Version="3.11.0" />
     <PackageVersion Include="LightBDD.XUnit2" Version="3.11.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.5" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="9.5.0" />
     <PackageVersion Include="Testcontainers.MongoDb" Version="4.4.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0" />
