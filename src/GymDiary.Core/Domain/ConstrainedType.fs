@@ -32,7 +32,7 @@ module ConstrainedType =
     let createStringLike (fieldName: string) (ctor: string -> 'a) (pattern: string) (value: string) =
         if String.IsNullOrEmpty(value) then
             ValidationError.valueNullOrEmpty fieldName |> Error
-        elif Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1)) then
+        elif Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase) then
             ctor value |> Ok
         else
             ValidationError.patternNotMatched fieldName |> Error
