@@ -13,4 +13,8 @@
     <PackageReference Include="Aspire.Hosting.AppHost" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GymDiary.Api.CSharp\GymDiary.Api.CSharp.csproj" />
+  </ItemGroup>
+
 </Project>

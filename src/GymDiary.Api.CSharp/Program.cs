@@ -1,16 +1,20 @@
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.AddServiceDefaults();
+
+builder.Services
+    .AddOpenApi()
+    .AddProblemDetails();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "v1"));
 }
-
-app.UseHttpsRedirection();
 
 var summaries = new[]
 {
@@ -34,6 +38,8 @@ app.MapGet(
         }
     )
     .WithName("GetWeatherForecast");
+
+app.MapDefaultEndpoints();
 
 app.Run();
 
