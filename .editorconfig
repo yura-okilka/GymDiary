@@ -40,12 +40,16 @@ fsharp_newline_before_multiline_computation_expression = false
 dotnet_sort_system_directives_first = true
 dotnet_separate_import_directive_groups = true
 csharp_style_namespace_declarations = file_scoped:warning
+csharp_prefer_braces = true:suggestion
 
 # Rider properties https://www.jetbrains.com/help/rider/EditorConfig_Index.html
-csharp_keep_blank_lines_in_code = 1
-csharp_braces_redundant = true
-csharp_arguments_literal = named
-csharp_arguments_skip_single = true
+resharper_csharp_keep_blank_lines_in_code = 1
+resharper_csharp_braces_redundant = true
+resharper_csharp_arguments_literal = named
+resharper_csharp_arguments_skip_single = true
+resharper_csharp_wrap_parameters_style = chop_if_long
+resharper_csharp_wrap_arguments_style = chop_if_long
+resharper_member_can_be_private_global_highlighting = hint
 
 # Code quality rules
 [*.{fs,cs}]

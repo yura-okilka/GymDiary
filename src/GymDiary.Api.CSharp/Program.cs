@@ -1,10 +1,13 @@
+using GymDiary.Api.CSharp;
+using GymDiary.Api.CSharp.Endpoints;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.Services
-    .AddOpenApi()
-    .AddProblemDetails();
+builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
+builder.Services.AddEndpoints(AssemblyReference.Assembly);
 
 var app = builder.Build();
 
@@ -16,34 +19,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "v1"));
 }
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet(
-        "/weatherforecast",
-        () =>
-        {
-            var forecast = Enumerable.Range(start: 1, count: 5).Select(
-                    index =>
-                        new WeatherForecast(
-                            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                            Random.Shared.Next(minValue: -20, maxValue: 55),
-                            summaries[Random.Shared.Next(summaries.Length)]
-                        )
-                )
-                .ToArray();
-            return forecast;
-        }
-    )
-    .WithName("GetWeatherForecast");
-
 app.MapDefaultEndpoints();
+app.MapEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

@@ -1,6 +1,0 @@
-@GymDiary.Api.CSharp_HostAddress = http://localhost:5050
-
-GET {{GymDiary.Api.CSharp_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
