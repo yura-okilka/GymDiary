@@ -11,7 +11,7 @@ open GymDiary.Core.Workflows.User
 open Microsoft.Extensions.DependencyInjection
 
 [<Extension>]
-type CoreServiceCollectionExtensions() =
+type CoreServiceExtensions() =
     [<Extension>]
     static member AddGymDiaryCore(services: IServiceCollection) : IServiceCollection =
         services

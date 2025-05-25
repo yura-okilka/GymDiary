@@ -10,7 +10,7 @@ open Microsoft.Extensions.DependencyInjection
 open MongoDB.Driver
 
 [<Extension>]
-type PersistenceServiceCollectionExtensions() =
+type PersistenceServiceExtensions() =
     [<Extension>]
     static member AddGymDiaryPersistence(services: IServiceCollection) : IServiceCollection =
         SerializationSettings.register ()

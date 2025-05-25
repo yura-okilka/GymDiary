@@ -22,7 +22,7 @@
     <Compile Include="Workflows\ExerciseCategory\DeleteExerciseCategory.fs" />
     <Compile Include="Workflows\ExerciseDefinition\CreateExerciseDefinition.fs" />
     <Compile Include="Workflows\User\CreateUser.fs" />
-    <Compile Include="CoreServiceCollectionExtensions.fs" />
+    <Compile Include="CoreServiceExtensions.fs" />
   </ItemGroup>
 
   <ItemGroup>
