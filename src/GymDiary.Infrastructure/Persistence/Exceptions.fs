@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence
+namespace GymDiary.Infrastructure.Persistence
 
 open GymDiary.Core.Domain
 

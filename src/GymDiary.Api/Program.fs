@@ -8,7 +8,7 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http.Features
 open Microsoft.Extensions.DependencyInjection
 open GymDiary.Core
-open GymDiary.Persistence
+open GymDiary.Infrastructure.Persistence
 
 module Program =
     type TestEntryPoint() =

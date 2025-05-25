@@ -1,7 +1,7 @@
 using GymDiary.Api.CSharp;
 using GymDiary.Api.CSharp.Endpoints;
 using GymDiary.Application;
-using GymDiary.Persistence;
+using GymDiary.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 

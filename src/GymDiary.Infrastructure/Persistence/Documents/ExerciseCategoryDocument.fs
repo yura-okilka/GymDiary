@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence.Documents
+namespace GymDiary.Infrastructure.Persistence.Documents
 
 open GymDiary.Core.Domain
 open GymDiary.Core.Domain.ExerciseCategoryAggregate

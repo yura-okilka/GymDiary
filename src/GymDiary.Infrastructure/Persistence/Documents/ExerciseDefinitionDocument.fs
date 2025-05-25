@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence.Documents
+namespace GymDiary.Infrastructure.Persistence.Documents
 
 open System
 open GymDiary.Core.Domain

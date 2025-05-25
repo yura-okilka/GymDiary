@@ -1,9 +1,9 @@
-namespace GymDiary.Persistence.Repositories
+namespace GymDiary.Infrastructure.Persistence.Repositories
 
 open GymDiary.Application.Persistence
 open GymDiary.Domain.ExerciseCategories
-open GymDiary.Persistence
-open GymDiary.Persistence.Documents
+open GymDiary.Infrastructure.Persistence
+open GymDiary.Infrastructure.Persistence.Documents
 open FsToolkit.ErrorHandling
 open MongoDB.Driver
 

@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence
+namespace GymDiary.Infrastructure.Persistence
 
 open MongoDB.Bson
 open MongoDB.Bson.Serialization.Conventions

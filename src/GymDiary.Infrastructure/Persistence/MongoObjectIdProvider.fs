@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence
+namespace GymDiary.Infrastructure.Persistence
 
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Application.Persistence

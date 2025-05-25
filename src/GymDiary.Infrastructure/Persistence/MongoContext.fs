@@ -1,6 +1,6 @@
-namespace GymDiary.Persistence
+namespace GymDiary.Infrastructure.Persistence
 
-open GymDiary.Persistence.Documents
+open GymDiary.Infrastructure.Persistence.Documents
 open MongoDB.Driver
 
 type IMongoContext =

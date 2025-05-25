@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence
+namespace GymDiary.Infrastructure.Persistence
 
 open System.Runtime.CompilerServices
 open System.Threading

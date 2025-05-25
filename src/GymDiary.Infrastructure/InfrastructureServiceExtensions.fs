@@ -1,4 +1,4 @@
-namespace GymDiary.Persistence
+namespace GymDiary.Infrastructure.Persistence
 
 #nowarn "20"
 
@@ -7,7 +7,7 @@ open System.Runtime.CompilerServices
 open GymDiary.Application.Time
 open GymDiary.Core.Persistence
 open GymDiary.Infrastructure.Time
-open GymDiary.Persistence.Repositories
+open GymDiary.Infrastructure.Persistence.Repositories
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open MongoDB.Driver
