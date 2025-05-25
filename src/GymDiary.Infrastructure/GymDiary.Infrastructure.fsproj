@@ -1,27 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <Compile Include="InternalExtensions.fs" />
-    <Compile Include="FindFluentExtensions.fs" />
-    <Compile Include="Exceptions.fs" />
-    <Compile Include="MongoSettings.fs" />
-    <Compile Include="SerializationSettings.fs" />
-    <Compile Include="MongoObjectIdProvider.fs" />
-    <Compile Include="Documents\ExerciseSetsDto.fs" />
-    <Compile Include="Documents\UserDocument.fs" />
-    <Compile Include="Documents\UserDocumentV2.fs" />
-    <Compile Include="Documents\ExerciseCategoryDocument.fs" />
-    <Compile Include="Documents\ExerciseCategoryDocumentV2.fs" />
-    <Compile Include="Documents\ExerciseDefinitionDocument.fs" />
-    <Compile Include="Documents\RoutineDocument.fs" />
-    <Compile Include="Documents\WorkoutDocument.fs" />
-    <Compile Include="MongoContext.fs" />
-    <Compile Include="Repositories\UserRepository.fs" />
-    <Compile Include="Repositories\UserRepositoryV2.fs" />
-    <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
-    <Compile Include="Repositories\ExerciseCategoryRepositoryV2.fs" />
-    <Compile Include="Repositories\ExerciseDefinitionRepository.fs" />
-    <Compile Include="PersistenceServiceCollectionExtensions.fs" />
+    <Compile Include="Persistence\InternalExtensions.fs" />
+    <Compile Include="Persistence\FindFluentExtensions.fs" />
+    <Compile Include="Persistence\Exceptions.fs" />
+    <Compile Include="Persistence\MongoSettings.fs" />
+    <Compile Include="Persistence\SerializationSettings.fs" />
+    <Compile Include="Persistence\MongoObjectIdProvider.fs" />
+    <Compile Include="Persistence\Documents\ExerciseSetsDto.fs" />
+    <Compile Include="Persistence\Documents\UserDocument.fs" />
+    <Compile Include="Persistence\Documents\UserDocumentV2.fs" />
+    <Compile Include="Persistence\Documents\ExerciseCategoryDocument.fs" />
+    <Compile Include="Persistence\Documents\ExerciseCategoryDocumentV2.fs" />
+    <Compile Include="Persistence\Documents\ExerciseDefinitionDocument.fs" />
+    <Compile Include="Persistence\Documents\RoutineDocument.fs" />
+    <Compile Include="Persistence\Documents\WorkoutDocument.fs" />
+    <Compile Include="Persistence\MongoContext.fs" />
+    <Compile Include="Persistence\Repositories\UserRepository.fs" />
+    <Compile Include="Persistence\Repositories\UserRepositoryV2.fs" />
+    <Compile Include="Persistence\Repositories\ExerciseCategoryRepository.fs" />
+    <Compile Include="Persistence\Repositories\ExerciseCategoryRepositoryV2.fs" />
+    <Compile Include="Persistence\Repositories\ExerciseDefinitionRepository.fs" />
+    <Compile Include="Persistence\PersistenceServiceCollectionExtensions.fs" />
   </ItemGroup>
 
   <ItemGroup>
