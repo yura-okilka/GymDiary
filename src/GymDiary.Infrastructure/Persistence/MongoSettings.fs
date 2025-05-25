@@ -11,7 +11,7 @@ type MongoSettings = {
 } with
 
     static member createFrom (section: string) (configuration: IConfiguration) : Result<MongoSettings, ValidationErrors> =
-        let settingsOption = configuration.GetSection(section).Get<MongoSettings>() |> Option.ofRecord
+        let settingsOption = configuration.GetSection(section).Get<MongoSettings>() |> Option.ofRecord // TODO: GetValueOrThrow
 
         match settingsOption with
         | Some settings -> validate {

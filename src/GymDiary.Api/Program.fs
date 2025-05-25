@@ -38,7 +38,7 @@ module Program =
         services.AddExceptionHandler<OxpeckerExceptionHandler>()
 
         services.AddGymDiaryCore()
-        services.AddGymDiaryPersistence()
+        services.AddGymDiaryInfrastructure()
 
         let app = builder.Build()
 

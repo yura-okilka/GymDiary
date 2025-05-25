@@ -11,7 +11,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddEndpoints(AssemblyReference.Assembly);
 builder.Services.AddGymDiaryApplication();
-builder.Services.AddGymDiaryPersistence();
+builder.Services.AddGymDiaryInfrastructure();
 
 var app = builder.Build();
 

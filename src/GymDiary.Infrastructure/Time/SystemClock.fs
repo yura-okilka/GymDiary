@@ -1,9 +1,7 @@
-namespace GymDiary.Application.Time
+namespace GymDiary.Infrastructure.Time
 
 open System
-
-type IClock =
-    abstract member UtcNow: DateTime
+open GymDiary.Application.Time
 
 type SystemClock(timeProvider: TimeProvider) =
     interface IClock with

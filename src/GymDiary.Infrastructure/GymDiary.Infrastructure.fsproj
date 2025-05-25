@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Include="Time\SystemClock.fs" />
     <Compile Include="Persistence\InternalExtensions.fs" />
     <Compile Include="Persistence\FindFluentExtensions.fs" />
     <Compile Include="Persistence\Exceptions.fs" />
@@ -21,9 +22,9 @@
     <Compile Include="Persistence\Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Persistence\Repositories\ExerciseCategoryRepositoryV2.fs" />
     <Compile Include="Persistence\Repositories\ExerciseDefinitionRepository.fs" />
-    <Compile Include="Persistence\PersistenceServiceExtensions.fs" />
+    <Compile Include="InfrastructureServiceExtensions.fs" />
   </ItemGroup>
-
+ 
   <ItemGroup>
     <PackageReference Include="FSharp.Core" />
     <PackageReference Include="FsToolkit.ErrorHandling.TaskResult" />

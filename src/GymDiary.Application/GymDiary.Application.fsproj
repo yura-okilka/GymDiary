@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Time\SystemClock.fs" />
+    <Compile Include="Time\Abstractions.fs" />
     <Compile Include="Persistence\Abstractions.fs" />
     <Compile Include="Workflows\Abstractions.fs" />
     <Compile Include="Workflows\Validation.fs" />
