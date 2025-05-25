@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GymDiary.Application\GymDiary.Application.fsproj" />
-    <ProjectReference Include="..\GymDiary.Persistence\GymDiary.Persistence.fsproj" />
+    <ProjectReference Include="..\GymDiary.Infrastructure\GymDiary.Infrastructure.fsproj" />
     <ProjectReference Include="..\GymDiary.ServiceDefaults\GymDiary.ServiceDefaults.csproj" />
   </ItemGroup>
 
