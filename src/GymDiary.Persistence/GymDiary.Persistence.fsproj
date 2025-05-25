@@ -9,13 +9,17 @@
     <Compile Include="MongoObjectIdProvider.fs" />
     <Compile Include="Documents\ExerciseSetsDto.fs" />
     <Compile Include="Documents\UserDocument.fs" />
+    <Compile Include="Documents\UserDocumentV2.fs" />
     <Compile Include="Documents\ExerciseCategoryDocument.fs" />
+    <Compile Include="Documents\ExerciseCategoryDocumentV2.fs" />
     <Compile Include="Documents\ExerciseDefinitionDocument.fs" />
     <Compile Include="Documents\RoutineDocument.fs" />
     <Compile Include="Documents\WorkoutDocument.fs" />
     <Compile Include="MongoContext.fs" />
     <Compile Include="Repositories\UserRepository.fs" />
+    <Compile Include="Repositories\UserRepositoryV2.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
+    <Compile Include="Repositories\ExerciseCategoryRepositoryV2.fs" />
     <Compile Include="Repositories\ExerciseDefinitionRepository.fs" />
     <Compile Include="PersistenceServiceCollectionExtensions.fs" />
   </ItemGroup>
@@ -30,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.fsproj" />
+    <ProjectReference Include="..\GymDiary.Application\GymDiary.Application.fsproj" />
     <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
     <ProjectReference Include="..\MongoDB.FSharp.Serialization\MongoDB.FSharp.Serialization.fsproj" />
   </ItemGroup>

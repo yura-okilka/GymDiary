@@ -15,6 +15,7 @@ trim_trailing_whitespace = true
 # Misc files
 [*.{xml,csproj,fsproj,props,targets}]
 indent_size = 2
+ij_xml_keep_blank_lines = 1
 ij_xml_space_inside_empty_tag = true
 
 [*.{json,yml,yaml}]

@@ -1,5 +1,7 @@
 using GymDiary.Api.CSharp;
 using GymDiary.Api.CSharp.Endpoints;
+using GymDiary.Application;
+using GymDiary.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,8 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddEndpoints(AssemblyReference.Assembly);
+builder.Services.AddGymDiaryApplication();
+builder.Services.AddGymDiaryPersistence();
 
 var app = builder.Build();
 

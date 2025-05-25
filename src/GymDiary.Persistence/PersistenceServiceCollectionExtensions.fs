@@ -19,9 +19,13 @@ type PersistenceServiceCollectionExtensions() =
         services
             .AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow "MongoDb" (sp.GetRequiredService<IConfiguration>()))
             .AddSingleton<IMongoClient, MongoClient>(fun sp ->
-                new MongoClient(sp.GetRequiredService<IConfiguration>().GetConnectionString("MongoDb")))
+                new MongoClient(
+                    sp
+                        .GetRequiredService<IConfiguration>()
+                        .GetConnectionString("gymdiary-db") // TODO: GetConnectionStringOrThrow
+                ))
             .AddSingleton<IMongoContext, MongoContext>()
-            .AddSingleton<IIdProvider, MongoObjectIdProvider>()
-            .AddSingleton<IUserRepository, UserRepository>()
-            .AddSingleton<IExerciseCategoryRepository, ExerciseCategoryRepository>()
+            .AddSingleton<GymDiary.Application.Persistence.IIdProvider, MongoObjectIdProvider>()
+            .AddSingleton<GymDiary.Application.Persistence.IUserRepository, UserRepositoryV2>()
+            .AddSingleton<GymDiary.Application.Persistence.IExerciseCategoryRepository, ExerciseCategoryRepositoryV2>()
             .AddSingleton<IExerciseDefinitionRepository, ExerciseDefinitionRepository>()
