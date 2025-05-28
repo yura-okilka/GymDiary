@@ -1,6 +1,5 @@
 namespace GymDiary.Infrastructure.Persistence
 
-open Common.Extensions
 open Microsoft.Extensions.Configuration
 open Validus
 
@@ -11,14 +10,14 @@ type MongoSettings = {
 } with
 
     static member createFrom (section: string) (configuration: IConfiguration) : Result<MongoSettings, ValidationErrors> =
-        let settingsOption = configuration.GetSection(section).Get<MongoSettings>() |> Option.ofRecord // TODO: GetValueOrThrow
+        let settingsOption = configuration.GetSection(section).Get<MongoSettings>()
 
         match settingsOption with
-        | Some settings -> validate {
+        | null -> ValidationErrors.create "settings" [ $"'{section}' settings must not be null" ] |> Error
+        | settings -> validate {
             let! _ = Check.String.notEmpty (nameof settings.Database) settings.Database
             return settings
           }
-        | None -> ValidationErrors.create "settings" [ $"'{section}' settings must not be null" ] |> Error
 
     static member createFromOrThrow (section: string) (configuration: IConfiguration) : MongoSettings =
         match MongoSettings.createFrom section configuration with

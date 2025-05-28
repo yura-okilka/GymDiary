@@ -4,7 +4,6 @@
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
     <IsTestProject>true</IsTestProject>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

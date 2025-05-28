@@ -8,7 +8,7 @@ type IdResponse = { Id: string }
 type ErrorResponse = {
     Name: string
     Message: string
-    Details: obj
+    Details: obj | null
 }
 
 module Responses =

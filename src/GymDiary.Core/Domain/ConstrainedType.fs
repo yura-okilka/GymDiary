@@ -10,9 +10,7 @@ module ConstrainedType =
 
     /// Create a constrained string using the constructor provided
     let createString (fieldName: string) (ctor: string -> 'a) (minLength: int, maxLength: int) (value: string) =
-        if value = null then
-            ValidationError.valueNull fieldName |> Error
-        elif value.Length < minLength then
+        if value.Length < minLength then
             ValidationError.lengthLessThanLimit fieldName (string (minLength)) |> Error
         elif value.Length > maxLength then
             ValidationError.lengthGreaterThanLimit fieldName (string (maxLength)) |> Error
@@ -38,11 +36,7 @@ module ConstrainedType =
             ValidationError.patternNotMatched fieldName |> Error
 
     /// Create a non-nullable string using the constructor provided
-    let createStringNotNull (fieldName: string) (ctor: string -> 'a) (value: string) =
-        if value = null then
-            ValidationError.valueNull fieldName |> Error
-        else
-            ctor value |> Ok
+    let createStringNotNull (fieldName: string) (ctor: string -> 'a) (value: string) = ctor value |> Ok
 
     /// Create a constrained integer using the constructor provided
     let createInt (fieldName: string) (ctor: int -> 'a) (minValue: int, maxValue: int) (value: int) =
@@ -54,12 +48,7 @@ module ConstrainedType =
             ctor value |> Ok
 
     /// Create a constrained decimal<kg> using the constructor provided
-    let createDecimalKg
-        (fieldName: string)
-        (ctor: decimal<kg> -> 'a)
-        (minValue: decimal<kg>, maxValue: decimal<kg>)
-        (value: decimal<kg>)
-        =
+    let createDecimalKg (fieldName: string) (ctor: decimal<kg> -> 'a) (minValue: decimal<kg>, maxValue: decimal<kg>) (value: decimal<kg>) =
         if value < minValue then
             ValidationError.valueLessThanLimit fieldName (string (minValue)) |> Error
         elif value > maxValue then

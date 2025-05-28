@@ -26,12 +26,21 @@ module Program =
         services.AddRouting()
         services.AddOxpecker()
         services.AddEndpointsApiExplorer()
-        services.AddSwaggerGen(_.CustomSchemaIds(_.FullName.Replace("+", "."))) // Error fix. https://github.com/swagger-api/swagger-ui/issues/7911
+
+        services.AddSwaggerGen(
+            _.CustomSchemaIds(fun t ->
+                let fullName = nonNull t.FullName
+                fullName.Replace("+", "."))
+        ) // Error fix. https://github.com/swagger-api/swagger-ui/issues/7911
 
         services.AddProblemDetails(fun options ->
             options.CustomizeProblemDetails <-
                 fun context ->
-                    let activity = context.HttpContext.Features.Get<IHttpActivityFeature>().Activity
+                    let activity =
+                        context.HttpContext.Features
+                            .GetRequiredFeature<IHttpActivityFeature>()
+                            .Activity
+
                     context.ProblemDetails.Extensions.TryAdd("traceId", activity.Id) |> ignore
                     context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier) |> ignore)
 

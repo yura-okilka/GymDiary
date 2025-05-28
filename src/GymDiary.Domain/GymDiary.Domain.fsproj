@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
+  
   <ItemGroup>
     <Compile Include="Primitives\ConstrainedType.fs" />
     <Compile Include="Primitives\SharedTypes.fs" />

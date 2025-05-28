@@ -7,7 +7,7 @@ open MongoDB.FSharp.Serialization.Serializers
 
 type FSharpTypeSerializationProvider() =
 
-    let createInstance (objType: Type) = Activator.CreateInstance(objType)
+    let createInstance (objType: Type) = Activator.CreateInstance(objType) |> nonNull
 
     let asBsonSerializer (value: obj) = value :?> IBsonSerializer
 
@@ -24,7 +24,7 @@ type FSharpTypeSerializationProvider() =
                 |> createInstance
                 |> asBsonSerializer
             else
-                null
+                failwith $"Failed to find serializer for type: {objType.FullName}" // TODO: test
 
 module FSharpTypeSerializers =
     let mutable private isRegistered = false
