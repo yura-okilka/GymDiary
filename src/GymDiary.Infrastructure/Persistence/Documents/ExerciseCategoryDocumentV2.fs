@@ -1,29 +1,29 @@
 namespace GymDiary.Infrastructure.Persistence.Documents
 
-open GymDiary.Application.Workflows.Validation
-open GymDiary.Domain.ExerciseCategories
-open FsToolkit.ErrorHandling
-open GymDiary.Domain.Primitives.SharedTypes
+open System
+open MongoDB.Bson.Serialization.Attributes
 
 [<CLIMutable>]
 type ExerciseCategoryDocumentV2 = {
     Id: string
     Name: string
     OwnerId: string
+    [<BsonIgnore>]
+    mutable CreatedOnUtc: DateTime
+    [<BsonIgnore>]
+    mutable UpdatedOnUtc: DateTime
 } with
 
-    static member fromDomain(domain: ExerciseCategory) : ExerciseCategoryDocumentV2 = {
-        Id = domain.Id.Value
-        Name = domain.Name.Value
-        OwnerId = domain.OwnerId.Value
-    }
+    interface IDocumentWithOwner with
+        member this.Id = this.Id
+        member this.OwnerId = this.OwnerId
 
-    static member toDomain(document: ExerciseCategoryDocumentV2) : Result<ExerciseCategory, ValidationError> = result {
-        let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create
+        [<BsonElement("CreatedOnUtc")>]
+        member this.CreatedOnUtc
+            with get () = this.CreatedOnUtc
+            and set value = this.CreatedOnUtc <- value
 
-        return {
-            Id = Id(document.Id)
-            Name = name
-            OwnerId = Id(document.OwnerId)
-        }
-    }
+        [<BsonElement("UpdatedOnUtc")>]
+        member this.UpdatedOnUtc
+            with get () = this.UpdatedOnUtc
+            and set value = this.UpdatedOnUtc <- value

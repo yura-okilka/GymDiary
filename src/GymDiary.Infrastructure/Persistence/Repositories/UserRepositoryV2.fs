@@ -1,22 +1,18 @@
 namespace GymDiary.Infrastructure.Persistence.Repositories
 
 open GymDiary.Application.Persistence
+open GymDiary.Application.Time
+open GymDiary.Domain.Users
 open GymDiary.Infrastructure.Persistence
 open GymDiary.Infrastructure.Persistence.Documents
+open GymDiary.Infrastructure.Persistence.Mapping
 open MongoDB.Driver
 
-type UserRepositoryV2(context: IMongoContext) =
+type UserRepositoryV2(context: IMongoContext, mapper: IDocumentMapper<User, UserDocumentV2>, clock: IClock) =
+    inherit EntityRepositoryBase<User, UserDocumentV2>(mapper, clock)
+    override this.Collection = context.UsersV2
+
     interface IUserRepository with
-
-        member _.Create user = task {
-            let document = user |> UserDocumentV2.fromDomain
-            do! context.UsersV2.InsertOneAsync(document)
-        }
-
-        member _.ExistWithId id =
-            let id = id.Value
-            context.Users.Find(fun d -> d.Id = id).AnyAsync()
-
-        member _.ExistWithEmail email =
+        member this.ExistsWithEmail email =
             let email = email.Value
-            context.Users.Find(fun d -> d.Email = email).AnyAsync()
+            this.Collection.Find(fun d -> d.Email = email).AnyAsync()

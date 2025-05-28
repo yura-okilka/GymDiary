@@ -17,7 +17,7 @@ type MongoObjectIdProvider() =
         | None -> Error $"{value} is not a valid {nameof ObjectId}" // TODO: check
         | Some id -> Ok id
 
-    interface IIdProvider with
+    interface IEntityIdProvider with
         member this.GenerateId() = this.GenerateId()
         member this.TryParse value = this.TryParse value
         member this.TryParseResult(value) = this.TryParseResult value

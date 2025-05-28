@@ -9,6 +9,7 @@
     <Compile Include="Persistence\MongoSettings.fs" />
     <Compile Include="Persistence\SerializationSettings.fs" />
     <Compile Include="Persistence\MongoObjectIdProvider.fs" />
+    <Compile Include="Persistence\Documents\IDocument.fs" />
     <Compile Include="Persistence\Documents\ExerciseSetsDto.fs" />
     <Compile Include="Persistence\Documents\UserDocument.fs" />
     <Compile Include="Persistence\Documents\UserDocumentV2.fs" />
@@ -17,7 +18,12 @@
     <Compile Include="Persistence\Documents\ExerciseDefinitionDocument.fs" />
     <Compile Include="Persistence\Documents\RoutineDocument.fs" />
     <Compile Include="Persistence\Documents\WorkoutDocument.fs" />
+    <Compile Include="Persistence\Mapping\IDocumentMapper.fs" />
+    <Compile Include="Persistence\Mapping\UserDocumentV2Mapper.fs" />
+    <Compile Include="Persistence\Mapping\ExerciseCategoryDocumentV2Mapper.fs" />
     <Compile Include="Persistence\MongoContext.fs" />
+    <Compile Include="Persistence\Repositories\EntityRepositoryBase.fs" />
+    <Compile Include="Persistence\Repositories\OwnedEntityRepositoryBase.fs" />
     <Compile Include="Persistence\Repositories\UserRepository.fs" />
     <Compile Include="Persistence\Repositories\UserRepositoryV2.fs" />
     <Compile Include="Persistence\Repositories\ExerciseCategoryRepository.fs" />

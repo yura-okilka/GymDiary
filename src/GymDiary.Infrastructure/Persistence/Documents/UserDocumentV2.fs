@@ -1,11 +1,7 @@
 namespace GymDiary.Infrastructure.Persistence.Documents
 
 open System
-open Common.Extensions
-open FsToolkit.ErrorHandling
-open GymDiary.Application.Workflows.Validation
-open GymDiary.Domain.Primitives.SharedTypes
-open GymDiary.Domain.Users
+open MongoDB.Bson.Serialization.Attributes
 
 type GenderDtoV2 =
     | Male = 1
@@ -20,44 +16,19 @@ type UserDocumentV2 = {
     LastName: string
     DateOfBirth: DateTime option
     Gender: GenderDtoV2 option
+    mutable CreatedOnUtc: DateTime
+    mutable UpdatedOnUtc: DateTime
 } with
 
-    static member fromDomain(domain: User) : UserDocumentV2 =
-        let genderToDto =
-            function
-            | Male -> GenderDtoV2.Male
-            | Female -> GenderDtoV2.Female
-            | Other -> GenderDtoV2.Other
+    interface IDocument with
+        member this.Id = this.Id
 
-        {
-            Id = domain.Id.Value
-            Email = domain.Email.Value
-            FirstName = domain.FirstName.Value
-            LastName = domain.LastName.Value
-            DateOfBirth = domain.DateOfBirth |> Option.map DateOnly.toDateTime
-            Gender = domain.Gender |> Option.map genderToDto
-        }
+        [<BsonIgnore>]
+        member this.CreatedOnUtc
+            with get () = this.CreatedOnUtc
+            and set value = this.CreatedOnUtc <- value
 
-    static member toDomain(document: UserDocumentV2) : Result<User, ValidationError> = result {
-        let dtoToGender field gender =
-            match gender with
-            | GenderDtoV2.Male -> Male |> Ok
-            | GenderDtoV2.Female -> Female |> Ok
-            | GenderDtoV2.Other -> Other |> Ok
-            | _ -> ValidationError(field, $"{gender} is not a valid {nameof (GenderDtoV2)}") |> Error
-
-        let! email = document.Email |> Validation.checkField (nameof document.Email) EmailAddress.create
-        let! firstName = document.FirstName |> Validation.checkField (nameof document.FirstName) String50.create
-        let! lastName = document.LastName |> Validation.checkField (nameof document.LastName) String50.create
-        let dateOfBirth = document.DateOfBirth |> Option.map DateOnly.FromDateTime
-        let! gender = document.Gender |> Option.traverseResult (dtoToGender (nameof document.Gender))
-
-        return {
-            Id = Id(document.Id)
-            Email = email
-            FirstName = firstName
-            LastName = lastName
-            DateOfBirth = dateOfBirth
-            Gender = gender
-        }
-    }
+        [<BsonIgnore>]
+        member this.UpdatedOnUtc
+            with get () = this.UpdatedOnUtc
+            and set value = this.UpdatedOnUtc <- value

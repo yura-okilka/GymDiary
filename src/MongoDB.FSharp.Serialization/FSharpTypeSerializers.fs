@@ -24,7 +24,7 @@ type FSharpTypeSerializationProvider() =
                 |> createInstance
                 |> asBsonSerializer
             else
-                failwith $"Failed to find serializer for type: {objType.FullName}" // TODO: test
+                Operators.Unchecked.defaultof<IBsonSerializer>
 
 module FSharpTypeSerializers =
     let mutable private isRegistered = false

@@ -20,7 +20,7 @@ type ConfigurationExtensions() =
         | value -> value
 
     [<Extension>]
-    static member GetConnectionStringOrThrow (configuration: IConfiguration) (name: string) : string =
+    static member GetConnectionStringOrThrow(configuration: IConfiguration, name: string) : string =
         match configuration.GetConnectionString(name) with
         | null -> raise (InvalidOperationException($"Connection string {name} was not found"))
         | value -> value

@@ -1,8 +1,10 @@
 module GymDiary.Application.ExerciseCategories.CreateExerciseCategoryWorkflow
 
+open System
 open System.Runtime.CompilerServices
 open FsToolkit.ErrorHandling
 open Microsoft.Extensions.Logging
+open GymDiary.Application.Time
 open GymDiary.Application.Persistence
 open GymDiary.Application.Workflows
 open GymDiary.Application.Workflows.Validation
@@ -23,24 +25,30 @@ type public CommandError =
     static member ownerNotFound id = Error(OwnerNotFound(UserNotFoundError(id)))
 
 type public Handler
-    (idProvider: IIdProvider, userRepository: IUserRepository, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    (
+        clock: IClock,
+        entityIdProvider: IEntityIdProvider,
+        userRepository: IUserRepository,
+        categoryRepository: IExerciseCategoryRepository,
+        logger: ILogger<Handler>
+    ) =
     member _.Handle command =
         asyncResult {
             let! category =
                 validation {
-                    let! id = idProvider.GenerateId() |> Ok
+                    let! id = entityIdProvider.GenerateId() |> Ok
                     and! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
-                    and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) idProvider.TryParseResult
-                    return ExerciseCategory.create id name ownerId
+                    and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) entityIdProvider.TryParseResult
+                    return ExerciseCategory.create id name ownerId clock.UtcNow
                 }
                 |> Result.mapError InvalidCommand
 
-            let! ownerExists = userRepository.ExistWithId category.OwnerId
+            let! ownerExists = userRepository.ExistsWithId category.OwnerId
 
             if not ownerExists then
                 return! CommandError.ownerNotFound category.OwnerId.Value
 
-            let! categoryExists = categoryRepository.ExistWithName category.Name category.OwnerId
+            let! categoryExists = categoryRepository.ExistsWithName category.Name category.OwnerId
 
             if categoryExists then
                 return! CommandError.categoryAlreadyExists category.Name.Value
@@ -57,7 +65,6 @@ type public Handler
         member this.Handle command = this.Handle command
 
 module ResultExtensions =
-    open System
 
     [<Extension>]
     let Match
