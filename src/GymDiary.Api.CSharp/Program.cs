@@ -1,4 +1,3 @@
-using GymDiary.Api.CSharp;
 using GymDiary.Api.CSharp.Endpoints;
 using GymDiary.Application;
 using GymDiary.Infrastructure.Persistence;
@@ -9,7 +8,7 @@ builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
-builder.Services.AddEndpoints(AssemblyReference.Assembly);
+builder.Services.AddGymDiaryEndpoints();
 builder.Services.AddGymDiaryApplication();
 builder.Services.AddGymDiaryInfrastructure();
 

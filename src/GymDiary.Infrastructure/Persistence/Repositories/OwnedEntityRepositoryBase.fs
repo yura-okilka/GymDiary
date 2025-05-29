@@ -25,7 +25,7 @@ type OwnedEntityRepositoryBase<'TEntity, 'TDocument when 'TDocument :> IDocument
             return
                 documentOption
                 |> Option.traverseResult mapper.MapToDomain
-                |> Result.valueOr (fun error -> raise (DocumentConversionExceptionV2(typeof<'TDocument>.Name, error)))
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<'TDocument>.Name, error)))
         }
 
         member _.GetAllByOwner ownerId = task {
@@ -36,5 +36,5 @@ type OwnedEntityRepositoryBase<'TEntity, 'TDocument when 'TDocument :> IDocument
                 documents
                 |> List.ofSeq
                 |> List.traverseResultM mapper.MapToDomain
-                |> Result.valueOr (fun error -> raise (DocumentConversionExceptionV2(typeof<'TDocument>.Name, error)))
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<'TDocument>.Name, error)))
         }

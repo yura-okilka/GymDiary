@@ -6,6 +6,9 @@ namespace GymDiary.Api.CSharp.Endpoints;
 
 public static class EndpointExtensions
 {
+    public static IServiceCollection AddGymDiaryEndpoints(this IServiceCollection services) =>
+        services.AddEndpoints(AssemblyReference.Assembly);
+
     public static IServiceCollection AddEndpoints(this IServiceCollection services, params Assembly[] assemblies)
     {
         var serviceDescriptors = assemblies

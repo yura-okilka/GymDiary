@@ -37,7 +37,7 @@ type EntityRepositoryBase<'TEntity, 'TDocument when 'TDocument :> IDocument>
             return
                 documentOption
                 |> Option.traverseResult mapper.MapToDomain
-                |> Result.valueOr (fun error -> raise (DocumentConversionExceptionV2(typeof<'TDocument>.Name, error)))
+                |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<'TDocument>.Name, error)))
         }
 
         member _.ExistsWithId id =
