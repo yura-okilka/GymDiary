@@ -62,7 +62,7 @@ type public Handler
         |> Async.StartAsTask
 
     interface IRequestHandler<Command, string, CommandError> with
-        member this.Handle command = this.Handle command
+        member h.Handle command = h.Handle command
 
 module ResultExtensions =
 

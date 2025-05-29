@@ -1,7 +1,6 @@
 namespace GymDiary.Infrastructure.Persistence.Documents
 
 open System
-open MongoDB.Bson.Serialization.Attributes
 
 type GenderDtoV2 =
     | Male = 1
@@ -16,19 +15,9 @@ type UserDocumentV2 = {
     LastName: string
     DateOfBirth: DateTime option
     Gender: GenderDtoV2 option
-    mutable CreatedOnUtc: DateTime
-    mutable UpdatedOnUtc: DateTime
+    CreatedOnUtc: DateTime
+    UpdatedOnUtc: DateTime
 } with
 
     interface IDocument with
-        member this.Id = this.Id
-
-        [<BsonIgnore>]
-        member this.CreatedOnUtc
-            with get () = this.CreatedOnUtc
-            and set value = this.CreatedOnUtc <- value
-
-        [<BsonIgnore>]
-        member this.UpdatedOnUtc
-            with get () = this.UpdatedOnUtc
-            and set value = this.UpdatedOnUtc <- value
+        member d.Id = d.Id

@@ -8,7 +8,7 @@ open System.ComponentModel.DataAnnotations
 type Id<'T> =
     | Id of string
 
-    member this.Value = let (Id value) = this in value
+    member i.Value = let (Id value) = i in value
 
 /// Constrained to be 50 chars or fewer
 [<Struct>]
@@ -16,7 +16,7 @@ type String50 =
     private
     | String50 of string
 
-    member this.Value = let (String50 value) = this in value
+    member s.Value = let (String50 value) = s in value
     static member create value = ConstrainedType.createString String50 (1, 50) value
 
 /// Constrained to be 200 chars or fewer
@@ -25,7 +25,7 @@ type String200 =
     private
     | String200 of string
 
-    member this.Value = let (String200 value) = this in value
+    member s.Value = let (String200 value) = s in value
     static member create value = ConstrainedType.createString String200 (1, 200) value
     static member createOption value = ConstrainedType.createStringOption String200 (1, 200) value
 
@@ -35,7 +35,7 @@ type String1k =
     private
     | String1k of string
 
-    member this.Value = let (String1k value) = this in value
+    member s.Value = let (String1k value) = s in value
     static member create value = ConstrainedType.createString String1k (1, 1000) value
     static member createOption value = ConstrainedType.createStringOption String1k (1, 1000) value
 
@@ -45,7 +45,7 @@ type PositiveInt =
     private
     | PositiveInt of int
 
-    member this.Value = let (PositiveInt value) = this in value
+    member i.Value = let (PositiveInt value) = i in value
 
     static member create value =
         ConstrainedType.createInt PositiveInt (1, Int32.MaxValue) value
@@ -56,7 +56,7 @@ type EmailAddress =
     private
     | EmailAddress of string
 
-    member this.Value = let (EmailAddress value) = this in value
+    member a.Value = let (EmailAddress value) = a in value
 
     static member create(value: string) =
         if EmailAddressAttribute().IsValid(value) then
@@ -70,7 +70,7 @@ type PhoneNumber =
     private
     | PhoneNumber of string
 
-    member this.Value = let (PhoneNumber value) = this in value
+    member n.Value = let (PhoneNumber value) = n in value
 
     static member create(value: string) =
         if PhoneAttribute().IsValid(value) then

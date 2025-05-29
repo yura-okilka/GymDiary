@@ -16,7 +16,7 @@ type UpdateEntityResult = Result<unit, UpdateEntityError>
 
 type IEntityRepository<'TEntity> =
     abstract member Create: 'TEntity -> Task<unit>
-    abstract member Update: Id<'TEntity> -> 'TEntity -> Task<UpdateEntityResult>
+    abstract member Update: 'TEntity -> Task<UpdateEntityResult>
     abstract member Delete: Id<'TEntity> -> Task<unit>
     abstract member Get: Id<'TEntity> -> Task<'TEntity option>
     abstract member ExistsWithId: Id<'TEntity> -> Task<bool>

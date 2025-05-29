@@ -2,7 +2,6 @@ namespace GymDiary.Infrastructure.Persistence.Repositories
 
 open FsToolkit.ErrorHandling
 open GymDiary.Application.Persistence
-open GymDiary.Application.Time
 open GymDiary.Infrastructure.Persistence
 open GymDiary.Infrastructure.Persistence.Documents
 open GymDiary.Infrastructure.Persistence.Mapping
@@ -10,17 +9,16 @@ open MongoDB.Driver
 
 [<AbstractClass>]
 type OwnedEntityRepositoryBase<'TEntity, 'TDocument when 'TDocument :> IDocumentWithOwner>
-    (mapper: IDocumentMapper<'TEntity, 'TDocument>, clock: IClock) =
-    inherit EntityRepositoryBase<'TEntity, 'TDocument>(mapper, clock)
+    (collection: IMongoCollection<'TDocument>, mapper: IDocumentMapper<'TEntity, 'TDocument>) =
+    inherit EntityRepositoryBase<'TEntity, 'TDocument>(collection, mapper)
 
     interface IOwnedEntityRepository<'TEntity> with
-
-        member r.GetOneByOwner id ownerId = task {
+        member _.GetOneByOwner id ownerId = task {
             let id = id.Value
             let ownerId = ownerId.Value
 
             let! documentOption =
-                r.Collection
+                collection
                     .Find(fun d -> d.Id = id && d.OwnerId = ownerId)
                     .SingleOrNoneAsync()
 
@@ -30,10 +28,9 @@ type OwnedEntityRepositoryBase<'TEntity, 'TDocument when 'TDocument :> IDocument
                 |> Result.valueOr (fun error -> raise (DocumentConversionExceptionV2(typeof<'TDocument>.Name, error)))
         }
 
-        member r.GetAllByOwner ownerId = task {
+        member _.GetAllByOwner ownerId = task {
             let ownerId = ownerId.Value
-
-            let! documents = r.Collection.Find(fun d -> d.OwnerId = ownerId).ToListAsync()
+            let! documents = collection.Find(fun d -> d.OwnerId = ownerId).ToListAsync()
 
             return
                 documents

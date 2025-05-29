@@ -12,12 +12,12 @@ type MongoObjectIdProvider() =
         | true, id -> id.ToString() |> Id |> Some
         | _ -> None
 
-    member this.TryParseResult value =
-        match this.TryParse value with
+    member p.TryParseResult value =
+        match p.TryParse value with
         | None -> Error $"{value} is not a valid {nameof ObjectId}" // TODO: check
         | Some id -> Ok id
 
     interface IEntityIdProvider with
-        member this.GenerateId() = this.GenerateId()
-        member this.TryParse value = this.TryParse value
-        member this.TryParseResult(value) = this.TryParseResult value
+        member p.GenerateId() = p.GenerateId()
+        member p.TryParse value = p.TryParse value
+        member p.TryParseResult value = p.TryParseResult value

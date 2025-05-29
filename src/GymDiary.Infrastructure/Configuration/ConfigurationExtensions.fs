@@ -14,7 +14,7 @@ type ConfigurationExtensions() =
         | value -> value
 
     [<Extension>]
-    static member GetValueOrThrow (configuration: IConfiguration) (name: string) : 'T =
+    static member GetValueOrThrow(configuration: IConfiguration, name: string) : 'T =
         match configuration.GetValue<'T>(name) with
         | null -> raise (InvalidOperationException($"Value {name} was not found"))
         | value -> value

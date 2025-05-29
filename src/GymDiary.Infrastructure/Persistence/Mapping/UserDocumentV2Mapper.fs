@@ -35,7 +35,7 @@ type UserDocumentV2Mapper() =
                 | GenderDtoV2.Male -> Male |> Ok
                 | GenderDtoV2.Female -> Female |> Ok
                 | GenderDtoV2.Other -> Other |> Ok
-                | _ -> ValidationError(field, $"{gender} is not a valid {nameof (GenderDtoV2)}") |> Error
+                | _ -> ValidationError(field, $"{gender} is not a valid {nameof GenderDtoV2}") |> Error
 
             let! email = document.Email |> Validation.checkField (nameof document.Email) EmailAddress.create
             let! firstName = document.FirstName |> Validation.checkField (nameof document.FirstName) String50.create
