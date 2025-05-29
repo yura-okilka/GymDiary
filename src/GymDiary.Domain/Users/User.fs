@@ -33,10 +33,11 @@ module User =
         UpdatedOnUtc = utcNow
     }
 
-    let update firstName lastName dateOfBirth gender user = {
+    let update firstName lastName dateOfBirth gender user utcNow = {
         user with
             FirstName = firstName
             LastName = lastName
             DateOfBirth = dateOfBirth
             Gender = gender
+            UpdatedOnUtc = utcNow
     }

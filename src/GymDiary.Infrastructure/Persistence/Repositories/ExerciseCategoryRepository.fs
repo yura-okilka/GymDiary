@@ -7,8 +7,8 @@ open GymDiary.Infrastructure.Persistence.Documents
 open GymDiary.Infrastructure.Persistence.Mapping
 open MongoDB.Driver
 
-type ExerciseCategoryRepositoryV2(context: IMongoContext, mapper: IDocumentMapper<ExerciseCategory, ExerciseCategoryDocumentV2>) =
-    inherit OwnedEntityRepositoryBase<ExerciseCategory, ExerciseCategoryDocumentV2>(context.ExerciseCategoriesV2, mapper)
+type ExerciseCategoryRepository(context: IMongoContext, mapper: IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument>) =
+    inherit OwnedEntityRepositoryBase<ExerciseCategory, ExerciseCategoryDocument>(context.ExerciseCategories, mapper)
 
     interface IExerciseCategoryRepository with
         member _.ExistsWithName name ownerId =
@@ -16,6 +16,6 @@ type ExerciseCategoryRepositoryV2(context: IMongoContext, mapper: IDocumentMappe
             let ownerId = ownerId.Value
 
             // Consider using case-insensitive index for large collections.
-            context.ExerciseCategoriesV2
+            context.ExerciseCategories
                 .Find(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId)
                 .AnyAsync()

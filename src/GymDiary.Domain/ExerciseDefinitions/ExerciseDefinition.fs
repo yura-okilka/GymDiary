@@ -13,6 +13,8 @@ type ExerciseDefinition = {
     RestTime: TimeSpan
     Sets: ExerciseSet list
     OwnerId: Id<User>
+    CreatedOnUtc: DateTime
+    UpdatedOnUtc: DateTime
 }
 
 type ExerciseDefinitionId = Id<ExerciseDefinition>
@@ -26,7 +28,7 @@ module ExerciseDefinition =
         else
             Ok()
 
-    let create id categoryId name notes restTime sets ownerId : Result<ExerciseDefinition, string> =
+    let create id categoryId name notes restTime sets ownerId utcNow : Result<ExerciseDefinition, string> =
         match validateSets sets with
         | Error message -> Error message
         | Ok() ->
@@ -38,9 +40,11 @@ module ExerciseDefinition =
                 RestTime = restTime
                 Sets = sets
                 OwnerId = ownerId
+                CreatedOnUtc = utcNow
+                UpdatedOnUtc = utcNow
             }
 
-    let update categoryId name notes restTime sets definition : Result<ExerciseDefinition, string> =
+    let update categoryId name notes restTime sets definition utcNow : Result<ExerciseDefinition, string> =
         match validateSets sets with
         | Error message -> Error message
         | Ok() ->
@@ -51,4 +55,6 @@ module ExerciseDefinition =
                     Notes = notes
                     RestTime = restTime
                     Sets = sets
+                    CreatedOnUtc = utcNow
+                    UpdatedOnUtc = utcNow
             }

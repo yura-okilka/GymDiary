@@ -14,12 +14,14 @@ type Routine = {
     Schedule: DayOfWeek Set
     Exercises: Id<ExerciseDefinition> Set
     OwnerId: Id<User>
+    CreatedOnUtc: DateTime
+    UpdatedOnUtc: DateTime
 }
 
 type RoutineId = Id<Routine>
 
 module Routine =
-    let create id name goal notes schedule exercises ownerId : Result<Routine, string> =
+    let create id name goal notes schedule exercises ownerId utcNow : Result<Routine, string> =
         if Set.isEmpty exercises then
             Error "Routine must have at least one exercise"
         else
@@ -31,13 +33,16 @@ module Routine =
                 Schedule = schedule
                 Exercises = exercises
                 OwnerId = ownerId
+                CreatedOnUtc = utcNow
+                UpdatedOnUtc = utcNow
             }
 
-    let update name goal notes schedule exercises routine = {
+    let update name goal notes schedule exercises routine utcNow = {
         routine with
             Name = name
             Goal = goal
             Notes = notes
             Schedule = schedule
             Exercises = exercises
+            UpdatedOnUtc = utcNow
     }

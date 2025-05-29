@@ -6,10 +6,10 @@ open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.ExerciseCategories
 
-type ExerciseCategoryDocumentV2Mapper() =
-    interface IDocumentMapper<ExerciseCategory, ExerciseCategoryDocumentV2> with
+type ExerciseCategoryDocumentMapper() =
+    interface IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument> with
 
-        member _.MapFromDomain(domain: ExerciseCategory) : ExerciseCategoryDocumentV2 = {
+        member _.MapFromDomain(domain: ExerciseCategory) : ExerciseCategoryDocument = {
             Id = domain.Id.Value
             Name = domain.Name.Value
             OwnerId = domain.OwnerId.Value
@@ -17,7 +17,7 @@ type ExerciseCategoryDocumentV2Mapper() =
             UpdatedOnUtc = domain.UpdatedOnUtc
         }
 
-        member _.MapToDomain(document: ExerciseCategoryDocumentV2) : Result<ExerciseCategory, ValidationError> = result {
+        member _.MapToDomain(document: ExerciseCategoryDocument) : Result<ExerciseCategory, ValidationError> = result {
             let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create
 
             return {

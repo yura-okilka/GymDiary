@@ -23,4 +23,8 @@ module ExerciseCategory =
         UpdatedOnUtc = utcNow
     }
 
-    let rename name category = { category with Name = name }
+    let rename name category utcNow = {
+        category with
+            Name = name
+            UpdatedOnUtc = utcNow
+    }

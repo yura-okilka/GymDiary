@@ -16,7 +16,7 @@ type ExerciseDefinitionSnapshotDto = {
     Name: string
     Notes: string option
     RestTime: TimeSpan
-    Sets: ExerciseSetsDto
+    Sets: ExerciseSetDto
     OwnerId: string
 }
 
@@ -33,7 +33,7 @@ type RoutineSnapshotDto = {
 [<CLIMutable>]
 type ExerciseDto = {
     Definition: ExerciseDefinitionSnapshotDto
-    Sets: ExerciseSetsDto
+    Sets: ExerciseSetDto
     StartedOn: DateTime
     CompletedOn: DateTime
 }

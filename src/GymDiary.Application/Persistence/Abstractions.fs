@@ -26,13 +26,13 @@ type IOwnedEntityRepository<'TEntity> =
     abstract member GetOneByOwner: Id<'TEntity> -> UserId -> Task<'TEntity option>
     abstract member GetAllByOwner: UserId -> Task<'TEntity list>
 
+type IUserRepository =
+    inherit IEntityRepository<User>
+    abstract member ExistsWithEmail: EmailAddress -> Task<bool>
+
 type IExerciseCategoryRepository =
     inherit IOwnedEntityRepository<ExerciseCategory>
     abstract member ExistsWithName: String50 -> UserId -> Task<bool>
 
 type IExerciseDefinitionRepository =
     inherit IOwnedEntityRepository<ExerciseDefinition>
-
-type IUserRepository =
-    inherit IEntityRepository<User>
-    abstract member ExistsWithEmail: EmailAddress -> Task<bool>

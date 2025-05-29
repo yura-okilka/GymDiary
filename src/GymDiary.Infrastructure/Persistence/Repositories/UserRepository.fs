@@ -7,10 +7,10 @@ open GymDiary.Infrastructure.Persistence.Documents
 open GymDiary.Infrastructure.Persistence.Mapping
 open MongoDB.Driver
 
-type UserRepositoryV2(context: IMongoContext, mapper: IDocumentMapper<User, UserDocumentV2>) =
-    inherit EntityRepositoryBase<User, UserDocumentV2>(context.UsersV2, mapper)
+type UserRepository(context: IMongoContext, mapper: IDocumentMapper<User, UserDocument>) =
+    inherit EntityRepositoryBase<User, UserDocument>(context.Users, mapper)
 
     interface IUserRepository with
         member _.ExistsWithEmail email =
             let email = email.Value
-            context.UsersV2.Find(fun d -> d.Email = email).AnyAsync()
+            context.Users.Find(fun d -> d.Email = email).AnyAsync()

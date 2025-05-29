@@ -8,15 +8,15 @@ open GymDiary.Infrastructure.Persistence.Documents
 open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.Primitives.SharedTypes
 
-type UserDocumentV2Mapper() =
-    interface IDocumentMapper<User, UserDocumentV2> with
+type UserDocumentMapper() =
+    interface IDocumentMapper<User, UserDocument> with
 
-        member _.MapFromDomain(domain: User) : UserDocumentV2 =
+        member _.MapFromDomain(domain: User) : UserDocument =
             let genderToDto =
                 function
-                | Male -> GenderDtoV2.Male
-                | Female -> GenderDtoV2.Female
-                | Other -> GenderDtoV2.Other
+                | Male -> GenderDto.Male
+                | Female -> GenderDto.Female
+                | Other -> GenderDto.Other
 
             {
                 Id = domain.Id.Value
@@ -29,13 +29,13 @@ type UserDocumentV2Mapper() =
                 UpdatedOnUtc = domain.UpdatedOnUtc
             }
 
-        member _.MapToDomain(document: UserDocumentV2) : Result<User, ValidationError> = result {
+        member _.MapToDomain(document: UserDocument) : Result<User, ValidationError> = result {
             let dtoToGender field gender =
                 match gender with
-                | GenderDtoV2.Male -> Male |> Ok
-                | GenderDtoV2.Female -> Female |> Ok
-                | GenderDtoV2.Other -> Other |> Ok
-                | _ -> ValidationError(field, $"{gender} is not a valid {nameof GenderDtoV2}") |> Error
+                | GenderDto.Male -> Male |> Ok
+                | GenderDto.Female -> Female |> Ok
+                | GenderDto.Other -> Other |> Ok
+                | _ -> ValidationError(field, $"{gender} is not a valid {nameof GenderDto}") |> Error
 
             let! email = document.Email |> Validation.checkField (nameof document.Email) EmailAddress.create
             let! firstName = document.FirstName |> Validation.checkField (nameof document.FirstName) String50.create

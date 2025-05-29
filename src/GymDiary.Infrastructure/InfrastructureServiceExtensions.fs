@@ -4,8 +4,8 @@ namespace GymDiary.Infrastructure.Persistence
 
 open System
 open System.Runtime.CompilerServices
+open GymDiary.Application.Persistence
 open GymDiary.Application.Time
-open GymDiary.Core.Persistence
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Users
 open GymDiary.Infrastructure.Configuration
@@ -34,9 +34,9 @@ type InfrastructureServiceExtensions() =
                         .GetConnectionStringOrThrow("gymdiary-db")
                 ))
             .AddSingleton<IMongoContext, MongoContext>()
-            .AddSingleton<IDocumentMapper<User, UserDocumentV2>, UserDocumentV2Mapper>()
-            .AddSingleton<IDocumentMapper<ExerciseCategory, ExerciseCategoryDocumentV2>, ExerciseCategoryDocumentV2Mapper>()
-            .AddSingleton<GymDiary.Application.Persistence.IEntityIdProvider, MongoObjectIdProvider>()
-            .AddSingleton<GymDiary.Application.Persistence.IUserRepository, UserRepositoryV2>()
-            .AddSingleton<GymDiary.Application.Persistence.IExerciseCategoryRepository, ExerciseCategoryRepositoryV2>()
+            .AddSingleton<IDocumentMapper<User, UserDocument>, UserDocumentMapper>()
+            .AddSingleton<IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument>, ExerciseCategoryDocumentMapper>()
+            .AddSingleton<IEntityIdProvider, MongoObjectIdProvider>()
+            .AddSingleton<IUserRepository, UserRepository>()
+            .AddSingleton<IExerciseCategoryRepository, ExerciseCategoryRepository>()
             .AddSingleton<IExerciseDefinitionRepository, ExerciseDefinitionRepository>()
