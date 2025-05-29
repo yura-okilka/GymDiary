@@ -24,9 +24,7 @@
     <Compile Include="Persistence\MongoContext.fs" />
     <Compile Include="Persistence\Repositories\EntityRepositoryBase.fs" />
     <Compile Include="Persistence\Repositories\OwnedEntityRepositoryBase.fs" />
-    <Compile Include="Persistence\Repositories\UserRepository.fs" />
     <Compile Include="Persistence\Repositories\UserRepositoryV2.fs" />
-    <Compile Include="Persistence\Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Persistence\Repositories\ExerciseCategoryRepositoryV2.fs" />
     <Compile Include="Persistence\Repositories\ExerciseDefinitionRepository.fs" />
     <Compile Include="InfrastructureServiceExtensions.fs" />
