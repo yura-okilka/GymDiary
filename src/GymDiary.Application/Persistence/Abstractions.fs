@@ -4,6 +4,7 @@ open System.Threading.Tasks
 open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.ExerciseCategories
+open GymDiary.Domain.Routines
 open GymDiary.Domain.Users
 
 type IEntityIdProvider =
@@ -36,3 +37,6 @@ type IExerciseCategoryRepository =
 
 type IExerciseDefinitionRepository =
     inherit IOwnedEntityRepository<ExerciseDefinition>
+
+type IRoutineRepository =
+    inherit IOwnedEntityRepository<Routine>

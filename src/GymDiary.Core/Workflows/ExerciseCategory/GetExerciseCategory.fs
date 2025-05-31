@@ -30,7 +30,6 @@ type IQueryHandler = IRequestHandler<Query, QueryResult, QueryError>
 
 type QueryHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
     interface IQueryHandler with
-
         member _.Handle query =
             asyncResult {
                 let! categoryId, ownerId =

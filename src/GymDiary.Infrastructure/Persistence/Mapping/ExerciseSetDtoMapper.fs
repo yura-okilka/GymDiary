@@ -8,7 +8,6 @@ open GymDiary.Application.Workflows.Validation
 
 type ExerciseSetDtoMapper() =
     interface IDocumentMapper<ExerciseSet, ExerciseSetDto> with
-
         member _.MapFromDomain(domain: ExerciseSet) : ExerciseSetDto =
             let setKindToDto =
                 function
@@ -34,7 +33,7 @@ type ExerciseSetDtoMapper() =
                 | ExerciseSetKindDto.Duration -> Duration |> Ok
                 | ExerciseSetKindDto.DurationWithWeight -> DurationWithWeight |> Ok
                 | ExerciseSetKindDto.DurationWithDistance -> DurationWithDistance |> Ok
-                | _ -> ValidationError(field, $"{value} is not a valid {nameof ExerciseSetKindDto}") |> Error // TODO: add helper function
+                | _ -> ValidationError.ofField field $"{value} is not a valid {nameof ExerciseSetKindDto}" |> Error
 
             let! kind = document.Kind |> dtoToSetKind (nameof document.Kind)
 

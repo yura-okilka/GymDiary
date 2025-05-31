@@ -8,7 +8,6 @@ open GymDiary.Domain.Primitives.SharedTypes
 
 type RoutineDocumentMapper() =
     interface IDocumentMapper<Routine, RoutineDocument> with
-
         member _.MapFromDomain(domain: Routine) : RoutineDocument = {
             Id = domain.Id.Value
             Name = domain.Name.Value

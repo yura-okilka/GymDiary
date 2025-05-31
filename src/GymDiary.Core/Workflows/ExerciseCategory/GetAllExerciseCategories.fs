@@ -20,7 +20,6 @@ type IQueryHandler = IRequestHandler<Query, ExerciseCategoryDto list, QueryError
 
 type QueryHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
     interface IQueryHandler with
-
         member _.Handle query =
             asyncResult {
                 let! ownerId = Id.tryCreate (nameof query.OwnerId) query.OwnerId |> Result.mapError InvalidQuery

@@ -9,7 +9,6 @@ open MongoDB.Driver
 
 type UserRepository(context: IMongoContext, mapper: IDocumentMapper<User, UserDocument>) =
     inherit EntityRepositoryBase<User, UserDocument>(context.Users, mapper)
-
     interface IUserRepository with
         member _.ExistsWithEmail email =
             let email = email.Value

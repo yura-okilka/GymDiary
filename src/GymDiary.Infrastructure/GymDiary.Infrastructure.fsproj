@@ -28,6 +28,7 @@
     <Compile Include="Persistence\Repositories\UserRepository.fs" />
     <Compile Include="Persistence\Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Persistence\Repositories\ExerciseDefinitionRepository.fs" />
+    <Compile Include="Persistence\Repositories\RoutineRepository.fs" />
     <Compile Include="InfrastructureServiceExtensions.fs" />
   </ItemGroup>
 

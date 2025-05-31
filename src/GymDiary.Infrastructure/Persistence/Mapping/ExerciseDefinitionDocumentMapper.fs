@@ -8,7 +8,6 @@ open GymDiary.Domain.Primitives.SharedTypes
 
 type ExerciseDefinitionDocumentMapper(setDtoMapper: IDocumentMapper<ExerciseSet, ExerciseSetDto>) =
     interface IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument> with
-
         member _.MapFromDomain(domain: ExerciseDefinition) : ExerciseDefinitionDocument = {
             Id = domain.Id.Value
             CategoryId = domain.CategoryId.Value

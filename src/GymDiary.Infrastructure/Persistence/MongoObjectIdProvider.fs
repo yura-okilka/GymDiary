@@ -5,11 +5,11 @@ open GymDiary.Application.Persistence
 open MongoDB.Bson
 
 type MongoObjectIdProvider() =
-    member _.GenerateId() = ObjectId.GenerateNewId().ToString() |> Id
+    member _.GenerateId() = Id(ObjectId.GenerateNewId().ToString())
 
     member _.TryParse value =
         match ObjectId.TryParse value with
-        | true, id -> id.ToString() |> Id |> Some
+        | true, id -> Some(Id(id.ToString()))
         | _ -> None
 
     member p.TryParseResult value =

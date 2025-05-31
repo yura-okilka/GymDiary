@@ -10,7 +10,6 @@ open Microsoft.AspNetCore.Mvc
 
 type OxpeckerExceptionHandler(problemDetailsService: IProblemDetailsService) =
     interface IExceptionHandler with
-
         member _.TryHandleAsync(httpContext: HttpContext, ex: Exception, cancellationToken: CancellationToken) : ValueTask<bool> =
             task {
                 // TODO: use in .NET 9 https://www.milanjovanovic.tech/blog/problem-details-for-aspnetcore-apis#handling-specific-exceptions-status-codes

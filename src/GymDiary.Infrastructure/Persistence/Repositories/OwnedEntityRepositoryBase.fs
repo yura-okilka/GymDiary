@@ -11,7 +11,6 @@ open MongoDB.Driver
 type OwnedEntityRepositoryBase<'TEntity, 'TDocument when 'TDocument :> IDocumentWithOwner>
     (collection: IMongoCollection<'TDocument>, mapper: IDocumentMapper<'TEntity, 'TDocument>) =
     inherit EntityRepositoryBase<'TEntity, 'TDocument>(collection, mapper)
-
     interface IOwnedEntityRepository<'TEntity> with
         member _.GetOneByOwner id ownerId = task {
             let id = id.Value

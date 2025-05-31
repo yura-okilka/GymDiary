@@ -8,7 +8,6 @@ open GymDiary.Domain.ExerciseCategories
 
 type ExerciseCategoryDocumentMapper() =
     interface IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument> with
-
         member _.MapFromDomain(domain: ExerciseCategory) : ExerciseCategoryDocument = {
             Id = domain.Id.Value
             Name = domain.Name.Value

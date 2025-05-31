@@ -19,7 +19,6 @@ type ICommandHandler = IRequestHandler<Command, unit, CommandError>
 
 type CommandHandler(categoryRepository: IExerciseCategoryRepository, logger: ILogger) =
     interface ICommandHandler with
-
         member _.Handle command =
             asyncResult {
                 let! categoryId, ownerId =

@@ -8,5 +8,4 @@ open GymDiary.Infrastructure.Persistence.Mapping
 
 type ExerciseDefinitionRepository(context: IMongoContext, mapper: IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument>) =
     inherit OwnedEntityRepositoryBase<ExerciseDefinition, ExerciseDefinitionDocument>(context.ExerciseDefinitions, mapper)
-
     interface IExerciseDefinitionRepository

@@ -10,7 +10,6 @@ open GymDiary.Domain.Primitives.SharedTypes
 
 type UserDocumentMapper() =
     interface IDocumentMapper<User, UserDocument> with
-
         member _.MapFromDomain(domain: User) : UserDocument =
             let genderToDto =
                 function
@@ -35,7 +34,7 @@ type UserDocumentMapper() =
                 | GenderDto.Male -> Male |> Ok
                 | GenderDto.Female -> Female |> Ok
                 | GenderDto.Other -> Other |> Ok
-                | _ -> ValidationError(field, $"{gender} is not a valid {nameof GenderDto}") |> Error
+                | _ -> ValidationError.ofField field $"{gender} is not a valid {nameof GenderDto}" |> Error
 
             let! email = document.Email |> Validation.checkField (nameof document.Email) EmailAddress.create
             let! firstName = document.FirstName |> Validation.checkField (nameof document.FirstName) String50.create

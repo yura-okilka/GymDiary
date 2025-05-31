@@ -11,5 +11,5 @@ type FindFluentExtensions() =
     [<Extension>]
     static member SingleOrNoneAsync(find: IFindFluent<'TDocument, 'TProjection>, ?ct: CancellationToken) : Task<'TProjection option> = task {
         let! projection = find.SingleOrDefaultAsync(defaultArg ct CancellationToken.None)
-        return Option.ofRecord projection // TODO: ofObj?
+        return Option.ofRecord projection
     }

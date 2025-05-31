@@ -9,7 +9,6 @@ open MongoDB.Driver
 
 type ExerciseCategoryRepository(context: IMongoContext, mapper: IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument>) =
     inherit OwnedEntityRepositoryBase<ExerciseCategory, ExerciseCategoryDocument>(context.ExerciseCategories, mapper)
-
     interface IExerciseCategoryRepository with
         member _.ExistsWithName name ownerId =
             let name = name.Value

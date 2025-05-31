@@ -44,7 +44,6 @@ type CommandHandler
         logger: ILogger
     ) =
     interface ICommandHandler with
-
         member _.Handle command =
             asyncResult {
                 let! validated =
