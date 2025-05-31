@@ -3,11 +3,7 @@ namespace GymDiary.Infrastructure.Persistence.Documents
 open System
 
 [<CLIMutable>]
-type ExerciseCategorySnapshotDto = {
-    Id: string
-    Name: string
-    OwnerId: string
-}
+type ExerciseCategorySnapshotDto = { Id: string; Name: string }
 
 [<CLIMutable>]
 type ExerciseDefinitionSnapshotDto = {
@@ -16,8 +12,7 @@ type ExerciseDefinitionSnapshotDto = {
     Name: string
     Notes: string option
     RestTime: TimeSpan
-    Sets: ExerciseSetDto
-    OwnerId: string
+    Sets: ExerciseSetDto list
 }
 
 [<CLIMutable>]
@@ -27,13 +22,12 @@ type RoutineSnapshotDto = {
     Goal: string option
     Notes: string option
     Schedule: DayOfWeek Set
-    OwnerId: string
 }
 
 [<CLIMutable>]
 type ExerciseDto = {
     Definition: ExerciseDefinitionSnapshotDto
-    Sets: ExerciseSetDto
+    Sets: ExerciseSetDto list
     StartedOn: DateTime
     CompletedOn: DateTime
 }
@@ -46,4 +40,8 @@ type WorkoutDocument = {
     StartedOn: DateTime
     CompletedOn: DateTime
     OwnerId: string
-}
+} with
+
+    interface IDocumentWithOwner with
+        member d.Id = d.Id
+        member d.OwnerId = d.OwnerId
