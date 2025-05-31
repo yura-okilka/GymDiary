@@ -21,6 +21,7 @@
     <Compile Include="Persistence\Mapping\ExerciseCategoryDocumentMapper.fs" />
     <Compile Include="Persistence\Mapping\ExerciseSetDtoMapper.fs" />
     <Compile Include="Persistence\Mapping\ExerciseDefinitionDocumentMapper.fs" />
+    <Compile Include="Persistence\Mapping\RoutineDocumentMapper.fs" />
     <Compile Include="Persistence\MongoContext.fs" />
     <Compile Include="Persistence\Repositories\EntityRepositoryBase.fs" />
     <Compile Include="Persistence\Repositories\OwnedEntityRepositoryBase.fs" />

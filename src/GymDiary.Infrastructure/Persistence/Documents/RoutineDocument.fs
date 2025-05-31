@@ -8,9 +8,13 @@ type RoutineDocument = {
     Name: string
     Goal: string option
     Notes: string option
-    Schedule: DayOfWeek list
-    ExerciseIds: string list
-    CreatedOn: DateTime
-    LastModifiedOn: DateTime
+    Schedule: DayOfWeek Set
+    ExerciseIds: string Set
     OwnerId: string
-}
+    CreatedOnUtc: DateTime
+    UpdatedOnUtc: DateTime
+} with
+
+    interface IDocumentWithOwner with
+        member d.Id = d.Id
+        member d.OwnerId = d.OwnerId

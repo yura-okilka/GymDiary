@@ -19,7 +19,7 @@ type ExerciseSetDtoMapper() =
                 | DurationWithDistance -> ExerciseSetKindDto.DurationWithDistance
 
             {
-                Kind = setKindToDto domain.Kind
+                Kind = domain.Kind |> setKindToDto
                 Repetitions = domain.Repetitions
                 Weight = float domain.Weight
                 Distance = float domain.Distance
