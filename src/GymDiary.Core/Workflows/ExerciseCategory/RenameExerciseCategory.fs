@@ -62,6 +62,6 @@ type CommandHandler(categoryRepository: IExerciseCategoryRepository, logger: ILo
                     |> AsyncResult.mapError (function
                         | EntityNotFound _ -> CommandError.categoryNotFound renamedCategory.Id renamedCategory.OwnerId)
 
-                logger.LogInformation("Exercise category with id '{id}' was renamed to '{name}'", command.Id, command.Name)
+                logger.LogInformation("Exercise category with id {id} was renamed to {name}", command.Id, command.Name)
             }
             |> Async.StartAsTask

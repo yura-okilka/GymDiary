@@ -32,6 +32,6 @@ type CommandHandler(categoryRepository: IExerciseCategoryRepository, logger: ILo
                 // TODO: ensure it can be deleted.
                 do! categoryRepository.Delete categoryId
 
-                logger.LogInformation("Exercise category with id '{id}' was deleted", command.Id)
+                logger.LogInformation("Exercise category with id {id} was deleted", command.Id)
             }
             |> Async.StartAsTask

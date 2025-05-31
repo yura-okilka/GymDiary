@@ -91,7 +91,7 @@ type CommandHandler
 
                 do! exerciseRepository.Create exercise
 
-                logger.LogInformation("Exercise definition was created with id '{id}'", exercise.Id)
+                logger.LogInformation("Exercise definition was created with id {id}", exercise.Id)
 
                 return exercise.Id |> Id.value
             }

@@ -63,7 +63,7 @@ type CommandHandler(idProvider: IIdProvider, userRepository: IUserRepository, lo
 
                 do! userRepository.Create user
 
-                logger.LogInformation("User was created with id '{id}'", user.Id)
+                logger.LogInformation("User was created with id {id}", user.Id)
 
                 return user.Id |> Id.value
             }

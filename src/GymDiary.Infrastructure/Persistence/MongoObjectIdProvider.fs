@@ -14,7 +14,7 @@ type MongoObjectIdProvider() =
 
     member p.TryParseResult value =
         match p.TryParse value with
-        | None -> Error $"{value} is not a valid {nameof ObjectId}" // TODO: check
+        | None -> Error $"{value} is not a valid {nameof ObjectId}"
         | Some id -> Ok id
 
     interface IEntityIdProvider with

@@ -52,7 +52,7 @@ type CommandHandler
 
                 do! categoryRepository.Create category
 
-                logger.LogInformation("Exercise category was created with id '{id}'", category.Id)
+                logger.LogInformation("Exercise category was created with id {id}", category.Id)
 
                 return category.Id |> Id.value
             }

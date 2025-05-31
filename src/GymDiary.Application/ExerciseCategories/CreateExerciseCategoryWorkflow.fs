@@ -55,7 +55,7 @@ type public Handler
 
             do! categoryRepository.Create category
 
-            logger.LogInformation("Exercise category was created with id '{id}'", category.Id.Value)
+            logger.LogInformation("Exercise category was created with id {id}", category.Id.Value)
 
             return category.Id.Value
         }
