@@ -28,7 +28,7 @@ type InfrastructureServiceExtensions() =
         // Create settings instance in the implementation factory to defer its creation and allow overriding IConfiguration in the test host.
         services
             .AddSingleton<IClock>(SystemClock(TimeProvider.System))
-            .AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow "MongoDb" (sp.GetRequiredService<IConfiguration>()))
+            .AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow (sp.GetRequiredService<IConfiguration>()))
             .AddSingleton<IMongoClient, MongoClient>(fun sp ->
                 new MongoClient(
                     sp

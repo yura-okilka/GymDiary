@@ -9,21 +9,21 @@ type MongoSettings = {
     Database: string
 } with
 
-    static member createFrom (section: string) (configuration: IConfiguration) : Result<MongoSettings, ValidationErrors> =
-        let settingsOption = configuration.GetSection(section).Get<MongoSettings>()
+    static member Section = "MongoDb"
 
-        match settingsOption with
-        | null -> ValidationErrors.create "settings" [ $"'{section}' settings must not be null" ] |> Error
+    static member createFrom(configuration: IConfiguration) : Result<MongoSettings, ValidationErrors> =
+        match configuration.GetSection(MongoSettings.Section).Get<MongoSettings>() with
+        | null -> ValidationErrors.create "settings" [ $"{MongoSettings.Section} settings must not be null" ] |> Error
         | settings -> validate {
             let! _ = Check.String.notEmpty (nameof settings.Database) settings.Database
             return settings
           }
 
-    static member createFromOrThrow (section: string) (configuration: IConfiguration) : MongoSettings =
-        match MongoSettings.createFrom section configuration with
+    static member createFromOrThrow(configuration: IConfiguration) : MongoSettings =
+        match MongoSettings.createFrom configuration with
         | Ok settings -> settings
         | Error errors ->
             errors
             |> ValidationErrors.toList
             |> String.concat "; "
-            |> fun msg -> failwith $"Invalid '{section}' settings: {msg}"
+            |> fun msg -> failwith $"Invalid {MongoSettings.Section} settings: {msg}"
