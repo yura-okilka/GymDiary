@@ -22,19 +22,14 @@ open MongoDB.Driver
 [<Extension>]
 type InfrastructureServiceExtensions() =
     [<Extension>]
-    static member AddGymDiaryInfrastructure(services: IServiceCollection) : IServiceCollection =
+    static member private AddPersistence(services: IServiceCollection) : IServiceCollection =
         SerializationSettings.register ()
 
         // Create settings instance in the implementation factory to defer its creation and allow overriding IConfiguration in the test host.
         services
-            .AddSingleton<IClock>(SystemClock(TimeProvider.System))
             .AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow (sp.GetRequiredService<IConfiguration>()))
             .AddSingleton<IMongoClient, MongoClient>(fun sp ->
-                new MongoClient(
-                    sp
-                        .GetRequiredService<IConfiguration>()
-                        .GetConnectionStringOrThrow("gymdiary-db")
-                ))
+                new MongoClient(sp.GetRequiredService<IConfiguration>().GetConnectionStringOrThrow("gymdiary-db")))
             .AddSingleton<IMongoContext, MongoContext>()
             .AddSingleton<IEntityIdProvider, MongoObjectIdProvider>()
 
@@ -48,3 +43,7 @@ type InfrastructureServiceExtensions() =
             .AddSingleton<IExerciseCategoryRepository, ExerciseCategoryRepository>()
             .AddSingleton<IExerciseDefinitionRepository, ExerciseDefinitionRepository>()
             .AddSingleton<IRoutineRepository, RoutineRepository>()
+
+    [<Extension>]
+    static member AddGymDiaryInfrastructure(services: IServiceCollection) : IServiceCollection =
+        services.AddSingleton<IClock>(SystemClock(TimeProvider.System)).AddPersistence()
