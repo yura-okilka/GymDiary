@@ -13,7 +13,7 @@ module DomainErrors =
             ExerciseCategoryNotFoundError(id |> Id.value, ownerId |> Id.value)
 
         static member toString(ExerciseCategoryNotFoundError(id, ownerId)) =
-            $"Exercise category with id %s{id} and owner %s{ownerId} is not found"
+            $"Exercise category with id %s{id} and owner %s{ownerId} was not found"
 
     type ExerciseCategoryAlreadyExistsError =
         | ExerciseCategoryAlreadyExistsError of name: string
@@ -35,4 +35,4 @@ module DomainErrors =
 
         static member create(id: UserId) = OwnerNotFoundError(id |> Id.value)
 
-        static member toString(OwnerNotFoundError id) = $"Owner with id %s{id} is not found"
+        static member toString(OwnerNotFoundError id) = $"Owner with id %s{id} was not found"

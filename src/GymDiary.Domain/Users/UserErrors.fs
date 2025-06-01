@@ -9,4 +9,4 @@ type UserWithEmailAlreadyExistsError =
 type UserNotFoundError =
     | UserNotFoundError of id: string
 
-    static member toString(UserNotFoundError id) = $"User with id %s{id} is not found"
+    static member toString(UserNotFoundError id) = $"User with id %s{id} was not found"

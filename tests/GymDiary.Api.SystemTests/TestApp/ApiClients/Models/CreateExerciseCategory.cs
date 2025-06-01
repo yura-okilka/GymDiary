@@ -8,7 +8,7 @@ public static class CreateExerciseCategory
 
     public static ErrorResponse OwnerNotFoundError(string id) => new(
         "OwnerNotFound",
-        $"Owner with id {id} is not found",
+        $"Owner with id {id} was not found",
         Details: null
     );
 }
