@@ -19,9 +19,9 @@ type OptionSerializer<'T>() =
     override _.Deserialize(context, args) =
         let genericTypeArgument = typeof<'T>
 
-        let (unionCase, unionArgs) =
+        let unionCase, unionArgs =
             let value =
-                if (genericTypeArgument.IsPrimitive) then
+                if genericTypeArgument.IsPrimitive then
                     BsonSerializer.Deserialize(context.Reader, typeof<obj>)
                 else
                     BsonSerializer.Deserialize(context.Reader, genericTypeArgument)
