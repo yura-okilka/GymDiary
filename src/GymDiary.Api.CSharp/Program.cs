@@ -1,3 +1,4 @@
+using GymDiary.Api.CSharp.Authentication;
 using GymDiary.Api.CSharp.Endpoints;
 using GymDiary.Application;
 using GymDiary.Infrastructure.Persistence;
@@ -9,6 +10,7 @@ builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 builder.Services.AddGymDiaryEndpoints();
+builder.Services.AddGymDiaryAuthentication();
 builder.Services.AddGymDiaryApplication();
 builder.Services.AddGymDiaryInfrastructure();
 
