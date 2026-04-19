@@ -10,4 +10,6 @@ open Microsoft.Extensions.DependencyInjection
 type ApplicationServicesExtensions() =
     [<Extension>]
     static member AddGymDiaryApplication(services: IServiceCollection) : IServiceCollection =
-        services.AddSingleton<CreateExerciseCategoryWorkflow.Handler>()
+        services
+            .AddSingleton<CreateExerciseCategoryWorkflow.Handler>()
+            .AddSingleton<GetExerciseCategoryWorkflow.Handler>()

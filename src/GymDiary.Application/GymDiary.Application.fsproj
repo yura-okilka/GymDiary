@@ -14,6 +14,7 @@
     <Compile Include="Workflows\Abstractions.fs" />
     <Compile Include="Workflows\Validation.fs" />
     <Compile Include="ExerciseCategories\CreateExerciseCategoryWorkflow.fs" />
+    <Compile Include="ExerciseCategories\GetExerciseCategoryWorkflow.fs" />
     <Compile Include="ApplicationServicesExtensions.fs" />
   </ItemGroup>
 

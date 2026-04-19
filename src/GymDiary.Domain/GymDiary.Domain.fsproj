@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+
   <ItemGroup>
     <Compile Include="Primitives\ConstrainedType.fs" />
     <Compile Include="Primitives\SharedTypes.fs" />
     <Compile Include="Users\User.fs" />
-    <Compile Include="Users\UserErrors.fs" />
     <Compile Include="ExerciseCategories\ExerciseCategory.fs" />
-    <Compile Include="ExerciseCategories\ExerciseCategoryErrors.fs" />
     <Compile Include="ExerciseDefinitions\ExerciseSet.fs" />
     <Compile Include="ExerciseDefinitions\ExerciseDefinition.fs" />
     <Compile Include="Routines\Routine.fs" />

@@ -8,7 +8,8 @@ public static class AuthenticationServiceExtensions
     {
         services
             .AddHttpContextAccessor()
-            .AddTransient<IUserContext, HttpUserContext>();
+            // TODO: swap FakeUserContext for HttpUserContext once real authentication is wired up.
+            .AddTransient<IUserContext, FakeUserContext>();
 
         return services;
     }

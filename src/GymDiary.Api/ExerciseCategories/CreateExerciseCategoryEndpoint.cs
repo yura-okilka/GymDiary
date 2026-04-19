@@ -21,7 +21,7 @@ public class CreateExerciseCategoryEndpoint : IEndpoint
                     var result = await handler.Handle(new CreateExerciseCategoryWorkflow.Command(request.Name, userContext.UserId));
 
                     return result.Match<IResult>(
-                        id => TypedResults.CreatedAtRoute(new Response(id), nameof(GetExerciseCategory), new { id }),
+                        id => TypedResults.CreatedAtRoute(new Response(id), nameof(GetExerciseCategoryEndpoint), new { id }),
                         onInvalidCommand: e => TypedResults.ValidationProblem(e.ToProblemDictionary()),
                         onCategoryAlreadyExists: e => TypedResults.Problem(new ProblemDetails
                         {
