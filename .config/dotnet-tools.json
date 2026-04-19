@@ -6,7 +6,15 @@
       "version": "6.2.3",
       "commands": [
         "fantomas"
-      ]
+      ],
+      "rollForward": false
+    },
+    "microsoft.openapi.kiota": {
+      "version": "1.31.1",
+      "commands": [
+        "kiota"
+      ],
+      "rollForward": false
     }
   }
 }

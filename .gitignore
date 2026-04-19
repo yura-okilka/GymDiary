@@ -397,3 +397,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 .idea/
+
+# Kiota-generated API client — only the lock file is tracked so regeneration is reproducible.
+src/GymDiary.ApiClient/Generated/*
+!src/GymDiary.ApiClient/Generated/kiota-lock.json
