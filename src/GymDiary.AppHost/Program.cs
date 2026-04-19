@@ -1,3 +1,5 @@
+using GymDiary.AppHost;
+
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -5,7 +7,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var mongoUsername = builder.AddParameter("mongo-username", "admin");
 var mongoPassword = builder.AddParameter("mongo-password", "admin", secret: true);
 
-var mongoDb = builder.AddMongoDB("mongo-db", userName: mongoUsername, password: mongoPassword)
+var mongoDb = builder.AddMongoDB(ResourceNames.MongoDb, userName: mongoUsername, password: mongoPassword)
     .WithContainerName("gymdiary-mongodb")
     .WithLifetime(ContainerLifetime.Persistent)
     .WithEndpoint("tcp",
@@ -16,9 +18,9 @@ var mongoDb = builder.AddMongoDB("mongo-db", userName: mongoUsername, password: 
             ep.IsProxied = false;
         });
 
-var gymDiaryDb = mongoDb.AddDatabase("gymdiary-db", "gymDiary");
+var gymDiaryDb = mongoDb.AddDatabase(ResourceNames.GymDiaryDb, "gymDiary");
 
-var api = builder.AddProject<GymDiary_Api>("api")
+var api = builder.AddProject<GymDiary_Api>(ResourceNames.Api)
     .WithHttpHealthCheck("/health")
     .WithReference(gymDiaryDb)
     .WaitFor(gymDiaryDb);

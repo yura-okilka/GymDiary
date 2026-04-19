@@ -11,6 +11,7 @@
     <!-- API -->
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.2.2" />
     <PackageVersion Include="Aspire.Hosting.MongoDB" Version="13.2.2" />
+    <PackageVersion Include="Aspire.Hosting.Testing" Version="13.2.2" />
     <PackageVersion Include="Oxpecker" Version="2.0.0" />
     <PackageVersion Include="Oxpecker.OpenApi" Version="2.1.1" />
     <PackageVersion Include="Scalar.AspNetCore" Version="2.14.1" />
