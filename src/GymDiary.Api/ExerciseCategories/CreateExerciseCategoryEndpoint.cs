@@ -6,8 +6,6 @@ using GymDiary.Application.ExerciseCategories;
 
 using Microsoft.AspNetCore.Mvc;
 
-using static GymDiary.Application.ExerciseCategories.CreateExerciseCategoryWorkflow.ResultExtensions;
-
 namespace GymDiary.Api.ExerciseCategories;
 
 public class CreateExerciseCategoryEndpoint : IEndpoint

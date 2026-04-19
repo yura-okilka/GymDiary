@@ -1,4 +1,4 @@
-module GymDiary.Application.ExerciseCategories.CreateExerciseCategoryWorkflow
+namespace GymDiary.Application.ExerciseCategories
 
 open System
 open System.Runtime.CompilerServices
@@ -12,64 +12,66 @@ open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.Users
 
-type public Command = { Name: string; OwnerId: string }
+module CreateExerciseCategoryWorkflow =
 
-type public CommandError =
-    | InvalidCommand of ValidationError list
-    | CategoryAlreadyExists of ExerciseCategoryAlreadyExistsError
-    | OwnerNotFound of UserNotFoundError
+    type public Command = { Name: string; OwnerId: string }
 
-    static member categoryAlreadyExists name =
-        Error(CategoryAlreadyExists(ExerciseCategoryAlreadyExistsError(name)))
+    type public CommandError =
+        | InvalidCommand of ValidationError list
+        | CategoryAlreadyExists of ExerciseCategoryAlreadyExistsError
+        | OwnerNotFound of UserNotFoundError
 
-    static member ownerNotFound id = Error(OwnerNotFound(UserNotFoundError(id)))
+        static member categoryAlreadyExists name =
+            Error(CategoryAlreadyExists(ExerciseCategoryAlreadyExistsError(name)))
 
-type public Handler
-    (
-        clock: IClock,
-        entityIdProvider: IEntityIdProvider,
-        userRepository: IUserRepository,
-        categoryRepository: IExerciseCategoryRepository,
-        logger: ILogger<Handler>
-    ) =
-    member _.Handle command =
-        asyncResult {
-            let! category =
-                validation {
-                    let! id = entityIdProvider.GenerateId() |> Ok
-                    and! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
-                    and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) entityIdProvider.TryParseResult
-                    return ExerciseCategory.create id name ownerId clock.UtcNow
-                }
-                |> Result.mapError InvalidCommand
+        static member ownerNotFound id = Error(OwnerNotFound(UserNotFoundError(id)))
 
-            let! ownerExists = userRepository.ExistsWithId category.OwnerId
+    type public Handler
+        (
+            clock: IClock,
+            entityIdProvider: IEntityIdProvider,
+            userRepository: IUserRepository,
+            categoryRepository: IExerciseCategoryRepository,
+            logger: ILogger<Handler>
+        ) =
+        member _.Handle command =
+            asyncResult {
+                let! category =
+                    validation {
+                        let! id = entityIdProvider.GenerateId() |> Ok
+                        and! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
+                        and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) entityIdProvider.TryParseResult
+                        return ExerciseCategory.create id name ownerId clock.UtcNow
+                    }
+                    |> Result.mapError InvalidCommand
 
-            if not ownerExists then
-                return! CommandError.ownerNotFound category.OwnerId.Value
+                let! ownerExists = userRepository.ExistsWithId category.OwnerId
 
-            let! categoryExists = categoryRepository.ExistsWithName category.Name category.OwnerId
+                if not ownerExists then
+                    return! CommandError.ownerNotFound category.OwnerId.Value
 
-            if categoryExists then
-                return! CommandError.categoryAlreadyExists category.Name.Value
+                let! categoryExists = categoryRepository.ExistsWithName category.Name category.OwnerId
 
-            do! categoryRepository.Create category
+                if categoryExists then
+                    return! CommandError.categoryAlreadyExists category.Name.Value
 
-            logger.LogInformation("Exercise category was created with id {id}", category.Id.Value)
+                do! categoryRepository.Create category
 
-            return category.Id.Value
-        }
-        |> Async.StartAsTask
+                logger.LogInformation("Exercise category was created with id {id}", category.Id.Value)
 
-    interface IRequestHandler<Command, string, CommandError> with
-        member h.Handle command = h.Handle command
+                return category.Id.Value
+            }
+            |> Async.StartAsTask
 
-module ResultExtensions =
+        interface IRequestHandler<Command, string, CommandError> with
+            member h.Handle command = h.Handle command
+
+module CreateExerciseCategoryResultExtensions =
 
     [<Extension>]
     let Match
         (
-            result: Result<string, CommandError>,
+            result: Result<string, CreateExerciseCategoryWorkflow.CommandError>,
             onOk: Func<_, _>,
             onInvalidCommand: Func<_, _>,
             onCategoryAlreadyExists: Func<_, _>,
@@ -79,6 +81,6 @@ module ResultExtensions =
         | Ok v -> onOk.Invoke(v)
         | Error error ->
             match error with
-            | InvalidCommand e -> onInvalidCommand.Invoke(e)
-            | CategoryAlreadyExists e -> onCategoryAlreadyExists.Invoke(e)
-            | OwnerNotFound e -> onOwnerNotFound.Invoke(e)
+            | CreateExerciseCategoryWorkflow.InvalidCommand e -> onInvalidCommand.Invoke(e)
+            | CreateExerciseCategoryWorkflow.CategoryAlreadyExists e -> onCategoryAlreadyExists.Invoke(e)
+            | CreateExerciseCategoryWorkflow.OwnerNotFound e -> onOwnerNotFound.Invoke(e)
