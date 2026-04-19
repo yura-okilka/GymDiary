@@ -1,4 +1,5 @@
 using GymDiary.Api.Endpoints;
+using GymDiary.Api.OpenApi;
 using GymDiary.Api.Validation;
 using GymDiary.Application.Authentication;
 using GymDiary.Application.ExerciseCategories;
@@ -45,5 +46,34 @@ public class CreateExerciseCategoryEndpoint : IEndpoint
                 "Category names must be unique per owner.")
             .Produces<Response>(StatusCodes.Status201Created)
             .ProducesValidationProblem()
-            .ProducesProblem(StatusCodes.Status409Conflict);
+            .ProducesProblem(StatusCodes.Status409Conflict)
+            .WithMetadata(new ProblemResponseMetadata(
+                StatusCode: StatusCodes.Status400BadRequest,
+                Description: "The request failed validation. 'errors' maps field names to messages."))
+            .WithMetadata(new ProblemResponseMetadata(
+                StatusCode: StatusCodes.Status409Conflict,
+                Description: "The request conflicts with server state.",
+                Examples: new Dictionary<string, ProblemResponseExample>
+                {
+                    ["CategoryAlreadyExists"] = new(
+                        Summary: "A category with this name already exists for the user.",
+                        Json: """
+                              {
+                                "status": 409,
+                                "title": "Exercise category already exists",
+                                "detail": "An exercise category named 'Push' already exists for this user.",
+                                "traceId": "00-abc123-..."
+                              }
+                              """),
+                    ["OwnerNotFound"] = new(
+                        Summary: "The owning user does not exist.",
+                        Json: """
+                              {
+                                "status": 409,
+                                "title": "Owner not found",
+                                "detail": "User '42' does not exist.",
+                                "traceId": "00-abc123-..."
+                              }
+                              """)
+                }));
 }
