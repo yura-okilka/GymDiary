@@ -1,6 +1,0 @@
-﻿services:
-  gymdiary.api:
-    image: gymdiary.api
-    build:
-      context: .
-      dockerfile: src/GymDiary.Api/Dockerfile
