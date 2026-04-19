@@ -27,13 +27,13 @@ public class CreateExerciseCategoryEndpoint : IEndpoint
                         {
                             Status = StatusCodes.Status409Conflict,
                             Title = "Exercise category already exists",
-                            Detail = $"An exercise category named '{e.name}' already exists for this user."
+                            Detail = $"An exercise category named '{e.Value}' already exists for this user."
                         }),
                         onOwnerNotFound: e => TypedResults.Problem(new ProblemDetails
                         {
                             Status = StatusCodes.Status409Conflict,
                             Title = "Owner not found",
-                            Detail = $"User '{e.id}' does not exist."
+                            Detail = $"User '{e.Value}' does not exist."
                         }));
                 })
             .WithName(nameof(CreateExerciseCategoryEndpoint))

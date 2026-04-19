@@ -6,7 +6,3 @@ type UserWithEmailAlreadyExistsError =
 
     static member toString(UserWithEmailAlreadyExistsError email) = $"User with email %s{email} already exists"
 
-type UserNotFoundError =
-    | UserNotFoundError of id: string
-
-    static member toString(UserNotFoundError id) = $"User with id %s{id} was not found"

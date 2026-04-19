@@ -3,6 +3,7 @@ namespace GymDiary.Application.ExerciseCategories
 open System
 open System.Runtime.CompilerServices
 open FsToolkit.ErrorHandling
+open GymDiary.Domain.Users
 open Microsoft.Extensions.Logging
 open GymDiary.Application.Time
 open GymDiary.Application.Persistence
@@ -10,7 +11,6 @@ open GymDiary.Application.Workflows
 open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Primitives.SharedTypes
-open GymDiary.Domain.Users
 
 module CreateExerciseCategoryWorkflow =
 
@@ -18,13 +18,12 @@ module CreateExerciseCategoryWorkflow =
 
     type public CommandError =
         | InvalidCommand of ValidationError list
-        | CategoryAlreadyExists of ExerciseCategoryAlreadyExistsError
-        | OwnerNotFound of UserNotFoundError
+        | CategoryAlreadyExists of name: String50
+        | OwnerNotFound of id: UserId
 
-        static member categoryAlreadyExists name =
-            Error(CategoryAlreadyExists(ExerciseCategoryAlreadyExistsError(name)))
+        static member categoryAlreadyExists name = Error(CategoryAlreadyExists(name))
 
-        static member ownerNotFound id = Error(OwnerNotFound(UserNotFoundError(id)))
+        static member ownerNotFound id = Error(OwnerNotFound(id))
 
     type public Handler
         (
@@ -48,12 +47,12 @@ module CreateExerciseCategoryWorkflow =
                 let! ownerExists = userRepository.ExistsWithId category.OwnerId
 
                 if not ownerExists then
-                    return! CommandError.ownerNotFound category.OwnerId.Value
+                    return! CommandError.ownerNotFound category.OwnerId
 
                 let! categoryExists = categoryRepository.ExistsWithName category.Name category.OwnerId
 
                 if categoryExists then
-                    return! CommandError.categoryAlreadyExists category.Name.Value
+                    return! CommandError.categoryAlreadyExists category.Name
 
                 do! categoryRepository.Create category
 
