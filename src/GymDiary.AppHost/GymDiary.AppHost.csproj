@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GymDiary.Api.CSharp\GymDiary.Api.CSharp.csproj" />
+    <ProjectReference Include="..\GymDiary.Api\GymDiary.Api.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-namespace GymDiary.Api.CSharp.Endpoints;
+namespace GymDiary.Api.Endpoints;
 
 public static class EndpointTags
 {

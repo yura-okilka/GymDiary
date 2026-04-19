@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace GymDiary.Api.CSharp;
+namespace GymDiary.Api;
 
 public static class AssemblyReference
 {

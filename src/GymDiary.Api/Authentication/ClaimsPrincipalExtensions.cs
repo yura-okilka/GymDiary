@@ -2,7 +2,7 @@ using System.Security.Claims;
 
 using Microsoft.IdentityModel.JsonWebTokens;
 
-namespace GymDiary.Api.CSharp.Authentication;
+namespace GymDiary.Api.Authentication;
 
 public static class ClaimsPrincipalExtensions
 {

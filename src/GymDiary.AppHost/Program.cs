@@ -18,7 +18,7 @@ var mongoDb = builder.AddMongoDB("mongo-db", userName: mongoUsername, password: 
 
 var gymDiaryDb = mongoDb.AddDatabase("gymdiary-db", "gymDiary");
 
-var api = builder.AddProject<GymDiary_Api_CSharp>("api")
+var api = builder.AddProject<GymDiary_Api>("api")
     .WithHttpHealthCheck("/health")
     .WithReference(gymDiaryDb)
     .WaitFor(gymDiaryDb);

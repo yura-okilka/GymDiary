@@ -2,7 +2,7 @@ using System.Reflection;
 
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace GymDiary.Api.CSharp.Endpoints;
+namespace GymDiary.Api.Endpoints;
 
 public static class EndpointExtensions
 {

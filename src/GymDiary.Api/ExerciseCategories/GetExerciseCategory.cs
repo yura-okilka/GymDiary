@@ -1,6 +1,6 @@
-using GymDiary.Api.CSharp.Endpoints;
+using GymDiary.Api.Endpoints;
 
-namespace GymDiary.Api.CSharp.ExerciseCategories;
+namespace GymDiary.Api.ExerciseCategories;
 
 public class GetExerciseCategory : IEndpoint
 {

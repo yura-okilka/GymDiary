@@ -1,10 +1,10 @@
-using GymDiary.Api.CSharp.Endpoints;
+using GymDiary.Api.Endpoints;
 using GymDiary.Application.Authentication;
 using GymDiary.Application.ExerciseCategories;
 
 using static GymDiary.Application.ExerciseCategories.CreateExerciseCategoryWorkflow.ResultExtensions;
 
-namespace GymDiary.Api.CSharp.ExerciseCategories;
+namespace GymDiary.Api.ExerciseCategories;
 
 public class CreateExerciseCategoryEndpoint : IEndpoint
 {

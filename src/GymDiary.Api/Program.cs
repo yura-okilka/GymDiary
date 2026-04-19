@@ -1,5 +1,5 @@
-using GymDiary.Api.CSharp.Authentication;
-using GymDiary.Api.CSharp.Endpoints;
+using GymDiary.Api.Authentication;
+using GymDiary.Api.Endpoints;
 using GymDiary.Application;
 using GymDiary.Infrastructure.Persistence;
 

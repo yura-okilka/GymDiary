@@ -1,6 +1,6 @@
 using GymDiary.Application.Authentication;
 
-namespace GymDiary.Api.CSharp.Authentication;
+namespace GymDiary.Api.Authentication;
 
 public class HttpUserContext(HttpContextAccessor httpContextAccessor) : IUserContext
 {

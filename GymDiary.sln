@@ -40,7 +40,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymDiary.ServiceDefaults", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymDiary.AppHost", "src\GymDiary.AppHost\GymDiary.AppHost.csproj", "{87562977-567B-4E9C-AD75-1955A8858CA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymDiary.Api.CSharp", "src\GymDiary.Api.CSharp\GymDiary.Api.CSharp.csproj", "{FFE24DB4-037D-4E7C-80E8-A5B556BD52BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymDiary.Api", "src\GymDiary.Api\GymDiary.Api.csproj", "{FFE24DB4-037D-4E7C-80E8-A5B556BD52BD}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "GymDiary.Application", "src\GymDiary.Application\GymDiary.Application.fsproj", "{7C0C0FF6-7518-4D32-9513-0E6FC272BF39}"
 EndProject
