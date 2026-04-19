@@ -34,7 +34,7 @@
 
   <ItemGroup>
     <PackageReference Include="FSharp.Core" />
-    <PackageReference Include="FsToolkit.ErrorHandling.TaskResult" />
+    <PackageReference Include="FsToolkit.ErrorHandling" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
     <PackageReference Include="MongoDB.Driver" />
     <PackageReference Include="Validus" />
