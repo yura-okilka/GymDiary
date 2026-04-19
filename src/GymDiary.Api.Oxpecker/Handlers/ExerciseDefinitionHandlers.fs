@@ -55,9 +55,9 @@ let createDefinitionOpenApi =
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status409Conflict)
             |],
             configureOperation =
-                (fun o ->
+                (fun o _ _ ->
                     o.OperationId <- "CreateExerciseDefinition"
                     o.Summary <- "Create exercise definition"
-                    o)
+                    Task.CompletedTask)
         )
     )

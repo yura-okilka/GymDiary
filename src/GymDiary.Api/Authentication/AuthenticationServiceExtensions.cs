@@ -6,7 +6,9 @@ public static class AuthenticationServiceExtensions
 {
     public static IServiceCollection AddGymDiaryAuthentication(this IServiceCollection services)
     {
-        services.AddTransient<IUserContext, HttpUserContext>();
+        services
+            .AddHttpContextAccessor()
+            .AddTransient<IUserContext, HttpUserContext>();
 
         return services;
     }

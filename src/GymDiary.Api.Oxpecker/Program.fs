@@ -4,9 +4,11 @@ namespace GymDiary.Api
 
 open System.Collections.Generic
 open Oxpecker
+open Oxpecker.OpenApi
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http.Features
 open Microsoft.Extensions.DependencyInjection
+open Scalar.AspNetCore
 open GymDiary.Core
 open GymDiary.Infrastructure.Persistence
 
@@ -25,13 +27,8 @@ module Program =
         let services = builder.Services
         services.AddRouting()
         services.AddOxpecker()
-        services.AddEndpointsApiExplorer()
 
-        services.AddSwaggerGen(
-            _.CustomSchemaIds(fun t ->
-                let fullName = nonNull t.FullName
-                fullName.Replace("+", "."))
-        ) // Error fix. https://github.com/swagger-api/swagger-ui/issues/7911
+        services.AddOpenApi(fun o -> o.AddSchemaTransformer<FSharpOptionSchemaTransformer>() |> ignore)
 
         services.AddProblemDetails(fun options ->
             options.CustomizeProblemDetails <-
@@ -54,8 +51,8 @@ module Program =
         app.UseRouting()
         app.UseExceptionHandler()
         app.UseOxpecker(Router.webApp)
-        app.UseSwagger()
-        app.UseSwaggerUI()
+        app.MapOpenApi()
+        app.MapScalarApiReference()
 
         app.Run()
 

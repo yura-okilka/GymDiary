@@ -10,7 +10,7 @@ public class ManagedMongoDbContainer : IDbContainer
 
     public ManagedMongoDbContainer(ManagedMongoDbContainerSettings settings)
     {
-        _container = new MongoDbBuilder().WithImage(settings.Image).Build();
+        _container = new MongoDbBuilder(settings.Image).Build();
     }
 
     public string ConnectionString => _container.GetConnectionString();

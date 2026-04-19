@@ -78,10 +78,10 @@ let createCategoryOpenApi =
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status409Conflict)
             |],
             configureOperation =
-                (fun o ->
+                (fun o _ _ ->
                     o.OperationId <- "CreateExerciseCategory"
                     o.Summary <- "Create exercise category"
-                    o)
+                    Task.CompletedTask)
         )
     )
 

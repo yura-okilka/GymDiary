@@ -36,9 +36,9 @@ let createUserOpenApi =
                 ResponseBody(typeof<ErrorResponse>, ?statusCode = Some StatusCodes.Status409Conflict)
             |],
             configureOperation =
-                (fun o ->
+                (fun o _ _ ->
                     o.OperationId <- "CreateUser"
                     o.Summary <- "Create user"
-                    o)
+                    Task.CompletedTask)
         )
     )

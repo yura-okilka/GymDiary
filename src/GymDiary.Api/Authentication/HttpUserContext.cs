@@ -2,7 +2,7 @@ using GymDiary.Application.Authentication;
 
 namespace GymDiary.Api.Authentication;
 
-public class HttpUserContext(HttpContextAccessor httpContextAccessor) : IUserContext
+public class HttpUserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
 {
     private HttpContext HttpContext => httpContextAccessor.HttpContext ?? throw new Exception("HttpContext is not available");
 

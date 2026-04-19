@@ -2,6 +2,7 @@ using GymDiary.Api.Authentication;
 using GymDiary.Api.Endpoints;
 using GymDiary.Application;
 using GymDiary.Infrastructure.Persistence;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,7 @@ app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "v1"));
+    app.MapScalarApiReference();
 }
 
 app.MapDefaultEndpoints();
