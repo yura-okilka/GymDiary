@@ -14,7 +14,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".solution", ".solution", "{529D6432-E5D3-472D-AE7C-F106AEF47C8D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		docker-compose.yml = docker-compose.yml
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		nuget.config = nuget.config
