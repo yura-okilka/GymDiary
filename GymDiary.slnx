@@ -1,0 +1,35 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/.solution/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="nuget.config" />
+  </Folder>
+  <Folder Name="/archive/">
+    <Project Path="src/GymDiary.Api.Oxpecker/GymDiary.Api.Oxpecker.fsproj" />
+    <Project Path="src/GymDiary.Core/GymDiary.Core.fsproj" />
+    <Project Path="tests/GymDiary.Api.SystemTests/GymDiary.Api.SystemTests.csproj" />
+    <Project Path="tests/SystemTests/SystemTests.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Common/Common.fsproj" />
+    <Project Path="src/GymDiary.Api/GymDiary.Api.csproj" />
+    <Project Path="src/GymDiary.ApiClient/GymDiary.ApiClient.csproj" />
+    <Project Path="src/GymDiary.AppHost/GymDiary.AppHost.csproj" />
+    <Project Path="src/GymDiary.Application/GymDiary.Application.fsproj" />
+    <Project Path="src/GymDiary.DbMigrations/GymDiary.DbMigrations.csproj" />
+    <Project Path="src/GymDiary.Domain/GymDiary.Domain.fsproj" />
+    <Project Path="src/GymDiary.Infrastructure/GymDiary.Infrastructure.fsproj" />
+    <Project Path="src/GymDiary.ServiceDefaults/GymDiary.ServiceDefaults.csproj" />
+    <Project Path="src/MongoDB.FSharp.Serialization/MongoDB.FSharp.Serialization.fsproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/GymDiary.Domain.UnitTests/GymDiary.Domain.UnitTests.fsproj" />
+    <Project Path="tests/GymDiary.IntegrationTests/GymDiary.IntegrationTests.csproj" />
+  </Folder>
+</Solution>
