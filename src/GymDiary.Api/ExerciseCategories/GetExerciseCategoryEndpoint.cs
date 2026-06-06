@@ -1,4 +1,4 @@
-using GymDiary.Api.Dtos;
+using GymDiary.Api.Contracts;
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
 using GymDiary.Api.Validation;
@@ -18,7 +18,7 @@ public class GetExerciseCategoryEndpoint : IEndpoint
                     var result = await handler.Handle(new GetExerciseCategoryWorkflow.Query(id, currentUser.Id));
 
                     return result.Match<IResult>(
-                        category => TypedResults.Ok(new ExerciseCategoryDto(
+                        category => TypedResults.Ok(new ExerciseCategoryResponse(
                             category.Id.Value,
                             category.Name.Value,
                             category.OwnerId.Value)),
@@ -34,7 +34,7 @@ public class GetExerciseCategoryEndpoint : IEndpoint
             .WithTags(EndpointTags.ExerciseCategories)
             .WithSummary("Get an exercise category.")
             .WithDescription("Returns an exercise category owned by the authenticated user.")
-            .Produces<ExerciseCategoryDto>()
+            .Produces<ExerciseCategoryResponse>()
             .ProducesValidationProblem()
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithMetadata(new ProblemResponseMetadata(

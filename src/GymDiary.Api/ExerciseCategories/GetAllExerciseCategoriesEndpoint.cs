@@ -1,4 +1,4 @@
-using GymDiary.Api.Dtos;
+using GymDiary.Api.Contracts;
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
 using GymDiary.Api.Validation;
@@ -17,7 +17,7 @@ public class GetAllExerciseCategoriesEndpoint : IEndpoint
 
                     return result.Match<IResult>(
                         categories => TypedResults.Ok(categories
-                            .Select(c => new ExerciseCategoryDto(c.Id.Value, c.Name.Value, c.OwnerId.Value))
+                            .Select(c => new ExerciseCategoryResponse(c.Id.Value, c.Name.Value, c.OwnerId.Value))
                             .ToArray()),
                         onInvalidQuery: e => TypedResults.ValidationProblem(e.ToProblemDictionary()));
                 })
@@ -25,7 +25,7 @@ public class GetAllExerciseCategoriesEndpoint : IEndpoint
             .WithTags(EndpointTags.ExerciseCategories)
             .WithSummary("Get all exercise categories.")
             .WithDescription("Returns all exercise categories owned by the authenticated user.")
-            .Produces<ExerciseCategoryDto[]>()
+            .Produces<ExerciseCategoryResponse[]>()
             .ProducesValidationProblem()
             .WithMetadata(new ProblemResponseMetadata(
                 StatusCode: StatusCodes.Status400BadRequest,
