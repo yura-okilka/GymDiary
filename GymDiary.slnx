@@ -25,5 +25,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/GymDiary.Domain.UnitTests/GymDiary.Domain.UnitTests.fsproj" />
     <Project Path="tests/GymDiary.IntegrationTests/GymDiary.IntegrationTests.csproj" />
+    <Project Path="tests/GymDiary.Persistence.MongoDB.UnitTests/GymDiary.Persistence.MongoDB.UnitTests.fsproj" />
   </Folder>
 </Solution>

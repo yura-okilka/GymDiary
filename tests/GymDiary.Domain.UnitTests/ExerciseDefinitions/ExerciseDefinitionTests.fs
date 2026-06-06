@@ -13,9 +13,12 @@ let private value =
     | Ok v -> v
     | Error e -> failwith (string e)
 
+let private repetitionSets counts =
+    counts |> List.map (fun n -> PositiveInt.create n |> value) |> RepetitionSets
+
 let private definitionCreatedOn (createdOn: DateTime) =
     let name = String50.create "Bench press" |> value
-    let sets = [ ExerciseSet.ofRepetitions 10u ]
+    let sets = repetitionSets [ 10 ]
     ExerciseDefinition.create (Id "def") (Id "cat") name None TimeSpan.Zero sets (Id "owner") createdOn
     |> value
 
@@ -26,7 +29,7 @@ let ``update preserves CreatedOnUtc and bumps UpdatedOnUtc`` () =
 
     let definition = definitionCreatedOn createdOn
     let name = String50.create "Incline press" |> value
-    let sets = [ ExerciseSet.ofRepetitions 8u ]
+    let sets = repetitionSets [ 8 ]
 
     let updated =
         ExerciseDefinition.update (Id "cat") name None TimeSpan.Zero sets definition updatedOn

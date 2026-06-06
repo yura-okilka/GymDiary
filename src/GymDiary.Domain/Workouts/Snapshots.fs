@@ -19,7 +19,7 @@ type ExerciseDefinitionSnapshot = {
     Name: String50
     Notes: String1k option
     RestTime: TimeSpan
-    Sets: ExerciseSet list
+    Sets: ExerciseSets
 }
 
 /// A snapshot of routine at a particular time

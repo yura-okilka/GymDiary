@@ -6,7 +6,7 @@ open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.Primitives.SharedTypes
 
-type ExerciseDefinitionDocumentMapper(setDtoMapper: IDocumentMapper<ExerciseSet, ExerciseSetDto>) =
+type ExerciseDefinitionDocumentMapper(setsMapper: IDocumentMapper<ExerciseSets, ExerciseSetDto list>) =
     interface IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument> with
         member _.MapFromDomain(domain: ExerciseDefinition) : ExerciseDefinitionDocument = {
             Id = domain.Id.Value
@@ -14,7 +14,7 @@ type ExerciseDefinitionDocumentMapper(setDtoMapper: IDocumentMapper<ExerciseSet,
             Name = domain.Name.Value
             Notes = domain.Notes |> Option.map _.Value
             RestTime = domain.RestTime
-            Sets = domain.Sets |> List.map setDtoMapper.MapFromDomain
+            Sets = setsMapper.MapFromDomain domain.Sets
             OwnerId = domain.OwnerId.Value
             CreatedOnUtc = domain.CreatedOnUtc
             UpdatedOnUtc = domain.UpdatedOnUtc
@@ -27,7 +27,7 @@ type ExerciseDefinitionDocumentMapper(setDtoMapper: IDocumentMapper<ExerciseSet,
                 document.Notes
                 |> Option.traverseResult (Validation.checkField (nameof document.Notes) String1k.create)
 
-            let! sets = document.Sets |> List.traverseResultM setDtoMapper.MapToDomain
+            let! sets = setsMapper.MapToDomain document.Sets
 
             return {
                 Id = Id(document.Id)
