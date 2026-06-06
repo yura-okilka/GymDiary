@@ -13,3 +13,4 @@ type ApplicationServicesExtensions() =
         services
             .AddSingleton<CreateExerciseCategoryWorkflow.Handler>()
             .AddSingleton<GetExerciseCategoryWorkflow.Handler>()
+            .AddSingleton<GetAllExerciseCategoriesWorkflow.Handler>()
