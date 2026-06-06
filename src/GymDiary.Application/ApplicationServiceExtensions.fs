@@ -7,7 +7,7 @@ open GymDiary.Application.ExerciseCategories
 open Microsoft.Extensions.DependencyInjection
 
 [<Extension>]
-type ApplicationServicesExtensions() =
+type ApplicationServiceExtensions() =
     [<Extension>]
     static member AddGymDiaryApplication(services: IServiceCollection) : IServiceCollection =
         services

@@ -16,7 +16,7 @@
     <Compile Include="ExerciseCategories\CreateExerciseCategoryWorkflow.fs" />
     <Compile Include="ExerciseCategories\GetExerciseCategoryWorkflow.fs" />
     <Compile Include="ExerciseCategories\GetAllExerciseCategoriesWorkflow.fs" />
-    <Compile Include="ApplicationServicesExtensions.fs" />
+    <Compile Include="ApplicationServiceExtensions.fs" />
   </ItemGroup>
 
   <ItemGroup>
