@@ -55,6 +55,5 @@ module ExerciseDefinition =
                     Notes = notes
                     RestTime = restTime
                     Sets = sets
-                    CreatedOnUtc = utcNow
                     UpdatedOnUtc = utcNow
             }

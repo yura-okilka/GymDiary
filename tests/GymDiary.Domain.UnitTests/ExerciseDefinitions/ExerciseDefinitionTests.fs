@@ -1,0 +1,36 @@
+module GymDiary.Domain.UnitTests.ExerciseDefinitions.ExerciseDefinitionTests
+
+open System
+
+open GymDiary.Domain.Primitives.SharedTypes
+open GymDiary.Domain.ExerciseDefinitions
+
+open Xunit
+open FsUnitTyped
+
+let private value =
+    function
+    | Ok v -> v
+    | Error e -> failwith (string e)
+
+let private definitionCreatedOn (createdOn: DateTime) =
+    let name = String50.create "Bench press" |> value
+    let sets = [ ExerciseSet.ofRepetitions 10u ]
+    ExerciseDefinition.create (Id "def") (Id "cat") name None TimeSpan.Zero sets (Id "owner") createdOn
+    |> value
+
+[<Fact>]
+let ``update preserves CreatedOnUtc and bumps UpdatedOnUtc`` () =
+    let createdOn = DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+    let updatedOn = DateTime(2026, 6, 7, 12, 0, 0, DateTimeKind.Utc)
+
+    let definition = definitionCreatedOn createdOn
+    let name = String50.create "Incline press" |> value
+    let sets = [ ExerciseSet.ofRepetitions 8u ]
+
+    let updated =
+        ExerciseDefinition.update (Id "cat") name None TimeSpan.Zero sets definition updatedOn
+        |> value
+
+    updated.CreatedOnUtc |> shouldEqual createdOn
+    updated.UpdatedOnUtc |> shouldEqual updatedOn
