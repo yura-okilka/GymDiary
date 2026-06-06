@@ -37,3 +37,10 @@ type OwnedEntityRepositoryBase<'TEntity, 'TDocument when 'TDocument :> IDocument
                 |> List.traverseResultM mapper.MapToDomain
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<'TDocument>.Name, error)))
         }
+
+        member _.DeleteByOwner id ownerId = task {
+            let id = id.Value
+            let ownerId = ownerId.Value
+            let! result = collection.DeleteOneAsync(fun d -> d.Id = id && d.OwnerId = ownerId)
+            return result.DeletedCount > 0L
+        }

@@ -25,6 +25,7 @@ type IOwnedEntityRepository<'TEntity> =
     inherit IEntityRepository<'TEntity>
     abstract member GetOneByOwner: Id<'TEntity> -> UserId -> Task<'TEntity option>
     abstract member GetAllByOwner: UserId -> Task<'TEntity list>
+    abstract member DeleteByOwner: Id<'TEntity> -> UserId -> Task<bool>
 
 type IUserRepository =
     inherit IEntityRepository<User>

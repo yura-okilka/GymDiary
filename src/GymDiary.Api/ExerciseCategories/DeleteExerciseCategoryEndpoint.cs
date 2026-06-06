@@ -1,0 +1,55 @@
+using GymDiary.Api.Endpoints;
+using GymDiary.Api.OpenApi;
+using GymDiary.Api.Validation;
+using GymDiary.Application.ExerciseCategories;
+using GymDiary.Application.Identity;
+
+using Microsoft.AspNetCore.Mvc;
+
+namespace GymDiary.Api.ExerciseCategories;
+
+public class DeleteExerciseCategoryEndpoint : IEndpoint
+{
+    public void MapEndpoint(IEndpointRouteBuilder app) =>
+        app.MapDelete("exercise-categories/{id}",
+                async (string id, DeleteExerciseCategoryWorkflow.Handler handler, ICurrentUser currentUser) =>
+                {
+                    var result = await handler.Handle(new DeleteExerciseCategoryWorkflow.Command(id, currentUser.Id));
+
+                    return result.Match<IResult>(
+                        _ => TypedResults.NoContent(),
+                        onInvalidCommand: e => TypedResults.ValidationProblem(e.ToProblemDictionary()),
+                        onCategoryNotFound: _ => TypedResults.Problem(new ProblemDetails
+                        {
+                            Status = StatusCodes.Status404NotFound,
+                            Title = "Exercise category not found",
+                            Detail = $"Exercise category '{id}' was not found for this user."
+                        }));
+                })
+            .WithName(nameof(DeleteExerciseCategoryEndpoint))
+            .WithTags(EndpointTags.ExerciseCategories)
+            .WithSummary("Delete an exercise category.")
+            .WithDescription("Deletes an exercise category owned by the authenticated user.")
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesValidationProblem()
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithMetadata(new ProblemResponseMetadata(
+                StatusCode: StatusCodes.Status400BadRequest,
+                Description: "The request failed validation. 'errors' maps field names to messages."))
+            .WithMetadata(new ProblemResponseMetadata(
+                StatusCode: StatusCodes.Status404NotFound,
+                Description: "The requested exercise category does not exist for this user.",
+                Examples: new Dictionary<string, ProblemResponseExample>
+                {
+                    ["CategoryNotFound"] = new(
+                        Summary: "No exercise category exists with this id for the user.",
+                        Json: """
+                              {
+                                "status": 404,
+                                "title": "Exercise category not found",
+                                "detail": "Exercise category '42' was not found for this user.",
+                                "traceId": "00-abc123-..."
+                              }
+                              """)
+                }));
+}
