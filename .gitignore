@@ -401,3 +401,6 @@ FodyWeavers.xsd
 # Kiota-generated API client — only the lock file is tracked so regeneration is reproducible.
 src/GymDiary.ApiClient/Generated/*
 !src/GymDiary.ApiClient/Generated/kiota-lock.json
+
+# Claude Code — ignore per-developer local settings; shared project config (e.g. .claude/settings.json) stays tracked.
+.claude/settings.local.json
