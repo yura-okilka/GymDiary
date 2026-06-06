@@ -9,6 +9,7 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
     <File Path="nuget.config" />
+    <File Path="README.md" />
   </Folder>
   <Folder Name="/archive/">
     <Project Path="src/GymDiary.Api.Oxpecker/GymDiary.Api.Oxpecker.fsproj" />
