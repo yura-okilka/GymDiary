@@ -10,7 +10,7 @@ open Microsoft.AspNetCore.Http.Features
 open Microsoft.Extensions.DependencyInjection
 open Scalar.AspNetCore
 open GymDiary.Core
-open GymDiary.Infrastructure.Persistence
+open GymDiary.Persistence.MongoDB
 
 module Program =
     type TestEntryPoint() =
@@ -44,7 +44,7 @@ module Program =
         services.AddExceptionHandler<OxpeckerExceptionHandler>()
 
         services.AddGymDiaryCore()
-        services.AddGymDiaryInfrastructure()
+        services.AddGymDiaryMongoDB()
 
         let app = builder.Build()
 

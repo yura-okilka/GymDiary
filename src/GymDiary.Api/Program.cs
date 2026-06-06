@@ -4,7 +4,7 @@ using GymDiary.Api.Identity;
 using GymDiary.Api.OpenApi;
 using GymDiary.Api.Time;
 using GymDiary.Application;
-using GymDiary.Infrastructure.Persistence;
+using GymDiary.Persistence.MongoDB;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +24,7 @@ builder.Services.AddGymDiaryTime();
 builder.Services.AddGymDiaryIdentity();
 builder.Services.AddGymDiaryEndpoints();
 builder.Services.AddGymDiaryApplication();
-builder.Services.AddGymDiaryInfrastructure();
+builder.Services.AddGymDiaryMongoDB();
 
 var app = builder.Build();
 

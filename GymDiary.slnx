@@ -24,7 +24,7 @@
     <Project Path="src/GymDiary.Application/GymDiary.Application.fsproj" />
     <Project Path="src/GymDiary.DbMigrations/GymDiary.DbMigrations.csproj" />
     <Project Path="src/GymDiary.Domain/GymDiary.Domain.fsproj" />
-    <Project Path="src/GymDiary.Infrastructure/GymDiary.Infrastructure.fsproj" />
+    <Project Path="src/GymDiary.Persistence.MongoDB/GymDiary.Persistence.MongoDB.fsproj" />
     <Project Path="src/GymDiary.ServiceDefaults/GymDiary.ServiceDefaults.csproj" />
     <Project Path="src/MongoDB.FSharp.Serialization/MongoDB.FSharp.Serialization.fsproj" />
   </Folder>

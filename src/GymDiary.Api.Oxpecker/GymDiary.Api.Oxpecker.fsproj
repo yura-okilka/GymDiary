@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
-    <ProjectReference Include="..\GymDiary.Infrastructure\GymDiary.Infrastructure.fsproj" />
+    <ProjectReference Include="..\GymDiary.Persistence.MongoDB\GymDiary.Persistence.MongoDB.fsproj" />
   </ItemGroup>
 
   <ItemGroup>

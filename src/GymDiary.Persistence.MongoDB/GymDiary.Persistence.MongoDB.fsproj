@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <Compile Include="InternalExtensions.fs" />
+    <Compile Include="FindFluentExtensions.fs" />
+    <Compile Include="Exceptions.fs" />
+    <Compile Include="MongoSettings.fs" />
+    <Compile Include="SerializationSettings.fs" />
+    <Compile Include="MongoObjectIdFactory.fs" />
+    <Compile Include="Documents\IDocument.fs" />
+    <Compile Include="Documents\UserDocument.fs" />
+    <Compile Include="Documents\ExerciseCategoryDocument.fs" />
+    <Compile Include="Documents\ExerciseSetsDto.fs" />
+    <Compile Include="Documents\ExerciseDefinitionDocument.fs" />
+    <Compile Include="Documents\RoutineDocument.fs" />
+    <Compile Include="Documents\WorkoutDocument.fs" />
+    <Compile Include="Mapping\IDocumentMapper.fs" />
+    <Compile Include="Mapping\UserDocumentMapper.fs" />
+    <Compile Include="Mapping\ExerciseCategoryDocumentMapper.fs" />
+    <Compile Include="Mapping\ExerciseSetDtoMapper.fs" />
+    <Compile Include="Mapping\ExerciseDefinitionDocumentMapper.fs" />
+    <Compile Include="Mapping\RoutineDocumentMapper.fs" />
+    <Compile Include="MongoContext.fs" />
+    <Compile Include="Repositories\EntityRepositoryBase.fs" />
+    <Compile Include="Repositories\OwnedEntityRepositoryBase.fs" />
+    <Compile Include="Repositories\UserRepository.fs" />
+    <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
+    <Compile Include="Repositories\ExerciseDefinitionRepository.fs" />
+    <Compile Include="Repositories\RoutineRepository.fs" />
+    <Compile Include="MongoDBServiceExtensions.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" />
+    <PackageReference Include="FsToolkit.ErrorHandling" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="MongoDB.Driver" />
+    <PackageReference Include="Validus" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.fsproj" />
+    <ProjectReference Include="..\GymDiary.Application\GymDiary.Application.fsproj" />
+    <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
+    <ProjectReference Include="..\MongoDB.FSharp.Serialization\MongoDB.FSharp.Serialization.fsproj" />
+  </ItemGroup>
+
+</Project>
