@@ -13,8 +13,6 @@
   </Folder>
   <Folder Name="/archive/">
     <Project Path="src/GymDiary.Core/GymDiary.Core.fsproj" />
-    <Project Path="src/GymDiary.DbMigrations/GymDiary.DbMigrations.csproj" />
-    <Project Path="tests/SystemTests/SystemTests.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Common/Common.fsproj" />
