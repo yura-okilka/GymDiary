@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
-using GymDiary.Api.Authentication;
 using GymDiary.Api.Endpoints;
+using GymDiary.Api.Identity;
 using GymDiary.Api.OpenApi;
 using GymDiary.Api.Time;
 using GymDiary.Application;
@@ -21,8 +21,8 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddProblemDetails();
 builder.Services.AddGymDiaryTime();
+builder.Services.AddGymDiaryIdentity();
 builder.Services.AddGymDiaryEndpoints();
-builder.Services.AddGymDiaryAuthentication();
 builder.Services.AddGymDiaryApplication();
 builder.Services.AddGymDiaryInfrastructure();
 

@@ -1,8 +1,8 @@
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
 using GymDiary.Api.Validation;
-using GymDiary.Application.Authentication;
 using GymDiary.Application.ExerciseCategories;
+using GymDiary.Application.Identity;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +16,9 @@ public class CreateExerciseCategoryEndpoint : IEndpoint
 
     public void MapEndpoint(IEndpointRouteBuilder app) =>
         app.MapPost("exercise-categories",
-                async (Request request, CreateExerciseCategoryWorkflow.Handler handler, IUserContext userContext) =>
+                async (Request request, CreateExerciseCategoryWorkflow.Handler handler, ICurrentUser currentUser) =>
                 {
-                    var result = await handler.Handle(new CreateExerciseCategoryWorkflow.Command(request.Name, userContext.UserId));
+                    var result = await handler.Handle(new CreateExerciseCategoryWorkflow.Command(request.Name, currentUser.Id));
 
                     return result.Match<IResult>(
                         id => TypedResults.CreatedAtRoute(new Response(id), nameof(GetExerciseCategoryEndpoint), new { id }),

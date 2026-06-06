@@ -2,8 +2,8 @@ using GymDiary.Api.Dtos;
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
 using GymDiary.Api.Validation;
-using GymDiary.Application.Authentication;
 using GymDiary.Application.ExerciseCategories;
+using GymDiary.Application.Identity;
 
 namespace GymDiary.Api.ExerciseCategories;
 
@@ -11,9 +11,9 @@ public class GetAllExerciseCategoriesEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app) =>
         app.MapGet("exercise-categories",
-                async (GetAllExerciseCategoriesWorkflow.Handler handler, IUserContext userContext) =>
+                async (GetAllExerciseCategoriesWorkflow.Handler handler, ICurrentUser currentUser) =>
                 {
-                    var result = await handler.Handle(new GetAllExerciseCategoriesWorkflow.Query(userContext.UserId));
+                    var result = await handler.Handle(new GetAllExerciseCategoriesWorkflow.Query(currentUser.Id));
 
                     return result.Match<IResult>(
                         categories => TypedResults.Ok(categories
