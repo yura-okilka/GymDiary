@@ -1,0 +1,70 @@
+module GymDiary.Domain.UnitTests.Workouts.WorkoutTests
+
+open System
+
+open GymDiary.Domain.Primitives.SharedTypes
+open GymDiary.Domain.ExerciseDefinitions
+open GymDiary.Domain.Workouts
+open GymDiary.Domain.Workouts.Snapshots
+
+open Xunit
+open FsUnitTyped
+
+let private value =
+    function
+    | Ok v -> v
+    | Error e -> failwith (string e)
+
+let private str s = String50.create s |> value
+
+let private startedOn = DateTime(2026, 6, 7, 10, 0, 0, DateTimeKind.Utc)
+let private completedOn = DateTime(2026, 6, 7, 11, 0, 0, DateTimeKind.Utc)
+
+let private routineSnapshot: RoutineSnapshot = {
+    Id = Id "routine"
+    Name = str "Push day"
+    Goal = None
+    Notes = None
+    Schedule = Set.empty
+}
+
+let private definitionSnapshot: ExerciseDefinitionSnapshot = {
+    Id = Id "def"
+    Category = { Id = Id "cat"; Name = str "Chest" }
+    Name = str "Bench press"
+    Notes = None
+    RestTime = TimeSpan.Zero
+    Sets = RepetitionSets [ PositiveInt.create 10 |> value ]
+}
+
+let private exercise start completed : Exercise = {
+    Definition = definitionSnapshot
+    Sets = RepetitionSets [ PositiveInt.create 10 |> value ]
+    StartedOn = start
+    CompletedOn = completed
+}
+
+let private create exercises startedOn completedOn =
+    Workout.create (Id "workout") routineSnapshot exercises startedOn completedOn (Id "owner")
+
+[<Fact>]
+let ``create with valid input succeeds`` () =
+    create [ exercise startedOn completedOn ] startedOn completedOn
+    |> Result.isOk
+    |> shouldEqual true
+
+[<Fact>]
+let ``create with no exercises fails`` () =
+    create [] startedOn completedOn |> Result.isError |> shouldEqual true
+
+[<Fact>]
+let ``create completed before started fails`` () =
+    create [ exercise startedOn completedOn ] completedOn startedOn
+    |> Result.isError
+    |> shouldEqual true
+
+[<Fact>]
+let ``create with an exercise completed before it started fails`` () =
+    create [ exercise completedOn startedOn ] startedOn completedOn
+    |> Result.isError
+    |> shouldEqual true

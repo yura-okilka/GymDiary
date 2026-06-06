@@ -10,6 +10,7 @@
     <Compile Include="Primitives\ConstrainedTypeTests.fs" />
     <Compile Include="ExerciseDefinitions\ExerciseDefinitionTests.fs" />
     <Compile Include="Routines\RoutineTests.fs" />
+    <Compile Include="Workouts\WorkoutTests.fs" />
   </ItemGroup>
 
   <ItemGroup>

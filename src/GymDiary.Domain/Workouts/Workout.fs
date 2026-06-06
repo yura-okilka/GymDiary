@@ -27,17 +27,19 @@ type Workout = {
 type WorkoutId = Id<Workout>
 
 module Workout =
-    let create id routine exercises startedOn completedOn ownerId =
-        if exercises |> List.isEmpty then
-            failwith "Workout must have at least one exercise"
+    let create id routine exercises startedOn completedOn ownerId : Result<Workout, string> =
+        if List.isEmpty exercises then
+            Error "Workout must have at least one exercise"
         elif startedOn > completedOn then
-            failwith "Workout cannot be completed before it started"
-
-        {
-            Id = id
-            Routine = routine
-            Exercises = exercises
-            StartedOn = startedOn
-            CompletedOn = completedOn
-            OwnerId = ownerId
-        }
+            Error "Workout cannot be completed before it started"
+        elif exercises |> List.exists (fun (e: Exercise) -> e.StartedOn > e.CompletedOn) then
+            Error "Exercise cannot be completed before it started"
+        else
+            Ok {
+                Id = id
+                Routine = routine
+                Exercises = exercises
+                StartedOn = startedOn
+                CompletedOn = completedOn
+                OwnerId = ownerId
+            }
