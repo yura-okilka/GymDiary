@@ -41,7 +41,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.fsproj" />
     <ProjectReference Include="..\GymDiary.Application\GymDiary.Application.fsproj" />
-    <ProjectReference Include="..\GymDiary.Core\GymDiary.Core.fsproj" />
     <ProjectReference Include="..\MongoDB.FSharp.Serialization\MongoDB.FSharp.Serialization.fsproj" />
   </ItemGroup>
 

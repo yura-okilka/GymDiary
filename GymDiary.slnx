@@ -11,9 +11,6 @@
     <File Path="nuget.config" />
     <File Path="README.md" />
   </Folder>
-  <Folder Name="/archive/">
-    <Project Path="src/GymDiary.Core/GymDiary.Core.fsproj" />
-  </Folder>
   <Folder Name="/src/">
     <Project Path="src/Common/Common.fsproj" />
     <Project Path="src/GymDiary.Api/GymDiary.Api.csproj" />
