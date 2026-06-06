@@ -1,10 +1,9 @@
-namespace GymDiary.Infrastructure.Configuration
+namespace Common.Configuration
 
 open System
 open System.Runtime.CompilerServices
 open Microsoft.Extensions.Configuration
 
-[<Extension>]
 type ConfigurationExtensions() =
 
     [<Extension>]

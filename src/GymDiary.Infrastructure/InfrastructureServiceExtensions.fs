@@ -4,13 +4,13 @@ namespace GymDiary.Infrastructure.Persistence
 
 open System
 open System.Runtime.CompilerServices
+open Common.Configuration
 open GymDiary.Application.Persistence
 open GymDiary.Application.Time
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Routines
 open GymDiary.Domain.Users
-open GymDiary.Infrastructure.Configuration
 open GymDiary.Infrastructure.Persistence.Documents
 open GymDiary.Infrastructure.Persistence.Mapping
 open GymDiary.Infrastructure.Time
