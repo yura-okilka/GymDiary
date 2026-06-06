@@ -12,10 +12,8 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/archive/">
-    <Project Path="src/GymDiary.Api.Oxpecker/GymDiary.Api.Oxpecker.fsproj" />
     <Project Path="src/GymDiary.Core/GymDiary.Core.fsproj" />
     <Project Path="src/GymDiary.DbMigrations/GymDiary.DbMigrations.csproj" />
-    <Project Path="tests/GymDiary.Api.SystemTests/GymDiary.Api.SystemTests.csproj" />
     <Project Path="tests/SystemTests/SystemTests.csproj" />
   </Folder>
   <Folder Name="/src/">
