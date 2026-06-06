@@ -21,10 +21,16 @@ type Routine = {
 type RoutineId = Id<Routine>
 
 module Routine =
-    let create id name goal notes schedule exercises ownerId utcNow : Result<Routine, string> =
+    let private validateExercises exercises =
         if Set.isEmpty exercises then
             Error "Routine must have at least one exercise"
         else
+            Ok()
+
+    let create id name goal notes schedule exercises ownerId utcNow : Result<Routine, string> =
+        match validateExercises exercises with
+        | Error message -> Error message
+        | Ok() ->
             Ok {
                 Id = id
                 Name = name
@@ -37,12 +43,16 @@ module Routine =
                 UpdatedOnUtc = utcNow
             }
 
-    let update name goal notes schedule exercises routine utcNow = {
-        routine with
-            Name = name
-            Goal = goal
-            Notes = notes
-            Schedule = schedule
-            Exercises = exercises
-            UpdatedOnUtc = utcNow
-    }
+    let update name goal notes schedule exercises routine utcNow : Result<Routine, string> =
+        match validateExercises exercises with
+        | Error message -> Error message
+        | Ok() ->
+            Ok {
+                routine with
+                    Name = name
+                    Goal = goal
+                    Notes = notes
+                    Schedule = schedule
+                    Exercises = exercises
+                    UpdatedOnUtc = utcNow
+            }
