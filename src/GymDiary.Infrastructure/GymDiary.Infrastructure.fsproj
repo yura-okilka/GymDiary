@@ -6,7 +6,7 @@
     <Compile Include="Persistence\Exceptions.fs" />
     <Compile Include="Persistence\MongoSettings.fs" />
     <Compile Include="Persistence\SerializationSettings.fs" />
-    <Compile Include="Persistence\MongoObjectIdProvider.fs" />
+    <Compile Include="Persistence\MongoObjectIdFactory.fs" />
     <Compile Include="Persistence\Documents\IDocument.fs" />
     <Compile Include="Persistence\Documents\UserDocument.fs" />
     <Compile Include="Persistence\Documents\ExerciseCategoryDocument.fs" />

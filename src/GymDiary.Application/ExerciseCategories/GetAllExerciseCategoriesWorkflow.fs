@@ -15,12 +15,12 @@ module GetAllExerciseCategoriesWorkflow =
 
     type public QueryError = InvalidQuery of ValidationError list
 
-    type public Handler(entityIdProvider: IEntityIdProvider, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    type public Handler(entityIdFactory: IEntityIdFactory, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
         member _.Handle(query: Query) =
             asyncResult {
                 let! ownerId =
                     validation {
-                        let! ownerId = query.OwnerId |> Validation.checkField (nameof query.OwnerId) entityIdProvider.TryParseResult
+                        let! ownerId = query.OwnerId |> Validation.checkField (nameof query.OwnerId) entityIdFactory.TryParseResult
                         return ownerId
                     }
                     |> Result.mapError InvalidQuery

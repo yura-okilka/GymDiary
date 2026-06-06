@@ -18,13 +18,13 @@ module GetExerciseCategoryWorkflow =
         | InvalidQuery of ValidationError list
         | CategoryNotFound of id: ExerciseCategoryId * ownerId: UserId
 
-    type public Handler(entityIdProvider: IEntityIdProvider, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    type public Handler(entityIdFactory: IEntityIdFactory, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
         member _.Handle(query: Query) =
             asyncResult {
                 let! categoryId, ownerId =
                     validation {
-                        let! categoryId = query.Id |> Validation.checkField (nameof query.Id) entityIdProvider.TryParseResult
-                        and! ownerId = query.OwnerId |> Validation.checkField (nameof query.OwnerId) entityIdProvider.TryParseResult
+                        let! categoryId = query.Id |> Validation.checkField (nameof query.Id) entityIdFactory.TryParseResult
+                        and! ownerId = query.OwnerId |> Validation.checkField (nameof query.OwnerId) entityIdFactory.TryParseResult
                         return (categoryId, ownerId)
                     }
                     |> Result.mapError InvalidQuery

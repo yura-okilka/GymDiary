@@ -7,9 +7,8 @@ open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Routines
 open GymDiary.Domain.Users
 
-type IEntityIdProvider =
+type IEntityIdFactory =
     abstract member GenerateId: unit -> Id<'T>
-    abstract member TryParse: string -> Id<'T> option
     abstract member TryParseResult: string -> Result<Id<'T>, string>
 
 type UpdateEntityError = EntityNotFound of entity: string * id: string
