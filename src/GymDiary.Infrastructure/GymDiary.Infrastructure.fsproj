@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <Compile Include="Time\SystemClock.fs" />
     <Compile Include="Persistence\InternalExtensions.fs" />
     <Compile Include="Persistence\FindFluentExtensions.fs" />
     <Compile Include="Persistence\Exceptions.fs" />

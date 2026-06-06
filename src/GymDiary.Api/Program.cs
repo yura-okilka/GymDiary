@@ -1,11 +1,10 @@
 using System.Text.Json.Serialization;
-
 using GymDiary.Api.Authentication;
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
+using GymDiary.Api.Time;
 using GymDiary.Application;
 using GymDiary.Infrastructure.Persistence;
-
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +20,7 @@ builder.Services.AddOpenApi(options => options.AddOperationTransformer<ProblemRe
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddProblemDetails();
+builder.Services.AddGymDiaryTime();
 builder.Services.AddGymDiaryEndpoints();
 builder.Services.AddGymDiaryAuthentication();
 builder.Services.AddGymDiaryApplication();

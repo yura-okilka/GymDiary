@@ -27,7 +27,7 @@ module CreateExerciseCategoryWorkflow =
 
     type public Handler
         (
-            clock: IClock,
+            timeProvider: TimeProvider,
             entityIdProvider: IEntityIdProvider,
             userRepository: IUserRepository,
             categoryRepository: IExerciseCategoryRepository,
@@ -40,7 +40,7 @@ module CreateExerciseCategoryWorkflow =
                         let! id = entityIdProvider.GenerateId() |> Ok
                         and! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
                         and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) entityIdProvider.TryParseResult
-                        return ExerciseCategory.create id name ownerId clock.UtcNow
+                        return ExerciseCategory.create id name ownerId timeProvider.UtcNow
                     }
                     |> Result.mapError InvalidCommand
 

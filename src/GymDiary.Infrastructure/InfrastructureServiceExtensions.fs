@@ -2,18 +2,15 @@ namespace GymDiary.Infrastructure.Persistence
 
 #nowarn "20"
 
-open System
 open System.Runtime.CompilerServices
 open Common.Configuration
 open GymDiary.Application.Persistence
-open GymDiary.Application.Time
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Routines
 open GymDiary.Domain.Users
 open GymDiary.Infrastructure.Persistence.Documents
 open GymDiary.Infrastructure.Persistence.Mapping
-open GymDiary.Infrastructure.Time
 open GymDiary.Infrastructure.Persistence.Repositories
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
@@ -45,5 +42,4 @@ type InfrastructureServiceExtensions() =
             .AddSingleton<IRoutineRepository, RoutineRepository>()
 
     [<Extension>]
-    static member AddGymDiaryInfrastructure(services: IServiceCollection) : IServiceCollection =
-        services.AddSingleton<IClock>(SystemClock(TimeProvider.System)).AddPersistence()
+    static member AddGymDiaryInfrastructure(services: IServiceCollection) : IServiceCollection = services.AddPersistence()

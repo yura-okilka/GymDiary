@@ -8,7 +8,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Time\Abstractions.fs" />
+    <Compile Include="Time\TimeProviderExtensions.fs" />
     <Compile Include="Authentication\Abstractions.fs" />
     <Compile Include="Persistence\Abstractions.fs" />
     <Compile Include="Workflows\Abstractions.fs" />
