@@ -13,6 +13,7 @@
   <Folder Name="/archive/">
     <Project Path="src/GymDiary.Api.Oxpecker/GymDiary.Api.Oxpecker.fsproj" />
     <Project Path="src/GymDiary.Core/GymDiary.Core.fsproj" />
+    <Project Path="src/GymDiary.DbMigrations/GymDiary.DbMigrations.csproj" />
     <Project Path="tests/GymDiary.Api.SystemTests/GymDiary.Api.SystemTests.csproj" />
     <Project Path="tests/SystemTests/SystemTests.csproj" />
   </Folder>
@@ -22,7 +23,6 @@
     <Project Path="src/GymDiary.ApiClient/GymDiary.ApiClient.csproj" />
     <Project Path="src/GymDiary.AppHost/GymDiary.AppHost.csproj" />
     <Project Path="src/GymDiary.Application/GymDiary.Application.fsproj" />
-    <Project Path="src/GymDiary.DbMigrations/GymDiary.DbMigrations.csproj" />
     <Project Path="src/GymDiary.Domain/GymDiary.Domain.fsproj" />
     <Project Path="src/GymDiary.Persistence.MongoDB/GymDiary.Persistence.MongoDB.fsproj" />
     <Project Path="src/GymDiary.ServiceDefaults/GymDiary.ServiceDefaults.csproj" />
