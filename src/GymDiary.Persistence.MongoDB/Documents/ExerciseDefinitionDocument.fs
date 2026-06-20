@@ -4,13 +4,13 @@ open System
 
 [<CLIMutable>]
 type ExerciseDefinitionDocument = {
-    Id: string
-    CategoryId: string
+    Id: Guid
+    CategoryId: Guid
     Name: string
     Notes: string option
     RestTime: TimeSpan
     Sets: ExerciseSetDto list
-    OwnerId: string
+    OwnerId: Guid
     CreatedOnUtc: DateTime
     UpdatedOnUtc: DateTime
 } with

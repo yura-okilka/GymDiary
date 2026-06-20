@@ -4,13 +4,13 @@ open System
 
 [<CLIMutable>]
 type RoutineDocument = {
-    Id: string
+    Id: Guid
     Name: string
     Goal: string option
     Notes: string option
     Schedule: DayOfWeek Set
-    ExerciseIds: string Set
-    OwnerId: string
+    ExerciseIds: Guid Set
+    OwnerId: Guid
     CreatedOnUtc: DateTime
     UpdatedOnUtc: DateTime
 } with

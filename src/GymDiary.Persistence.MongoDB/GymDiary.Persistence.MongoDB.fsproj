@@ -6,7 +6,6 @@
     <Compile Include="Exceptions.fs" />
     <Compile Include="MongoSettings.fs" />
     <Compile Include="SerializationSettings.fs" />
-    <Compile Include="MongoObjectIdFactory.fs" />
     <Compile Include="Documents\IDocument.fs" />
     <Compile Include="Documents\UserDocument.fs" />
     <Compile Include="Documents\ExerciseCategoryDocument.fs" />

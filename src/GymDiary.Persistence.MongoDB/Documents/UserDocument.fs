@@ -9,7 +9,7 @@ type GenderDto =
 
 [<CLIMutable>]
 type UserDocument = {
-    Id: string
+    Id: Guid
     Email: string
     FirstName: string
     LastName: string

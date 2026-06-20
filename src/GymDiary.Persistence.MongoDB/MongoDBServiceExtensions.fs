@@ -28,7 +28,6 @@ type MongoDBServiceExtensions() =
             .AddSingleton<IMongoClient, MongoClient>(fun sp ->
                 new MongoClient(sp.GetRequiredService<IConfiguration>().GetConnectionStringOrThrow("gymdiary-db")))
             .AddSingleton<IMongoContext, MongoContext>()
-            .AddSingleton<IEntityIdFactory, MongoObjectIdFactory>()
 
             .AddSingleton<IDocumentMapper<User, UserDocument>, UserDocumentMapper>()
             .AddSingleton<IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument>, ExerciseCategoryDocumentMapper>()

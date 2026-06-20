@@ -3,6 +3,7 @@ namespace GymDiary.Persistence.MongoDB.Mapping
 open System
 open Common.Extensions
 open FsToolkit.ErrorHandling
+open FSharp.UMX
 open GymDiary.Domain.Users
 open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Application.Workflows.Validation
@@ -18,7 +19,7 @@ type UserDocumentMapper() =
                 | Other -> GenderDto.Other
 
             {
-                Id = domain.Id.Value
+                Id = UMX.untag domain.Id
                 Email = domain.Email.Value
                 FirstName = domain.FirstName.Value
                 LastName = domain.LastName.Value
@@ -36,6 +37,7 @@ type UserDocumentMapper() =
                 | GenderDto.Other -> Other |> Ok
                 | _ -> ValidationError.ofField field $"{gender} is not a valid {nameof GenderDto}" |> Error
 
+            let id: UserId = UMX.tag document.Id
             let! email = document.Email |> Validation.checkField (nameof document.Email) EmailAddress.create
             let! firstName = document.FirstName |> Validation.checkField (nameof document.FirstName) String50.create
             let! lastName = document.LastName |> Validation.checkField (nameof document.LastName) String50.create
@@ -43,7 +45,7 @@ type UserDocumentMapper() =
             let! gender = document.Gender |> Option.traverseResult (dtoToGender (nameof document.Gender))
 
             return {
-                Id = Id(document.Id)
+                Id = id
                 Email = email
                 FirstName = firstName
                 LastName = lastName

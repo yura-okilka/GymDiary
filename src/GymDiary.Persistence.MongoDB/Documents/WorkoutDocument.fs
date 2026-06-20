@@ -3,11 +3,11 @@ namespace GymDiary.Persistence.MongoDB.Documents
 open System
 
 [<CLIMutable>]
-type ExerciseCategorySnapshotDto = { Id: string; Name: string }
+type ExerciseCategorySnapshotDto = { Id: Guid; Name: string }
 
 [<CLIMutable>]
 type ExerciseDefinitionSnapshotDto = {
-    Id: string
+    Id: Guid
     Category: ExerciseCategorySnapshotDto
     Name: string
     Notes: string option
@@ -17,7 +17,7 @@ type ExerciseDefinitionSnapshotDto = {
 
 [<CLIMutable>]
 type RoutineSnapshotDto = {
-    Id: string
+    Id: Guid
     Name: string
     Goal: string option
     Notes: string option
@@ -34,12 +34,12 @@ type ExerciseDto = {
 
 [<CLIMutable>]
 type WorkoutDocument = {
-    Id: string
+    Id: Guid
     Routine: RoutineSnapshotDto
     Exercises: ExerciseDto list
     StartedOn: DateTime
     CompletedOn: DateTime
-    OwnerId: string
+    OwnerId: Guid
 } with
 
     interface IDocumentWithOwner with

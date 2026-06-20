@@ -7,5 +7,5 @@ open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Persistence.MongoDB.Mapping
 
 type ExerciseDefinitionRepository(context: IMongoContext, mapper: IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument>) =
-    inherit OwnedEntityRepositoryBase<ExerciseDefinition, ExerciseDefinitionDocument>(context.ExerciseDefinitions, mapper)
+    inherit OwnedEntityRepositoryBase<ExerciseDefinition, exerciseDefinitionId, ExerciseDefinitionDocument>(context.ExerciseDefinitions, mapper)
     interface IExerciseDefinitionRepository

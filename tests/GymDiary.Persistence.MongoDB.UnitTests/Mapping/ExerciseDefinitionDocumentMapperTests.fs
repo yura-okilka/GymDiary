@@ -28,7 +28,7 @@ let ``round-trips an exercise definition`` () =
     let sets = WeightedRepetitionSets [ (PositiveInt.create 10 |> value, 60.0<kg>) ]
 
     let definition =
-        ExerciseDefinition.create (Id "def") (Id "cat") name notes (TimeSpan.FromMinutes 2.0) sets (Id "owner") createdOn
+        ExerciseDefinition.create (EntityId.create ()) (EntityId.create ()) name notes (TimeSpan.FromMinutes 2.0) sets (EntityId.create ()) createdOn
         |> value
 
     definition |> mapper.MapFromDomain |> mapper.MapToDomain |> shouldEqual (Ok definition)
@@ -40,7 +40,7 @@ let ``round-trips an exercise definition without notes`` () =
     let sets = DurationSets [ TimeSpan.FromSeconds 60.0 ]
 
     let definition =
-        ExerciseDefinition.create (Id "def") (Id "cat") name None TimeSpan.Zero sets (Id "owner") createdOn
+        ExerciseDefinition.create (EntityId.create ()) (EntityId.create ()) name None TimeSpan.Zero sets (EntityId.create ()) createdOn
         |> value
 
     definition |> mapper.MapFromDomain |> mapper.MapToDomain |> shouldEqual (Ok definition)

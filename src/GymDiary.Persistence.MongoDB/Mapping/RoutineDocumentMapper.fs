@@ -1,7 +1,10 @@
 namespace GymDiary.Persistence.MongoDB.Mapping
 
 open FsToolkit.ErrorHandling
+open FSharp.UMX
+open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Routines
+open GymDiary.Domain.Users
 open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.Primitives.SharedTypes
@@ -9,18 +12,19 @@ open GymDiary.Domain.Primitives.SharedTypes
 type RoutineDocumentMapper() =
     interface IDocumentMapper<Routine, RoutineDocument> with
         member _.MapFromDomain(domain: Routine) : RoutineDocument = {
-            Id = domain.Id.Value
+            Id = UMX.untag domain.Id
             Name = domain.Name.Value
             Goal = domain.Goal |> Option.map _.Value
             Notes = domain.Notes |> Option.map _.Value
             Schedule = domain.Schedule
-            ExerciseIds = domain.Exercises |> Set.map _.Value
-            OwnerId = domain.OwnerId.Value
+            ExerciseIds = domain.Exercises |> Set.map (fun id -> UMX.untag id)
+            OwnerId = UMX.untag domain.OwnerId
             CreatedOnUtc = domain.CreatedOnUtc
             UpdatedOnUtc = domain.UpdatedOnUtc
         }
 
         member _.MapToDomain(document: RoutineDocument) : Result<Routine, ValidationError> = result {
+            let id: RoutineId = UMX.tag document.Id
             let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create
 
             let! goal =
@@ -31,16 +35,17 @@ type RoutineDocumentMapper() =
                 document.Notes
                 |> Option.traverseResult (Validation.checkField (nameof document.Notes) String1k.create)
 
-            let exercises = document.ExerciseIds |> Set.map Id
+            let exercises: ExerciseDefinitionId Set = document.ExerciseIds |> Set.map (fun id -> UMX.tag id)
+            let ownerId: UserId = UMX.tag document.OwnerId
 
             return {
-                Id = Id(document.Id)
+                Id = id
                 Name = name
                 Goal = goal
                 Notes = notes
                 Schedule = document.Schedule
                 Exercises = exercises
-                OwnerId = Id(document.OwnerId)
+                OwnerId = ownerId
                 CreatedOnUtc = document.CreatedOnUtc
                 UpdatedOnUtc = document.UpdatedOnUtc
             }

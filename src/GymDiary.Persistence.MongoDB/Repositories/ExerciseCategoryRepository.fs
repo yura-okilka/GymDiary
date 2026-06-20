@@ -1,5 +1,6 @@
 namespace GymDiary.Persistence.MongoDB.Repositories
 
+open FSharp.UMX
 open GymDiary.Application.Persistence
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Persistence.MongoDB
@@ -8,11 +9,11 @@ open GymDiary.Persistence.MongoDB.Mapping
 open MongoDB.Driver
 
 type ExerciseCategoryRepository(context: IMongoContext, mapper: IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument>) =
-    inherit OwnedEntityRepositoryBase<ExerciseCategory, ExerciseCategoryDocument>(context.ExerciseCategories, mapper)
+    inherit OwnedEntityRepositoryBase<ExerciseCategory, exerciseCategoryId, ExerciseCategoryDocument>(context.ExerciseCategories, mapper)
     interface IExerciseCategoryRepository with
         member _.ExistsWithName name ownerId =
             let name = name.Value
-            let ownerId = ownerId.Value
+            let ownerId = UMX.untag ownerId
 
             // Consider using case-insensitive index for large collections.
             context.ExerciseCategories

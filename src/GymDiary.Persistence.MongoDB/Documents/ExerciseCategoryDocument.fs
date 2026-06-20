@@ -4,9 +4,9 @@ open System
 
 [<CLIMutable>]
 type ExerciseCategoryDocument = {
-    Id: string
+    Id: Guid
     Name: string
-    OwnerId: string
+    OwnerId: Guid
     CreatedOnUtc: DateTime
     UpdatedOnUtc: DateTime
 } with

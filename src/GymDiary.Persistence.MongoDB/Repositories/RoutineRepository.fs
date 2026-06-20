@@ -7,5 +7,5 @@ open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Persistence.MongoDB.Mapping
 
 type RoutineRepository(context: IMongoContext, mapper: IDocumentMapper<Routine, RoutineDocument>) =
-    inherit OwnedEntityRepositoryBase<Routine, RoutineDocument>(context.Routines, mapper)
+    inherit OwnedEntityRepositoryBase<Routine, routineId, RoutineDocument>(context.Routines, mapper)
     interface IRoutineRepository

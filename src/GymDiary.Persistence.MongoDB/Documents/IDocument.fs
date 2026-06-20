@@ -1,8 +1,10 @@
 namespace GymDiary.Persistence.MongoDB.Documents
 
+open System
+
 type IDocument =
-    abstract member Id: string
+    abstract member Id: Guid
 
 type IDocumentWithOwner =
     inherit IDocument
-    abstract member OwnerId: string
+    abstract member OwnerId: Guid
