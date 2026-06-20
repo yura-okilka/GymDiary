@@ -50,7 +50,7 @@ Use cases and the **ports** (abstractions) the core needs from the outside world
 
 - **Depends only on `Domain`.**
 - **Ports** (interfaces implemented by adapters), grouped by concern:
-  - `Persistence/` — `IEntityIdFactory`, the repository interfaces
+  - `Persistence/` — the repository interfaces
   - `Identity/` — `ICurrentUser` (who the operation runs as)
   - `Time/` — a `TimeProvider.UtcNow` extension (no custom clock interface)
   - `Workflows/` — `IRequestHandler<'TRequest, 'TResponse, 'TError>`
@@ -65,7 +65,7 @@ Use cases and the **ports** (abstractions) the core needs from the outside world
 ### `GymDiary.Persistence.MongoDB` (F#) — adapter
 The MongoDB implementation of the persistence ports.
 
-- **Implements** `GymDiary.Application` abstractions (repositories, `IEntityIdFactory`).
+- **Implements** `GymDiary.Application` abstractions (the repository interfaces).
 - Owns MongoDB documents, document↔domain mappers, the Mongo context, and
   serialization settings. The rest of the system never sees a `BsonDocument`.
 - Exposes a single DI entry point: `AddGymDiaryMongoDB()`.
