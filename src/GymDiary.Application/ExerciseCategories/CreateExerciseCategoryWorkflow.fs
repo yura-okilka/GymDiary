@@ -28,18 +28,18 @@ module CreateExerciseCategoryWorkflow =
     type public Handler
         (
             timeProvider: TimeProvider,
-            entityIdFactory: IEntityIdFactory,
             userRepository: IUserRepository,
             categoryRepository: IExerciseCategoryRepository,
             logger: ILogger<Handler>
         ) =
         member _.Handle command =
             asyncResult {
+                let id: ExerciseCategoryId = EntityId.create ()
+
                 let! category =
                     validation {
-                        let! id = entityIdFactory.GenerateId() |> Ok
-                        and! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
-                        and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) entityIdFactory.TryParseResult
+                        let! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
+                        and! (ownerId: UserId) = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse
                         return ExerciseCategory.create id name ownerId timeProvider.UtcNow
                     }
                     |> Result.mapError InvalidCommand
@@ -56,9 +56,9 @@ module CreateExerciseCategoryWorkflow =
 
                 do! categoryRepository.Create category
 
-                logger.LogInformation("Exercise category was created with id {id}", category.Id.Value)
+                logger.LogInformation("Exercise category was created with id {id}", EntityId.toString category.Id)
 
-                return category.Id.Value
+                return EntityId.toString category.Id
             }
             |> Async.StartAsTask
 

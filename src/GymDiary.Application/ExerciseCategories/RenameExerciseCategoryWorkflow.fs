@@ -25,7 +25,6 @@ module RenameExerciseCategoryWorkflow =
     type public Handler
         (
             timeProvider: TimeProvider,
-            entityIdFactory: IEntityIdFactory,
             categoryRepository: IExerciseCategoryRepository,
             logger: ILogger<Handler>
         ) =
@@ -33,8 +32,8 @@ module RenameExerciseCategoryWorkflow =
             asyncResult {
                 let! categoryId, ownerId, name =
                     validation {
-                        let! categoryId = command.Id |> Validation.checkField (nameof command.Id) entityIdFactory.TryParseResult
-                        and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) entityIdFactory.TryParseResult
+                        let! (categoryId: ExerciseCategoryId) = command.Id |> Validation.checkField (nameof command.Id) EntityId.parse
+                        and! (ownerId: UserId) = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse
                         and! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
                         return (categoryId, ownerId, name)
                     }
@@ -66,7 +65,7 @@ module RenameExerciseCategoryWorkflow =
 
                 logger.LogInformation(
                     "Exercise category with id {id} was renamed to {name}",
-                    renamedCategory.Id.Value,
+                    EntityId.toString renamedCategory.Id,
                     name.Value
                 )
             }

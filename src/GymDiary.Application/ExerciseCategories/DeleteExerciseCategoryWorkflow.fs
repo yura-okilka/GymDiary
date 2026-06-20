@@ -9,6 +9,7 @@ open GymDiary.Application.Workflows
 open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Users
+open GymDiary.Domain.Primitives.SharedTypes
 
 module DeleteExerciseCategoryWorkflow =
 
@@ -18,13 +19,13 @@ module DeleteExerciseCategoryWorkflow =
         | InvalidCommand of ValidationError list
         | CategoryNotFound of id: ExerciseCategoryId * ownerId: UserId
 
-    type public Handler(entityIdFactory: IEntityIdFactory, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    type public Handler(categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
         member _.Handle command =
             asyncResult {
                 let! categoryId, ownerId =
                     validation {
-                        let! categoryId = command.Id |> Validation.checkField (nameof command.Id) entityIdFactory.TryParseResult
-                        and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) entityIdFactory.TryParseResult
+                        let! (categoryId: ExerciseCategoryId) = command.Id |> Validation.checkField (nameof command.Id) EntityId.parse
+                        and! (ownerId: UserId) = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse
                         return (categoryId, ownerId)
                     }
                     |> Result.mapError InvalidCommand
@@ -36,7 +37,7 @@ module DeleteExerciseCategoryWorkflow =
                 if not deleted then
                     return! Error(CategoryNotFound(categoryId, ownerId))
 
-                logger.LogInformation("Exercise category with id {id} was deleted", categoryId.Value)
+                logger.LogInformation("Exercise category with id {id} was deleted", EntityId.toString categoryId)
             }
             |> Async.StartAsTask
 

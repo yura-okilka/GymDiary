@@ -8,6 +8,8 @@ open GymDiary.Application.Persistence
 open GymDiary.Application.Workflows
 open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.ExerciseCategories
+open GymDiary.Domain.Users
+open GymDiary.Domain.Primitives.SharedTypes
 
 module GetAllExerciseCategoriesWorkflow =
 
@@ -15,12 +17,12 @@ module GetAllExerciseCategoriesWorkflow =
 
     type public QueryError = InvalidQuery of ValidationError list
 
-    type public Handler(entityIdFactory: IEntityIdFactory, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    type public Handler(categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
         member _.Handle(query: Query) =
             asyncResult {
                 let! ownerId =
                     validation {
-                        let! ownerId = query.OwnerId |> Validation.checkField (nameof query.OwnerId) entityIdFactory.TryParseResult
+                        let! (ownerId: UserId) = query.OwnerId |> Validation.checkField (nameof query.OwnerId) EntityId.parse
                         return ownerId
                     }
                     |> Result.mapError InvalidQuery
@@ -30,7 +32,7 @@ module GetAllExerciseCategoriesWorkflow =
                 logger.LogInformation(
                     "Retrieved {count} exercise categories for owner {ownerId}",
                     List.length categories,
-                    ownerId.Value
+                    EntityId.toString ownerId
                 )
 
                 return categories

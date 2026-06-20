@@ -9,6 +9,7 @@ open GymDiary.Application.Workflows
 open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Users
+open GymDiary.Domain.Primitives.SharedTypes
 
 module GetExerciseCategoryWorkflow =
 
@@ -18,13 +19,13 @@ module GetExerciseCategoryWorkflow =
         | InvalidQuery of ValidationError list
         | CategoryNotFound of id: ExerciseCategoryId * ownerId: UserId
 
-    type public Handler(entityIdFactory: IEntityIdFactory, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    type public Handler(categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
         member _.Handle(query: Query) =
             asyncResult {
                 let! categoryId, ownerId =
                     validation {
-                        let! categoryId = query.Id |> Validation.checkField (nameof query.Id) entityIdFactory.TryParseResult
-                        and! ownerId = query.OwnerId |> Validation.checkField (nameof query.OwnerId) entityIdFactory.TryParseResult
+                        let! (categoryId: ExerciseCategoryId) = query.Id |> Validation.checkField (nameof query.Id) EntityId.parse
+                        and! (ownerId: UserId) = query.OwnerId |> Validation.checkField (nameof query.OwnerId) EntityId.parse
                         return (categoryId, ownerId)
                     }
                     |> Result.mapError InvalidQuery
@@ -34,7 +35,7 @@ module GetExerciseCategoryWorkflow =
                     |> Async.AwaitTask
                     |> AsyncResult.requireSome (CategoryNotFound(categoryId, ownerId))
 
-                logger.LogInformation("Exercise category with id {id} was retrieved", category.Id.Value)
+                logger.LogInformation("Exercise category with id {id} was retrieved", EntityId.toString category.Id)
 
                 return category
             }
