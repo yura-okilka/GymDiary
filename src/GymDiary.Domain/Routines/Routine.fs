@@ -1,24 +1,28 @@
 namespace GymDiary.Domain.Routines
 
 open System
+open FSharp.UMX
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Users
 
+[<Measure>]
+type routineId
+
+type RoutineId = Guid<routineId>
+
 /// A template of a workout
 type Routine = {
-    Id: Id<Routine>
+    Id: RoutineId
     Name: String50
     Goal: String200 option
     Notes: String1k option
     Schedule: DayOfWeek Set
-    Exercises: Id<ExerciseDefinition> Set
-    OwnerId: Id<User>
+    Exercises: ExerciseDefinitionId Set
+    OwnerId: UserId
     CreatedOnUtc: DateTime
     UpdatedOnUtc: DateTime
 }
-
-type RoutineId = Id<Routine>
 
 module Routine =
     let private validateExercises exercises =

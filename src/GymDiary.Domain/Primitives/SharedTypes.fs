@@ -2,13 +2,22 @@ module GymDiary.Domain.Primitives.SharedTypes
 
 open System
 open System.ComponentModel.DataAnnotations
+open FSharp.UMX
 
-/// Constrained to be a strongly typed id of entity
-[<Struct>]
-type Id<'T> =
-    | Id of string
+/// Generation and parsing of strongly typed entity ids: UMX-tagged, version-7 GUIDs.
+[<RequireQualifiedAccess>]
+module EntityId =
+    /// A new time-ordered (version 7) id tagged with the entity's measure.
+    let inline create<[<Measure>] 'm> () : Guid<'m> = UMX.tag (Guid.CreateVersion7())
 
-    member i.Value = let (Id value) = i in value
+    /// Parses a string into a tagged id, rejecting anything that is not a valid GUID.
+    let inline parse<[<Measure>] 'm> (value: string) : Result<Guid<'m>, string> =
+        match Guid.TryParse value with
+        | true, guid -> Ok(UMX.tag guid)
+        | false, _ -> Error "Id must be a valid GUID"
+
+    /// Renders a tagged id as its canonical 36-character string form.
+    let inline toString (id: Guid<'m>) : string = (UMX.untag id).ToString()
 
 /// Constrained to be 50 chars or fewer
 [<Struct>]

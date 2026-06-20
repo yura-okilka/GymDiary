@@ -19,7 +19,7 @@ let private repetitionSets counts =
 let private definitionCreatedOn (createdOn: DateTime) =
     let name = String50.create "Bench press" |> value
     let sets = repetitionSets [ 10 ]
-    ExerciseDefinition.create (Id "def") (Id "cat") name None TimeSpan.Zero sets (Id "owner") createdOn
+    ExerciseDefinition.create (EntityId.create ()) (EntityId.create ()) name None TimeSpan.Zero sets (EntityId.create ()) createdOn
     |> value
 
 [<Fact>]
@@ -32,7 +32,7 @@ let ``update preserves CreatedOnUtc and bumps UpdatedOnUtc`` () =
     let sets = repetitionSets [ 8 ]
 
     let updated =
-        ExerciseDefinition.update (Id "cat") name None TimeSpan.Zero sets definition updatedOn
+        ExerciseDefinition.update (EntityId.create ()) name None TimeSpan.Zero sets definition updatedOn
         |> value
 
     updated.CreatedOnUtc |> shouldEqual createdOn

@@ -1,22 +1,26 @@
 namespace GymDiary.Domain.ExerciseDefinitions
 
 open System
+open FSharp.UMX
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.Users
 
+[<Measure>]
+type exerciseDefinitionId
+
+type ExerciseDefinitionId = Guid<exerciseDefinitionId>
+
 type ExerciseDefinition =
-    { Id: Id<ExerciseDefinition>
-      CategoryId: Id<ExerciseCategory>
+    { Id: ExerciseDefinitionId
+      CategoryId: ExerciseCategoryId
       Name: String50
       Notes: String1k option
       RestTime: TimeSpan
       Sets: ExerciseSets
-      OwnerId: Id<User>
+      OwnerId: UserId
       CreatedOnUtc: DateTime
       UpdatedOnUtc: DateTime }
-
-type ExerciseDefinitionId = Id<ExerciseDefinition>
 
 module ExerciseDefinition =
     // The set kind is encoded in the ExerciseSets type, so "all sets are the same kind" holds by

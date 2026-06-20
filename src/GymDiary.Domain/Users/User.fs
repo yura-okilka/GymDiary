@@ -1,6 +1,7 @@
 namespace GymDiary.Domain.Users
 
 open System
+open FSharp.UMX
 open GymDiary.Domain.Primitives.SharedTypes
 
 type Gender =
@@ -8,8 +9,13 @@ type Gender =
     | Female
     | Other
 
+[<Measure>]
+type userId
+
+type UserId = Guid<userId>
+
 type User = {
-    Id: Id<User>
+    Id: UserId
     Email: EmailAddress
     FirstName: String50
     LastName: String50
@@ -18,8 +24,6 @@ type User = {
     CreatedOnUtc: DateTime
     UpdatedOnUtc: DateTime
 }
-
-type UserId = Id<User>
 
 module User =
     let create id email firstName lastName dateOfBirth gender utcNow = {

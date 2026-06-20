@@ -8,13 +8,13 @@ open GymDiary.Domain.Routines
 
 /// A snapshot of exercise category at a particular time
 type ExerciseCategorySnapshot = {
-    Id: Id<ExerciseCategory>
+    Id: ExerciseCategoryId
     Name: String50
 }
 
 /// A snapshot of exercise definition at a particular time
 type ExerciseDefinitionSnapshot = {
-    Id: Id<ExerciseDefinition>
+    Id: ExerciseDefinitionId
     Category: ExerciseCategorySnapshot
     Name: String50
     Notes: String1k option
@@ -24,7 +24,7 @@ type ExerciseDefinitionSnapshot = {
 
 /// A snapshot of routine at a particular time
 type RoutineSnapshot = {
-    Id: Id<Routine>
+    Id: RoutineId
     Name: String50
     Goal: String200 option
     Notes: String1k option

@@ -1,18 +1,22 @@
 namespace GymDiary.Domain.ExerciseCategories
 
 open System
+open FSharp.UMX
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.Users
 
+[<Measure>]
+type exerciseCategoryId
+
+type ExerciseCategoryId = Guid<exerciseCategoryId>
+
 type ExerciseCategory = {
-    Id: Id<ExerciseCategory>
+    Id: ExerciseCategoryId
     Name: String50
-    OwnerId: Id<User>
+    OwnerId: UserId
     CreatedOnUtc: DateTime
     UpdatedOnUtc: DateTime
 }
-
-type ExerciseCategoryId = Id<ExerciseCategory>
 
 module ExerciseCategory =
     let create id name ownerId utcNow = {

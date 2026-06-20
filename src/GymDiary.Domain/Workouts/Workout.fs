@@ -1,6 +1,7 @@
 namespace GymDiary.Domain.Workouts
 
 open System
+open FSharp.UMX
 open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.Users
@@ -14,17 +15,20 @@ type Exercise = {
     CompletedOn: DateTime
 }
 
+[<Measure>]
+type workoutId
+
+type WorkoutId = Guid<workoutId>
+
 /// A workout completed at a particular time
 type Workout = {
-    Id: Id<Workout>
+    Id: WorkoutId
     Routine: RoutineSnapshot
     Exercises: Exercise list
     StartedOn: DateTime
     CompletedOn: DateTime
-    OwnerId: Id<User>
+    OwnerId: UserId
 }
-
-type WorkoutId = Id<Workout>
 
 module Workout =
     let create id routine exercises startedOn completedOn ownerId : Result<Workout, string> =

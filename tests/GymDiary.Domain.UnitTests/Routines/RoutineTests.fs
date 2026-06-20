@@ -14,12 +14,12 @@ let private value =
     | Ok v -> v
     | Error e -> failwith (string e)
 
-let private exercises ids =
-    ids |> List.map Id |> Set.ofList
+let private exercises count : ExerciseDefinitionId Set =
+    List.init count (fun _ -> EntityId.create ()) |> Set.ofList
 
 let private routineCreatedOn (createdOn: DateTime) =
     let name = String50.create "Push day" |> value
-    Routine.create (Id "routine") name None None Set.empty (exercises [ "ex1" ]) (Id "owner") createdOn
+    Routine.create (EntityId.create ()) name None None Set.empty (exercises 1) (EntityId.create ()) createdOn
     |> value
 
 [<Fact>]
@@ -31,7 +31,7 @@ let ``update preserves CreatedOnUtc and bumps UpdatedOnUtc`` () =
     let name = String50.create "Pull day" |> value
 
     let updated =
-        Routine.update name None None Set.empty (exercises [ "ex2"; "ex3" ]) routine updatedOn
+        Routine.update name None None Set.empty (exercises 2) routine updatedOn
         |> value
 
     updated.CreatedOnUtc |> shouldEqual createdOn

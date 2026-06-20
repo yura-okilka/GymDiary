@@ -21,7 +21,7 @@ let private startedOn = DateTime(2026, 6, 7, 10, 0, 0, DateTimeKind.Utc)
 let private completedOn = DateTime(2026, 6, 7, 11, 0, 0, DateTimeKind.Utc)
 
 let private routineSnapshot: RoutineSnapshot = {
-    Id = Id "routine"
+    Id = EntityId.create ()
     Name = str "Push day"
     Goal = None
     Notes = None
@@ -29,8 +29,8 @@ let private routineSnapshot: RoutineSnapshot = {
 }
 
 let private definitionSnapshot: ExerciseDefinitionSnapshot = {
-    Id = Id "def"
-    Category = { Id = Id "cat"; Name = str "Chest" }
+    Id = EntityId.create ()
+    Category = { Id = EntityId.create (); Name = str "Chest" }
     Name = str "Bench press"
     Notes = None
     RestTime = TimeSpan.Zero
@@ -45,7 +45,7 @@ let private exercise start completed : Exercise = {
 }
 
 let private create exercises startedOn completedOn =
-    Workout.create (Id "workout") routineSnapshot exercises startedOn completedOn (Id "owner")
+    Workout.create (EntityId.create ()) routineSnapshot exercises startedOn completedOn (EntityId.create ())
 
 [<Fact>]
 let ``create with valid input succeeds`` () =
