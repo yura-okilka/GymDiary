@@ -6,6 +6,7 @@
   <ItemGroup>
     <!-- Common -->
     <PackageVersion Include="FSharp.Core" Version="10.1.203" />
+    <PackageVersion Include="FSharp.UMX" Version="1.1.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.7" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.7" />
 
