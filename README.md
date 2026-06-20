@@ -40,7 +40,7 @@ The heart of the system: entities, value objects, and the rules that must always
 - **Make illegal states unrepresentable.** Value objects use smart constructors with
   `private` union cases (`String50`, `EmailAddress`, …) and validate on creation,
   returning `Result<_, _>`.
-- Strongly-typed identifiers via the phantom type `Id<'T>` (e.g. `Id<User>`).
+- Strongly-typed identifiers via UMX measure-tagged GUIDs (e.g. `type UserId = Guid<userId>`).
 - Units of measure for physical quantities (`float<kg>`, `float<m>`).
 - Aggregates are records with a companion `module` exposing `create` / `update`
   functions that enforce invariants.
