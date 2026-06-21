@@ -33,7 +33,7 @@ public class CreateExerciseCategoryEndpoint : IEndpoint
                         {
                             Status = StatusCodes.Status409Conflict,
                             Title = "Owner not found",
-                            Detail = $"User '{e.Value}' does not exist."
+                            Detail = $"User '{e}' does not exist."
                         }));
                 })
             .WithName(nameof(CreateExerciseCategoryEndpoint))

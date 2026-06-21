@@ -17,7 +17,7 @@ public class GetAllExerciseCategoriesEndpoint : IEndpoint
 
                     return result.Match<IResult>(
                         categories => TypedResults.Ok(categories
-                            .Select(c => new ExerciseCategoryResponse(c.Id.Value, c.Name.Value, c.OwnerId.Value))
+                            .Select(c => new ExerciseCategoryResponse(c.Id, c.Name.Value, c.OwnerId))
                             .ToArray()),
                         onInvalidQuery: e => TypedResults.ValidationProblem(e.ToProblemDictionary()));
                 })

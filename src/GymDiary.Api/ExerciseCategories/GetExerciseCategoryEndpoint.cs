@@ -19,9 +19,9 @@ public class GetExerciseCategoryEndpoint : IEndpoint
 
                     return result.Match<IResult>(
                         category => TypedResults.Ok(new ExerciseCategoryResponse(
-                            category.Id.Value,
+                            category.Id,
                             category.Name.Value,
-                            category.OwnerId.Value)),
+                            category.OwnerId)),
                         onInvalidQuery: e => TypedResults.ValidationProblem(e.ToProblemDictionary()),
                         onCategoryNotFound: _ => TypedResults.Problem(new ProblemDetails
                         {
