@@ -44,5 +44,4 @@ let ``update with no exercises fails`` () =
     let name = String50.create "Pull day" |> value
 
     Routine.update name None None Set.empty Set.empty routine (DateTime(2026, 6, 7, 0, 0, 0, DateTimeKind.Utc))
-    |> Result.isError
-    |> shouldEqual true
+    |> shouldEqual (Error RoutineError.MustHaveAtLeastOneExercise)

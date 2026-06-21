@@ -58,16 +58,14 @@ let ``create with valid input succeeds`` () =
 
 [<Fact>]
 let ``create with no exercises fails`` () =
-    create [] startedOn completedOn |> Result.isError |> shouldEqual true
+    create [] startedOn completedOn |> shouldEqual (Error WorkoutError.MustHaveAtLeastOneExercise)
 
 [<Fact>]
 let ``create completed before started fails`` () =
     create [ exercise startedOn completedOn ] completedOn startedOn
-    |> Result.isError
-    |> shouldEqual true
+    |> shouldEqual (Error WorkoutError.CompletedBeforeStarted)
 
 [<Fact>]
 let ``create with an exercise completed before it started fails`` () =
     create [ exercise completedOn startedOn ] startedOn completedOn
-    |> Result.isError
-    |> shouldEqual true
+    |> shouldEqual (Error WorkoutError.ExerciseCompletedBeforeStarted)

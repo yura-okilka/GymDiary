@@ -39,3 +39,10 @@ let ``update preserves CreatedOnUtc and bumps UpdatedOnUtc`` () =
 
     updated.CreatedOnUtc |> shouldEqual createdOn
     updated.UpdatedOnUtc |> shouldEqual updatedOn
+
+[<Fact>]
+let ``create with no sets fails`` () =
+    let name = String50.create "Bench press" |> value
+
+    ExerciseDefinition.create (EntityId.create<exerciseDefinitionId> ()) (EntityId.create<exerciseCategoryId> ()) name None TimeSpan.Zero (RepetitionSets []) (EntityId.create<userId> ()) (DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc))
+    |> shouldEqual (Error ExerciseDefinitionError.MustHaveAtLeastOneSet)
