@@ -3,6 +3,7 @@ namespace GymDiary.Application.ExerciseCategories
 open System
 open System.Runtime.CompilerServices
 open FsToolkit.ErrorHandling
+open FSharp.UMX
 open GymDiary.Domain.Users
 open Microsoft.Extensions.Logging
 open GymDiary.Application.Time
@@ -58,11 +59,11 @@ module CreateExerciseCategoryWorkflow =
 
                 logger.LogInformation("Exercise category was created with id {id}", string category.Id)
 
-                return string category.Id
+                return UMX.untag category.Id
             }
             |> Async.StartAsTask
 
-        interface IRequestHandler<Command, string, CommandError> with
+        interface IRequestHandler<Command, Guid, CommandError> with
             member h.Handle command = h.Handle command
 
 module CreateExerciseCategoryResultExtensions =
@@ -70,7 +71,7 @@ module CreateExerciseCategoryResultExtensions =
     [<Extension>]
     let Match
         (
-            result: Result<string, CreateExerciseCategoryWorkflow.CommandError>,
+            result: Result<Guid, CreateExerciseCategoryWorkflow.CommandError>,
             onOk: Func<_, _>,
             onInvalidCommand: Func<_, _>,
             onCategoryAlreadyExists: Func<_, _>,

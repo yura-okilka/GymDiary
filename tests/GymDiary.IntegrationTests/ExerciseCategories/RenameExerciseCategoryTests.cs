@@ -16,11 +16,11 @@ public class RenameExerciseCategoryTests(AppHostFixture fixture)
         var created = await client.ExerciseCategories.PostAsync(new Request { Name = "Cardio" });
 
         created.Should().NotBeNull();
-        created.Id.Should().NotBeNullOrEmpty();
+        created.Id.Should().NotBeEmpty();
 
-        await client.ExerciseCategories[created.Id].PutAsync(new Request { Name = "Conditioning" });
+        await client.ExerciseCategories[created.Id.ToString()].PutAsync(new Request { Name = "Conditioning" });
 
-        var category = await client.ExerciseCategories[created.Id].GetAsync();
+        var category = await client.ExerciseCategories[created.Id.ToString()].GetAsync();
 
         category.Should().NotBeNull();
         category.Id.Should().Be(created.Id);

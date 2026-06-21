@@ -19,11 +19,11 @@ public class DeleteExerciseCategoryTests(AppHostFixture fixture)
         var created = await client.ExerciseCategories.PostAsync(new Request { Name = "Cardio" });
 
         created.Should().NotBeNull();
-        created.Id.Should().NotBeNullOrEmpty();
+        created.Id.Should().NotBeEmpty();
 
-        await client.ExerciseCategories[created.Id].DeleteAsync();
+        await client.ExerciseCategories[created.Id.ToString()].DeleteAsync();
 
-        var act = () => client.ExerciseCategories[created.Id].GetAsync();
+        var act = () => client.ExerciseCategories[created.Id.ToString()].GetAsync();
 
         var ex = await act.Should().ThrowAsync<ProblemDetails>();
         ex.Which.Status.Should().Be(StatusCodes.Status404NotFound);

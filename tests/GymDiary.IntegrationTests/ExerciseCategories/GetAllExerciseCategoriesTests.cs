@@ -20,9 +20,9 @@ public class GetAllExerciseCategoriesTests(AppHostFixture fixture)
 
         categories.Should().NotBeNull();
         categories.Should().OnlyContain(c =>
-            !string.IsNullOrEmpty(c.Id) &&
+            c.Id.HasValue && c.Id.Value != Guid.Empty &&
             !string.IsNullOrEmpty(c.Name) &&
-            !string.IsNullOrEmpty(c.OwnerId));
+            c.OwnerId.HasValue && c.OwnerId.Value != Guid.Empty);
     }
 
     [Fact(Skip = "Needs the FakeUserContext's user id seeded in the test database before the Create workflow accepts it.")]
@@ -39,9 +39,9 @@ public class GetAllExerciseCategoriesTests(AppHostFixture fixture)
         var categories = await client.ExerciseCategories.GetAsync();
 
         categories.Should().NotBeNull();
-        categories.Select(c => c.Id).Should().Contain([legs.Id, chest.Id]);
+        categories.Select(c => c.Id).Should().Contain(legs.Id).And.Contain(chest.Id);
         categories.Select(c => c.Name).Should().Contain(["Legs", "Chest"]);
         categories.Select(c => c.OwnerId).Distinct().Should().ContainSingle()
-            .Which.Should().NotBeNullOrEmpty();
+            .Which.Should().NotBeEmpty();
     }
 }

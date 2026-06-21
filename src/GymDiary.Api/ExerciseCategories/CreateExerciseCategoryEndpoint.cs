@@ -12,7 +12,7 @@ public class CreateExerciseCategoryEndpoint : IEndpoint
 {
     public record Request(string Name);
 
-    public record Response(string Id);
+    public record Response(Guid Id);
 
     public void MapEndpoint(IEndpointRouteBuilder app) =>
         app.MapPost("exercise-categories",

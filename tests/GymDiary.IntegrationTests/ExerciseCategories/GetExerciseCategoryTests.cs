@@ -19,14 +19,14 @@ public class GetExerciseCategoryTests(AppHostFixture fixture)
         var created = await client.ExerciseCategories.PostAsync(new Request { Name = "Cardio" });
 
         created.Should().NotBeNull();
-        created.Id.Should().NotBeNullOrEmpty();
+        created.Id.Should().NotBeEmpty();
 
-        var category = await client.ExerciseCategories[created.Id].GetAsync();
+        var category = await client.ExerciseCategories[created.Id.ToString()].GetAsync();
 
         category.Should().NotBeNull();
         category.Id.Should().Be(created.Id);
         category.Name.Should().Be("Cardio");
-        category.OwnerId.Should().NotBeNullOrEmpty();
+        category.OwnerId.Should().NotBeEmpty();
     }
 
     [Fact]
