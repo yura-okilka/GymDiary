@@ -24,15 +24,15 @@ let ``create produces unique ids`` () =
 [<Fact>]
 let ``parse accepts a valid GUID`` () =
     let raw = Guid.NewGuid()
-    let parsed: Result<Guid<testId>, string> = EntityId.parse (string raw)
+    let parsed = EntityId.parse<testId> (string raw)
     parsed |> shouldEqual (Ok(UMX.tag raw))
 
 [<Fact>]
 let ``parse rejects a non-GUID string`` () =
-    let parsed: Result<Guid<testId>, string> = EntityId.parse "not-a-guid"
+    let parsed = EntityId.parse<testId> "not-a-guid"
     parsed |> Result.isError |> shouldEqual true
 
 [<Fact>]
 let ``toString round-trips through parse`` () =
     let id = EntityId.create<testId> ()
-    EntityId.parse (string id) |> shouldEqual (Ok id)
+    EntityId.parse<testId> (string id) |> shouldEqual (Ok id)

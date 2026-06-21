@@ -22,7 +22,7 @@ module GetAllExerciseCategoriesWorkflow =
             asyncResult {
                 let! ownerId =
                     validation {
-                        let! (ownerId: UserId) = query.OwnerId |> Validation.checkField (nameof query.OwnerId) EntityId.parse
+                        let! ownerId = query.OwnerId |> Validation.checkField (nameof query.OwnerId) EntityId.parse<userId>
                         return ownerId
                     }
                     |> Result.mapError InvalidQuery

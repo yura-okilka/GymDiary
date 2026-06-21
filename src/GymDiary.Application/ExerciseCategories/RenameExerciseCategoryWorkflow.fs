@@ -32,8 +32,8 @@ module RenameExerciseCategoryWorkflow =
             asyncResult {
                 let! categoryId, ownerId, name =
                     validation {
-                        let! (categoryId: ExerciseCategoryId) = command.Id |> Validation.checkField (nameof command.Id) EntityId.parse
-                        and! (ownerId: UserId) = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse
+                        let! categoryId = command.Id |> Validation.checkField (nameof command.Id) EntityId.parse<exerciseCategoryId>
+                        and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse<userId>
                         and! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
                         return (categoryId, ownerId, name)
                     }

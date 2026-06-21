@@ -24,8 +24,8 @@ module GetExerciseCategoryWorkflow =
             asyncResult {
                 let! categoryId, ownerId =
                     validation {
-                        let! (categoryId: ExerciseCategoryId) = query.Id |> Validation.checkField (nameof query.Id) EntityId.parse
-                        and! (ownerId: UserId) = query.OwnerId |> Validation.checkField (nameof query.OwnerId) EntityId.parse
+                        let! categoryId = query.Id |> Validation.checkField (nameof query.Id) EntityId.parse<exerciseCategoryId>
+                        and! ownerId = query.OwnerId |> Validation.checkField (nameof query.OwnerId) EntityId.parse<userId>
                         return (categoryId, ownerId)
                     }
                     |> Result.mapError InvalidQuery

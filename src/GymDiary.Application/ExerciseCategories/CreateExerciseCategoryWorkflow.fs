@@ -39,7 +39,7 @@ module CreateExerciseCategoryWorkflow =
                 let! category =
                     validation {
                         let! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
-                        and! (ownerId: UserId) = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse
+                        and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse<userId>
                         return ExerciseCategory.create id name ownerId timeProvider.UtcNow
                     }
                     |> Result.mapError InvalidCommand
