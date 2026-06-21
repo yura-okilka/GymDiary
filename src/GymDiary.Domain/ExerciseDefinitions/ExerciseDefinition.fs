@@ -17,13 +17,13 @@ type ExerciseDefinition =
       Name: String50
       Notes: String1k option
       RestTime: TimeSpan
-      Sets: ExerciseSets
+      Sets: ExerciseSetGroup
       OwnerId: UserId
       CreatedOnUtc: DateTime
       UpdatedOnUtc: DateTime }
 
 module ExerciseDefinition =
-    // The set kind is encoded in the ExerciseSets type, so "all sets are the same kind" holds by
+    // The set kind is encoded in the ExerciseSetGroup type, so "all sets are the same kind" holds by
     // construction; only the non-empty invariant still needs checking.
     let private validateSets sets =
 
@@ -33,7 +33,7 @@ module ExerciseDefinition =
             | WeightedRepetitionSets s -> List.isEmpty s
             | DurationSets s -> List.isEmpty s
             | WeightedDurationSets s -> List.isEmpty s
-            | DistanceDurationSets s -> List.isEmpty s
+            | TimedDistanceSets s -> List.isEmpty s
 
         if isEmpty then
             Error "Exercise must have at least one set"

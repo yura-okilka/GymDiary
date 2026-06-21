@@ -31,7 +31,7 @@ type MongoDBServiceExtensions() =
 
             .AddSingleton<IDocumentMapper<User, UserDocument>, UserDocumentMapper>()
             .AddSingleton<IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument>, ExerciseCategoryDocumentMapper>()
-            .AddSingleton<IDocumentMapper<ExerciseSets, ExerciseSetDto list>, ExerciseSetDtoMapper>()
+            .AddSingleton<IDocumentMapper<ExerciseSetGroup, ExerciseSetDto list>, ExerciseSetDtoMapper>()
             .AddSingleton<IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument>, ExerciseDefinitionDocumentMapper>()
             .AddSingleton<IDocumentMapper<Routine, RoutineDocument>, RoutineDocumentMapper>()
 

@@ -10,7 +10,7 @@ open GymDiary.Domain.Workouts.Snapshots
 /// An exercise completed at a particular time
 type Exercise = {
     Definition: ExerciseDefinitionSnapshot
-    Sets: ExerciseSets
+    Sets: ExerciseSetGroup
     StartedOn: DateTime
     CompletedOn: DateTime
 }

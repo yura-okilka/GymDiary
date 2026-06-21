@@ -5,7 +5,7 @@
     <Compile Include="Primitives\SharedTypes.fs" />
     <Compile Include="Users\User.fs" />
     <Compile Include="ExerciseCategories\ExerciseCategory.fs" />
-    <Compile Include="ExerciseDefinitions\ExerciseSets.fs" />
+    <Compile Include="ExerciseDefinitions\ExerciseSetGroup.fs" />
     <Compile Include="ExerciseDefinitions\ExerciseDefinition.fs" />
     <Compile Include="Routines\Routine.fs" />
     <Compile Include="Workouts\Snapshots.fs" />

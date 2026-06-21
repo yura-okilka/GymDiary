@@ -21,8 +21,8 @@ type ExerciseSetDtoMapper() =
 
     // The group DU is stored as a flat list of kind-tagged set documents (one per set), so the storage
     // schema is unchanged; the kind is recovered on the way back in and validated to be uniform.
-    interface IDocumentMapper<ExerciseSets, ExerciseSetDto list> with
-        member _.MapFromDomain(domain: ExerciseSets) : ExerciseSetDto list =
+    interface IDocumentMapper<ExerciseSetGroup, ExerciseSetDto list> with
+        member _.MapFromDomain(domain: ExerciseSetGroup) : ExerciseSetDto list =
             match domain with
             | RepetitionSets reps ->
                 reps |> List.map (fun r -> { emptySetDto ExerciseSetKindDto.Repetitions with Repetitions = uint r.Value })
@@ -33,10 +33,10 @@ type ExerciseSetDtoMapper() =
                 durations |> List.map (fun d -> { emptySetDto ExerciseSetKindDto.Duration with Duration = d })
             | WeightedDurationSets items ->
                 items |> List.map (fun (d, w) -> { emptySetDto ExerciseSetKindDto.DurationWithWeight with Duration = d; Weight = float w })
-            | DistanceDurationSets items ->
-                items |> List.map (fun (d, dist) -> { emptySetDto ExerciseSetKindDto.DurationWithDistance with Duration = d; Distance = float dist })
+            | TimedDistanceSets items ->
+                items |> List.map (fun (dist, d) -> { emptySetDto ExerciseSetKindDto.DurationWithDistance with Duration = d; Distance = float dist })
 
-        member _.MapToDomain(documents: ExerciseSetDto list) : Result<ExerciseSets, ValidationError> = result {
+        member _.MapToDomain(documents: ExerciseSetDto list) : Result<ExerciseSetGroup, ValidationError> = result {
             let positiveReps (d: ExerciseSetDto) =
                 int d.Repetitions |> Validation.checkField (nameof d.Repetitions) PositiveInt.create
 
@@ -60,7 +60,7 @@ type ExerciseSetDtoMapper() =
                     | ExerciseSetKindDto.DurationWithWeight ->
                         return WeightedDurationSets(documents |> List.map (fun d -> (d.Duration, floatKg d.Weight)))
                     | ExerciseSetKindDto.DurationWithDistance ->
-                        return DistanceDurationSets(documents |> List.map (fun d -> (d.Duration, floatM d.Distance)))
+                        return TimedDistanceSets(documents |> List.map (fun d -> (floatM d.Distance, d.Duration)))
                     | other ->
                         return! ValidationError.ofField (nameof first.Kind) $"{other} is not a valid {nameof ExerciseSetKindDto}" |> Error
         }

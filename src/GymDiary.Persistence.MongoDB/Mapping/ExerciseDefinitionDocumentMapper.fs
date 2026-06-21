@@ -9,7 +9,7 @@ open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Application.Workflows.Validation
 open GymDiary.Domain.Primitives.SharedTypes
 
-type ExerciseDefinitionDocumentMapper(setsMapper: IDocumentMapper<ExerciseSets, ExerciseSetDto list>) =
+type ExerciseDefinitionDocumentMapper(setsMapper: IDocumentMapper<ExerciseSetGroup, ExerciseSetDto list>) =
     interface IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument> with
         member _.MapFromDomain(domain: ExerciseDefinition) : ExerciseDefinitionDocument = {
             Id = UMX.untag domain.Id

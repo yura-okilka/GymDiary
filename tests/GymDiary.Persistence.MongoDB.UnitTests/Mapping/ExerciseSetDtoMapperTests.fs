@@ -20,9 +20,9 @@ let private value =
 let private pos n = PositiveInt.create n |> value
 
 let private mapper =
-    ExerciseSetDtoMapper() :> IDocumentMapper<ExerciseSets, ExerciseSetDto list>
+    ExerciseSetDtoMapper() :> IDocumentMapper<ExerciseSetGroup, ExerciseSetDto list>
 
-let private roundTrip (sets: ExerciseSets) =
+let private roundTrip (sets: ExerciseSetGroup) =
     sets |> mapper.MapFromDomain |> mapper.MapToDomain
 
 let private errorField result =
@@ -52,7 +52,7 @@ let ``round-trips weighted duration sets`` () =
 
 [<Fact>]
 let ``round-trips distance duration sets`` () =
-    let sets = DistanceDurationSets [ (TimeSpan.FromMinutes 5.0, 1000.0<m>) ]
+    let sets = TimedDistanceSets [ (1000.0<m>, TimeSpan.FromMinutes 5.0) ]
     roundTrip sets |> shouldEqual (Ok sets)
 
 [<Fact>]
