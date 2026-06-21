@@ -24,16 +24,19 @@ type Routine = {
     UpdatedOnUtc: DateTime
 }
 
+type RoutineError =
+    | MustHaveAtLeastOneExercise
+
 module Routine =
     let private validateExercises exercises =
         if Set.isEmpty exercises then
-            Error "Routine must have at least one exercise"
+            Error MustHaveAtLeastOneExercise
         else
             Ok()
 
-    let create id name goal notes schedule exercises ownerId utcNow : Result<Routine, string> =
+    let create id name goal notes schedule exercises ownerId utcNow : Result<Routine, RoutineError> =
         match validateExercises exercises with
-        | Error message -> Error message
+        | Error error -> Error error
         | Ok() ->
             Ok {
                 Id = id
@@ -47,9 +50,9 @@ module Routine =
                 UpdatedOnUtc = utcNow
             }
 
-    let update name goal notes schedule exercises routine utcNow : Result<Routine, string> =
+    let update name goal notes schedule exercises routine utcNow : Result<Routine, RoutineError> =
         match validateExercises exercises with
-        | Error message -> Error message
+        | Error error -> Error error
         | Ok() ->
             Ok {
                 routine with

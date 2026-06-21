@@ -22,6 +22,9 @@ type ExerciseDefinition =
       CreatedOnUtc: DateTime
       UpdatedOnUtc: DateTime }
 
+type ExerciseDefinitionError =
+    | MustHaveAtLeastOneSet
+
 module ExerciseDefinition =
     // The set kind is encoded in the ExerciseSetGroup type, so "all sets are the same kind" holds by
     // construction; only the non-empty invariant still needs checking.
@@ -36,13 +39,13 @@ module ExerciseDefinition =
             | TimedDistanceSets s -> List.isEmpty s
 
         if isEmpty then
-            Error "Exercise must have at least one set"
+            Error MustHaveAtLeastOneSet
         else
             Ok()
 
-    let create id categoryId name notes restTime sets ownerId utcNow : Result<ExerciseDefinition, string> =
+    let create id categoryId name notes restTime sets ownerId utcNow : Result<ExerciseDefinition, ExerciseDefinitionError> =
         match validateSets sets with
-        | Error message -> Error message
+        | Error error -> Error error
         | Ok() ->
             Ok
                 { Id = id
@@ -55,9 +58,9 @@ module ExerciseDefinition =
                   CreatedOnUtc = utcNow
                   UpdatedOnUtc = utcNow }
 
-    let update categoryId name notes restTime sets definition utcNow : Result<ExerciseDefinition, string> =
+    let update categoryId name notes restTime sets definition utcNow : Result<ExerciseDefinition, ExerciseDefinitionError> =
         match validateSets sets with
-        | Error message -> Error message
+        | Error error -> Error error
         | Ok() ->
             Ok
                 { definition with

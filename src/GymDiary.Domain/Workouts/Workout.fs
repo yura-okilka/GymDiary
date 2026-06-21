@@ -30,14 +30,19 @@ type Workout = {
     OwnerId: UserId
 }
 
+type WorkoutError =
+    | MustHaveAtLeastOneExercise
+    | CompletedBeforeStarted
+    | ExerciseCompletedBeforeStarted
+
 module Workout =
-    let create id routine exercises startedOn completedOn ownerId : Result<Workout, string> =
+    let create id routine exercises startedOn completedOn ownerId : Result<Workout, WorkoutError> =
         if List.isEmpty exercises then
-            Error "Workout must have at least one exercise"
+            Error MustHaveAtLeastOneExercise
         elif startedOn > completedOn then
-            Error "Workout cannot be completed before it started"
+            Error CompletedBeforeStarted
         elif exercises |> List.exists (fun (e: Exercise) -> e.StartedOn > e.CompletedOn) then
-            Error "Exercise cannot be completed before it started"
+            Error ExerciseCompletedBeforeStarted
         else
             Ok {
                 Id = id
