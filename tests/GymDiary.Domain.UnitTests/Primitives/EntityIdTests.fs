@@ -12,13 +12,13 @@ type testId
 
 [<Fact>]
 let ``create produces a version 7 GUID`` () =
-    let id: Guid<testId> = EntityId.create ()
+    let id = EntityId.create<testId> ()
     (UMX.untag id).Version |> shouldEqual 7
 
 [<Fact>]
 let ``create produces unique ids`` () =
-    let a: Guid<testId> = EntityId.create ()
-    let b: Guid<testId> = EntityId.create ()
+    let a = EntityId.create<testId> ()
+    let b = EntityId.create<testId> ()
     a |> shouldNotEqual b
 
 [<Fact>]
@@ -34,5 +34,5 @@ let ``parse rejects a non-GUID string`` () =
 
 [<Fact>]
 let ``toString round-trips through parse`` () =
-    let id: Guid<testId> = EntityId.create ()
+    let id = EntityId.create<testId> ()
     EntityId.parse (EntityId.toString id) |> shouldEqual (Ok id)

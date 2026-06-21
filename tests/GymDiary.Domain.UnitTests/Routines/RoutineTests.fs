@@ -5,6 +5,7 @@ open System
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Routines
+open GymDiary.Domain.Users
 
 open Xunit
 open FsUnitTyped
@@ -15,11 +16,11 @@ let private value =
     | Error e -> failwith (string e)
 
 let private exercises count : ExerciseDefinitionId Set =
-    List.init count (fun _ -> EntityId.create ()) |> Set.ofList
+    List.init count (fun _ -> EntityId.create<exerciseDefinitionId> ()) |> Set.ofList
 
 let private routineCreatedOn (createdOn: DateTime) =
     let name = String50.create "Push day" |> value
-    Routine.create (EntityId.create ()) name None None Set.empty (exercises 1) (EntityId.create ()) createdOn
+    Routine.create (EntityId.create<routineId> ()) name None None Set.empty (exercises 1) (EntityId.create<userId> ()) createdOn
     |> value
 
 [<Fact>]

@@ -4,7 +4,9 @@ open System
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 open GymDiary.Domain.Primitives.SharedTypes
+open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.ExerciseDefinitions
+open GymDiary.Domain.Users
 open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Persistence.MongoDB.Mapping
 
@@ -28,7 +30,7 @@ let ``round-trips an exercise definition`` () =
     let sets = WeightedRepetitionSets [ (PositiveInt.create 10 |> value, 60.0<kg>) ]
 
     let definition =
-        ExerciseDefinition.create (EntityId.create ()) (EntityId.create ()) name notes (TimeSpan.FromMinutes 2.0) sets (EntityId.create ()) createdOn
+        ExerciseDefinition.create (EntityId.create<exerciseDefinitionId> ()) (EntityId.create<exerciseCategoryId> ()) name notes (TimeSpan.FromMinutes 2.0) sets (EntityId.create<userId> ()) createdOn
         |> value
 
     definition |> mapper.MapFromDomain |> mapper.MapToDomain |> shouldEqual (Ok definition)
@@ -40,7 +42,7 @@ let ``round-trips an exercise definition without notes`` () =
     let sets = DurationSets [ TimeSpan.FromSeconds 60.0 ]
 
     let definition =
-        ExerciseDefinition.create (EntityId.create ()) (EntityId.create ()) name None TimeSpan.Zero sets (EntityId.create ()) createdOn
+        ExerciseDefinition.create (EntityId.create<exerciseDefinitionId> ()) (EntityId.create<exerciseCategoryId> ()) name None TimeSpan.Zero sets (EntityId.create<userId> ()) createdOn
         |> value
 
     definition |> mapper.MapFromDomain |> mapper.MapToDomain |> shouldEqual (Ok definition)

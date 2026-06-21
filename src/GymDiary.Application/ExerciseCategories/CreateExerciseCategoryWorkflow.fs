@@ -34,7 +34,7 @@ module CreateExerciseCategoryWorkflow =
         ) =
         member _.Handle command =
             asyncResult {
-                let id: ExerciseCategoryId = EntityId.create ()
+                let id = EntityId.create<exerciseCategoryId> ()
 
                 let! category =
                     validation {

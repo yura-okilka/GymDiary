@@ -3,7 +3,10 @@ module GymDiary.Domain.UnitTests.Workouts.WorkoutTests
 open System
 
 open GymDiary.Domain.Primitives.SharedTypes
+open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.ExerciseDefinitions
+open GymDiary.Domain.Routines
+open GymDiary.Domain.Users
 open GymDiary.Domain.Workouts
 open GymDiary.Domain.Workouts.Snapshots
 
@@ -21,7 +24,7 @@ let private startedOn = DateTime(2026, 6, 7, 10, 0, 0, DateTimeKind.Utc)
 let private completedOn = DateTime(2026, 6, 7, 11, 0, 0, DateTimeKind.Utc)
 
 let private routineSnapshot: RoutineSnapshot = {
-    Id = EntityId.create ()
+    Id = EntityId.create<routineId> ()
     Name = str "Push day"
     Goal = None
     Notes = None
@@ -29,8 +32,8 @@ let private routineSnapshot: RoutineSnapshot = {
 }
 
 let private definitionSnapshot: ExerciseDefinitionSnapshot = {
-    Id = EntityId.create ()
-    Category = { Id = EntityId.create (); Name = str "Chest" }
+    Id = EntityId.create<exerciseDefinitionId> ()
+    Category = { Id = EntityId.create<exerciseCategoryId> (); Name = str "Chest" }
     Name = str "Bench press"
     Notes = None
     RestTime = TimeSpan.Zero
@@ -45,7 +48,7 @@ let private exercise start completed : Exercise = {
 }
 
 let private create exercises startedOn completedOn =
-    Workout.create (EntityId.create ()) routineSnapshot exercises startedOn completedOn (EntityId.create ())
+    Workout.create (EntityId.create<workoutId> ()) routineSnapshot exercises startedOn completedOn (EntityId.create<userId> ())
 
 [<Fact>]
 let ``create with valid input succeeds`` () =
