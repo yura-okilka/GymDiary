@@ -13,6 +13,7 @@ type UserDocument = {
     Email: string
     FirstName: string
     LastName: string
+    PhoneNumber: string option
     DateOfBirth: DateTime option
     Gender: GenderDto option
     CreatedOnUtc: DateTime

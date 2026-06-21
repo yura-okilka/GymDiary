@@ -19,6 +19,7 @@ type User = {
     Email: EmailAddress
     FirstName: String50
     LastName: String50
+    PhoneNumber: PhoneNumber option
     DateOfBirth: DateOnly option
     Gender: Gender option
     CreatedOnUtc: DateTime
@@ -26,21 +27,23 @@ type User = {
 }
 
 module User =
-    let create id email firstName lastName dateOfBirth gender utcNow = {
+    let create id email firstName lastName phoneNumber dateOfBirth gender utcNow = {
         Id = id
         Email = email
         FirstName = firstName
         LastName = lastName
+        PhoneNumber = phoneNumber
         DateOfBirth = dateOfBirth
         Gender = gender
         CreatedOnUtc = utcNow
         UpdatedOnUtc = utcNow
     }
 
-    let update firstName lastName dateOfBirth gender user utcNow = {
+    let update firstName lastName phoneNumber dateOfBirth gender user utcNow = {
         user with
             FirstName = firstName
             LastName = lastName
+            PhoneNumber = phoneNumber
             DateOfBirth = dateOfBirth
             Gender = gender
             UpdatedOnUtc = utcNow
