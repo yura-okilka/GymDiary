@@ -35,7 +35,7 @@ module GetExerciseCategoryWorkflow =
                     |> Async.AwaitTask
                     |> AsyncResult.requireSome (CategoryNotFound(categoryId, ownerId))
 
-                logger.LogInformation("Exercise category with id {id} was retrieved", EntityId.toString category.Id)
+                logger.LogInformation("Exercise category with id {id} was retrieved", string category.Id)
 
                 return category
             }

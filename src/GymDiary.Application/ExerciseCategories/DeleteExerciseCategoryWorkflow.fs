@@ -37,7 +37,7 @@ module DeleteExerciseCategoryWorkflow =
                 if not deleted then
                     return! Error(CategoryNotFound(categoryId, ownerId))
 
-                logger.LogInformation("Exercise category with id {id} was deleted", EntityId.toString categoryId)
+                logger.LogInformation("Exercise category with id {id} was deleted", string categoryId)
             }
             |> Async.StartAsTask
 

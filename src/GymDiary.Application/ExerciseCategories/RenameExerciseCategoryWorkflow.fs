@@ -65,7 +65,7 @@ module RenameExerciseCategoryWorkflow =
 
                 logger.LogInformation(
                     "Exercise category with id {id} was renamed to {name}",
-                    EntityId.toString renamedCategory.Id,
+                    string renamedCategory.Id,
                     name.Value
                 )
             }

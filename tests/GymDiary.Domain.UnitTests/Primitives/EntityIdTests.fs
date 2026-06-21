@@ -35,4 +35,4 @@ let ``parse rejects a non-GUID string`` () =
 [<Fact>]
 let ``toString round-trips through parse`` () =
     let id = EntityId.create<testId> ()
-    EntityId.parse (EntityId.toString id) |> shouldEqual (Ok id)
+    EntityId.parse (string id) |> shouldEqual (Ok id)

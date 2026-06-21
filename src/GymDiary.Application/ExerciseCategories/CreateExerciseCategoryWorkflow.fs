@@ -56,9 +56,9 @@ module CreateExerciseCategoryWorkflow =
 
                 do! categoryRepository.Create category
 
-                logger.LogInformation("Exercise category was created with id {id}", EntityId.toString category.Id)
+                logger.LogInformation("Exercise category was created with id {id}", string category.Id)
 
-                return EntityId.toString category.Id
+                return string category.Id
             }
             |> Async.StartAsTask
 

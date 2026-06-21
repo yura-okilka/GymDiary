@@ -16,9 +16,6 @@ module EntityId =
         | true, guid -> Ok(UMX.tag guid)
         | false, _ -> Error "Id must be a valid GUID"
 
-    /// Renders a tagged id as its canonical 36-character string form.
-    let inline toString (id: Guid<'m>) : string = (UMX.untag id).ToString()
-
 /// Constrained to be 50 chars or fewer
 [<Struct>]
 type String50 =

@@ -32,7 +32,7 @@ module GetAllExerciseCategoriesWorkflow =
                 logger.LogInformation(
                     "Retrieved {count} exercise categories for owner {ownerId}",
                     List.length categories,
-                    EntityId.toString ownerId
+                    string ownerId
                 )
 
                 return categories
