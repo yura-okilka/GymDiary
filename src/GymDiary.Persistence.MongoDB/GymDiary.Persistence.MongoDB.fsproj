@@ -26,7 +26,7 @@
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseDefinitionRepository.fs" />
     <Compile Include="Repositories\RoutineRepository.fs" />
-    <Compile Include="MongoDBServiceExtensions.fs" />
+    <Compile Include="PersistenceServiceExtensions.fs" />
   </ItemGroup>
 
   <ItemGroup>
