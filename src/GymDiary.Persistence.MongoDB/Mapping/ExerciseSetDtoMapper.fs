@@ -7,7 +7,7 @@ open FsToolkit.ErrorHandling
 open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Persistence.MongoDB.Documents
-open GymDiary.Application.Workflows.Validation
+open GymDiary.Application.Validation
 
 type ExerciseSetDtoMapper() =
 

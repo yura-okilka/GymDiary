@@ -1,4 +1,4 @@
-namespace GymDiary.Application.Workflows.Validation
+namespace GymDiary.Application.Validation
 
 /// A field paired with its validation error messages.
 type ValidationError =

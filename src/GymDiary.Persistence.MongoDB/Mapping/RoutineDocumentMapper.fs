@@ -6,7 +6,7 @@ open GymDiary.Domain.ExerciseDefinitions
 open GymDiary.Domain.Routines
 open GymDiary.Domain.Users
 open GymDiary.Persistence.MongoDB.Documents
-open GymDiary.Application.Workflows.Validation
+open GymDiary.Application.Validation
 open GymDiary.Domain.Primitives.SharedTypes
 
 type RoutineDocumentMapper() =

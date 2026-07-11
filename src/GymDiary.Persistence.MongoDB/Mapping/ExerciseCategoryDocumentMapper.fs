@@ -3,7 +3,7 @@ namespace GymDiary.Persistence.MongoDB.Mapping
 open FsToolkit.ErrorHandling
 open FSharp.UMX
 open GymDiary.Persistence.MongoDB.Documents
-open GymDiary.Application.Workflows.Validation
+open GymDiary.Application.Validation
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.Users
 open GymDiary.Domain.ExerciseCategories

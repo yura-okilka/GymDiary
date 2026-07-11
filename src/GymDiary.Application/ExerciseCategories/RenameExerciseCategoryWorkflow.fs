@@ -8,7 +8,7 @@ open Microsoft.Extensions.Logging
 open GymDiary.Application.Time
 open GymDiary.Application.Persistence
 open GymDiary.Application.Workflows
-open GymDiary.Application.Workflows.Validation
+open GymDiary.Application.Validation
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.Users

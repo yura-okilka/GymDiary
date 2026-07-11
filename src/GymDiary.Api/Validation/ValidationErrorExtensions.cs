@@ -1,4 +1,4 @@
-using GymDiary.Application.Workflows.Validation;
+using GymDiary.Application.Validation;
 
 namespace GymDiary.Api.Validation;
 

@@ -5,7 +5,7 @@ open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 open GymDiary.Domain.Primitives.SharedTypes
 open GymDiary.Domain.ExerciseDefinitions
-open GymDiary.Application.Workflows.Validation
+open GymDiary.Application.Validation
 open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Persistence.MongoDB.Mapping
 
