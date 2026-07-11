@@ -4,7 +4,6 @@
     <Compile Include="Infrastructure\InternalExtensions.fs" />
     <Compile Include="Infrastructure\FindFluentExtensions.fs" />
     <Compile Include="Infrastructure\Exceptions.fs" />
-    <Compile Include="Infrastructure\MongoOptions.fs" />
     <Compile Include="Infrastructure\SerializationSettings.fs" />
     <Compile Include="Abstractions\IDocument.fs" />
     <Compile Include="Abstractions\IDocumentMapper.fs" />
@@ -26,16 +25,14 @@
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseDefinitionRepository.fs" />
     <Compile Include="Repositories\RoutineRepository.fs" />
-    <Compile Include="PersistenceServiceExtensions.fs" />
+    <Compile Include="PersistenceBuilderExtensions.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FSharp.Core" />
     <PackageReference Include="FSharp.UMX" />
+    <PackageReference Include="Aspire.MongoDB.Driver.v3" />
     <PackageReference Include="FsToolkit.ErrorHandling" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
-    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
     <PackageReference Include="MongoDB.Driver" />
   </ItemGroup>
 

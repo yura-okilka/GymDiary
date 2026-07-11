@@ -3,7 +3,6 @@ namespace GymDiary.Persistence.MongoDB
 #nowarn "20"
 
 open System.Runtime.CompilerServices
-open Common.Configuration
 open GymDiary.Application.Persistence
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.ExerciseDefinitions
@@ -12,25 +11,20 @@ open GymDiary.Domain.Users
 open GymDiary.Persistence.MongoDB.Documents
 open GymDiary.Persistence.MongoDB.Mapping
 open GymDiary.Persistence.MongoDB.Repositories
-open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
-open MongoDB.Driver
+open Microsoft.Extensions.Hosting
 
 [<Extension>]
-type PersistenceServiceExtensions() =
+type PersistenceBuilderExtensions() =
     [<Extension>]
-    static member AddGymDiaryMongoDB(services: IServiceCollection) : IServiceCollection =
+    static member AddGymDiaryPersistenceMongoDB(builder: IHostApplicationBuilder) : IHostApplicationBuilder =
         SerializationSettings.register ()
 
-        services
-            .AddOptions<MongoOptions>()
-            .BindConfiguration(MongoOptions.Section)
-            .ValidateDataAnnotations()
-            .ValidateOnStart()
+        // Aspire MongoDB client integration: registers IMongoClient/IMongoDatabase from the AppHost
+        // connection string, plus health checks and telemetry.
+        builder.AddMongoDBClient("gymdiary-db")
 
-        services
-            .AddSingleton<IMongoClient, MongoClient>(fun sp ->
-                new MongoClient(sp.GetRequiredService<IConfiguration>().GetConnectionStringOrThrow("gymdiary-db")))
+        builder.Services
             .AddSingleton<IMongoContext, MongoContext>()
 
             .AddSingleton<IDocumentMapper<User, UserDocument>, UserDocumentMapper>()
@@ -43,3 +37,5 @@ type PersistenceServiceExtensions() =
             .AddSingleton<IExerciseCategoryRepository, ExerciseCategoryRepository>()
             .AddSingleton<IExerciseDefinitionRepository, ExerciseDefinitionRepository>()
             .AddSingleton<IRoutineRepository, RoutineRepository>()
+
+        builder

@@ -24,7 +24,7 @@ builder.Services.AddGymDiaryTime();
 builder.Services.AddGymDiaryIdentity();
 builder.Services.AddGymDiaryEndpoints();
 builder.Services.AddGymDiaryApplication();
-builder.Services.AddGymDiaryMongoDB();
+builder.AddGymDiaryPersistenceMongoDB();
 
 var app = builder.Build();
 
