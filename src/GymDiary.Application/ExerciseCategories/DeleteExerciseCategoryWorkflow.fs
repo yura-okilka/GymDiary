@@ -6,7 +6,6 @@ open FsToolkit.ErrorHandling
 open FSharp.UMX
 open Microsoft.Extensions.Logging
 open GymDiary.Application.Persistence
-open GymDiary.Application.Workflows
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Users
 
@@ -32,9 +31,6 @@ module DeleteExerciseCategoryWorkflow =
                 logger.LogInformation("Exercise category with id {id} was deleted", string categoryId)
             }
             |> Async.StartAsTask
-
-        interface IRequestHandler<Command, unit, CommandError> with
-            member h.Handle command = h.Handle command
 
 module DeleteExerciseCategoryResultExtensions =
 

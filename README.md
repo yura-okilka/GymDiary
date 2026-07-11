@@ -53,12 +53,11 @@ Use cases and the **ports** (abstractions) the core needs from the outside world
   - `Persistence/` — the repository interfaces
   - `Identity/` — `ICurrentUser` (who the operation runs as)
   - `Time/` — a `TimeProvider.UtcNow` extension (no custom clock interface)
-  - `Workflows/` — `IRequestHandler<'TRequest, 'TResponse, 'TError>`
 - **Workflows** = one module per use case, each with a `Command`/`Query`, a typed
-  error DU (`CommandError`/`QueryError`), and a `Handler` implementing
-  `IRequestHandler`, returning `Task<Result<_, _>>`. Input is validated with the
-  `validation { }` computation expression; the flow is railway-oriented
-  (`asyncResult { }`).
+  error DU (`CommandError`/`QueryError`), and a `Handler` class whose constructor
+  takes the ports it needs and whose `Handle` returns `Task<Result<_, _>>`. Input
+  is validated with the `validation { }` computation expression; the flow is
+  railway-oriented (`asyncResult { }`).
 - Never references a concrete technology — it asks for ports, the host injects
   implementations.
 

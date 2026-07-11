@@ -13,7 +13,6 @@
     <Compile Include="Time\TimeProviderExtensions.fs" />
     <Compile Include="Identity\ICurrentUser.fs" />
     <Compile Include="Persistence\Repositories.fs" />
-    <Compile Include="Workflows\IRequestHandler.fs" />
     <Compile Include="ExerciseCategories\CreateExerciseCategoryWorkflow.fs" />
     <Compile Include="ExerciseCategories\GetExerciseCategoryWorkflow.fs" />
     <Compile Include="ExerciseCategories\GetAllExerciseCategoriesWorkflow.fs" />

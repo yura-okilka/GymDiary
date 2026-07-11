@@ -7,7 +7,6 @@ open FSharp.UMX
 open Microsoft.Extensions.Logging
 open GymDiary.Application.Time
 open GymDiary.Application.Persistence
-open GymDiary.Application.Workflows
 open GymDiary.Application.Validation
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Primitives.SharedTypes
@@ -61,9 +60,6 @@ module RenameExerciseCategoryWorkflow =
                 logger.LogInformation("Exercise category with id {id} was renamed to {name}", string renamedCategory.Id, name.Value)
             }
             |> Async.StartAsTask
-
-        interface IRequestHandler<Command, unit, CommandError> with
-            member h.Handle command = h.Handle command
 
 module RenameExerciseCategoryResultExtensions =
 

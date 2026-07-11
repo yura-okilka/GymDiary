@@ -8,7 +8,6 @@ open GymDiary.Domain.Users
 open Microsoft.Extensions.Logging
 open GymDiary.Application.Time
 open GymDiary.Application.Persistence
-open GymDiary.Application.Workflows
 open GymDiary.Application.Validation
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Primitives.SharedTypes
@@ -62,9 +61,6 @@ module CreateExerciseCategoryWorkflow =
                 return %category.Id
             }
             |> Async.StartAsTask
-
-        interface IRequestHandler<Command, Guid, CommandError> with
-            member h.Handle command = h.Handle command
 
 module CreateExerciseCategoryResultExtensions =
 

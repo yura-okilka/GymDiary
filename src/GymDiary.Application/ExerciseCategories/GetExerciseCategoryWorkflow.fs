@@ -6,7 +6,6 @@ open FsToolkit.ErrorHandling
 open FSharp.UMX
 open Microsoft.Extensions.Logging
 open GymDiary.Application.Persistence
-open GymDiary.Application.Workflows
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Users
 
@@ -31,9 +30,6 @@ module GetExerciseCategoryWorkflow =
                 return category
             }
             |> Async.StartAsTask
-
-        interface IRequestHandler<Query, ExerciseCategory, QueryError> with
-            member h.Handle query = h.Handle query
 
 module GetExerciseCategoryResultExtensions =
 
