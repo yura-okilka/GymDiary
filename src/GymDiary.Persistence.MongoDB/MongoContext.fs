@@ -1,6 +1,7 @@
 namespace GymDiary.Persistence.MongoDB
 
 open GymDiary.Persistence.MongoDB.Documents
+open Microsoft.Extensions.Options
 open MongoDB.Driver
 
 type IMongoContext =
@@ -10,10 +11,12 @@ type IMongoContext =
     abstract member Routines: IMongoCollection<RoutineDocument>
     abstract member Workouts: IMongoCollection<WorkoutDocument>
 
-type MongoContext(mongoClient: IMongoClient, mongoSettings: MongoSettings) =
+type MongoContext(mongoClient: IMongoClient, options: IOptions<MongoOptions>) =
+    let databaseName = options.Value.Database
+
     member private _.GetCollection collection =
         mongoClient
-            .GetDatabase(mongoSettings.Database)
+            .GetDatabase(databaseName)
             .GetCollection<'TDocument>(collection)
 
     interface IMongoContext with

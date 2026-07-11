@@ -4,7 +4,7 @@
     <Compile Include="Infrastructure\InternalExtensions.fs" />
     <Compile Include="Infrastructure\FindFluentExtensions.fs" />
     <Compile Include="Infrastructure\Exceptions.fs" />
-    <Compile Include="Infrastructure\MongoSettings.fs" />
+    <Compile Include="Infrastructure\MongoOptions.fs" />
     <Compile Include="Infrastructure\SerializationSettings.fs" />
     <Compile Include="Abstractions\IDocument.fs" />
     <Compile Include="Abstractions\IDocumentMapper.fs" />
@@ -34,8 +34,9 @@
     <PackageReference Include="FSharp.UMX" />
     <PackageReference Include="FsToolkit.ErrorHandling" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
     <PackageReference Include="MongoDB.Driver" />
-    <PackageReference Include="Validus" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,9 +22,13 @@ type PersistenceServiceExtensions() =
     static member AddGymDiaryMongoDB(services: IServiceCollection) : IServiceCollection =
         SerializationSettings.register ()
 
-        // Create settings instance in the implementation factory to defer its creation and allow overriding IConfiguration in the test host.
         services
-            .AddSingleton<MongoSettings>(fun sp -> MongoSettings.createFromOrThrow (sp.GetRequiredService<IConfiguration>()))
+            .AddOptions<MongoOptions>()
+            .BindConfiguration(MongoOptions.Section)
+            .ValidateDataAnnotations()
+            .ValidateOnStart()
+
+        services
             .AddSingleton<IMongoClient, MongoClient>(fun sp ->
                 new MongoClient(sp.GetRequiredService<IConfiguration>().GetConnectionStringOrThrow("gymdiary-db")))
             .AddSingleton<IMongoContext, MongoContext>()
@@ -39,4 +43,3 @@ type PersistenceServiceExtensions() =
             .AddSingleton<IExerciseCategoryRepository, ExerciseCategoryRepository>()
             .AddSingleton<IExerciseDefinitionRepository, ExerciseDefinitionRepository>()
             .AddSingleton<IRoutineRepository, RoutineRepository>()
-
