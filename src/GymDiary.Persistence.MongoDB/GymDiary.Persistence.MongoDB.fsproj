@@ -1,27 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <Compile Include="InternalExtensions.fs" />
-    <Compile Include="FindFluentExtensions.fs" />
-    <Compile Include="Exceptions.fs" />
-    <Compile Include="MongoSettings.fs" />
-    <Compile Include="SerializationSettings.fs" />
-    <Compile Include="Documents\IDocument.fs" />
+    <Compile Include="Infrastructure\InternalExtensions.fs" />
+    <Compile Include="Infrastructure\FindFluentExtensions.fs" />
+    <Compile Include="Infrastructure\Exceptions.fs" />
+    <Compile Include="Infrastructure\MongoSettings.fs" />
+    <Compile Include="Infrastructure\SerializationSettings.fs" />
+    <Compile Include="Abstractions\IDocument.fs" />
+    <Compile Include="Abstractions\IDocumentMapper.fs" />
     <Compile Include="Documents\UserDocument.fs" />
     <Compile Include="Documents\ExerciseCategoryDocument.fs" />
     <Compile Include="Documents\ExerciseSetsDto.fs" />
     <Compile Include="Documents\ExerciseDefinitionDocument.fs" />
     <Compile Include="Documents\RoutineDocument.fs" />
     <Compile Include="Documents\WorkoutDocument.fs" />
-    <Compile Include="Mapping\IDocumentMapper.fs" />
     <Compile Include="Mapping\UserDocumentMapper.fs" />
     <Compile Include="Mapping\ExerciseCategoryDocumentMapper.fs" />
     <Compile Include="Mapping\ExerciseSetDtoMapper.fs" />
     <Compile Include="Mapping\ExerciseDefinitionDocumentMapper.fs" />
     <Compile Include="Mapping\RoutineDocumentMapper.fs" />
     <Compile Include="MongoContext.fs" />
-    <Compile Include="Repositories\EntityRepositoryBase.fs" />
-    <Compile Include="Repositories\OwnedEntityRepositoryBase.fs" />
+    <Compile Include="Repositories\Base\EntityRepositoryBase.fs" />
+    <Compile Include="Repositories\Base\OwnedEntityRepositoryBase.fs" />
     <Compile Include="Repositories\UserRepository.fs" />
     <Compile Include="Repositories\ExerciseCategoryRepository.fs" />
     <Compile Include="Repositories\ExerciseDefinitionRepository.fs" />
