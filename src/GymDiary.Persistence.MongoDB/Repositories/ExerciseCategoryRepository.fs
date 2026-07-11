@@ -19,3 +19,4 @@ type ExerciseCategoryRepository(context: IMongoContext, mapper: IDocumentMapper<
             context.ExerciseCategories
                 .Find(fun d -> d.Name.ToLower() = name.ToLower() && d.OwnerId = ownerId)
                 .AnyAsync()
+            |> Async.AwaitTask

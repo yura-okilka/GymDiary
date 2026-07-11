@@ -17,7 +17,7 @@ module GetAllExerciseCategoriesWorkflow =
             async {
                 let ownerId: UserId = %query.OwnerId
 
-                let! categories = categoryRepository.GetAllByOwner ownerId |> Async.AwaitTask
+                let! categories = categoryRepository.GetAllByOwner ownerId
 
                 logger.LogInformation("Retrieved {count} exercise categories for owner {ownerId}", List.length categories, string ownerId)
 

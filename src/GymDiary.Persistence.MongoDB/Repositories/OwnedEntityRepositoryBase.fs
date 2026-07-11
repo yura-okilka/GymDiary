@@ -14,7 +14,7 @@ type OwnedEntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocum
     (collection: IMongoCollection<'TDocument>, mapper: IDocumentMapper<'TEntity, 'TDocument>) =
     inherit EntityRepositoryBase<'TEntity, 'm, 'TDocument>(collection, mapper)
     interface IOwnedEntityRepository<'TEntity, Guid<'m>> with
-        member _.GetOneByOwner (id: Guid<'m>) (ownerId: UserId) = task {
+        member _.GetOneByOwner (id: Guid<'m>) (ownerId: UserId) = async {
             let id = %id
             let ownerId = %ownerId
 
@@ -22,6 +22,7 @@ type OwnedEntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocum
                 collection
                     .Find(fun d -> d.Id = id && d.OwnerId = ownerId)
                     .SingleOrNoneAsync()
+                |> Async.AwaitTask
 
             return
                 documentOption
@@ -29,9 +30,9 @@ type OwnedEntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocum
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<'TDocument>.Name, error)))
         }
 
-        member _.GetAllByOwner(ownerId: UserId) = task {
+        member _.GetAllByOwner(ownerId: UserId) = async {
             let ownerId = %ownerId
-            let! documents = collection.Find(fun d -> d.OwnerId = ownerId).ToListAsync()
+            let! documents = collection.Find(fun d -> d.OwnerId = ownerId).ToListAsync() |> Async.AwaitTask
 
             return
                 documents
@@ -40,9 +41,9 @@ type OwnedEntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocum
                 |> Result.valueOr (fun error -> raise (DocumentConversionException(typeof<'TDocument>.Name, error)))
         }
 
-        member _.DeleteByOwner (id: Guid<'m>) (ownerId: UserId) = task {
+        member _.DeleteByOwner (id: Guid<'m>) (ownerId: UserId) = async {
             let id = %id
             let ownerId = %ownerId
-            let! result = collection.DeleteOneAsync(fun d -> d.Id = id && d.OwnerId = ownerId)
+            let! result = collection.DeleteOneAsync(fun d -> d.Id = id && d.OwnerId = ownerId) |> Async.AwaitTask
             return result.DeletedCount > 0L
         }

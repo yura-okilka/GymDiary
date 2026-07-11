@@ -24,7 +24,6 @@ module GetExerciseCategoryWorkflow =
 
                 let! category =
                     categoryRepository.GetOneByOwner categoryId ownerId
-                    |> Async.AwaitTask
                     |> AsyncResult.requireSome (CategoryNotFound(categoryId, ownerId))
 
                 logger.LogInformation("Exercise category with id {id} was retrieved", string category.Id)

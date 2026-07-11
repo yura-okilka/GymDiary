@@ -12,4 +12,4 @@ type UserRepository(context: IMongoContext, mapper: IDocumentMapper<User, UserDo
     interface IUserRepository with
         member _.ExistsWithEmail email =
             let email = email.Value
-            context.Users.Find(fun d -> d.Email = email).AnyAsync()
+            context.Users.Find(fun d -> d.Email = email).AnyAsync() |> Async.AwaitTask

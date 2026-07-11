@@ -2,7 +2,6 @@ namespace GymDiary.Application.ExerciseCategories
 
 open System
 open System.Runtime.CompilerServices
-open System.Threading.Tasks
 open FsToolkit.ErrorHandling
 open FSharp.UMX
 open Microsoft.Extensions.Logging
@@ -40,14 +39,13 @@ module RenameExerciseCategoryWorkflow =
 
                 let! category =
                     categoryRepository.GetOneByOwner categoryId ownerId
-                    |> Async.AwaitTask
                     |> AsyncResult.requireSome (CategoryNotFound(categoryId, ownerId))
 
                 // Only enforce name uniqueness when the name actually changes — otherwise the category's
                 // own current name registers as a conflict (false positive when renaming to the same name).
                 let! nameAlreadyUsed =
                     if name = category.Name then
-                        Task.FromResult false
+                        Async.singleton false
                     else
                         categoryRepository.ExistsWithName name ownerId
 
@@ -58,7 +56,6 @@ module RenameExerciseCategoryWorkflow =
 
                 do!
                     categoryRepository.Update renamedCategory
-                    |> Async.AwaitTask
                     |> AsyncResult.mapError (fun (EntityNotFound _) -> CategoryNotFound(renamedCategory.Id, renamedCategory.OwnerId))
 
                 logger.LogInformation("Exercise category with id {id} was renamed to {name}", string renamedCategory.Id, name.Value)
