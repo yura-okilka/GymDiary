@@ -21,10 +21,6 @@ module CreateExerciseCategoryWorkflow =
         | CategoryAlreadyExists of name: String50
         | OwnerNotFound of id: UserId
 
-        static member categoryAlreadyExists name = Error(CategoryAlreadyExists(name))
-
-        static member ownerNotFound id = Error(OwnerNotFound(id))
-
     type public Handler
         (
             timeProvider: TimeProvider,
@@ -47,12 +43,12 @@ module CreateExerciseCategoryWorkflow =
                 let! ownerExists = userRepository.ExistsWithId category.OwnerId
 
                 if not ownerExists then
-                    return! CommandError.ownerNotFound category.OwnerId
+                    return! Error(OwnerNotFound category.OwnerId)
 
                 let! categoryExists = categoryRepository.ExistsWithName category.Name category.OwnerId
 
                 if categoryExists then
-                    return! CommandError.categoryAlreadyExists category.Name
+                    return! Error(CategoryAlreadyExists category.Name)
 
                 do! categoryRepository.Create category
 
