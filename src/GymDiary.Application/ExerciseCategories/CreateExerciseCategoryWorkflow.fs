@@ -18,7 +18,7 @@ module CreateExerciseCategoryWorkflow =
     type public Command = { Name: string; OwnerId: Guid }
 
     type public CommandError =
-        | InvalidCommand of ValidationErrors
+        | InvalidCommand of ValidationError list
         | CategoryAlreadyExists of name: String50
         | OwnerNotFound of id: UserId
 
@@ -41,7 +41,7 @@ module CreateExerciseCategoryWorkflow =
                 let! name =
                     command.Name
                     |> Validation.checkField (nameof command.Name) String50.create
-                    |> Result.mapError InvalidCommand
+                    |> Result.mapError (List.singleton >> InvalidCommand)
 
                 let category = ExerciseCategory.create categoryId name ownerId timeProvider.UtcNow
 

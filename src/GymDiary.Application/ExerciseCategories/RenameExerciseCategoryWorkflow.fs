@@ -22,7 +22,7 @@ module RenameExerciseCategoryWorkflow =
     }
 
     type public CommandError =
-        | InvalidCommand of ValidationErrors
+        | InvalidCommand of ValidationError list
         | CategoryNotFound of id: ExerciseCategoryId * ownerId: UserId
         | CategoryAlreadyExists of name: String50
 
@@ -35,7 +35,7 @@ module RenameExerciseCategoryWorkflow =
                 let! name =
                     command.Name
                     |> Validation.checkField (nameof command.Name) String50.create
-                    |> Result.mapError InvalidCommand
+                    |> Result.mapError (List.singleton >> InvalidCommand)
 
                 let! category =
                     categoryRepository.GetOneByOwner categoryId ownerId

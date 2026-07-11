@@ -1,5 +1,6 @@
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
+using GymDiary.Api.Validation;
 using GymDiary.Application.ExerciseCategories;
 using GymDiary.Application.Identity;
 

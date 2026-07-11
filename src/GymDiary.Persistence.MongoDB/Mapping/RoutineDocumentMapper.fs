@@ -23,7 +23,7 @@ type RoutineDocumentMapper() =
             UpdatedOnUtc = domain.UpdatedOnUtc
         }
 
-        member _.MapToDomain(document: RoutineDocument) : Result<Routine, ValidationErrors> = result {
+        member _.MapToDomain(document: RoutineDocument) : Result<Routine, ValidationError> = result {
             let id: RoutineId = %document.Id
             let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create
 
