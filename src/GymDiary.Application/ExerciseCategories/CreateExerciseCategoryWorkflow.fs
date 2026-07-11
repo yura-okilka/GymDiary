@@ -36,18 +36,17 @@ module CreateExerciseCategoryWorkflow =
                     |> Validation.checkField (nameof command.Name) String50.create
                     |> Result.mapError (List.singleton >> InvalidCommand)
 
-                let category = ExerciseCategory.create categoryId name ownerId timeProvider.UtcNow
-
-                let! ownerExists = userRepository.ExistsWithId category.OwnerId
+                let! ownerExists = userRepository.ExistsWithId ownerId
 
                 if not ownerExists then
-                    return! Error(OwnerNotFound category.OwnerId)
+                    return! Error(OwnerNotFound ownerId)
 
-                let! categoryExists = categoryRepository.ExistsWithName category.Name category.OwnerId
+                let! categoryExists = categoryRepository.ExistsWithName name ownerId
 
                 if categoryExists then
-                    return! Error(CategoryAlreadyExists category.Name)
+                    return! Error(CategoryAlreadyExists name)
 
+                let category = ExerciseCategory.create categoryId name ownerId timeProvider.UtcNow
                 do! categoryRepository.Create category
 
                 return %category.Id
