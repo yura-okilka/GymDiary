@@ -4,7 +4,6 @@ open System
 open System.Runtime.CompilerServices
 open FsToolkit.ErrorHandling
 open FSharp.UMX
-open Microsoft.Extensions.Logging
 open GymDiary.Application.Persistence
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Users
@@ -15,7 +14,7 @@ module DeleteExerciseCategoryWorkflow =
 
     type public CommandError = CategoryNotFound of id: ExerciseCategoryId * ownerId: UserId
 
-    type public Handler(categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    type public Handler(categoryRepository: IExerciseCategoryRepository) =
         member _.Handle command =
             asyncResult {
                 let categoryId: ExerciseCategoryId = %command.Id
@@ -27,8 +26,6 @@ module DeleteExerciseCategoryWorkflow =
 
                 if not deleted then
                     return! Error(CategoryNotFound(categoryId, ownerId))
-
-                logger.LogInformation("Exercise category with id {id} was deleted", string categoryId)
             }
             |> Async.StartAsTask
 

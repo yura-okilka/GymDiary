@@ -33,6 +33,7 @@
     <PackageReference Include="FSharp.UMX" />
     <PackageReference Include="Aspire.MongoDB.Driver.v3" />
     <PackageReference Include="FsToolkit.ErrorHandling" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="MongoDB.Driver" />
   </ItemGroup>
 

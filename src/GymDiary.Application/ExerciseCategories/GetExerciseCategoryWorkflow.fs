@@ -4,7 +4,6 @@ open System
 open System.Runtime.CompilerServices
 open FsToolkit.ErrorHandling
 open FSharp.UMX
-open Microsoft.Extensions.Logging
 open GymDiary.Application.Persistence
 open GymDiary.Domain.ExerciseCategories
 open GymDiary.Domain.Users
@@ -15,7 +14,7 @@ module GetExerciseCategoryWorkflow =
 
     type public QueryError = CategoryNotFound of id: ExerciseCategoryId * ownerId: UserId
 
-    type public Handler(categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    type public Handler(categoryRepository: IExerciseCategoryRepository) =
         member _.Handle(query: Query) =
             asyncResult {
                 let categoryId: ExerciseCategoryId = %query.Id
@@ -24,8 +23,6 @@ module GetExerciseCategoryWorkflow =
                 let! category =
                     categoryRepository.GetOneByOwner categoryId ownerId
                     |> AsyncResult.requireSome (CategoryNotFound(categoryId, ownerId))
-
-                logger.LogInformation("Exercise category with id {id} was retrieved", string category.Id)
 
                 return category
             }

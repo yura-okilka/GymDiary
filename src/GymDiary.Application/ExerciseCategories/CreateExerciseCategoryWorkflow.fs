@@ -5,7 +5,6 @@ open System.Runtime.CompilerServices
 open FsToolkit.ErrorHandling
 open FSharp.UMX
 open GymDiary.Domain.Users
-open Microsoft.Extensions.Logging
 open GymDiary.Application.Time
 open GymDiary.Application.Persistence
 open GymDiary.Application.Validation
@@ -25,8 +24,7 @@ module CreateExerciseCategoryWorkflow =
         (
             timeProvider: TimeProvider,
             userRepository: IUserRepository,
-            categoryRepository: IExerciseCategoryRepository,
-            logger: ILogger<Handler>
+            categoryRepository: IExerciseCategoryRepository
         ) =
         member _.Handle command =
             asyncResult {
@@ -51,8 +49,6 @@ module CreateExerciseCategoryWorkflow =
                     return! Error(CategoryAlreadyExists category.Name)
 
                 do! categoryRepository.Create category
-
-                logger.LogInformation("Exercise category was created with id {id}", string category.Id)
 
                 return %category.Id
             }

@@ -4,7 +4,6 @@ open System
 open System.Runtime.CompilerServices
 open FsToolkit.ErrorHandling
 open FSharp.UMX
-open Microsoft.Extensions.Logging
 open GymDiary.Application.Time
 open GymDiary.Application.Persistence
 open GymDiary.Application.Validation
@@ -25,7 +24,7 @@ module RenameExerciseCategoryWorkflow =
         | CategoryNotFound of id: ExerciseCategoryId * ownerId: UserId
         | CategoryAlreadyExists of name: String50
 
-    type public Handler(timeProvider: TimeProvider, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
+    type public Handler(timeProvider: TimeProvider, categoryRepository: IExerciseCategoryRepository) =
         member _.Handle command =
             asyncResult {
                 let categoryId: ExerciseCategoryId = %command.Id
@@ -56,8 +55,6 @@ module RenameExerciseCategoryWorkflow =
                 do!
                     categoryRepository.Update renamedCategory
                     |> AsyncResult.mapError (fun (EntityNotFound _) -> CategoryNotFound(renamedCategory.Id, renamedCategory.OwnerId))
-
-                logger.LogInformation("Exercise category with id {id} was renamed to {name}", string renamedCategory.Id, name.Value)
             }
             |> Async.StartAsTask
 
