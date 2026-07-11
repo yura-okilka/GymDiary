@@ -30,13 +30,13 @@ type UserDocumentMapper() =
                 UpdatedOnUtc = domain.UpdatedOnUtc
             }
 
-        member _.MapToDomain(document: UserDocument) : Result<User, ValidationError> = result {
+        member _.MapToDomain(document: UserDocument) : Result<User, ValidationErrors> = result {
             let dtoToGender field gender =
                 match gender with
                 | GenderDto.Male -> Male |> Ok
                 | GenderDto.Female -> Female |> Ok
                 | GenderDto.Other -> Other |> Ok
-                | _ -> ValidationError.ofField field $"{gender} is not a valid {nameof GenderDto}" |> Error
+                | _ -> ValidationErrors.ofField field $"{gender} is not a valid {nameof GenderDto}" |> Error
 
             let id: UserId = %document.Id
             let! email = document.Email |> Validation.checkField (nameof document.Email) EmailAddress.create

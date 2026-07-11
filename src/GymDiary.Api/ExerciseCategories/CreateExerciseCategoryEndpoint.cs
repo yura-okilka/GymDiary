@@ -1,6 +1,5 @@
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
-using GymDiary.Api.Validation;
 using GymDiary.Application.ExerciseCategories;
 using GymDiary.Application.Identity;
 
@@ -22,7 +21,7 @@ public class CreateExerciseCategoryEndpoint : IEndpoint
 
                     return result.Match<IResult>(
                         id => TypedResults.CreatedAtRoute(new Response(id), nameof(GetExerciseCategoryEndpoint), new { id }),
-                        onInvalidCommand: e => TypedResults.ValidationProblem(e.ToProblemDictionary()),
+                        onInvalidCommand: e => TypedResults.ValidationProblem(e.ToDictionary()),
                         onCategoryAlreadyExists: e => TypedResults.Problem(new ProblemDetails
                         {
                             Status = StatusCodes.Status409Conflict,

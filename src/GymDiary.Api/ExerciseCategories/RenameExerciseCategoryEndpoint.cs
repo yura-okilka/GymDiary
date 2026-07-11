@@ -1,6 +1,5 @@
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
-using GymDiary.Api.Validation;
 using GymDiary.Application.ExerciseCategories;
 using GymDiary.Application.Identity;
 
@@ -21,7 +20,7 @@ public class RenameExerciseCategoryEndpoint : IEndpoint
 
                     return result.Match<IResult>(
                         _ => TypedResults.NoContent(),
-                        onInvalidCommand: e => TypedResults.ValidationProblem(e.ToProblemDictionary()),
+                        onInvalidCommand: e => TypedResults.ValidationProblem(e.ToDictionary()),
                         onCategoryNotFound: _ => TypedResults.Problem(new ProblemDetails
                         {
                             Status = StatusCodes.Status404NotFound,

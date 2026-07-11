@@ -28,7 +28,7 @@ let private roundTrip (sets: ExerciseSetGroup) =
 let private errorField result =
     match result with
     | Ok _ -> failwith "expected Error"
-    | Error(ValidationError(field, _)) -> field
+    | Error(errors: ValidationErrors) -> errors.ToDictionary().Keys |> Seq.head
 
 [<Fact>]
 let ``round-trips repetition sets`` () =

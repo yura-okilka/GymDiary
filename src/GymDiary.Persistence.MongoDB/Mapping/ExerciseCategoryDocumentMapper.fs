@@ -18,7 +18,7 @@ type ExerciseCategoryDocumentMapper() =
             UpdatedOnUtc = domain.UpdatedOnUtc
         }
 
-        member _.MapToDomain(document: ExerciseCategoryDocument) : Result<ExerciseCategory, ValidationError> = result {
+        member _.MapToDomain(document: ExerciseCategoryDocument) : Result<ExerciseCategory, ValidationErrors> = result {
             let id: ExerciseCategoryId = %document.Id
             let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create
             let ownerId: UserId = %document.OwnerId

@@ -23,7 +23,7 @@ type ExerciseDefinitionDocumentMapper(setsMapper: IDocumentMapper<ExerciseSetGro
             UpdatedOnUtc = domain.UpdatedOnUtc
         }
 
-        member _.MapToDomain(document: ExerciseDefinitionDocument) : Result<ExerciseDefinition, ValidationError> = result {
+        member _.MapToDomain(document: ExerciseDefinitionDocument) : Result<ExerciseDefinition, ValidationErrors> = result {
             let id: ExerciseDefinitionId = %document.Id
             let categoryId: ExerciseCategoryId = %document.CategoryId
             let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create

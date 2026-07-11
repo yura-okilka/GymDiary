@@ -36,15 +36,15 @@ type ExerciseSetDtoMapper() =
             | TimedDistanceSets items ->
                 items |> List.map (fun (dist, d) -> { emptySetDto ExerciseSetKindDto.DurationWithDistance with Duration = d; Distance = float dist })
 
-        member _.MapToDomain(documents: ExerciseSetDto list) : Result<ExerciseSetGroup, ValidationError> = result {
+        member _.MapToDomain(documents: ExerciseSetDto list) : Result<ExerciseSetGroup, ValidationErrors> = result {
             let positiveReps (d: ExerciseSetDto) =
                 int d.Repetitions |> Validation.checkField (nameof d.Repetitions) PositiveInt.create
 
             match documents with
-            | [] -> return! ValidationError.ofField "Sets" "Exercise must have at least one set" |> Error
+            | [] -> return! ValidationErrors.ofField "Sets" "Exercise must have at least one set" |> Error
             | first :: _ ->
                 if documents |> List.exists (fun d -> d.Kind <> first.Kind) then
-                    return! ValidationError.ofField "Sets" "All sets must be of the same kind" |> Error
+                    return! ValidationErrors.ofField "Sets" "All sets must be of the same kind" |> Error
                 else
                     match first.Kind with
                     | ExerciseSetKindDto.Repetitions ->
@@ -62,5 +62,5 @@ type ExerciseSetDtoMapper() =
                     | ExerciseSetKindDto.DurationWithDistance ->
                         return TimedDistanceSets(documents |> List.map (fun d -> (floatM d.Distance, d.Duration)))
                     | other ->
-                        return! ValidationError.ofField (nameof first.Kind) $"{other} is not a valid {nameof ExerciseSetKindDto}" |> Error
+                        return! ValidationErrors.ofField (nameof first.Kind) $"{other} is not a valid {nameof ExerciseSetKindDto}" |> Error
         }
