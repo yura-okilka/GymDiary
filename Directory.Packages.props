@@ -21,6 +21,8 @@
     <PackageVersion Include="Scalar.AspNetCore" Version="2.14.11" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.8" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
+    <!-- Transitive pin: 2.0.0 (pulled in by *.OpenApi/Scalar) has GHSA-v5pm-xwqc-g5wc; 2.7.5 is the first patched 2.x -->
+    <PackageVersion Include="Microsoft.OpenApi" Version="2.7.5" />
 
     <!-- Logging & tracing -->
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.3" />
