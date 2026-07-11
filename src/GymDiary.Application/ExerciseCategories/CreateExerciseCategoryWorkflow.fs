@@ -15,7 +15,7 @@ open GymDiary.Domain.Primitives.SharedTypes
 
 module CreateExerciseCategoryWorkflow =
 
-    type public Command = { Name: string; OwnerId: string }
+    type public Command = { Name: string; OwnerId: Guid }
 
     type public CommandError =
         | InvalidCommand of ValidationError list
@@ -35,15 +35,15 @@ module CreateExerciseCategoryWorkflow =
         ) =
         member _.Handle command =
             asyncResult {
-                let id = EntityId.create<exerciseCategoryId> ()
+                let categoryId = EntityId.create<exerciseCategoryId> ()
+                let ownerId: UserId = %command.OwnerId
 
-                let! category =
-                    validation {
-                        let! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
-                        and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse<userId>
-                        return ExerciseCategory.create id name ownerId timeProvider.UtcNow
-                    }
-                    |> Result.mapError InvalidCommand
+                let! name =
+                    command.Name
+                    |> Validation.checkField (nameof command.Name) String50.create
+                    |> Result.mapError (List.singleton >> InvalidCommand)
+
+                let category = ExerciseCategory.create categoryId name ownerId timeProvider.UtcNow
 
                 let! ownerExists = userRepository.ExistsWithId category.OwnerId
 
@@ -59,7 +59,7 @@ module CreateExerciseCategoryWorkflow =
 
                 logger.LogInformation("Exercise category was created with id {id}", string category.Id)
 
-                return UMX.untag category.Id
+                return %category.Id
             }
             |> Async.StartAsTask
 

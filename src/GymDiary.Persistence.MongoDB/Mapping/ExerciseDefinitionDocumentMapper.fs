@@ -12,20 +12,20 @@ open GymDiary.Domain.Primitives.SharedTypes
 type ExerciseDefinitionDocumentMapper(setsMapper: IDocumentMapper<ExerciseSetGroup, ExerciseSetDto list>) =
     interface IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument> with
         member _.MapFromDomain(domain: ExerciseDefinition) : ExerciseDefinitionDocument = {
-            Id = UMX.untag domain.Id
-            CategoryId = UMX.untag domain.CategoryId
+            Id = %domain.Id
+            CategoryId = %domain.CategoryId
             Name = domain.Name.Value
             Notes = domain.Notes |> Option.map _.Value
             RestTime = domain.RestTime
             Sets = setsMapper.MapFromDomain domain.Sets
-            OwnerId = UMX.untag domain.OwnerId
+            OwnerId = %domain.OwnerId
             CreatedOnUtc = domain.CreatedOnUtc
             UpdatedOnUtc = domain.UpdatedOnUtc
         }
 
         member _.MapToDomain(document: ExerciseDefinitionDocument) : Result<ExerciseDefinition, ValidationError> = result {
-            let id: ExerciseDefinitionId = UMX.tag document.Id
-            let categoryId: ExerciseCategoryId = UMX.tag document.CategoryId
+            let id: ExerciseDefinitionId = %document.Id
+            let categoryId: ExerciseCategoryId = %document.CategoryId
             let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create
 
             let! notes =
@@ -33,7 +33,7 @@ type ExerciseDefinitionDocumentMapper(setsMapper: IDocumentMapper<ExerciseSetGro
                 |> Option.traverseResult (Validation.checkField (nameof document.Notes) String1k.create)
 
             let! sets = setsMapper.MapToDomain document.Sets
-            let ownerId: UserId = UMX.tag document.OwnerId
+            let ownerId: UserId = %document.OwnerId
 
             return {
                 Id = id

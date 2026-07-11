@@ -26,13 +26,13 @@ type EntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocument :
         }
 
         member _.Delete(id: Guid<'m>) = task {
-            let id = UMX.untag id
+            let id = %id
             let! _ = collection.DeleteOneAsync(fun d -> d.Id = id)
             return ()
         }
 
         member _.Get(id: Guid<'m>) = task {
-            let id = UMX.untag id
+            let id = %id
             let! documentOption = collection.Find(fun d -> d.Id = id).SingleOrNoneAsync()
 
             return
@@ -42,5 +42,5 @@ type EntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocument :
         }
 
         member _.ExistsWithId(id: Guid<'m>) =
-            let id = UMX.untag id
+            let id = %id
             collection.Find(fun d -> d.Id = id).AnyAsync()

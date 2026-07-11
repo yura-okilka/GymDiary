@@ -11,17 +11,17 @@ open GymDiary.Domain.ExerciseCategories
 type ExerciseCategoryDocumentMapper() =
     interface IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument> with
         member _.MapFromDomain(domain: ExerciseCategory) : ExerciseCategoryDocument = {
-            Id = UMX.untag domain.Id
+            Id = %domain.Id
             Name = domain.Name.Value
-            OwnerId = UMX.untag domain.OwnerId
+            OwnerId = %domain.OwnerId
             CreatedOnUtc = domain.CreatedOnUtc
             UpdatedOnUtc = domain.UpdatedOnUtc
         }
 
         member _.MapToDomain(document: ExerciseCategoryDocument) : Result<ExerciseCategory, ValidationError> = result {
-            let id: ExerciseCategoryId = UMX.tag document.Id
+            let id: ExerciseCategoryId = %document.Id
             let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create
-            let ownerId: UserId = UMX.tag document.OwnerId
+            let ownerId: UserId = %document.OwnerId
 
             return {
                 Id = id

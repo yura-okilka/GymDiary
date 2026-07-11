@@ -1,7 +1,6 @@
 using GymDiary.Api.Contracts;
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
-using GymDiary.Api.Validation;
 using GymDiary.Application.ExerciseCategories;
 using GymDiary.Application.Identity;
 
@@ -12,8 +11,8 @@ namespace GymDiary.Api.ExerciseCategories;
 public class GetExerciseCategoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app) =>
-        app.MapGet("exercise-categories/{id}",
-                async (string id, GetExerciseCategoryWorkflow.Handler handler, ICurrentUser currentUser) =>
+        app.MapGet("exercise-categories/{id:guid}",
+                async (Guid id, GetExerciseCategoryWorkflow.Handler handler, ICurrentUser currentUser) =>
                 {
                     var result = await handler.Handle(new GetExerciseCategoryWorkflow.Query(id, currentUser.Id));
 
@@ -22,7 +21,6 @@ public class GetExerciseCategoryEndpoint : IEndpoint
                             category.Id,
                             category.Name.Value,
                             category.OwnerId)),
-                        onInvalidQuery: e => TypedResults.ValidationProblem(e.ToProblemDictionary()),
                         onCategoryNotFound: _ => TypedResults.Problem(new ProblemDetails
                         {
                             Status = StatusCodes.Status404NotFound,
@@ -35,11 +33,7 @@ public class GetExerciseCategoryEndpoint : IEndpoint
             .WithSummary("Get an exercise category.")
             .WithDescription("Returns an exercise category owned by the authenticated user.")
             .Produces<ExerciseCategoryResponse>()
-            .ProducesValidationProblem()
             .ProducesProblem(StatusCodes.Status404NotFound)
-            .WithMetadata(new ProblemResponseMetadata(
-                StatusCode: StatusCodes.Status400BadRequest,
-                Description: "The request failed validation. 'errors' maps field names to messages."))
             .WithMetadata(new ProblemResponseMetadata(
                 StatusCode: StatusCodes.Status404NotFound,
                 Description: "The requested exercise category does not exist for this user.",
@@ -51,7 +45,7 @@ public class GetExerciseCategoryEndpoint : IEndpoint
                               {
                                 "status": 404,
                                 "title": "Exercise category not found",
-                                "detail": "Exercise category '42' was not found for this user.",
+                                "detail": "Exercise category '0197e2a0-6b7a-7c3d-9e1f-2a3b4c5d6e7f' was not found for this user.",
                                 "traceId": "00-abc123-..."
                               }
                               """)

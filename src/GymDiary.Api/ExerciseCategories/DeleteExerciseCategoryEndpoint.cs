@@ -1,6 +1,5 @@
 using GymDiary.Api.Endpoints;
 using GymDiary.Api.OpenApi;
-using GymDiary.Api.Validation;
 using GymDiary.Application.ExerciseCategories;
 using GymDiary.Application.Identity;
 
@@ -11,14 +10,13 @@ namespace GymDiary.Api.ExerciseCategories;
 public class DeleteExerciseCategoryEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app) =>
-        app.MapDelete("exercise-categories/{id}",
-                async (string id, DeleteExerciseCategoryWorkflow.Handler handler, ICurrentUser currentUser) =>
+        app.MapDelete("exercise-categories/{id:guid}",
+                async (Guid id, DeleteExerciseCategoryWorkflow.Handler handler, ICurrentUser currentUser) =>
                 {
                     var result = await handler.Handle(new DeleteExerciseCategoryWorkflow.Command(id, currentUser.Id));
 
                     return result.Match<IResult>(
                         _ => TypedResults.NoContent(),
-                        onInvalidCommand: e => TypedResults.ValidationProblem(e.ToProblemDictionary()),
                         onCategoryNotFound: _ => TypedResults.Problem(new ProblemDetails
                         {
                             Status = StatusCodes.Status404NotFound,
@@ -31,11 +29,7 @@ public class DeleteExerciseCategoryEndpoint : IEndpoint
             .WithSummary("Delete an exercise category.")
             .WithDescription("Deletes an exercise category owned by the authenticated user.")
             .Produces(StatusCodes.Status204NoContent)
-            .ProducesValidationProblem()
             .ProducesProblem(StatusCodes.Status404NotFound)
-            .WithMetadata(new ProblemResponseMetadata(
-                StatusCode: StatusCodes.Status400BadRequest,
-                Description: "The request failed validation. 'errors' maps field names to messages."))
             .WithMetadata(new ProblemResponseMetadata(
                 StatusCode: StatusCodes.Status404NotFound,
                 Description: "The requested exercise category does not exist for this user.",
@@ -47,7 +41,7 @@ public class DeleteExerciseCategoryEndpoint : IEndpoint
                               {
                                 "status": 404,
                                 "title": "Exercise category not found",
-                                "detail": "Exercise category '42' was not found for this user.",
+                                "detail": "Exercise category '0197e2a0-6b7a-7c3d-9e1f-2a3b4c5d6e7f' was not found for this user.",
                                 "traceId": "00-abc123-..."
                               }
                               """)

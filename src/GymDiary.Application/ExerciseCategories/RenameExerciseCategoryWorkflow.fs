@@ -4,6 +4,7 @@ open System
 open System.Runtime.CompilerServices
 open System.Threading.Tasks
 open FsToolkit.ErrorHandling
+open FSharp.UMX
 open Microsoft.Extensions.Logging
 open GymDiary.Application.Time
 open GymDiary.Application.Persistence
@@ -15,29 +16,27 @@ open GymDiary.Domain.Users
 
 module RenameExerciseCategoryWorkflow =
 
-    type public Command = { Id: string; OwnerId: string; Name: string }
+    type public Command = {
+        Id: Guid
+        OwnerId: Guid
+        Name: string
+    }
 
     type public CommandError =
         | InvalidCommand of ValidationError list
         | CategoryNotFound of id: ExerciseCategoryId * ownerId: UserId
         | CategoryAlreadyExists of name: String50
 
-    type public Handler
-        (
-            timeProvider: TimeProvider,
-            categoryRepository: IExerciseCategoryRepository,
-            logger: ILogger<Handler>
-        ) =
+    type public Handler(timeProvider: TimeProvider, categoryRepository: IExerciseCategoryRepository, logger: ILogger<Handler>) =
         member _.Handle command =
             asyncResult {
-                let! categoryId, ownerId, name =
-                    validation {
-                        let! categoryId = command.Id |> Validation.checkField (nameof command.Id) EntityId.parse<exerciseCategoryId>
-                        and! ownerId = command.OwnerId |> Validation.checkField (nameof command.OwnerId) EntityId.parse<userId>
-                        and! name = command.Name |> Validation.checkField (nameof command.Name) String50.create
-                        return (categoryId, ownerId, name)
-                    }
-                    |> Result.mapError InvalidCommand
+                let categoryId: ExerciseCategoryId = %command.Id
+                let ownerId: UserId = %command.OwnerId
+
+                let! name =
+                    command.Name
+                    |> Validation.checkField (nameof command.Name) String50.create
+                    |> Result.mapError (List.singleton >> InvalidCommand)
 
                 let! category =
                     categoryRepository.GetOneByOwner categoryId ownerId
@@ -60,14 +59,9 @@ module RenameExerciseCategoryWorkflow =
                 do!
                     categoryRepository.Update renamedCategory
                     |> Async.AwaitTask
-                    |> AsyncResult.mapError (fun (EntityNotFound _) ->
-                        CategoryNotFound(renamedCategory.Id, renamedCategory.OwnerId))
+                    |> AsyncResult.mapError (fun (EntityNotFound _) -> CategoryNotFound(renamedCategory.Id, renamedCategory.OwnerId))
 
-                logger.LogInformation(
-                    "Exercise category with id {id} was renamed to {name}",
-                    string renamedCategory.Id,
-                    name.Value
-                )
+                logger.LogInformation("Exercise category with id {id} was renamed to {name}", string renamedCategory.Id, name.Value)
             }
             |> Async.StartAsTask
 

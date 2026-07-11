@@ -19,7 +19,7 @@ type UserDocumentMapper() =
                 | Other -> GenderDto.Other
 
             {
-                Id = UMX.untag domain.Id
+                Id = %domain.Id
                 Email = domain.Email.Value
                 FirstName = domain.FirstName.Value
                 LastName = domain.LastName.Value
@@ -38,7 +38,7 @@ type UserDocumentMapper() =
                 | GenderDto.Other -> Other |> Ok
                 | _ -> ValidationError.ofField field $"{gender} is not a valid {nameof GenderDto}" |> Error
 
-            let id: UserId = UMX.tag document.Id
+            let id: UserId = %document.Id
             let! email = document.Email |> Validation.checkField (nameof document.Email) EmailAddress.create
             let! firstName = document.FirstName |> Validation.checkField (nameof document.FirstName) String50.create
             let! lastName = document.LastName |> Validation.checkField (nameof document.LastName) String50.create

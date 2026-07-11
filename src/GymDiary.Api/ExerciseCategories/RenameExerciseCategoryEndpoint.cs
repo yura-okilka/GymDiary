@@ -13,8 +13,8 @@ public class RenameExerciseCategoryEndpoint : IEndpoint
     public record Request(string Name);
 
     public void MapEndpoint(IEndpointRouteBuilder app) =>
-        app.MapPut("exercise-categories/{id}",
-                async (string id, Request request, RenameExerciseCategoryWorkflow.Handler handler, ICurrentUser currentUser) =>
+        app.MapPut("exercise-categories/{id:guid}",
+                async (Guid id, Request request, RenameExerciseCategoryWorkflow.Handler handler, ICurrentUser currentUser) =>
                 {
                     var result = await handler.Handle(
                         new RenameExerciseCategoryWorkflow.Command(id, currentUser.Id, request.Name));
@@ -59,7 +59,7 @@ public class RenameExerciseCategoryEndpoint : IEndpoint
                               {
                                 "status": 404,
                                 "title": "Exercise category not found",
-                                "detail": "Exercise category '42' was not found for this user.",
+                                "detail": "Exercise category '0197e2a0-6b7a-7c3d-9e1f-2a3b4c5d6e7f' was not found for this user.",
                                 "traceId": "00-abc123-..."
                               }
                               """)

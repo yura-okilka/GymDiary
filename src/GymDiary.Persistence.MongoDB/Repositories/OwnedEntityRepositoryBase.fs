@@ -15,8 +15,8 @@ type OwnedEntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocum
     inherit EntityRepositoryBase<'TEntity, 'm, 'TDocument>(collection, mapper)
     interface IOwnedEntityRepository<'TEntity, Guid<'m>> with
         member _.GetOneByOwner (id: Guid<'m>) (ownerId: UserId) = task {
-            let id = UMX.untag id
-            let ownerId = UMX.untag ownerId
+            let id = %id
+            let ownerId = %ownerId
 
             let! documentOption =
                 collection
@@ -30,7 +30,7 @@ type OwnedEntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocum
         }
 
         member _.GetAllByOwner(ownerId: UserId) = task {
-            let ownerId = UMX.untag ownerId
+            let ownerId = %ownerId
             let! documents = collection.Find(fun d -> d.OwnerId = ownerId).ToListAsync()
 
             return
@@ -41,8 +41,8 @@ type OwnedEntityRepositoryBase<'TEntity, [<Measure>] 'm, 'TDocument when 'TDocum
         }
 
         member _.DeleteByOwner (id: Guid<'m>) (ownerId: UserId) = task {
-            let id = UMX.untag id
-            let ownerId = UMX.untag ownerId
+            let id = %id
+            let ownerId = %ownerId
             let! result = collection.DeleteOneAsync(fun d -> d.Id = id && d.OwnerId = ownerId)
             return result.DeletedCount > 0L
         }

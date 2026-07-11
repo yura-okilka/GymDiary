@@ -13,7 +13,7 @@ type ExerciseCategoryRepository(context: IMongoContext, mapper: IDocumentMapper<
     interface IExerciseCategoryRepository with
         member _.ExistsWithName name ownerId =
             let name = name.Value
-            let ownerId = UMX.untag ownerId
+            let ownerId = %ownerId
 
             // Consider using case-insensitive index for large collections.
             context.ExerciseCategories

@@ -18,9 +18,9 @@ public class RenameExerciseCategoryTests(AppHostFixture fixture)
         created.Should().NotBeNull();
         created.Id.Should().NotBeEmpty();
 
-        await client.ExerciseCategories[created.Id.ToString()].PutAsync(new Request { Name = "Conditioning" });
+        await client.ExerciseCategories[created.Id!.Value].PutAsync(new Request { Name = "Conditioning" });
 
-        var category = await client.ExerciseCategories[created.Id.ToString()].GetAsync();
+        var category = await client.ExerciseCategories[created.Id!.Value].GetAsync();
 
         category.Should().NotBeNull();
         category.Id.Should().Be(created.Id);
@@ -28,25 +28,11 @@ public class RenameExerciseCategoryTests(AppHostFixture fixture)
     }
 
     [Fact]
-    public async Task Returns_validation_problem_when_id_is_not_a_valid_object_id()
-    {
-        var client = fixture.GetApiClient();
-
-        var act = () => client.ExerciseCategories["not-an-object-id"].PutAsync(new Request { Name = "Cardio" });
-
-        var ex = await act.Should().ThrowAsync<HttpValidationProblemDetails>();
-        ex.Which.Status.Should().Be(StatusCodes.Status400BadRequest);
-        ex.Which.Title.Should().Be("One or more validation errors occurred.");
-        ex.Which.Errors.Should().NotBeNull();
-        ex.Which.Errors!.AdditionalData.Should().ContainKey("Id");
-    }
-
-    [Fact]
     public async Task Returns_validation_problem_when_name_is_invalid()
     {
         var client = fixture.GetApiClient();
 
-        const string validId = "0123456789abcdef01234567";
+        var validId = Guid.NewGuid();
         var tooLongName = new string('x', 51);
 
         var act = () => client.ExerciseCategories[validId].PutAsync(new Request { Name = tooLongName });
@@ -62,7 +48,7 @@ public class RenameExerciseCategoryTests(AppHostFixture fixture)
     {
         var client = fixture.GetApiClient();
 
-        const string missingId = "0123456789abcdef01234567";
+        var missingId = Guid.NewGuid();
 
         var act = () => client.ExerciseCategories[missingId].PutAsync(new Request { Name = "Cardio" });
 

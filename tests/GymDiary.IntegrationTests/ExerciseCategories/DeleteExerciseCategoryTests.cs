@@ -4,8 +4,6 @@ using GymDiary.ApiClient.Generated.Models;
 
 using Microsoft.AspNetCore.Http;
 
-using HttpValidationProblemDetails = GymDiary.ApiClient.Generated.Models.HttpValidationProblemDetails;
-
 namespace GymDiary.IntegrationTests.ExerciseCategories;
 
 [Collection(nameof(AppHostCollection))]
@@ -21,26 +19,12 @@ public class DeleteExerciseCategoryTests(AppHostFixture fixture)
         created.Should().NotBeNull();
         created.Id.Should().NotBeEmpty();
 
-        await client.ExerciseCategories[created.Id.ToString()].DeleteAsync();
+        await client.ExerciseCategories[created.Id!.Value].DeleteAsync();
 
-        var act = () => client.ExerciseCategories[created.Id.ToString()].GetAsync();
+        var act = () => client.ExerciseCategories[created.Id!.Value].GetAsync();
 
         var ex = await act.Should().ThrowAsync<ProblemDetails>();
         ex.Which.Status.Should().Be(StatusCodes.Status404NotFound);
-    }
-
-    [Fact]
-    public async Task Returns_validation_problem_when_id_is_not_a_valid_object_id()
-    {
-        var client = fixture.GetApiClient();
-
-        var act = () => client.ExerciseCategories["not-an-object-id"].DeleteAsync();
-
-        var ex = await act.Should().ThrowAsync<HttpValidationProblemDetails>();
-        ex.Which.Status.Should().Be(StatusCodes.Status400BadRequest);
-        ex.Which.Title.Should().Be("One or more validation errors occurred.");
-        ex.Which.Errors.Should().NotBeNull();
-        ex.Which.Errors!.AdditionalData.Should().ContainKey("Id");
     }
 
     [Fact]
@@ -48,7 +32,7 @@ public class DeleteExerciseCategoryTests(AppHostFixture fixture)
     {
         var client = fixture.GetApiClient();
 
-        const string missingId = "0123456789abcdef01234567";
+        var missingId = Guid.NewGuid();
 
         var act = () => client.ExerciseCategories[missingId].DeleteAsync();
 

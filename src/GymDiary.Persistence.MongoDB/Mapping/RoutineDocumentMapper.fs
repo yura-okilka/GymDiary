@@ -12,19 +12,19 @@ open GymDiary.Domain.Primitives.SharedTypes
 type RoutineDocumentMapper() =
     interface IDocumentMapper<Routine, RoutineDocument> with
         member _.MapFromDomain(domain: Routine) : RoutineDocument = {
-            Id = UMX.untag domain.Id
+            Id = %domain.Id
             Name = domain.Name.Value
             Goal = domain.Goal |> Option.map _.Value
             Notes = domain.Notes |> Option.map _.Value
             Schedule = domain.Schedule
-            ExerciseIds = domain.Exercises |> Set.map (fun id -> UMX.untag id)
-            OwnerId = UMX.untag domain.OwnerId
+            ExerciseIds = domain.Exercises |> Set.map (fun id -> %id)
+            OwnerId = %domain.OwnerId
             CreatedOnUtc = domain.CreatedOnUtc
             UpdatedOnUtc = domain.UpdatedOnUtc
         }
 
         member _.MapToDomain(document: RoutineDocument) : Result<Routine, ValidationError> = result {
-            let id: RoutineId = UMX.tag document.Id
+            let id: RoutineId = %document.Id
             let! name = document.Name |> Validation.checkField (nameof document.Name) String50.create
 
             let! goal =
@@ -35,8 +35,8 @@ type RoutineDocumentMapper() =
                 document.Notes
                 |> Option.traverseResult (Validation.checkField (nameof document.Notes) String1k.create)
 
-            let exercises: ExerciseDefinitionId Set = document.ExerciseIds |> Set.map (fun id -> UMX.tag id)
-            let ownerId: UserId = UMX.tag document.OwnerId
+            let exercises: ExerciseDefinitionId Set = document.ExerciseIds |> Set.map (fun id -> %id)
+            let ownerId: UserId = %document.OwnerId
 
             return {
                 Id = id
