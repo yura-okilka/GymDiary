@@ -66,4 +66,10 @@ let ``round-trips an empty group`` () =
 let ``MapToDomain of non-positive repetitions fails`` () =
     mapper.MapToDomain(ExerciseSetGroupDto.RepetitionSets [ 0 ])
     |> errorField
+    |> shouldEqual "repetitions"
+
+[<Fact>]
+let ``MapToDomain of non-positive weighted repetitions fails`` () =
+    mapper.MapToDomain(ExerciseSetGroupDto.WeightedRepetitionSets [ { Repetitions = 0; Weight = 60.0 } ])
+    |> errorField
     |> shouldEqual "Repetitions"

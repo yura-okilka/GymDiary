@@ -12,9 +12,6 @@ open GymDiary.Application.Validation
 // flat-list mapper needed are gone: a mixed or unknown kind is unrepresentable in either union.
 type ExerciseSetGroupMapper() =
 
-    let toPositive value =
-        value |> Validation.checkField "Repetitions" PositiveInt.create
-
     interface IDocumentMapper<ExerciseSetGroup, ExerciseSetGroupDto> with
         member _.MapFromDomain(domain: ExerciseSetGroup) : ExerciseSetGroupDto =
             match domain with
@@ -35,13 +32,19 @@ type ExerciseSetGroupMapper() =
 
         member _.MapToDomain(document: ExerciseSetGroupDto) : Result<ExerciseSetGroup, ValidationError> = result {
             match document with
-            | ExerciseSetGroupDto.RepetitionSets reps ->
-                let! reps = reps |> List.traverseResultM toPositive
+            | ExerciseSetGroupDto.RepetitionSets repetitions ->
+                let! reps =
+                    repetitions
+                    |> List.traverseResultM (Validation.checkField (nameof repetitions) PositiveInt.create)
+
                 return ExerciseSetGroup.RepetitionSets reps
             | ExerciseSetGroupDto.WeightedRepetitionSets sets ->
                 let! items =
                     sets
-                    |> List.traverseResultM (fun s -> toPositive s.Repetitions |> Result.map (fun r -> (r, floatKg s.Weight)))
+                    |> List.traverseResultM (fun s ->
+                        s.Repetitions
+                        |> Validation.checkField (nameof s.Repetitions) PositiveInt.create
+                        |> Result.map (fun r -> (r, floatKg s.Weight)))
 
                 return ExerciseSetGroup.WeightedRepetitionSets items
             | ExerciseSetGroupDto.DurationSets durations -> return ExerciseSetGroup.DurationSets durations
