@@ -26,9 +26,13 @@ module SerializationSettings =
             conventions.Add(IgnoreIfNullConvention(true))
 
             // Scope conventions to our own types so we never reshape driver-internal or third-party class maps.
+            // FullName is null for some types (open generics, arrays); those are never ours, so exclude them.
             ConventionRegistry.Register(
                 "GymDiary Conventions",
                 conventions,
-                fun t -> t.FullName.StartsWith("GymDiary"))
+                fun t ->
+                    match t.FullName with
+                    | null -> false
+                    | name -> name.StartsWith("GymDiary"))
 
     let register () = registered.Force()

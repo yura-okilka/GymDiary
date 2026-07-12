@@ -12,11 +12,9 @@ open Xunit
 open FsUnitTyped
 
 // Verifies the redesigned DTO through the real production serialization settings (F# DU serializer +
-// camelCase convention), not just the domain<->DTO mapper.
-let private registered = lazy (SerializationSettings.register ())
-
+// camelCase convention), not just the domain<->DTO mapper. `register` is idempotent (lazy-guarded).
 let private toDoc (value: 'T) : BsonDocument =
-    registered.Force()
+    SerializationSettings.register ()
     value.ToBsonDocument()
 
 [<Fact>]
