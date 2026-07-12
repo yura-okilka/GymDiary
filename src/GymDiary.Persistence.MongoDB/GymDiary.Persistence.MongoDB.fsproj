@@ -9,7 +9,7 @@
     <Compile Include="Abstractions\IDocumentMapper.fs" />
     <Compile Include="Documents\UserDocument.fs" />
     <Compile Include="Documents\ExerciseCategoryDocument.fs" />
-    <Compile Include="Documents\ExerciseSetsDto.fs" />
+    <Compile Include="Documents\ExerciseSetGroupDto.fs" />
     <Compile Include="Documents\ExerciseDefinitionDocument.fs" />
     <Compile Include="Documents\RoutineDocument.fs" />
     <Compile Include="Documents\WorkoutDocument.fs" />
