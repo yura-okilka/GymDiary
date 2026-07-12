@@ -4,7 +4,6 @@ open MongoDB.Bson
 open MongoDB.Bson.Serialization
 open MongoDB.Bson.Serialization.Conventions
 open MongoDB.Bson.Serialization.Serializers
-open MongoDB.FSharp.Serialization
 
 module SerializationSettings =
 
@@ -12,8 +11,8 @@ module SerializationSettings =
         // Store System.Guid (incl. UMX-tagged ids) as native BSON UUID, standard representation.
         BsonSerializer.TryRegisterSerializer(GuidSerializer(GuidRepresentation.Standard)) |> ignore
 
-        FSharpTypeConventions.register ()
-        FSharpTypeSerializers.register ()
+        // F# records, options, lists, maps, sets and discriminated unions (FSharp.MongoDB).
+        FSharp.register ()
 
         let conventions = ConventionPack()
         conventions.Add(CamelCaseElementNameConvention())

@@ -15,7 +15,7 @@
     <Compile Include="Documents\WorkoutDocument.fs" />
     <Compile Include="Mapping\UserDocumentMapper.fs" />
     <Compile Include="Mapping\ExerciseCategoryDocumentMapper.fs" />
-    <Compile Include="Mapping\ExerciseSetDtoMapper.fs" />
+    <Compile Include="Mapping\ExerciseSetGroupMapper.fs" />
     <Compile Include="Mapping\ExerciseDefinitionDocumentMapper.fs" />
     <Compile Include="Mapping\RoutineDocumentMapper.fs" />
     <Compile Include="MongoContext.fs" />
@@ -33,6 +33,7 @@
     <PackageReference Include="FSharp.UMX" />
     <PackageReference Include="Aspire.MongoDB.Driver.v3" />
     <PackageReference Include="FsToolkit.ErrorHandling" />
+    <PackageReference Include="FSharp.MongoDB" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="MongoDB.Driver" />
   </ItemGroup>
@@ -40,7 +41,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.fsproj" />
     <ProjectReference Include="..\GymDiary.Application\GymDiary.Application.fsproj" />
-    <ProjectReference Include="..\MongoDB.FSharp.Serialization\MongoDB.FSharp.Serialization.fsproj" />
   </ItemGroup>
 
 </Project>

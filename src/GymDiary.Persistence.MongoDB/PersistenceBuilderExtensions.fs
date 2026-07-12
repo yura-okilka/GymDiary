@@ -29,7 +29,7 @@ type PersistenceBuilderExtensions() =
 
             .AddSingleton<IDocumentMapper<User, UserDocument>, UserDocumentMapper>()
             .AddSingleton<IDocumentMapper<ExerciseCategory, ExerciseCategoryDocument>, ExerciseCategoryDocumentMapper>()
-            .AddSingleton<IDocumentMapper<ExerciseSetGroup, ExerciseSetDto list>, ExerciseSetDtoMapper>()
+            .AddSingleton<IDocumentMapper<ExerciseSetGroup, ExerciseSetGroupDto>, ExerciseSetGroupMapper>()
             .AddSingleton<IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument>, ExerciseDefinitionDocumentMapper>()
             .AddSingleton<IDocumentMapper<Routine, RoutineDocument>, RoutineDocumentMapper>()
 

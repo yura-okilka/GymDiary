@@ -9,7 +9,7 @@ type ExerciseDefinitionDocument = {
     Name: string
     Notes: string option
     RestTime: TimeSpan
-    Sets: ExerciseSetDto list
+    Sets: ExerciseSetGroupDto
     OwnerId: Guid
     CreatedOnUtc: DateTime
     UpdatedOnUtc: DateTime

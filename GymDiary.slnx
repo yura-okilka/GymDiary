@@ -20,7 +20,6 @@
     <Project Path="src/GymDiary.Domain/GymDiary.Domain.fsproj" />
     <Project Path="src/GymDiary.Persistence.MongoDB/GymDiary.Persistence.MongoDB.fsproj" />
     <Project Path="src/GymDiary.ServiceDefaults/GymDiary.ServiceDefaults.csproj" />
-    <Project Path="src/MongoDB.FSharp.Serialization/MongoDB.FSharp.Serialization.fsproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/GymDiary.Domain.UnitTests/GymDiary.Domain.UnitTests.fsproj" />

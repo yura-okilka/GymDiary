@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Mapping\ExerciseSetDtoMapperTests.fs" />
+    <Compile Include="Mapping\ExerciseSetGroupMapperTests.fs" />
     <Compile Include="Mapping\ExerciseDefinitionDocumentMapperTests.fs" />
+    <Compile Include="Serialization\ExerciseSetGroupSerializationTests.fs" />
   </ItemGroup>
 
   <ItemGroup>

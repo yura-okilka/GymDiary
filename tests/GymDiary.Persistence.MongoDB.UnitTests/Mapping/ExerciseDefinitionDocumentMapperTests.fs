@@ -19,7 +19,7 @@ let private value =
     | Error e -> failwith (string e)
 
 let private mapper =
-    ExerciseDefinitionDocumentMapper(ExerciseSetDtoMapper())
+    ExerciseDefinitionDocumentMapper(ExerciseSetGroupMapper())
     :> IDocumentMapper<ExerciseDefinition, ExerciseDefinitionDocument>
 
 [<Fact>]
@@ -27,7 +27,7 @@ let ``round-trips an exercise definition`` () =
     let createdOn = DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
     let name = String50.create "Bench press" |> value
     let notes = String1k.create "Keep elbows tucked" |> value |> Some
-    let sets = WeightedRepetitionSets [ (PositiveInt.create 10 |> value, 60.0<kg>) ]
+    let sets = ExerciseSetGroup.WeightedRepetitionSets [ (PositiveInt.create 10 |> value, 60.0<kg>) ]
 
     let definition =
         ExerciseDefinition.create (EntityId.create<exerciseDefinitionId> ()) (EntityId.create<exerciseCategoryId> ()) name notes (TimeSpan.FromMinutes 2.0) sets (EntityId.create<userId> ()) createdOn
@@ -39,7 +39,7 @@ let ``round-trips an exercise definition`` () =
 let ``round-trips an exercise definition without notes`` () =
     let createdOn = DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
     let name = String50.create "Plank" |> value
-    let sets = DurationSets [ TimeSpan.FromSeconds 60.0 ]
+    let sets = ExerciseSetGroup.DurationSets [ TimeSpan.FromSeconds 60.0 ]
 
     let definition =
         ExerciseDefinition.create (EntityId.create<exerciseDefinitionId> ()) (EntityId.create<exerciseCategoryId> ()) name None TimeSpan.Zero sets (EntityId.create<userId> ()) createdOn
